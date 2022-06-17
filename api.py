@@ -43,11 +43,14 @@ def user_stats(user):
 if __name__ == "__main__":
     import pprint
     pp = pprint.PrettyPrinter()
-    
+
+    print("My favorites from my account: \n")
     pp.pprint(user_favorites("nmcassa"))
-    pp.pprint(user_favorites("kurstboy"))
-    pp.pprint(user_stats("nmcassa"))
     
+    print("Stats from my account:\n")
+    pp.pprint(user_stats("nmcassa"))
+
     nick = User("nmcassa", user_stats("nmcassa"))
+    print("JSON of my User Object:\n")
     print(nick.jsonify())
     
