@@ -8,6 +8,9 @@ class Movie:
     def __init__(self, title):
         self.title = title
         self.director = self.movie_director(title)
+        self.year = self.movie_year(title)
+        self.rating = self.movie_rating(title)
+        self.description = self.movie_description(title)
 
     def jsonify(self):
         return json.dumps(self, indent=4,cls=Encoder)
@@ -39,10 +42,39 @@ class Movie:
             
         return director
 
+    def movie_rating(self, movie):
+        movie = movie.replace(' ', '-')
+        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
+
+        meta = page.find_all("meta", attrs={'name':'twitter:data2'})
+        content = meta[0]['content']
+
+        return content
+
+    def movie_description(self, movie):
+        movie = movie.replace(' ', '-')
+        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
+
+        meta = page.find_all("meta", attrs={'name':'twitter:description'})
+        content = meta[0]['content']
+
+        if "\u2026" in content:
+            content = content.replace("\u2026", "...")
+
+        return content
+
+    def movie_year(self, movie):
+        movie = movie.replace(' ', '-')
+        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
+
+        meta = page.find_all("meta", attrs={'name': 'twitter:title'})[0]['content']
+
+        return meta[meta.find('(')+1:meta.find(')')]
+
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
 if __name__ == "__main__":
-    king = Movie("king kong")
-    print(king.director)
+    king = Movie("the florida project")
+    print(king.jsonify())

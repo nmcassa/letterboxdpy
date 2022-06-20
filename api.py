@@ -9,7 +9,7 @@ if __name__ == "__main__":
     print("JSON of my User Object:\n")
     print(nick.jsonify())
 
-    king = Movie("king kong")
+    king = Movie("house")
     print("\n JSON of Movie Object:\n")
     print(king.jsonify())
     
