@@ -25,12 +25,24 @@ class Movie:
         movie = movie.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
 
-        crew = page.find_all("span", text = 'Director')[0].parent.parent
-        director = crew.findChildren("a")
-        director = director[0].text
-
+        crew = page.find_all("span", text = 'Director')
+        if len(crew) != 0:
+            director = crew[0].parent.parent.findChildren("a")
+            director = director[0].text
+        else:
+            crew = page.find_all("span", text = 'Directors')
+            directors = crew[0].parent.parent.findChildren("p")[0]
+            directors = directors.findChildren("a")
+            director = []
+            for item in directors:
+                director.append(item.text)
+            
         return director
 
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
+
+if __name__ == "__main__":
+    king = Movie("king kong")
+    print(king.director)
