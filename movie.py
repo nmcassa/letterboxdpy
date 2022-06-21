@@ -5,12 +5,17 @@ from bs4 import BeautifulSoup
 from json import JSONEncoder
 
 class Movie:
-    def __init__(self, title):
+    #only put in a year when the movie isn't the most popular movie of it's name
+    #if you put in the year for a movie that doesn't have the year in its url it
+    #redirects to the closest movie with that year.
+    def __init__(self, title, year=''):
+        if not self.check_year(title, year):
+            year = ''
         self.title = title
-        self.director = self.movie_director(title)
-        self.year = self.movie_year(title)
-        self.rating = self.movie_rating(title)
-        self.description = self.movie_description(title)
+        self.director = self.movie_director(title, year)
+        self.rating = self.movie_rating(title, year)
+        self.description = self.movie_description(title, year)
+        self.year = self.movie_year(title, year)
 
     def jsonify(self):
         return json.dumps(self, indent=4,cls=Encoder)
@@ -24,7 +29,9 @@ class Movie:
 
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
-    def movie_director(self, movie):
+    def movie_director(self, movie, year):
+        if year != '':
+            movie = movie + ' ' + str(year)
         movie = movie.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
 
@@ -42,16 +49,22 @@ class Movie:
             
         return director
 
-    def movie_rating(self, movie):
+    def movie_rating(self, movie, year):
+        if year != '':
+            movie = movie + ' ' + str(year)
         movie = movie.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
 
         meta = page.find_all("meta", attrs={'name':'twitter:data2'})
+        if len(meta) == 0:
+            return meta
         content = meta[0]['content']
 
         return content
 
-    def movie_description(self, movie):
+    def movie_description(self, movie, year):
+        if year != '':
+            movie = movie + ' ' + str(year)
         movie = movie.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
 
@@ -63,18 +76,34 @@ class Movie:
 
         return content
 
-    def movie_year(self, movie):
+    def movie_year(self, movie, year):
+        if year != '':
+            movie = movie + ' ' + str(year)
         movie = movie.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
 
         meta = page.find_all("meta", attrs={'name': 'twitter:title'})[0]['content']
+        true_year = meta[meta.find('(')+1:meta.find(')')]
 
-        return meta[meta.find('(')+1:meta.find(')')]
+        return true_year
+
+    def check_year(self, movie, year):
+        if year != '':
+            movie = movie + ' ' + str(year)
+        movie = movie.replace(' ', '-')
+        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
+
+        meta = page.find_all("meta", attrs={'name': 'twitter:title'})[0]['content']
+        true_year = meta[meta.find('(')+1:meta.find(')')]
+
+        if str(true_year) != str(year) and year != '':
+            return False
+        return True
 
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
 if __name__ == "__main__":
-    king = Movie("the florida project")
+    king = Movie("house", 1975)
     print(king.jsonify())

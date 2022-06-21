@@ -109,5 +109,5 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    nick = User("connoreatspants")
-    print(nick.jsonify())
+    nick = User("nmcassa")
+    print(nick.films)
