@@ -5,9 +5,6 @@ from bs4 import BeautifulSoup
 from json import JSONEncoder
 
 class Movie:
-    #only put in a year when the movie isn't the most popular movie of it's name
-    #if you put in the year for a movie that doesn't have the year in its url it
-    #redirects to the closest movie with that year.
     def __init__(self, title, year=''):
         if not self.check_year(title, year):
             year = ''

@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: letterboxdpy
+Version: 1.1
+Summary: UNKNOWN
+Home-page: https://github.com/nmcassa/letterboxdpy
+Author: Nicholas Cassarino
+Author-email: nmcassa804@outlook.com
+License: MIT
+Keywords: webscraper letterboxd movies
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+
+# letterboxdpy
+A letterboxd python webscraper that can return json information about users
+
+hopefully more in the future...
+
+![Example of the webscraper](example.PNG)
+
+

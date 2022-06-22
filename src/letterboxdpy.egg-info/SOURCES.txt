@@ -1,0 +1,8 @@
+README.md
+setup.cfg
+setup.py
+src/letterboxdpy.egg-info/PKG-INFO
+src/letterboxdpy.egg-info/SOURCES.txt
+src/letterboxdpy.egg-info/dependency_links.txt
+src/letterboxdpy.egg-info/requires.txt
+src/letterboxdpy.egg-info/top_level.txt
