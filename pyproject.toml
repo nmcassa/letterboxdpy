@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "letterboxdpy"
+version = "1.6"
+authors = [
+  { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
+]
+description = "A letterboxd webscraper"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
