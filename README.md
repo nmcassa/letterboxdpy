@@ -1,8 +1,11 @@
 # letterboxdpy
 
-A letterboxd python webscraper that can return json information about users and movies
+[![PyPI version](https://badge.fury.io/py/letterboxdpy.svg)](https://badge.fury.io/py/letterboxdpy)
 
-hopefully more in the future...
+## Installation
+```
+    pip install letterboxdpy
+```
 
 ## **Example of Movie Object**
 
@@ -15,3 +18,4 @@ hopefully more in the future...
 ### **Code used for above**
 
 ![Example code](ss/code_example.PNG)
+
