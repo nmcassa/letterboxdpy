@@ -1,6 +1,8 @@
 # letterboxdpy
 
 [![PyPI version](https://badge.fury.io/py/letterboxdpy.svg)](https://badge.fury.io/py/letterboxdpy)
+![downloads](https://img.shields.io/pypi/dm/letterboxdpy)
+![format](https://img.shields.io/pypi/format/letterboxdpy)
 
 ## Installation
 
