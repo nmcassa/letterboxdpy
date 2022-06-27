@@ -6,9 +6,10 @@ from bs4 import BeautifulSoup
 
 class User:
     def __init__(self, username):
+        page = self.get_parsed_page("https://letterboxd.com/" + username + "/")
         self.username = username
-        self.favorites = self.user_favorites(username)
-        self.stats = self.user_stats(username)
+        self.favorites = self.user_favorites(username, page)
+        self.stats = self.user_stats(username, page)
         self.watchlist_count = self.user_watchlist(username)
         #self.films = self.user_films_watched(username)
         self.following = self.user_following(username)
@@ -26,9 +27,7 @@ class User:
 
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
-    def user_favorites(self, user):
-        page = self.get_parsed_page("https://letterboxd.com/" + user + "/")
-        
+    def user_favorites(self, user, page):        
         section = page.find_all("section", {"id": ["favourites"], })
         movies = section[0].findChildren("div")
         names = []
@@ -39,8 +38,7 @@ class User:
             
         return names
 
-    def user_stats(self, user):
-        page = self.get_parsed_page("https://letterboxd.com/" + user + "/")
+    def user_stats(self, user, page):
         span = []
         stats = {}
 

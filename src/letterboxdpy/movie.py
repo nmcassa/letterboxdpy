@@ -6,14 +6,20 @@ from json import JSONEncoder
 
 class Movie:
     def __init__(self, title, year=''):
-        if not self.check_year(title, year):
+        if year != '':
+            title = title + ' ' + str(year)
+        title = title.replace(' ', '-')
+        page = self.get_parsed_page("https://letterboxd.com/film/" + title + "/")
+
+        if not self.check_year(title, year, page):
             year = ''
+        
         self.title = title
-        self.director = self.movie_director(title, year)
-        self.rating = self.movie_rating(title, year)
-        self.description = self.movie_description(title, year)
-        self.year = self.movie_year(title, year)
-        self.genres = self.movie_genre(title, year)
+        self.director = self.movie_director(title, year, page)
+        self.rating = self.movie_rating(title, year, page)
+        self.description = self.movie_description(title, year, page)
+        self.year = self.movie_year(title, year, page)
+        self.genres = self.movie_genre(title, year, page)
         self.details = self.movie_details(title, year)
 
     def jsonify(self):
@@ -28,12 +34,7 @@ class Movie:
 
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
-    def movie_director(self, movie, year):
-        if year != '':
-            movie = movie + ' ' + str(year)
-        movie = movie.replace(' ', '-')
-        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
-
+    def movie_director(self, movie, year, page):
         crew = page.find_all("span", text = 'Director')
         if len(crew) != 0:
             director = crew[0].parent.parent.findChildren("a")
@@ -50,12 +51,7 @@ class Movie:
             
         return director
 
-    def movie_rating(self, movie, year):
-        if year != '':
-            movie = movie + ' ' + str(year)
-        movie = movie.replace(' ', '-')
-        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
-
+    def movie_rating(self, movie, year, page):
         meta = page.find_all("meta", attrs={'name':'twitter:data2'})
         if len(meta) == 0:
             return meta
@@ -63,12 +59,7 @@ class Movie:
 
         return content
 
-    def movie_description(self, movie, year):
-        if year != '':
-            movie = movie + ' ' + str(year)
-        movie = movie.replace(' ', '-')
-        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
-
+    def movie_description(self, movie, year, page):
         meta = page.find_all("meta", attrs={'name':'twitter:description'})
         if len(meta) == 0:
             return ''
@@ -79,12 +70,7 @@ class Movie:
 
         return content
 
-    def movie_year(self, movie, year):
-        if year != '':
-            movie = movie + ' ' + str(year)
-        movie = movie.replace(' ', '-')
-        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
-
+    def movie_year(self, movie, year, page):
         meta = page.find_all("meta", attrs={'name': 'twitter:title'})
         if len(meta) == 0:
             return ""
@@ -94,12 +80,7 @@ class Movie:
 
         return true_year
 
-    def check_year(self, movie, year):
-        if year != '':
-            movie = movie + ' ' + str(year)
-        movie = movie.replace(' ', '-')
-        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
-
+    def check_year(self, movie, year, page):
         meta = page.find_all("meta", attrs={'name': 'twitter:title'})
         if len(meta) == 0:
             return True
@@ -111,12 +92,7 @@ class Movie:
             return False
         return True
 
-    def movie_genre(self, movie, year):
-        if year != '':
-            movie = movie + ' ' + str(year)
-        movie = movie.replace(' ', '-')
-        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
-
+    def movie_genre(self, movie, year, page):
         res = []
 
         div = page.find_all("div",{"id": ["tab-genres"], })
@@ -129,9 +105,6 @@ class Movie:
         return res
 
     def movie_details(self, movie, year):
-        if year != '':
-            movie = movie + ' ' + str(year)
-        movie = movie.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/details/")
 
         res = {}
