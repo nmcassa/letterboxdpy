@@ -38,6 +38,8 @@ class Movie:
             director = director[0].text
         else:
             crew = page.find_all("span", text = 'Directors')
+            if len(crew) == 0:
+                return []
             directors = crew[0].parent.parent.findChildren("p")[0]
             directors = directors.findChildren("a")
             director = []
@@ -66,6 +68,8 @@ class Movie:
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
 
         meta = page.find_all("meta", attrs={'name':'twitter:description'})
+        if len(meta) == 0:
+            return ''
         content = meta[0]['content']
 
         if "\u2026" in content:
@@ -102,5 +106,5 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    king = Movie("house", 1975)
+    king = Movie("quiero estudiar")
     print(king.jsonify())

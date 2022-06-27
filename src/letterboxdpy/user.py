@@ -110,4 +110,4 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     nick = User("nmcassa")
-    print(nick.films)
+    print(nick.jsonify())
