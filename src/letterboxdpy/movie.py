@@ -161,5 +161,7 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    king = Movie("everything everywhere all at once")
+    king = Movie("king kong")
+    print(king.jsonify())
+    king = Movie("king kong", 2005)
     print(king.jsonify())
