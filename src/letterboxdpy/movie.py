@@ -13,6 +13,8 @@ class Movie:
         self.rating = self.movie_rating(title, year)
         self.description = self.movie_description(title, year)
         self.year = self.movie_year(title, year)
+        self.genres = self.movie_genre(title, year)
+        self.details = self.movie_details(title, year)
 
     def jsonify(self):
         return json.dumps(self, indent=4,cls=Encoder)
@@ -83,8 +85,12 @@ class Movie:
         movie = movie.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
 
-        meta = page.find_all("meta", attrs={'name': 'twitter:title'})[0]['content']
-        true_year = meta[meta.find('(')+1:meta.find(')')]
+        meta = page.find_all("meta", attrs={'name': 'twitter:title'})
+        if len(meta) == 0:
+            return ""
+        else :
+            meta = meta[0]['content']
+            true_year = meta[meta.find('(')+1:meta.find(')')]
 
         return true_year
 
@@ -94,17 +100,66 @@ class Movie:
         movie = movie.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
 
-        meta = page.find_all("meta", attrs={'name': 'twitter:title'})[0]['content']
-        true_year = meta[meta.find('(')+1:meta.find(')')]
+        meta = page.find_all("meta", attrs={'name': 'twitter:title'})
+        if len(meta) == 0:
+            return True
+        else :
+            meta = meta[0]['content']
+            true_year = meta[meta.find('(')+1:meta.find(')')]
 
         if str(true_year) != str(year) and year != '':
             return False
         return True
+
+    def movie_genre(self, movie, year):
+        if year != '':
+            movie = movie + ' ' + str(year)
+        movie = movie.replace(' ', '-')
+        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/")
+
+        res = []
+
+        div = page.find_all("div",{"id": ["tab-genres"], })
+        a = div[0].find_all("a")
+
+        for item in a:
+            if item['href'][7:12] == 'genre':
+                res.append(item.text)
+
+        return res
+
+    def movie_details(self, movie, year):
+        if year != '':
+            movie = movie + ' ' + str(year)
+        movie = movie.replace(' ', '-')
+        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/details/")
+
+        res = {}
+        studio = []
+        country = []
+        language = []
+
+        div = page.find_all("div", {"id": ["tab-details"], })
+        a = div[0].find_all("a")
+
+        for item in a:
+            if item['href'][1:7] == 'studio':
+                studio.append(item.text)
+            if item['href'][7:14] == 'country':
+                country.append(item.text)
+            if item['href'][7:15] == 'language':
+                language.append(item.text)
+        res['Country'] = country
+        res['Studio'] = studio
+        res['Language'] = language
+
+        return res
+        
 
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
 if __name__ == "__main__":
-    king = Movie("quiero estudiar")
+    king = Movie("everything everywhere all at once")
     print(king.jsonify())
