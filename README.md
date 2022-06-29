@@ -42,7 +42,7 @@ print(nick.jsonify())
 ## ** Code Example**
 
 ```python
-nick = User("nmcassa")
+nick = user.User("nmcassa")
 print(nick.user_genre_info())
 ```
 
@@ -98,7 +98,7 @@ print(king.jsonify())
 ## **Code Example**
 
 ```python
-king = Movie("king kong", 2005)
+king = movie.Movie("king kong", 2005)
 print(king.movie_details())
 ```
 
