@@ -10,10 +10,6 @@ class User:
         self.username = username
         self.favorites = self.user_favorites(username, page)
         self.stats = self.user_stats(username, page)
-        self.watchlist_count = self.user_watchlist(username)
-        #self.films = self.user_films_watched(username)
-        self.following = self.user_following(username)
-        self.followers = self.user_followers(username)
 
     def jsonify(self):
         return json.dumps(self, indent=4,cls=Encoder)
@@ -52,8 +48,8 @@ class User:
 
         return stats
 
-    def user_watchlist(self, user):
-        page = self.get_parsed_page("https://letterboxd.com/" + user + "/watchlist/")
+    def user_watchlist(self):
+        page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
 
         count = page.find_all("span", {"class": ["watchlist-count"], })
 
@@ -61,7 +57,7 @@ class User:
 
         return ret[0]
 
-    def user_films_watched(self, user):
+    def user_films_watched(self):
         #returns all movies
         prev = count = 0
         curr = 1
@@ -69,18 +65,18 @@ class User:
         while prev != curr:
             count += 1
             prev = len(movie_list)
-            page = self.get_parsed_page("https://letterboxd.com/" + user + "/films/page/" + str(count) + "/")
+            page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/films/page/" + str(count) + "/")
 
             img = page.find_all("img", {"class": ["image"], })
             for alt in img:
                 movie_list.append(alt['alt'])
             curr = len(movie_list)
             
-        return movie_list
+        return page
 
-    def user_following(self, user):
+    def user_following(self):
         #returns the first page of following
-        page = self.get_parsed_page("https://letterboxd.com/" + user + "/following/")
+        page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/following/")
         img = page.find_all("img", attrs={'height': '40'})
 
         ret = []
@@ -90,9 +86,9 @@ class User:
 
         return ret
 
-    def user_followers(self, user):
+    def user_followers(self):
         #returns the first page of followers
-        page = self.get_parsed_page("https://letterboxd.com/" + user + "/followers/")
+        page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/followers/")
         img = page.find_all("img", attrs={'height': '40'})
 
         ret = []
@@ -102,6 +98,20 @@ class User:
 
         return ret
 
+    def user_genre_info(self):
+        genres = ["action", "adventure", "animation", "comedy", "crime", "documentary",
+                  "drama", "family", "fantasy", "history", "horror", "music", "mystery",
+                  "romance", "science-fiction", "thriller", "tv-movie", "war", "western"]
+        ret = {}
+        for genre in genres:
+            page = self.get_parsed_page("https://letterboxd.com/" + self.username +
+                                        "/films/genre/" + genre + "/")
+            data = page.find_all("span", {"class": ["replace-if-you"], })
+            data = data[0].next_sibling
+            ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
+            
+        return ret
+            
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
@@ -109,3 +119,4 @@ class Encoder(JSONEncoder):
 if __name__ == "__main__":
     nick = User("nmcassa")
     print(nick.jsonify())
+    print(nick.user_genre_info())

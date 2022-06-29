@@ -20,7 +20,6 @@ class Movie:
         self.description = self.movie_description(title, year, page)
         self.year = self.movie_year(title, year, page)
         self.genres = self.movie_genre(title, year, page)
-        self.details = self.movie_details(title, year)
 
     def jsonify(self):
         return json.dumps(self, indent=4,cls=Encoder)
@@ -104,8 +103,8 @@ class Movie:
 
         return res
 
-    def movie_details(self, movie, year):
-        page = self.get_parsed_page("https://letterboxd.com/film/" + movie + "/details/")
+    def movie_details(self):
+        page = self.get_parsed_page("https://letterboxd.com/film/" + self.title + "/details/")
 
         res = {}
         studio = []
@@ -138,3 +137,4 @@ if __name__ == "__main__":
     print(king.jsonify())
     king = Movie("king kong", 2005)
     print(king.jsonify())
+    print(king.movie_details())

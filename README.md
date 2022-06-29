@@ -7,7 +7,7 @@
 ## Installation
 
 ```
-    pip install letterboxdpy
+pip install letterboxdpy
 ```
 
 ## **Code Example**
@@ -18,9 +18,39 @@ nick = user.User("nmcassa")
 print(nick.jsonify())
 ```
 
+### **User Object JSON**
+
+```
+{
+    "username": "nmcassa",
+    "favorites": [
+        "The Grand Budapest Hotel",
+        "The King of Comedy",
+        "The Alpinist",
+        "The Graduate"
+    ],
+    "stats": {
+        "Films": "342",
+        "This year": "69",
+        "List": "1",
+        "Following": "6",
+        "Followers": "5"
+    }
+}
+```
+
+## ** Code Example**
+
+```python
+nick = User("nmcassa")
+print(nick.user_genre_info())
+```
+
 ### Output
 
-![Example of the user object](ss/user_example.PNG)
+```
+{'action': 55, 'adventure': 101, 'animation': 95, 'comedy': 188, 'crime': 22, 'documentary': 16, 'drama': 94, 'family': 109, 'fantasy': 54, 'history': 5, 'horror': 27, 'music': 9, 'mystery': 30, 'romance': 29, 'science-fiction': 48, 'thriller': 43, 'tv-movie': 13, 'war': 4, 'western': 5}
+```
 
 ## **Code Example**
 
@@ -33,6 +63,47 @@ king = movie.Movie("king kong", 2005)
 print(king.jsonify())
 ```
 
-## **Example of Movie Object**
+### **Movie Object JSON**
 
-![Example of the movie object](ss/movie_example.PNG)
+```
+{
+    "title": "king-kong",
+    "director": [
+        "Merian C. Cooper",
+        "Ernest B. Schoedsack"
+    ],
+    "rating": "3.85 out of 5",
+    "description": "A film crew discovers the \"eighth wonder of the world,\" a giant prehistoric ape, and brings him back to New York, where he wreaks havoc.",
+    "year": "1933",
+    "genres": [
+        "horror",
+        "adventure",
+        "fantasy"
+    ]
+}
+{
+    "title": "king-kong-2005",
+    "director": "Peter Jackson",
+    "rating": "3.32 out of 5",
+    "description": "In 1933 New York, an overly ambitious movie producer coerces his cast and hired ship crew to travel to mysterious Skull Island, where they encounter Kong, a giant ape who is immediately smitten with...",
+    "year": "2005",
+    "genres": [
+        "action",
+        "adventure",
+        "drama"
+    ]
+}
+```
+
+## **Code Example**
+
+```python
+king = Movie("king kong", 2005)
+print(king.movie_details())
+```
+
+### **Output**
+
+```
+{'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
+```
