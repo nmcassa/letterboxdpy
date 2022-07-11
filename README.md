@@ -107,3 +107,69 @@ print(king.movie_details())
 ```
 {'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
 ```
+
+## **Code Example**
+
+```python
+from letterboxdpy import list
+list = list.List("https://letterboxd.com/nmcassa/list/movies-for-sale-and-my-local-goodwill/")
+print(list.jsonify())
+```
+
+### **List Object JSON**
+
+```
+{
+    "title": "Movies for sale and my local goodwill",
+    "author": "nmcassa",
+    "description": "",
+    "movies": [
+        "Fiddler on the Roof",
+        "Grumpier Old Men",
+        "The Rainmaker",
+        "Great Expectations",
+        "Heat",
+        "The Santa Clause",
+        "The Lord of the Rings: The Fellowship of the Ring",
+        "Charlie's Angels",
+        "The Chamber",
+        "Easy A",
+        "A Christmas Carol",
+        "A Christmas Story",
+        "The Return of Jafar",
+        "Snow Dogs",
+        "101 Dalmatians",
+        "Dumbo",
+        "Annie",
+        "Spy Kids",
+        "The Lion King",
+        "The Jungle Book",
+        "Saving Private Ryan",
+        "The Princess Diaries",
+        "Aladdin and the King of Thieves",
+        "Lady and the Tramp II: Scamp's Adventure",
+        "Knocked Up",
+        "Ocean's Eleven",
+        "Evan Almighty",
+        "Iron Man",
+        "Crazy, Stupid, Love.",
+        "Ender's Game",
+        "Rambo",
+        "Talladega Nights: The Ballad of Ricky Bobby",
+        "National Lampoon's Christmas Vacation",
+        "Mission: Impossible",
+        "Mission: Impossible II",
+        "Quantum of Solace",
+        "The Devil Wears Prada",
+        "Green Zone",
+        "Inside Job",
+        "Racing Stripes",
+        "No Strings Attached",
+        "We Bought a Zoo",
+        "Madagascar",
+        "Happy Feet",
+        "A Cinderella Story"
+    ],
+    "filmCount": 45
+}
+```

@@ -72,7 +72,7 @@ class User:
                 movie_list.append(alt['alt'])
             curr = len(movie_list)
             
-        return page
+        return movie_list
 
     def user_following(self):
         #returns the first page of following
@@ -119,4 +119,4 @@ class Encoder(JSONEncoder):
 if __name__ == "__main__":
     nick = User("nmcassa")
     print(nick.jsonify())
-    print(nick.user_genre_info())
+    print(nick.user_films_watched())
