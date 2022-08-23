@@ -10,7 +10,7 @@
 pip install letterboxdpy
 ```
 
-## ** User Objects **
+## **User Objects**
 
 ```python
 from letterboxdpy import user
@@ -38,7 +38,7 @@ output:
 }
 ```
 
-## ** user_genre_info(user object) **
+## **user_genre_info(user object)**
 
 ```python
 nick = user.User("nmcassa")
@@ -49,15 +49,15 @@ output:
 {'action': 55, 'adventure': 101, 'animation': 95, 'comedy': 188, 'crime': 22, 'documentary': 16, 'drama': 94, 'family': 109, 'fantasy': 54, 'history': 5, 'horror': 27, 'music': 9, 'mystery': 30, 'romance': 29, 'science-fiction': 48, 'thriller': 43, 'tv-movie': 13, 'war': 4, 'western': 5}
 ```
 
-## ** user_following(user object) / user_followers(user object **
+## **user_following(user object) / user_followers(user object)**
 
 returns the first page of the users following / followers
 
-## ** user_films_watched(user object) **
+## **user_films_watched(user object)**
 
 returns all of the users watched movies
 
-## ** Movie Object **
+## **Movie Object**
 
 ```python
 from letterboxdpy import movie
@@ -97,7 +97,7 @@ output:
 
 ```
 
-## ** movie_details(movie object) **
+## **movie_details(movie object)**
 
 ```python
 king = movie.Movie("king kong", 2005)
@@ -108,11 +108,11 @@ output:
 {'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
 ```
 
-## ** movie_description(movie object) **
+## **movie_description(movie object)**
 
 returns the description of the movie passed
 
-## ** List Object **
+## **List Object**
 
 ```python
 from letterboxdpy import list
