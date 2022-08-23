@@ -26,18 +26,18 @@ class List:
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
     def list_title(self, page):
-        prop = page.find_all("meta", attrs={'property': 'og:title'})
-        return prop[0]['content']
+        data = page.find_all("meta", attrs={'property': 'og:title'})
+        return data[0]['content']
 
     def author(self, page):
-        prop = page.find("span", attrs={'itemprop': 'name'})
-        return prop.text
+        data = page.find("span", attrs={'itemprop': 'name'})
+        return data.text
 
     def description(self, page):
-        prop = page.find_all("meta", attrs={'property': 'og:description'})
-        if len(prop) == 0:
+        data = page.find_all("meta", attrs={'property': 'og:description'})
+        if len(data) == 0:
             return ''
-        return prop[0]['content']
+        return data[0]['content']
 
     def film_count(self, url):
         prev = count = 0

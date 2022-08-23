@@ -10,17 +10,15 @@
 pip install letterboxdpy
 ```
 
-## **Code Example**
+## ** User Objects **
 
 ```python
 from letterboxdpy import user
 nick = user.User("nmcassa")
 print(nick.jsonify())
-```
 
-### **User Object JSON**
+output:
 
-```
 {
     "username": "nmcassa",
     "favorites": [
@@ -30,29 +28,36 @@ print(nick.jsonify())
         "The Graduate"
     ],
     "stats": {
-        "Films": "342",
-        "This year": "69",
+        "Films": "360",
+        "This year": "86",
         "List": "1",
-        "Following": "6",
-        "Followers": "5"
-    }
+        "Following": "7",
+        "Followers": "6"
+    },
+    "watchlist_length": "73"
 }
 ```
 
-## ** Code Example**
+## ** user_genre_info(user object) **
 
 ```python
 nick = user.User("nmcassa")
-print(nick.user_genre_info())
-```
+print(user_genre_info(nick))
 
-### Output
+output:
 
-```
 {'action': 55, 'adventure': 101, 'animation': 95, 'comedy': 188, 'crime': 22, 'documentary': 16, 'drama': 94, 'family': 109, 'fantasy': 54, 'history': 5, 'horror': 27, 'music': 9, 'mystery': 30, 'romance': 29, 'science-fiction': 48, 'thriller': 43, 'tv-movie': 13, 'war': 4, 'western': 5}
 ```
 
-## **Code Example**
+## ** user_following(user object) / user_followers(user object **
+
+returns the first page of the users following / followers
+
+## ** user_films_watched(user object) **
+
+returns all of the users watched movies
+
+## ** Movie Object **
 
 ```python
 from letterboxdpy import movie
@@ -61,11 +66,9 @@ print(king.jsonify())
 
 king = movie.Movie("king kong", 2005)
 print(king.jsonify())
-```
 
-### **Movie Object JSON**
+output:
 
-```
 {
     "title": "king-kong",
     "director": [
@@ -73,7 +76,6 @@ print(king.jsonify())
         "Ernest B. Schoedsack"
     ],
     "rating": "3.85 out of 5",
-    "description": "A film crew discovers the \"eighth wonder of the world,\" a giant prehistoric ape, and brings him back to New York, where he wreaks havoc.",
     "year": "1933",
     "genres": [
         "horror",
@@ -84,8 +86,7 @@ print(king.jsonify())
 {
     "title": "king-kong-2005",
     "director": "Peter Jackson",
-    "rating": "3.32 out of 5",
-    "description": "In 1933 New York, an overly ambitious movie producer coerces his cast and hired ship crew to travel to mysterious Skull Island, where they encounter Kong, a giant ape who is immediately smitten with...",
+    "rating": "3.33 out of 5",
     "year": "2005",
     "genres": [
         "action",
@@ -93,32 +94,33 @@ print(king.jsonify())
         "drama"
     ]
 }
+
 ```
 
-## **Code Example**
+## ** movie_details(movie object) **
 
 ```python
 king = movie.Movie("king kong", 2005)
-print(king.movie_details())
-```
+print(movie_details(king))
 
-### **Output**
+output:
 
-```
 {'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
 ```
 
-## **Code Example**
+## ** movie_description(movie object) **
+
+returns the description of the movie passed
+
+## ** List Object **
 
 ```python
 from letterboxdpy import list
 list = list.List("https://letterboxd.com/nmcassa/list/movies-for-sale-and-my-local-goodwill/")
 print(list.jsonify())
-```
 
-### **List Object JSON**
+output:
 
-```
 {
     "title": "Movies for sale and my local goodwill",
     "author": "nmcassa",

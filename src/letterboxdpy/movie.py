@@ -11,15 +11,14 @@ class Movie:
         title = title.replace(' ', '-')
         page = self.get_parsed_page("https://letterboxd.com/film/" + title + "/")
 
-        if not self.check_year(title, year, page):
+        if not self.check_year(year, page):
             year = ''
         
         self.title = title
-        self.director = self.movie_director(title, year, page)
-        self.rating = self.movie_rating(title, year, page)
-        self.description = self.movie_description(title, year, page)
-        self.year = self.movie_year(title, year, page)
-        self.genres = self.movie_genre(title, year, page)
+        self.director = self.movie_director(page)
+        self.rating = self.movie_rating(page)
+        self.year = self.movie_year(page)
+        self.genres = self.movie_genre(page)
 
     def jsonify(self):
         return json.dumps(self, indent=4,cls=Encoder)
@@ -33,16 +32,16 @@ class Movie:
 
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
-    def movie_director(self, movie, year, page):
-        crew = page.find_all("span", text = 'Director')
-        if len(crew) != 0:
-            director = crew[0].parent.parent.findChildren("a")
+    def movie_director(self, page):
+        data = page.find_all("span", text = 'Director')
+        if len(data) != 0:
+            director = data[0].parent.parent.findChildren("a")
             director = director[0].text
         else:
-            crew = page.find_all("span", text = 'Directors')
-            if len(crew) == 0:
+            data = page.find_all("span", text = 'Directors')
+            if len(data) == 0:
                 return []
-            directors = crew[0].parent.parent.findChildren("p")[0]
+            directors = data[0].parent.parent.findChildren("p")[0]
             directors = directors.findChildren("a")
             director = []
             for item in directors:
@@ -50,82 +49,84 @@ class Movie:
             
         return director
 
-    def movie_rating(self, movie, year, page):
-        meta = page.find_all("meta", attrs={'name':'twitter:data2'})
-        if len(meta) == 0:
-            return meta
-        content = meta[0]['content']
+    def movie_rating(self, page):
+        data = page.find_all("meta", attrs={'name':'twitter:data2'})
+        if len(data) == 0:
+            return data
+        data = data[0]['content']
 
-        return content
+        return data
 
-    def movie_description(self, movie, year, page):
-        meta = page.find_all("meta", attrs={'name':'twitter:description'})
-        if len(meta) == 0:
-            return ''
-        content = meta[0]['content']
-
-        if "\u2026" in content:
-            content = content.replace("\u2026", "...")
-
-        return content
-
-    def movie_year(self, movie, year, page):
-        meta = page.find_all("meta", attrs={'name': 'twitter:title'})
-        if len(meta) == 0:
+    def movie_year(self, page):
+        data = page.find_all("meta", attrs={'name': 'twitter:title'})
+        if len(data) == 0:
             return ""
         else :
-            meta = meta[0]['content']
-            true_year = meta[meta.find('(')+1:meta.find(')')]
+            data = data[0]['content']
+            true_year = data[data.find('(')+1:data.find(')')]
 
         return true_year
 
-    def check_year(self, movie, year, page):
-        meta = page.find_all("meta", attrs={'name': 'twitter:title'})
-        if len(meta) == 0:
+    def check_year(self, year, page):
+        data = page.find_all("meta", attrs={'name': 'twitter:title'})
+        if len(data) == 0:
             return True
         else :
-            meta = meta[0]['content']
-            true_year = meta[meta.find('(')+1:meta.find(')')]
+            data = data[0]['content']
+            true_year = data[data.find('(')+1:data.find(')')]
 
         if str(true_year) != str(year) and year != '':
             return False
         return True
 
-    def movie_genre(self, movie, year, page):
+    def movie_genre(self, page):
         res = []
 
-        div = page.find_all("div",{"id": ["tab-genres"], })
-        a = div[0].find_all("a")
+        data = page.find_all("div",{"id": ["tab-genres"], })
+        data = data[0].find_all("a")
 
-        for item in a:
+        for item in data:
             if item['href'][7:12] == 'genre':
                 res.append(item.text)
 
         return res
 
-    def movie_details(self):
-        page = self.get_parsed_page("https://letterboxd.com/film/" + self.title + "/details/")
+def movie_details(movie):
+    page = movie.get_parsed_page("https://letterboxd.com/film/" + movie.title + "/details/")
 
-        res = {}
-        studio = []
-        country = []
-        language = []
+    res = {}
+    studio = []
+    country = []
+    language = []
 
-        div = page.find_all("div", {"id": ["tab-details"], })
-        a = div[0].find_all("a")
+    div = page.find_all("div", {"id": ["tab-details"], })
+    a = div[0].find_all("a")
 
-        for item in a:
-            if item['href'][1:7] == 'studio':
-                studio.append(item.text)
-            if item['href'][7:14] == 'country':
-                country.append(item.text)
-            if item['href'][7:15] == 'language':
-                language.append(item.text)
-        res['Country'] = country
-        res['Studio'] = studio
-        res['Language'] = language
+    for item in a:
+        if item['href'][1:7] == 'studio':
+            studio.append(item.text)
+        if item['href'][7:14] == 'country':
+            country.append(item.text)
+        if item['href'][7:15] == 'language':
+            language.append(item.text)
+    res['Country'] = country
+    res['Studio'] = studio
+    res['Language'] = language
 
-        return res
+    return res
+
+def movie_description(movie):
+    page = movie.get_parsed_page("https://letterboxd.com/film/" + movie.title + "/")
+
+    data = page.find_all("meta", attrs={'name':'twitter:description'})
+    if len(data) == 0:
+        return ''
+    data = data[0]['content']
+
+    if "\u2026" in data:
+        data = data.replace("\u2026", "...")
+
+    return data
         
 
 class Encoder(JSONEncoder):
@@ -135,6 +136,6 @@ class Encoder(JSONEncoder):
 if __name__ == "__main__":
     king = Movie("king kong")
     print(king.jsonify())
-    king = Movie("king kong", 2005)
-    print(king.jsonify())
-    print(king.movie_details())
+    #king = Movie("king kong", 2005)
+    #print(king.jsonify())
+    #print(movie_details(king))
