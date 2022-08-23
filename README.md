@@ -16,9 +16,9 @@ pip install letterboxdpy
 from letterboxdpy import user
 nick = user.User("nmcassa")
 print(nick.jsonify())
+```
 
-output:
-
+```
 {
     "username": "nmcassa",
     "favorites": [
@@ -43,9 +43,9 @@ output:
 ```python
 nick = user.User("nmcassa")
 print(user_genre_info(nick))
+```
 
-output:
-
+```
 {'action': 55, 'adventure': 101, 'animation': 95, 'comedy': 188, 'crime': 22, 'documentary': 16, 'drama': 94, 'family': 109, 'fantasy': 54, 'history': 5, 'horror': 27, 'music': 9, 'mystery': 30, 'romance': 29, 'science-fiction': 48, 'thriller': 43, 'tv-movie': 13, 'war': 4, 'western': 5}
 ```
 
@@ -66,9 +66,8 @@ print(king.jsonify())
 
 king = movie.Movie("king kong", 2005)
 print(king.jsonify())
-
-output:
-
+```
+```
 {
     "title": "king-kong",
     "director": [
@@ -102,9 +101,8 @@ output:
 ```python
 king = movie.Movie("king kong", 2005)
 print(movie_details(king))
-
-output:
-
+```
+```
 {'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
 ```
 
@@ -118,9 +116,8 @@ returns the description of the movie passed
 from letterboxdpy import list
 list = list.List("https://letterboxd.com/nmcassa/list/movies-for-sale-and-my-local-goodwill/")
 print(list.jsonify())
-
-output:
-
+```
+```
 {
     "title": "Movies for sale and my local goodwill",
     "author": "nmcassa",
