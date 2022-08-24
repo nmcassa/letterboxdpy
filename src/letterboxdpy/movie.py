@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from json import JSONEncoder
 
 class Movie:
-    def __init__(self, title, year=''):
+    def __init__(self, title: str, year: str = '') -> None:
         if year != '':
             title = title + ' ' + str(year)
         title = title.replace(' ', '-')
@@ -20,10 +20,10 @@ class Movie:
         self.year = self.movie_year(page)
         self.genres = self.movie_genre(page)
 
-    def jsonify(self):
+    def jsonify(self) -> str:
         return json.dumps(self, indent=4,cls=Encoder)
 
-    def get_parsed_page(self, url):
+    def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
         headers = {
             "referer": "https://liquipedia.net/rocketleague/Portal:Statistics",
@@ -32,7 +32,7 @@ class Movie:
 
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
-    def movie_director(self, page):
+    def movie_director(self, page: None) -> str or list:
         data = page.find_all("span", text = 'Director')
         if len(data) != 0:
             director = data[0].parent.parent.findChildren("a")
@@ -49,7 +49,7 @@ class Movie:
             
         return director
 
-    def movie_rating(self, page):
+    def movie_rating(self, page: None) -> str:
         data = page.find_all("meta", attrs={'name':'twitter:data2'})
         if len(data) == 0:
             return data
@@ -57,7 +57,7 @@ class Movie:
 
         return data
 
-    def movie_year(self, page):
+    def movie_year(self, page: None) -> str:
         data = page.find_all("meta", attrs={'name': 'twitter:title'})
         if len(data) == 0:
             return ""
@@ -67,7 +67,7 @@ class Movie:
 
         return true_year
 
-    def check_year(self, year, page):
+    def check_year(self, year: str, page: None) -> bool:
         data = page.find_all("meta", attrs={'name': 'twitter:title'})
         if len(data) == 0:
             return True
@@ -79,7 +79,7 @@ class Movie:
             return False
         return True
 
-    def movie_genre(self, page):
+    def movie_genre(self, page: None) -> list:
         res = []
 
         data = page.find_all("div",{"id": ["tab-genres"], })
@@ -91,7 +91,7 @@ class Movie:
 
         return res
 
-def movie_details(movie):
+def movie_details(movie: Movie) -> dict:
     page = movie.get_parsed_page("https://letterboxd.com/film/" + movie.title + "/details/")
 
     res = {}
@@ -115,7 +115,7 @@ def movie_details(movie):
 
     return res
 
-def movie_description(movie):
+def movie_description(movie: Movie) -> str:
     page = movie.get_parsed_page("https://letterboxd.com/film/" + movie.title + "/")
 
     data = page.find_all("meta", attrs={'name':'twitter:description'})

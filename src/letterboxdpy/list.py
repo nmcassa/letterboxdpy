@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from json import JSONEncoder
 
 class List:
-    def __init__(self, url):
+    def __init__(self, url: str) -> None:
         page = self.get_parsed_page(url)
         
         self.title = self.list_title(page)
@@ -13,10 +13,10 @@ class List:
         self.description = self.description(page)
         self.filmCount = self.film_count(url)
 
-    def jsonify(self):
+    def jsonify(self) -> str:
         return json.dumps(self, indent=4,cls=Encoder)
 
-    def get_parsed_page(self, url):
+    def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
         headers = {
             "referer": "https://liquipedia.net/rocketleague/Portal:Statistics",
@@ -25,21 +25,21 @@ class List:
 
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
-    def list_title(self, page):
+    def list_title(self, page: None) -> str:
         data = page.find_all("meta", attrs={'property': 'og:title'})
         return data[0]['content']
 
-    def author(self, page):
+    def author(self, page: None) -> str:
         data = page.find("span", attrs={'itemprop': 'name'})
         return data.text
 
-    def description(self, page):
+    def description(self, page: None) -> str:
         data = page.find_all("meta", attrs={'property': 'og:description'})
         if len(data) == 0:
             return ''
         return data[0]['content']
 
-    def film_count(self, url):
+    def film_count(self, url: str) -> int: #and movie_list!!
         prev = count = 0
         curr = 1
         movie_list = []
