@@ -25,8 +25,7 @@ class User:
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
     def user_favorites(self, page: None) -> list:        
-        data = page.find_all("section", {"id": ["favourites"], })
-        data = data[0].findChildren("div")
+        data = page.find("section", {"id": ["favourites"], }).findChildren("div")
         names = []
 
         for div in data:
@@ -52,11 +51,10 @@ class User:
     def user_watchlist(self) -> str:
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
 
-        data = page.find_all("span", {"class": ["watchlist-count"], })
+        data = page.find("span", {"class": ["watchlist-count"], })
+        ret = data.text.split('\xa0')[0] #remove 'films' from '76 films'
 
-        ret = data[0].text.split('\xa0')
-
-        return ret[0]
+        return ret
 
 def user_films_watched(user: User) -> list:
     #returns all movies
@@ -108,8 +106,8 @@ def user_genre_info(user: User) -> dict:
     for genre in genres:
         page = user.get_parsed_page("https://letterboxd.com/" + user.username +
                                     "/films/genre/" + genre + "/")
-        data = page.find_all("span", {"class": ["replace-if-you"], })
-        data = data[0].next_sibling
+        data = page.find("span", {"class": ["replace-if-you"], })
+        data = data.next_sibling
         ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
         
     return ret
@@ -139,5 +137,5 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     nick = User("nmcassa")
-    print(nick.jsonify())
-    #print(user_reviews(nick))
+    #print(nick.jsonify())
+    print(user_genre_info(nick))

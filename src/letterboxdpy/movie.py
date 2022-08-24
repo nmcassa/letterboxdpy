@@ -34,12 +34,12 @@ class Movie:
 
     def movie_director(self, page: None) -> str or list:
         data = page.find_all("span", text = 'Director')
-        if len(data) != 0:
+        if len(data) != 0: #check if only one director
             director = data[0].parent.parent.findChildren("a")
             director = director[0].text
         else:
             data = page.find_all("span", text = 'Directors')
-            if len(data) == 0:
+            if len(data) == 0: #check for no directors
                 return []
             directors = data[0].parent.parent.findChildren("p")[0]
             directors = directors.findChildren("a")
@@ -82,8 +82,8 @@ class Movie:
     def movie_genre(self, page: None) -> list:
         res = []
 
-        data = page.find_all("div",{"id": ["tab-genres"], })
-        data = data[0].find_all("a")
+        data = page.find("div",{"id": ["tab-genres"], })
+        data = data.find_all("a")
 
         for item in data:
             if item['href'][7:12] == 'genre':
@@ -99,8 +99,8 @@ def movie_details(movie: Movie) -> dict:
     country = []
     language = []
 
-    div = page.find_all("div", {"id": ["tab-details"], })
-    a = div[0].find_all("a")
+    div = page.find("div", {"id": ["tab-details"], })
+    a = div.find_all("a")
 
     for item in a:
         if item['href'][1:7] == 'studio':
@@ -109,6 +109,7 @@ def movie_details(movie: Movie) -> dict:
             country.append(item.text)
         if item['href'][7:15] == 'language':
             language.append(item.text)
+            
     res['Country'] = country
     res['Studio'] = studio
     res['Language'] = language
@@ -135,7 +136,7 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     king = Movie("king kong")
-    print(king.jsonify())
+    #print(king.jsonify())
     #king = Movie("king kong", 2005)
     #print(king.jsonify())
-    #print(movie_details(king))
+    print(movie_details(king))

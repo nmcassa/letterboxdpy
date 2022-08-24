@@ -26,8 +26,8 @@ class List:
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
     def list_title(self, page: None) -> str:
-        data = page.find_all("meta", attrs={'property': 'og:title'})
-        return data[0]['content']
+        data = page.find("meta", attrs={'property': 'og:title'})
+        return data['content']
 
     def author(self, page: None) -> str:
         data = page.find("span", attrs={'itemprop': 'name'})

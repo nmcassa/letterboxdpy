@@ -60,10 +60,10 @@ returns all of the users watched movies
 ## **user_reviews(user object)**
 
 returns a dictionary of information from reviews the user has made such as: 
-    movie's title
-    movie's year
-    user's rating on movie
-    user's review
+    -movie's title
+    -movie's year
+    -user's rating on movie
+    -user's review
 
 ## **Movie Object**
 
