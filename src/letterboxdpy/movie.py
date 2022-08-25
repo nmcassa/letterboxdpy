@@ -8,13 +8,13 @@ class Movie:
     def __init__(self, title: str, year: str = '') -> None:
         if year != '':
             title = title + ' ' + str(year)
-        title = title.replace(' ', '-')
-        page = self.get_parsed_page("https://letterboxd.com/film/" + title + "/")
+        self.title = title.replace(' ', '-')
+        self.url = "https://letterboxd.com/film/" + self.title + "/"
+        page = self.get_parsed_page(self.url)
 
         if not self.check_year(year, page):
             year = ''
         
-        self.title = title
         self.director = self.movie_director(page)
         self.rating = self.movie_rating(page)
         self.year = self.movie_year(page)
@@ -26,7 +26,7 @@ class Movie:
     def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
         headers = {
-            "referer": "https://liquipedia.net/rocketleague/Portal:Statistics",
+            "referer": "https://letterboxd.com",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
 
@@ -91,8 +91,27 @@ class Movie:
 
         return res
 
+def movie_popular_reviews(movie: Movie) -> dict:
+    ret = []
+
+    page = movie.get_parsed_page(movie.url)
+
+    data = page.find("ul", {"class": ["film-popular-review"], })
+    data = data.find_all("div", {"class": ["film-detail-content"], })
+
+    for item in data:
+        curr = {}
+
+        curr['reviewer'] = item.find("strong", {"class": ["name"], }).text
+        curr['rating'] = item.find("span", {"class": ['rating'], }).text
+        curr['review'] = item.find("div", {"class": ['body-text'], }).findChild("p").text
+
+        ret.append(curr)
+
+    return ret
+
 def movie_details(movie: Movie) -> dict:
-    page = movie.get_parsed_page("https://letterboxd.com/film/" + movie.title + "/details/")
+    page = movie.get_parsed_page(movie.url + "details/")
 
     res = {}
     studio = []
@@ -109,7 +128,7 @@ def movie_details(movie: Movie) -> dict:
             country.append(item.text)
         if item['href'][7:15] == 'language':
             language.append(item.text)
-            
+
     res['Country'] = country
     res['Studio'] = studio
     res['Language'] = language
@@ -117,7 +136,7 @@ def movie_details(movie: Movie) -> dict:
     return res
 
 def movie_description(movie: Movie) -> str:
-    page = movie.get_parsed_page("https://letterboxd.com/film/" + movie.title + "/")
+    page = movie.get_parsed_page(movie.url)
 
     data = page.find_all("meta", attrs={'name':'twitter:description'})
     if len(data) == 0:
@@ -135,8 +154,8 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    king = Movie("king kong")
+    #king = Movie("king kong")
     #print(king.jsonify())
-    #king = Movie("king kong", 2005)
+    king = Movie("king kong", 2005)
     #print(king.jsonify())
-    print(movie_details(king))
+    print(movie_popular_reviews(king))

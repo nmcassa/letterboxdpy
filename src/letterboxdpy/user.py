@@ -6,8 +6,10 @@ from bs4 import BeautifulSoup
 
 class User:
     def __init__(self, username: str) -> None:
-        page = self.get_parsed_page("https://letterboxd.com/" + username + "/")
         self.username = username
+
+        page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/")
+
         self.favorites = self.user_favorites(page)
         self.stats = self.user_stats(page)
         self.watchlist_length = self.user_watchlist()
@@ -18,7 +20,7 @@ class User:
     def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
         headers = {
-            "referer": "https://liquipedia.net/rocketleague/Portal:Statistics",
+            "referer": "https://letterboxd.com",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
 

@@ -60,10 +60,10 @@ returns all of the users watched movies
 ## **user_reviews(user object)**
 
 returns a dictionary of information from reviews the user has made such as: 
-    -movie's title
-    -movie's year
-    -user's rating on movie
-    -user's review
+- movie's title
+- movie's year
+- user's rating on movie
+- user's review
 
 ## **Movie Object**
 
@@ -118,65 +118,57 @@ print(movie_details(king))
 
 returns the description of the movie passed
 
+## **movie_popular_reviews(movie object)**
+
+returns information about the movie's most popular reviews, such as:
+- reviewer
+- rating
+- review
+
 ## **List Object**
 
 ```python
 from letterboxdpy import list
-list = list.List("https://letterboxd.com/nmcassa/list/movies-for-sale-and-my-local-goodwill/")
+list = list.List("Horrorville", "The Official Top 25 Horror Films of 2022")
 print(list.jsonify())
 ```
 ```
 {
-    "title": "Movies for sale and my local goodwill",
-    "author": "nmcassa",
-    "description": "",
+    "url": "https://letterboxd.com/horrorville/list/the-official-top-25-horror-films-of-2022/",
+    "title": "The Official Top 25 Horror Films of 2022",
+    "author": "Horrorville",
+    "description": "To be updated monthly. It's ranked by average Letterboxd member rating. See the official top 50 of 2021 on Horrroville here. Eligibility rules: \u2022\u00a0Feature-length narrative films included only. \u2022\u00a0Shorts, documentaries, and TV are excluded. \u2022\u00a0Films must have their festival premiere in 2022 or their first national release in any country in 2022. \u2022\u00a0Films must have the horror genre tag on TMDb and Letterboxd. \u2022\u00a0There is a 1,000 minimum view threshold. Curated by Letterboxd Head of Platform Content Jack Moulton.",
     "movies": [
-        "Fiddler on the Roof",
-        "Grumpier Old Men",
-        "The Rainmaker",
-        "Great Expectations",
-        "Heat",
-        "The Santa Clause",
-        "The Lord of the Rings: The Fellowship of the Ring",
-        "Charlie's Angels",
-        "The Chamber",
-        "Easy A",
-        "A Christmas Carol",
-        "A Christmas Story",
-        "The Return of Jafar",
-        "Snow Dogs",
-        "101 Dalmatians",
-        "Dumbo",
-        "Annie",
-        "Spy Kids",
-        "The Lion King",
-        "The Jungle Book",
-        "Saving Private Ryan",
-        "The Princess Diaries",
-        "Aladdin and the King of Thieves",
-        "Lady and the Tramp II: Scamp's Adventure",
-        "Knocked Up",
-        "Ocean's Eleven",
-        "Evan Almighty",
-        "Iron Man",
-        "Crazy, Stupid, Love.",
-        "Ender's Game",
-        "Rambo",
-        "Talladega Nights: The Ballad of Ricky Bobby",
-        "National Lampoon's Christmas Vacation",
-        "Mission: Impossible",
-        "Mission: Impossible II",
-        "Quantum of Solace",
-        "The Devil Wears Prada",
-        "Green Zone",
-        "Inside Job",
-        "Racing Stripes",
-        "No Strings Attached",
-        "We Bought a Zoo",
-        "Madagascar",
-        "Happy Feet",
-        "A Cinderella Story"
+        "Nope",
+        "Mad God",
+        "Prey",
+        "Bodies Bodies Bodies",
+        "You Won't Be Alone",
+        "X",
+        "The House",
+        "Fresh",
+        "Final Cut",
+        "Saloum",
+        "The Black Phone",
+        "Bhoothakaalam",
+        "Nanny",
+        "Resurrection",
+        "15 Ways to Kill Your Neighbour",
+        "Speak No Evil",
+        "Watcher",
+        "Scream",
+        "Crimes of the Future",
+        "Flux Gourmet",
+        "Medusa",
+        "What Josiah Saw",
+        "Satan's Slaves 2: Communion",
+        "Piggy",
+        "Dawn Breaks Behind the Eyes"
     ],
-    "filmCount": 45
+    "filmCount": 25
 }
 ```
+
+## **list_tags(list object)**
+
+returns the tags under the list
