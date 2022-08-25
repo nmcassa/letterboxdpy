@@ -41,8 +41,9 @@ print(nick.jsonify())
 ## **user_genre_info(user object)**
 
 ```python
+from letterboxdpy import user
 nick = user.User("nmcassa")
-print(user_genre_info(nick))
+print(user.user_genre_info(nick))
 ```
 
 ```
@@ -51,19 +52,41 @@ print(user_genre_info(nick))
 
 ## **user_following(user object) / user_followers(user object)**
 
-returns the first page of the users following / followers
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_following(nick))
+print(user.user_followers(nick))
+```
+
+```
+['ryanshubert', 'Sean Baker', '24framesofnick', 'ConnorEatsPants', 'IHE', 'karsten', 'jordynhf']
+['ryanshubert', 'Crescendo House', 'Brendonyu668', 'Parker Bobbitt', 'jordynhf', 'Dan']
+```
 
 ## **user_films_watched(user object)**
 
-returns all of the users watched movies
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_films_watched(nick))
+```
+
+```
+...all of the users watched movies...
+```
 
 ## **user_reviews(user object)**
 
-returns a dictionary of information from reviews the user has made such as: 
-- movie's title
-- movie's year
-- user's rating on movie
-- user's review
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_reviews(nick))
+```
+
+```
+[{'movie': 'Beast', 'rating': ' ★½ ', 'date': '23 Aug 2022', 'review': 'Did not like it'}, {'movie': 'Men', 'rating': ' ★ ', 'date': '25 May 2022', 'review': 'What could he possibly be trying to say with this'}, {'movie': 'Nightcrawler', 'rating': ' ★★★ ', 'date': '04 May 2022', 'review': 'Jake is a pussy nerd loser in this'}, {'movie': 'The Graduate', 'rating': ' ★★★★ ', 'date': '30 Jan 2022', 'review': 'If only they didn’t play the same song like 20 times'}, {'movie': "I'm Thinking of Ending Things", 'rating': ' ★★★★ ', 'date': '14 Feb 2021', 'review': 'yeah i dont get it'}]
+```
 
 ## **Movie Object**
 
@@ -107,8 +130,9 @@ print(king.jsonify())
 ## **movie_details(movie object)**
 
 ```python
+from letterboxdpy import movie
 king = movie.Movie("king kong", 2005)
-print(movie_details(king))
+print(movie.movie_details(king))
 ```
 ```
 {'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
@@ -116,14 +140,27 @@ print(movie_details(king))
 
 ## **movie_description(movie object)**
 
-returns the description of the movie passed
+```python
+from letterboxdpy import movie
+king = movie.Movie("king kong", 2005)
+print(movie.movie_description(king))
+```
+
+```
+In 1933 New York, an overly ambitious movie producer coerces his cast and hired ship crew to travel to mysterious Skull Island, where they encounter Kong, a giant ape who is immediately smitten with...
+```
 
 ## **movie_popular_reviews(movie object)**
 
-returns information about the movie's most popular reviews, such as:
-- reviewer
-- rating
-- review
+```python
+from letterboxdpy import movie
+king = movie.Movie("king kong" 2005)
+print(movie.movie_popular_reviews(king))
+```
+
+```
+[{'reviewer': 'BRAT', 'rating': ' ★★★½ ', 'review': 'naomi watts: bitch, it’s king kongking kong: yes, i’m king kongadrien brody: this is king kong?jack black: yes, miss king kong!!kyle chandler: and i’m kyle chandler :)'}, {'reviewer': 'josh lewis', 'rating': ' ★★★★ ', 'review': 'This review may contain spoilers. I can handle the truth.'}, {'reviewer': 'ashley 🥀', 'rating': ' ★½ ', 'review': 'To quote one of the funniest tweets I have ever seen: did King Kong really think he was gonna date that lady?'}, ...
+```
 
 ## **List Object**
 
@@ -171,4 +208,12 @@ print(list.jsonify())
 
 ## **list_tags(list object)**
 
-returns the tags under the list
+```python
+from letterboxdpy import list
+a = list.List("Horrorville", "The Official Top 25 Horror Films of 2022")
+print(list.list_tags(a))
+```
+
+```
+['official', 'horror', 'letterboxd official', 'letterboxd', '2022', 'topprofile', 'top 25']
+```
