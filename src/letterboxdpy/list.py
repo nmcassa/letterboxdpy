@@ -76,5 +76,5 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     list = List("Horrorville", "The Official Top 25 Horror Films of 2022")
-    #print(list.jsonify())
-    print(list_tags(list))
+    print(list.jsonify())
+    #print(list_tags(list))

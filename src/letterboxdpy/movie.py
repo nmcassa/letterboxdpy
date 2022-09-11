@@ -157,5 +157,5 @@ if __name__ == "__main__":
     #king = Movie("king kong")
     #print(king.jsonify())
     king = Movie("king kong", 2005)
-    #print(king.jsonify())
-    print(movie_popular_reviews(king))
+    print(king.jsonify())
+    #print(movie_popular_reviews(king))

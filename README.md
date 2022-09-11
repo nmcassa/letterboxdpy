@@ -18,7 +18,7 @@ nick = user.User("nmcassa")
 print(nick.jsonify())
 ```
 
-```
+```json
 {
     "username": "nmcassa",
     "favorites": [
@@ -46,7 +46,7 @@ nick = user.User("nmcassa")
 print(user.user_genre_info(nick))
 ```
 
-```
+```python
 {'action': 55, 'adventure': 101, 'animation': 95, 'comedy': 188, 'crime': 22, 'documentary': 16, 'drama': 94, 'family': 109, 'fantasy': 54, 'history': 5, 'horror': 27, 'music': 9, 'mystery': 30, 'romance': 29, 'science-fiction': 48, 'thriller': 43, 'tv-movie': 13, 'war': 4, 'western': 5}
 ```
 
@@ -59,7 +59,7 @@ print(user.user_following(nick))
 print(user.user_followers(nick))
 ```
 
-```
+```python
 ['ryanshubert', 'Sean Baker', '24framesofnick', 'ConnorEatsPants', 'IHE', 'karsten', 'jordynhf']
 ['ryanshubert', 'Crescendo House', 'Brendonyu668', 'Parker Bobbitt', 'jordynhf', 'Dan']
 ```
@@ -84,7 +84,7 @@ nick = user.User("nmcassa")
 print(user.user_reviews(nick))
 ```
 
-```
+```python
 [{'movie': 'Beast', 'rating': ' ★½ ', 'date': '23 Aug 2022', 'review': 'Did not like it'}, {'movie': 'Men', 'rating': ' ★ ', 'date': '25 May 2022', 'review': 'What could he possibly be trying to say with this'}, {'movie': 'Nightcrawler', 'rating': ' ★★★ ', 'date': '04 May 2022', 'review': 'Jake is a pussy nerd loser in this'}, {'movie': 'The Graduate', 'rating': ' ★★★★ ', 'date': '30 Jan 2022', 'review': 'If only they didn’t play the same song like 20 times'}, {'movie': "I'm Thinking of Ending Things", 'rating': ' ★★★★ ', 'date': '14 Feb 2021', 'review': 'yeah i dont get it'}]
 ```
 
@@ -98,7 +98,8 @@ print(king.jsonify())
 king = movie.Movie("king kong", 2005)
 print(king.jsonify())
 ```
-```
+
+```json
 {
     "title": "king-kong",
     "director": [
@@ -134,7 +135,8 @@ from letterboxdpy import movie
 king = movie.Movie("king kong", 2005)
 print(movie.movie_details(king))
 ```
-```
+
+```python
 {'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
 ```
 
@@ -169,7 +171,8 @@ from letterboxdpy import list
 list = list.List("Horrorville", "The Official Top 25 Horror Films of 2022")
 print(list.jsonify())
 ```
-```
+
+```json
 {
     "url": "https://letterboxd.com/horrorville/list/the-official-top-25-horror-films-of-2022/",
     "title": "The Official Top 25 Horror Films of 2022",
@@ -214,6 +217,6 @@ a = list.List("Horrorville", "The Official Top 25 Horror Films of 2022")
 print(list.list_tags(a))
 ```
 
-```
+```python
 ['official', 'horror', 'letterboxd official', 'letterboxd', '2022', 'topprofile', 'top 25']
 ```
