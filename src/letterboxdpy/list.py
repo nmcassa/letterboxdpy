@@ -12,8 +12,11 @@ class List:
 
         page = self.get_parsed_page(self.url)
     
-        self.description = self.description(page)
-        self.filmCount = self.film_count(self.url)
+        self.description(page)
+        self.film_count(self.url)
+
+    def __str__(self):
+        return self.jsonify()
 
     def jsonify(self) -> str:
         return json.dumps(self, indent=4,cls=Encoder)
@@ -36,10 +39,11 @@ class List:
         return data.text
 
     def description(self, page: None) -> str:
-        data = page.find_all("meta", attrs={'property': 'og:description'})
-        if len(data) == 0:
-            return ''
-        return data[0]['content']
+        try:
+            data = page.find_all("meta", attrs={'property': 'og:description'})
+            self.description = data[0]['content']
+        except:
+            return None
 
     def film_count(self, url: str) -> int: #and movie_list!!
         prev = count = 0
@@ -55,8 +59,8 @@ class List:
                 movie_list.append(alt['alt'])
             curr = len(movie_list)
 
+        self.filmCount = curr
         self.movies = movie_list
-        return curr
 
 def list_tags(list: List) -> list:
     ret = []
@@ -76,5 +80,5 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     list = List("Horrorville", "The Official Top 25 Horror Films of 2022")
-    print(list.jsonify())
+    print(list)
     #print(list_tags(list))

@@ -9,10 +9,13 @@ class User:
         self.username = username
 
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/")
-
-        self.favorites = self.user_favorites(page)
-        self.stats = self.user_stats(page)
-        self.watchlist_length = self.user_watchlist()
+        
+        self.user_watchlist()
+        self.user_favorites(page)
+        self.user_stats(page)
+    
+    def __str__(self):
+        return self.jsonify()
 
     def jsonify(self) -> str:
         return json.dumps(self, indent=4,cls=Encoder)
@@ -34,7 +37,7 @@ class User:
             img = div.find("img")
             names.append(img['alt'])
             
-        return names
+        self.favorites = names
 
     def user_stats(self, page: None) -> dict:
         span = []
@@ -48,7 +51,7 @@ class User:
         for item in span:
             stats[item[1].text.replace(u'\xa0', ' ')] = item[0].text
 
-        return stats
+        self.stats = stats
 
     def user_watchlist(self) -> str:
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
@@ -56,7 +59,7 @@ class User:
         data = page.find("span", {"class": ["watchlist-count"], })
         ret = data.text.split('\xa0')[0] #remove 'films' from '76 films'
 
-        return ret
+        self.watchlist_length = ret
 
 def user_films_watched(user: User) -> list:
     #returns all movies
@@ -139,5 +142,5 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     nick = User("nmcassa")
-    #print(nick.jsonify())
-    print(user_reviews(nick))
+    print(nick)
+    #print(user_reviews(nick))

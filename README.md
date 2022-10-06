@@ -15,12 +15,13 @@ pip install letterboxdpy
 ```python
 from letterboxdpy import user
 nick = user.User("nmcassa")
-print(nick.jsonify())
+print(nick)
 ```
 
 ```json
 {
     "username": "nmcassa",
+    "watchlist_length": "72",
     "favorites": [
         "The Grand Budapest Hotel",
         "The King of Comedy",
@@ -28,13 +29,12 @@ print(nick.jsonify())
         "The Graduate"
     ],
     "stats": {
-        "Films": "360",
-        "This year": "86",
+        "Films": "371",
+        "This year": "96",
         "List": "1",
         "Following": "7",
         "Followers": "6"
-    },
-    "watchlist_length": "73"
+    }
 }
 ```
 
@@ -93,10 +93,10 @@ print(user.user_reviews(nick))
 ```python
 from letterboxdpy import movie
 king = movie.Movie("king kong")
-print(king.jsonify())
+print(king)
 
 king = movie.Movie("king kong", 2005)
-print(king.jsonify())
+print(king)
 ```
 
 ```json
@@ -169,18 +169,22 @@ print(movie.movie_popular_reviews(king))
 ```python
 from letterboxdpy import list
 list = list.List("Horrorville", "The Official Top 25 Horror Films of 2022")
-print(list.jsonify())
+print(list)
 ```
 
 ```json
 {
+    "title": "the-official-top-25-horror-films-of-2022",
+    "author": "horrorville",
     "url": "https://letterboxd.com/horrorville/list/the-official-top-25-horror-films-of-2022/",
-    "title": "The Official Top 25 Horror Films of 2022",
-    "author": "Horrorville",
     "description": "To be updated monthly. It's ranked by average Letterboxd member rating. See the official top 50 of 2021 on Horrroville here. Eligibility rules: \u2022\u00a0Feature-length narrative films included only. \u2022\u00a0Shorts, documentaries, and TV are excluded. \u2022\u00a0Films must have their festival premiere in 2022 or their first national release in any country in 2022. \u2022\u00a0Films must have the horror genre tag on TMDb and Letterboxd. \u2022\u00a0There is a 1,000 minimum view threshold. Curated by Letterboxd Head of Platform Content Jack Moulton.",
+    "filmCount": 25,
     "movies": [
         "Nope",
+        "Pearl",
+        "Barbarian",
         "Mad God",
+        "Bones and All",
         "Prey",
         "Bodies Bodies Bodies",
         "You Won't Be Alone",
@@ -189,23 +193,19 @@ print(list.jsonify())
         "Fresh",
         "Final Cut",
         "Saloum",
-        "The Black Phone",
         "Bhoothakaalam",
+        "The Black Phone",
         "Nanny",
-        "Resurrection",
         "15 Ways to Kill Your Neighbour",
-        "Speak No Evil",
+        "Resurrection",
         "Watcher",
         "Scream",
         "Crimes of the Future",
+        "Speak No Evil",
         "Flux Gourmet",
-        "Medusa",
-        "What Josiah Saw",
         "Satan's Slaves 2: Communion",
-        "Piggy",
-        "Dawn Breaks Behind the Eyes"
-    ],
-    "filmCount": 25
+        "Medusa"
+    ]
 }
 ```
 

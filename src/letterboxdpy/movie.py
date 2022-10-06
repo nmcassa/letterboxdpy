@@ -15,10 +15,13 @@ class Movie:
         if not self.check_year(year, page):
             year = ''
         
-        self.director = self.movie_director(page)
-        self.rating = self.movie_rating(page)
-        self.year = self.movie_year(page)
+        self.movie_director(page)
+        self.movie_rating(page)
+        self.movie_year(page)
         self.genres = self.movie_genre(page)
+
+    def __str__(self):
+        return self.jsonify()
 
     def jsonify(self) -> str:
         return json.dumps(self, indent=4,cls=Encoder)
@@ -33,47 +36,42 @@ class Movie:
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
     def movie_director(self, page: None) -> str or list:
-        data = page.find_all("span", text = 'Director')
-        if len(data) != 0: #check if only one director
+        try:
+            data = page.find_all("span", text = 'Director')
             director = data[0].parent.parent.findChildren("a")
-            director = director[0].text
-        else:
+            self.director = director[0].text
+        except:
             data = page.find_all("span", text = 'Directors')
             if len(data) == 0: #check for no directors
                 return []
             directors = data[0].parent.parent.findChildren("p")[0]
             directors = directors.findChildren("a")
-            director = []
+            self.directors = []
             for item in directors:
-                director.append(item.text)
-            
-        return director
+                self.directors.append(item.text)
 
     def movie_rating(self, page: None) -> str:
-        data = page.find_all("meta", attrs={'name':'twitter:data2'})
-        if len(data) == 0:
-            return data
-        data = data[0]['content']
-
-        return data
+        try:
+            data = page.find_all("meta", attrs={'name':'twitter:data2'})
+            self.rating = data[0]['content']
+        except:
+            self.rating = "None found"
 
     def movie_year(self, page: None) -> str:
-        data = page.find_all("meta", attrs={'name': 'twitter:title'})
-        if len(data) == 0:
-            return ""
-        else :
+        try:
+            data = page.find_all("meta", attrs={'name': 'twitter:title'})
             data = data[0]['content']
-            true_year = data[data.find('(')+1:data.find(')')]
-
-        return true_year
+            self.year = data[data.find('(')+1:data.find(')')]
+        except:
+            self.year = "None found"
 
     def check_year(self, year: str, page: None) -> bool:
-        data = page.find_all("meta", attrs={'name': 'twitter:title'})
-        if len(data) == 0:
-            return True
-        else :
+        try:
+            data = page.find_all("meta", attrs={'name': 'twitter:title'})
             data = data[0]['content']
             true_year = data[data.find('(')+1:data.find(')')]
+        except:
+            return True
 
         if str(true_year) != str(year) and year != '':
             return False
@@ -138,15 +136,11 @@ def movie_details(movie: Movie) -> dict:
 def movie_description(movie: Movie) -> str:
     page = movie.get_parsed_page(movie.url)
 
-    data = page.find_all("meta", attrs={'name':'twitter:description'})
-    if len(data) == 0:
-        return ''
-    data = data[0]['content']
-
-    if "\u2026" in data:
-        data = data.replace("\u2026", "...")
-
-    return data
+    try:
+        data = page.find_all("meta", attrs={'name':'twitter:description'})
+        return data[0]['content']
+    except:
+        return None
         
 
 class Encoder(JSONEncoder):
@@ -154,8 +148,8 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    #king = Movie("king kong")
-    #print(king.jsonify())
+    king = Movie("king kong")
+    print(king)
     king = Movie("king kong", 2005)
-    print(king.jsonify())
+    print(king)
     #print(movie_popular_reviews(king))
