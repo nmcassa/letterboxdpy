@@ -62,6 +62,9 @@ class User:
         self.watchlist_length = ret
 
 def user_films_watched(user: User) -> list:
+    if type(user) != User:
+        raise Exception("Improper parameter")
+
     #returns all movies
     prev = count = 0
     curr = 1
@@ -80,6 +83,9 @@ def user_films_watched(user: User) -> list:
     return movie_list
 
 def user_following(user: User) -> list:
+    if type(user) != User:
+        raise Exception("Improper parameter")
+
     #returns the first page of following
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/following/")
     data = page.find_all("img", attrs={'height': '40'})
@@ -92,6 +98,9 @@ def user_following(user: User) -> list:
     return ret
 
 def user_followers(user: User) -> list:
+    if type(user) != User:
+        raise Exception("Improper parameter")
+
     #returns the first page of followers
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/followers/")
     data = page.find_all("img", attrs={'height': '40'})
@@ -104,6 +113,9 @@ def user_followers(user: User) -> list:
     return ret
             
 def user_genre_info(user: User) -> dict:
+    if type(user) != User:
+        raise Exception("Improper parameter")
+
     genres = ["action", "adventure", "animation", "comedy", "crime", "documentary",
               "drama", "family", "fantasy", "history", "horror", "music", "mystery",
               "romance", "science-fiction", "thriller", "tv-movie", "war", "western"]
@@ -119,6 +131,9 @@ def user_genre_info(user: User) -> dict:
 
 #gives reviews that the user selected has made
 def user_reviews(user: User) -> list:
+    if type(user) != User:
+        raise Exception("Improper parameter")
+        
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/reviews/")
     ret = []
 
@@ -143,4 +158,4 @@ class Encoder(JSONEncoder):
 if __name__ == "__main__":
     nick = User("nmcassa")
     print(nick)
-    #print(user_reviews(nick))
+    #print(user_films_watched(nick))

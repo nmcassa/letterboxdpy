@@ -63,6 +63,9 @@ class List:
         self.movies = movie_list
 
 def list_tags(list: List) -> list:
+    if type(list) != List:
+        raise Exception("Improper parameter")
+
     ret = []
 
     data = list.get_parsed_page(list.url)
@@ -80,5 +83,5 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     list = List("Horrorville", "The Official Top 25 Horror Films of 2022")
-    print(list)
-    #print(list_tags(list))
+    #print(list)
+    print(list_tags(list))

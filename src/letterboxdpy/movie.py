@@ -90,6 +90,9 @@ class Movie:
         return res
 
 def movie_popular_reviews(movie: Movie) -> dict:
+    if type(movie) != Movie:
+        raise Exception("Improper parameter")
+
     ret = []
 
     page = movie.get_parsed_page(movie.url)
@@ -109,6 +112,9 @@ def movie_popular_reviews(movie: Movie) -> dict:
     return ret
 
 def movie_details(movie: Movie) -> dict:
+    if type(movie) != Movie:
+        raise Exception("Improper parameter")
+
     page = movie.get_parsed_page(movie.url + "details/")
 
     res = {}
@@ -134,6 +140,9 @@ def movie_details(movie: Movie) -> dict:
     return res
 
 def movie_description(movie: Movie) -> str:
+    if type(movie) != Movie:
+        raise Exception("Improper parameter")
+        
     page = movie.get_parsed_page(movie.url)
 
     try:
