@@ -23,14 +23,26 @@ print(nick)
     "username": "nmcassa",
     "watchlist_length": "72",
     "favorites": [
-        "The Grand Budapest Hotel",
-        "The King of Comedy",
-        "The Alpinist",
-        "The Graduate"
+        [
+            "The Grand Budapest Hotel",
+            "/film/the-grand-budapest-hotel/"
+        ],
+        [
+            "The King of Comedy",
+            "/film/the-king-of-comedy/"
+        ],
+        [
+            "The Alpinist",
+            "/film/the-alpinist/"
+        ],
+        [
+            "The Graduate",
+            "/film/the-graduate/"
+        ]
     ],
     "stats": {
-        "Films": "371",
-        "This year": "96",
+        "Films": "372",
+        "This year": "97",
         "List": "1",
         "Following": "7",
         "Followers": "6"
@@ -73,7 +85,7 @@ print(user.user_films_watched(nick))
 ```
 
 ```
-...all of the users watched movies...
+...all of the users watched movies in a tuple formatted (movie title, movie url)...
 ```
 
 ## **user_reviews(user object)**
@@ -102,7 +114,8 @@ print(king)
 ```json
 {
     "title": "king-kong",
-    "director": [
+    "url": "https://letterboxd.com/film/king-kong/",
+    "directors": [
         "Merian C. Cooper",
         "Ernest B. Schoedsack"
     ],
@@ -116,6 +129,7 @@ print(king)
 }
 {
     "title": "king-kong-2005",
+    "url": "https://letterboxd.com/film/king-kong-2005/",
     "director": "Peter Jackson",
     "rating": "3.33 out of 5",
     "year": "2005",
@@ -125,7 +139,6 @@ print(king)
         "drama"
     ]
 }
-
 ```
 
 ## **movie_details(movie object)**
@@ -180,31 +193,106 @@ print(list)
     "description": "To be updated monthly. It's ranked by average Letterboxd member rating. See the official top 50 of 2021 on Horrroville here. Eligibility rules: \u2022\u00a0Feature-length narrative films included only. \u2022\u00a0Shorts, documentaries, and TV are excluded. \u2022\u00a0Films must have their festival premiere in 2022 or their first national release in any country in 2022. \u2022\u00a0Films must have the horror genre tag on TMDb and Letterboxd. \u2022\u00a0There is a 1,000 minimum view threshold. Curated by Letterboxd Head of Platform Content Jack Moulton.",
     "filmCount": 25,
     "movies": [
-        "Nope",
-        "Pearl",
-        "Barbarian",
-        "Mad God",
-        "Bones and All",
-        "Prey",
-        "Bodies Bodies Bodies",
-        "You Won't Be Alone",
-        "X",
-        "The House",
-        "Fresh",
-        "Final Cut",
-        "Saloum",
-        "Bhoothakaalam",
-        "The Black Phone",
-        "Nanny",
-        "15 Ways to Kill Your Neighbour",
-        "Resurrection",
-        "Watcher",
-        "Scream",
-        "Crimes of the Future",
-        "Speak No Evil",
-        "Flux Gourmet",
-        "Satan's Slaves 2: Communion",
-        "Medusa"
+        [
+            "Nope",
+            "/film/nope/"
+        ],
+        [
+            "Pearl",
+            "/film/pearl-2022/"
+        ],
+        [
+            "Barbarian",
+            "/film/barbarian-2022/"
+        ],
+        [
+            "Mad God",
+            "/film/mad-god/"
+        ],
+        [
+            "Bones and All",
+            "/film/bones-and-all/"
+        ],
+        [
+            "Prey",
+            "/film/prey-2022/"
+        ],
+        [
+            "Bodies Bodies Bodies",
+            "/film/bodies-bodies-bodies/"
+        ],
+        [
+            "You Won't Be Alone",
+            "/film/you-wont-be-alone/"
+        ],
+        [
+            "X",
+            "/film/x-2022/"
+        ],
+        [
+            "The House",
+            "/film/the-house-2022-1/"
+        ],
+        [
+            "Fresh",
+            "/film/fresh-2022/"
+        ],
+        [
+            "Final Cut",
+            "/film/final-cut-2022/"
+        ],
+        [
+            "Saloum",
+            "/film/saloum/"
+        ],
+        [
+            "Bhoothakaalam",
+            "/film/bhoothakaalam/"
+        ],
+        [
+            "The Black Phone",
+            "/film/the-black-phone/"
+        ],
+        [
+            "Nanny",
+            "/film/nanny-2022/"
+        ],
+        [
+            "15 Ways to Kill Your Neighbour",
+            "/film/15-ways-to-kill-your-neighbour/"
+        ],
+        [
+            "Resurrection",
+            "/film/resurrection-2022/"
+        ],
+        [
+            "Watcher",
+            "/film/watcher/"
+        ],
+        [
+            "Scream",
+            "/film/scream-2022/"
+        ],
+        [
+            "Crimes of the Future",
+            "/film/crimes-of-the-future-2022/"
+        ],
+        [
+            "Speak No Evil",
+            "/film/speak-no-evil-2022/"
+        ],
+        [
+            "Flux Gourmet",
+            "/film/flux-gourmet/"
+        ],
+        [
+            "Satan's Slaves 2: Communion",
+            "/film/satans-slaves-2-communion/"
+        ],
+        [
+            "Medusa",
+            "/film/medusa-2021/"
+        ]
     ]
 }
 ```

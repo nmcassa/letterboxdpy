@@ -55,8 +55,11 @@ class List:
             page = self.get_parsed_page(url + "page/" + str(count) + "/")
 
             img = page.find_all("img", {"class": ["image"], })
-            for alt in img:
-                movie_list.append(alt['alt'])
+
+            for item in img:
+                movie_url = item.parent['data-film-slug']
+                movie_list.append((item['alt'], movie_url))
+                
             curr = len(movie_list)
 
         self.filmCount = curr
@@ -83,5 +86,5 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     list = List("Horrorville", "The Official Top 25 Horror Films of 2022")
-    #print(list)
-    print(list_tags(list))
+    print(list)
+    #print(list_tags(list))

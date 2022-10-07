@@ -35,7 +35,8 @@ class User:
 
         for div in data:
             img = div.find("img")
-            names.append(img['alt'])
+            movie_url = img.parent['data-film-slug']
+            names.append((img['alt'], movie_url))
             
         self.favorites = names
 
@@ -75,9 +76,12 @@ def user_films_watched(user: User) -> list:
         prev = len(movie_list)
         page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
 
-        data = page.find_all("img", {"class": ["image"], })
-        for alt in data:
-            movie_list.append(alt['alt'])
+        img = page.find_all("img", {"class": ["image"], })
+
+        for item in img:
+            movie_url = item.parent['data-film-slug']
+            movie_list.append((item['alt'], movie_url))
+
         curr = len(movie_list)
             
     return movie_list
@@ -157,5 +161,5 @@ class Encoder(JSONEncoder):
 
 if __name__ == "__main__":
     nick = User("nmcassa")
-    print(nick)
-    #print(user_films_watched(nick))
+    #print(nick)
+    print(user_films_watched(nick))

@@ -18,7 +18,7 @@ class Movie:
         self.movie_director(page)
         self.movie_rating(page)
         self.movie_year(page)
-        self.genres = self.movie_genre(page)
+        self.movie_genre(page)
 
     def __str__(self):
         return self.jsonify()
@@ -87,7 +87,7 @@ class Movie:
             if item['href'][7:12] == 'genre':
                 res.append(item.text)
 
-        return res
+        self.genres = res
 
 def movie_popular_reviews(movie: Movie) -> dict:
     if type(movie) != Movie:
