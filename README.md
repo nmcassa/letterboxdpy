@@ -104,11 +104,12 @@ print(user.user_reviews(nick))
 
 ```python
 from letterboxdpy import movie
-king = movie.Movie("king kong")
+king = Movie("king kong")
 print(king)
-
-king = movie.Movie("king kong", 2005)
+king = Movie("king kong", 2005)
 print(king)
+house = Movie("/film/the-house-2022-1/")
+print(house)
 ```
 
 ```json
@@ -137,6 +138,24 @@ print(king)
         "action",
         "adventure",
         "drama"
+    ]
+}
+{
+    "url": "https://letterboxd.com/film/the-house-2022-1/",
+    "directors": [
+        "Paloma Baeza",
+        "Niki Lindroth von Bahr",
+        "Emma De Swaef",
+        "Marc James Roels"
+    ],
+    "rating": "3.54 out of 5",
+    "year": "2022",
+    "genres": [
+        "fantasy",
+        "horror",
+        "drama",
+        "comedy",
+        "animation"
     ]
 }
 ```

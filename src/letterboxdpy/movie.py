@@ -6,10 +6,14 @@ from json import JSONEncoder
 
 class Movie:
     def __init__(self, title: str, year: str = '') -> None:
-        if year != '':
-            title = title + ' ' + str(year)
-        self.title = title.replace(' ', '-')
-        self.url = "https://letterboxd.com/film/" + self.title + "/"
+        if title[0] == "/":
+            self.url = "https://letterboxd.com" + title
+        else:
+            if year != '':
+                title = title + ' ' + str(year)
+            self.title = title.replace(' ', '-')
+            self.url = "https://letterboxd.com/film/" + self.title + "/"
+
         page = self.get_parsed_page(self.url)
 
         if not self.check_year(year, page):
@@ -103,9 +107,20 @@ def movie_popular_reviews(movie: Movie) -> dict:
     for item in data:
         curr = {}
 
-        curr['reviewer'] = item.find("strong", {"class": ["name"], }).text
-        curr['rating'] = item.find("span", {"class": ['rating'], }).text
-        curr['review'] = item.find("div", {"class": ['body-text'], }).findChild("p").text
+        try:
+            curr['reviewer'] = item.find("strong", {"class": ["name"], }).text
+        except:
+            curr['reviewer'] = None
+
+        try:
+            curr['rating'] = item.find("span", {"class": ['rating'], }).text
+        except:
+            curr['rating'] = None
+
+        try:
+            curr['review'] = item.find("div", {"class": ['body-text'], }).findChild("p").text
+        except:
+            curr['review'] = None
 
         ret.append(curr)
 
@@ -161,4 +176,6 @@ if __name__ == "__main__":
     print(king)
     king = Movie("king kong", 2005)
     print(king)
-    #print(movie_popular_reviews(king))
+    house = Movie("/film/the-house-2022-1/")
+    print(house)
+    #print(movie_popular_reviews(house))
