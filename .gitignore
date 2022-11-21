@@ -1,0 +1,11 @@
+__pycache__/
+build/
+*.pyc
+*.pyo
+*~
+
+# macOS
+.DS_Store
+
+# Windows
+desktop.ini
