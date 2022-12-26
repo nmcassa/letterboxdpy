@@ -6,6 +6,9 @@ from json import JSONEncoder
 
 class List:
     def __init__(self, author: str, title: str) -> None:
+        if not re.match("^[A-Za-z0-9_]*$", author):
+            raise Exception("Invalid author")
+
         self.title = title.replace(' ', '-').lower()
         self.author = author.lower()
         self.url = "https://letterboxd.com/" + self.author +"/list/" + self.title + "/"
@@ -65,6 +68,9 @@ class List:
         self.filmCount = curr
         self.movies = movie_list
 
+        if self.filmCount == 0:
+            raise Exception("No list exists")
+
 def list_tags(list: List) -> list:
     if type(list) != List:
         raise Exception("Improper parameter")
@@ -85,6 +91,6 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    list = List("Horrorville", "The Official Top 25 Horror Films of 2022")
-    print(list)
-    #print(list_tags(list))
+    list = List("eddiebergman", "movie-references-made-in-nbcs-community")
+    #print(list)
+    print(list_tags(list))

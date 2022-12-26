@@ -6,6 +6,9 @@ from bs4 import BeautifulSoup
 
 class User:
     def __init__(self, username: str) -> None:
+        if not re.match("^[A-Za-z0-9_]*$", username):
+            raise Exception("Invalid username")
+
         self.username = username
 
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/")
@@ -58,7 +61,10 @@ class User:
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
 
         data = page.find("span", {"class": ["watchlist-count"], })
-        ret = data.text.split('\xa0')[0] #remove 'films' from '76 films'
+        try:
+            ret = data.text.split('\xa0')[0] #remove 'films' from '76 films'
+        except:
+            raise Exception("No user found")
 
         self.watchlist_length = ret
 

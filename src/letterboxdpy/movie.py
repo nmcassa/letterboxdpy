@@ -85,7 +85,10 @@ class Movie:
         res = []
 
         data = page.find("div",{"id": ["tab-genres"], })
-        data = data.find_all("a")
+        try:
+            data = data.find_all("a")
+        except:
+            raise Exception("No movie found")
 
         for item in data:
             if item['href'][7:12] == 'genre':
@@ -174,8 +177,8 @@ class Encoder(JSONEncoder):
 if __name__ == "__main__":
     king = Movie("king kong")
     print(king)
-    king = Movie("king kong", 2005)
-    print(king)
-    house = Movie("/film/the-house-2022-1/")
-    print(house)
+    #king = Movie("king kong", 2005)
+    #print(king)
+    #house = Movie("/film/the-house-2022-1/")
+    #print(house)
     #print(movie_popular_reviews(house))
