@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "letterboxdpy"
-version = "3.1"
+version = "3.15"
 authors = [
   { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
 ]
@@ -16,3 +16,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/nmcassa/letterboxdpy"
+"Bug Tracker" = "https://github.com/nmcassa/letterboxdpy/issues"
