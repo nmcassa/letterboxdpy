@@ -9,7 +9,7 @@ class User:
         if not re.match("^[A-Za-z0-9_]*$", username):
             raise Exception("Invalid username")
 
-        self.username = username
+        self.username = username.lower()
 
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/")
         
@@ -166,6 +166,6 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    nick = User("nmcassa")
+    nick = User("nmcassA")
     #print(nick)
     print(user_films_watched(nick))

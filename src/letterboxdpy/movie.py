@@ -11,7 +11,7 @@ class Movie:
         else:
             if year != '':
                 title = title + ' ' + str(year)
-            self.title = title.replace(' ', '-')
+            self.title = title.replace(' ', '-').lower()
             self.url = "https://letterboxd.com/film/" + self.title + "/"
 
         page = self.get_parsed_page(self.url)
