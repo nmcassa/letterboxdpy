@@ -143,7 +143,7 @@ def user_genre_info(user: User) -> dict:
 def user_reviews(user: User) -> list:
     if type(user) != User:
         raise Exception("Improper parameter")
-        
+
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/reviews/")
     ret = []
 
@@ -158,6 +158,64 @@ def user_reviews(user: User) -> list:
         curr['review'] = item.find("div", {"class": ["body-text"], }).findChildren()[0].text #review
 
         ret.append(curr)
+
+    return ret
+
+def user_diary_page(user: User, page) -> list:
+    '''Returns the user's diary for a specific page'''
+
+    if type(user) != User:
+        raise Exception("Improper parameter")
+
+    page = user.get_parsed_page(
+        "https://letterboxd.com/" + user.username + "/films/diary/page/"+str(page)+"/")
+    ret = []
+
+    data = page.find_all("tr", {"class": ["diary-entry-row"], })
+    month_year = ''
+    for item in data:
+        curr = {}
+
+        curr['movie'] = item.find("h3").text  # movie title
+        curr['movie_id'] = item.find("h3").find('a')['href'].split('/')[3] # movie id
+        curr['rating'] = item.find(
+            "span", {"class": ["rating"], }).text.strip()  # movie rating
+        day = item.find(
+            "td", {"class": ["td-day diary-day center"], }).text  # rating date
+
+        day = day.replace(' ', '').replace(' ', '')
+
+        # Checks if the date is still in the same month. If not, it changes the month_year
+        tmp_monthyear = item.find(
+            "td", {"class": ["td-calendar"], }).text.replace(' ', '').replace(' ', '')
+
+        if tmp_monthyear != '':
+            month_year = item.find("td", {"class": ["td-calendar"], }).text
+
+        curr['date'] = day.strip() + ' ' + month_year.strip()  # rating date
+        ret.append(curr)
+
+    return ret
+
+def user_diary(user: User) -> list:
+    '''Returns a list of dictionaries with the user's diary'''
+
+    page = user.get_parsed_page(
+        "https://letterboxd.com/" + user.username + "/films/diary/")
+
+    # Get the max number of pages
+    try:
+        max_page = page.findAll("li", {"class": ["paginate-page"], })[-1].text
+        print(max_page)
+        ret = []
+
+        for i in range(1, int(max_page)+1):
+            page_result = user_diary_page(user, i)
+            ret.extend(page_result)
+
+    except IndexError:
+        print('No diary found')
+        ret =[]
 
     return ret
 
