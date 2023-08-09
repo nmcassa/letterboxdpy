@@ -168,7 +168,23 @@ def movie_description(movie: Movie) -> str:
         return data[0]['content']
     except:
         return None
-        
+
+
+def movie_poster(movie_id):
+    '''Returns the poster link of a movie'''
+    try:
+        page = requests.get("https://letterboxd.com/film/" + movie_id + "/", timeout=5)
+        page = BeautifulSoup(page.text, 'lxml')
+
+        script_w_data = page.select_one('script[type="application/ld+json"]')
+        link = json.loads(script_w_data.text.split(
+            ' */')[1].split('/* ]]>')[0])['image']
+
+    except AttributeError as exception:
+        print(f'error on {movie_id}. Exception:' + str(exception))
+        link = ''
+
+    return link
 
 class Encoder(JSONEncoder):
     def default(self, o):
