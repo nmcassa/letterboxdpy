@@ -10,7 +10,12 @@
 pip install letterboxdpy
 ```
 
-## **User Objects**
+# Directory
+ - [User Objects](#User)
+ - [Movie Objects](#Movie)
+ - [List Objects](#List)
+
+<h1 id="User">User Objects</h1>
 
 ```python
 from letterboxdpy import user
@@ -100,7 +105,15 @@ print(user.user_reviews(nick))
 [{'movie': 'Beast', 'rating': ' ★½ ', 'date': '23 Aug 2022', 'review': 'Did not like it'}, {'movie': 'Men', 'rating': ' ★ ', 'date': '25 May 2022', 'review': 'What could he possibly be trying to say with this'}, {'movie': 'Nightcrawler', 'rating': ' ★★★ ', 'date': '04 May 2022', 'review': 'Jake is a pussy nerd loser in this'}, {'movie': 'The Graduate', 'rating': ' ★★★★ ', 'date': '30 Jan 2022', 'review': 'If only they didn’t play the same song like 20 times'}, {'movie': "I'm Thinking of Ending Things", 'rating': ' ★★★★ ', 'date': '14 Feb 2021', 'review': 'yeah i dont get it'}]
 ```
 
-## **Movie Object**
+## **user_diary and user_diary_page and user_films_rated**
+
+ To be documented.
+
+## **Member Listing and top_users **
+
+ To be documented.
+
+<h1 id="Movie">Movie Objects</h1>
 
 ```python
 from letterboxdpy import movie
@@ -196,7 +209,11 @@ print(movie.movie_popular_reviews(king))
 [{'reviewer': 'BRAT', 'rating': ' ★★★½ ', 'review': 'naomi watts: bitch, it’s king kongking kong: yes, i’m king kongadrien brody: this is king kong?jack black: yes, miss king kong!!kyle chandler: and i’m kyle chandler :)'}, {'reviewer': 'josh lewis', 'rating': ' ★★★★ ', 'review': 'This review may contain spoilers. I can handle the truth.'}, {'reviewer': 'ashley 🥀', 'rating': ' ★½ ', 'review': 'To quote one of the funniest tweets I have ever seen: did King Kong really think he was gonna date that lady?'}, ...
 ```
 
-## **List Object**
+## **movie_poster**
+
+ To be documented.
+
+<h1 id="List">List Objects</h1>
 
 ```python
 from letterboxdpy import list
@@ -222,98 +239,7 @@ print(list)
         ],
         [
             "Barbarian",
-            "/film/barbarian-2022/"
-        ],
-        [
-            "Mad God",
-            "/film/mad-god/"
-        ],
-        [
-            "Bones and All",
-            "/film/bones-and-all/"
-        ],
-        [
-            "Prey",
-            "/film/prey-2022/"
-        ],
-        [
-            "Bodies Bodies Bodies",
-            "/film/bodies-bodies-bodies/"
-        ],
-        [
-            "You Won't Be Alone",
-            "/film/you-wont-be-alone/"
-        ],
-        [
-            "X",
-            "/film/x-2022/"
-        ],
-        [
-            "The House",
-            "/film/the-house-2022-1/"
-        ],
-        [
-            "Fresh",
-            "/film/fresh-2022/"
-        ],
-        [
-            "Final Cut",
-            "/film/final-cut-2022/"
-        ],
-        [
-            "Saloum",
-            "/film/saloum/"
-        ],
-        [
-            "Bhoothakaalam",
-            "/film/bhoothakaalam/"
-        ],
-        [
-            "The Black Phone",
-            "/film/the-black-phone/"
-        ],
-        [
-            "Nanny",
-            "/film/nanny-2022/"
-        ],
-        [
-            "15 Ways to Kill Your Neighbour",
-            "/film/15-ways-to-kill-your-neighbour/"
-        ],
-        [
-            "Resurrection",
-            "/film/resurrection-2022/"
-        ],
-        [
-            "Watcher",
-            "/film/watcher/"
-        ],
-        [
-            "Scream",
-            "/film/scream-2022/"
-        ],
-        [
-            "Crimes of the Future",
-            "/film/crimes-of-the-future-2022/"
-        ],
-        [
-            "Speak No Evil",
-            "/film/speak-no-evil-2022/"
-        ],
-        [
-            "Flux Gourmet",
-            "/film/flux-gourmet/"
-        ],
-        [
-            "Satan's Slaves 2: Communion",
-            "/film/satans-slaves-2-communion/"
-        ],
-        [
-            "Medusa",
-            "/film/medusa-2021/"
-        ]
-    ]
-}
+           ...
 ```
 
 ## **list_tags(list object)**
