@@ -1,8 +1,8 @@
 import json
-import re
 import requests
 from bs4 import BeautifulSoup
 from json import JSONEncoder
+
 
 class Movie:
     def __init__(self, title: str, year: str = '') -> None:

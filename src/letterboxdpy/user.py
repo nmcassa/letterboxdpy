@@ -4,6 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+
 class User:
     def __init__(self, username: str) -> None:
         if not re.match("^[A-Za-z0-9_]*$", username):
@@ -59,14 +60,16 @@ class User:
 
     def user_watchlist(self) -> str:
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
-
         data = page.find("span", {"class": ["watchlist-count"], })
+        if not data:
+            data = page.find("span", {"class": ["js-watchlist-count"], })
         try:
             ret = data.text.split('\xa0')[0] #remove 'films' from '76 films'
         except:
             raise Exception("No user found")
 
         self.watchlist_length = ret
+
 
 def user_films_watched(user: User) -> list:
     if type(user) != User:
@@ -92,11 +95,51 @@ def user_films_watched(user: User) -> list:
             
     return movie_list
 
+
+def user_films_rated(user: User) -> list:
+    """ """
+    if type(user) != User:
+        raise Exception("Improper parameter")
+
+    prev = count = 0
+    curr = -1
+    rating_list = []
+
+    while prev != curr:
+        count += 1
+        prev = len(rating_list)
+        page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
+
+        ps = page.find_all("p", {"class": ["poster-viewingdata"], })
+        for p in ps:
+            film_id = p.parent.div['data-film-id']
+            film_url_pattern = p.parent.div['data-film-slug']
+            rating = "NR"
+            film_title_unreliable = ""
+            try:
+                film_title_unreliable = p.parent.img['alt']
+            except Exception as e:
+                print(f"[Error]: couldn't get film title. {e=}")
+
+            try:
+                spans = p.find_all('span')
+                if spans:
+                    rating = spans[0].text
+            except Exception as e:
+                print(f"[Error]: couldn't get film rating. {e=}")
+            finally:
+                rating_list.append( (film_title_unreliable, film_id, film_url_pattern, rating ) )
+
+        curr = len(rating_list)
+
+    return rating_list
+
+
 def user_following(user: User) -> list:
     if type(user) != User:
         raise Exception("Improper parameter")
 
-    #returns the first page of following
+    # returns the first page of following
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/following/")
     data = page.find_all("img", attrs={'height': '40'})
 
@@ -106,6 +149,7 @@ def user_following(user: User) -> list:
         ret.append(person['alt'])
 
     return ret
+
 
 def user_followers(user: User) -> list:
     if type(user) != User:
@@ -121,7 +165,8 @@ def user_followers(user: User) -> list:
         ret.append(person['alt'])
 
     return ret
-            
+
+
 def user_genre_info(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
@@ -138,6 +183,7 @@ def user_genre_info(user: User) -> dict:
         ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
         
     return ret
+
 
 #gives reviews that the user selected has made
 def user_reviews(user: User) -> list:
@@ -160,6 +206,7 @@ def user_reviews(user: User) -> list:
         ret.append(curr)
 
     return ret
+
 
 def user_diary_page(user: User, page) -> list:
     '''Returns the user's diary for a specific page'''
@@ -197,6 +244,7 @@ def user_diary_page(user: User, page) -> list:
 
     return ret
 
+
 def user_diary(user: User) -> list:
     '''Returns a list of dictionaries with the user's diary'''
 
@@ -219,11 +267,24 @@ def user_diary(user: User) -> list:
 
     return ret
 
+
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
+
 if __name__ == "__main__":
-    nick = User("nmcassA")
-    #print(nick)
-    print(user_films_watched(nick))
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--user', dest="user", help="Username to gather stats on")
+    args = parser.parse_args()
+    user = args.user
+
+    if user:
+        print(f"{user=}")
+        userinfo = User(user)
+        print(userinfo)
+        # print(user_films_watched(userinfo))
+        ratings = user_films_rated(userinfo)
+        print(ratings)
+
