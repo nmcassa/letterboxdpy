@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "letterboxdpy"
-version = "4.0"
+version = "4.02"
 authors = [
   { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
 ]
