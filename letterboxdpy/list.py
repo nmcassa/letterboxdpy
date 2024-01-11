@@ -70,7 +70,31 @@ class List:
 
         if self.filmCount == 0:
             raise Exception("No list exists")
+            
+def date_created(list: List) -> list:
+    if type(list) != List:
+        raise Exception("Improper parameter")
 
+    ret = []
+
+    data = list.get_parsed_page(list.url)
+    data = data.find("span", {"class": "published is-updated", })
+    data = data.findChild("time")
+
+    return data.text
+
+def date_updated(list: List) -> list:
+    if type(list) != List:
+        raise Exception("Improper parameter")
+
+    ret = []
+
+    data = list.get_parsed_page(list.url)
+    data = data.find("span", {"class": "updated", })
+    data = data.findChild("time")
+
+    return data.text
+    
 def list_tags(list: List) -> list:
     if type(list) != List:
         raise Exception("Improper parameter")
