@@ -117,11 +117,11 @@ print(user.user_reviews(nick))
 
 ```python
 from letterboxdpy import movie
-king = Movie("king kong")
+king = movie.Movie("king kong")
 print(king)
-king = Movie("king kong", 2005)
+king = movie.Movie("king kong", 2005)
 print(king)
-house = Movie("/film/the-house-2022-1/")
+house = movie.Movie("/film/the-house-2022-1/")
 print(house)
 ```
 
