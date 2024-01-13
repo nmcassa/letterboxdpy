@@ -57,7 +57,8 @@ class List:
             prev = len(movie_list)
             page = self.get_parsed_page(url + "page/" + str(count) + "/")
 
-            img = page.find_all("img", {"class": ["image"], })
+            img = page.find("ul",{"class": ["js-list-entries poster-list -p125 -grid film-list"], })
+            img = img.find_all("img", {"class": ["image"], })
 
             for item in img:
                 movie_url = item.parent['data-film-slug']
