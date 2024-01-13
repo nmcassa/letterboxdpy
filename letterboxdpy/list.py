@@ -76,24 +76,26 @@ def date_created(list: List) -> list:
     if type(list) != List:
         raise Exception("Improper parameter")
 
-    ret = []
-
-    data = list.get_parsed_page(list.url)
-    data = data.find("span", {"class": "published is-updated", })
-    data = data.findChild("time")
-
+    page_data = list.get_parsed_page(list.url)
+    data = page_data.find("span", {"class": "published is-updated", })
+    if type(data) != type(None):
+        data = data.findChild("time")
+    else:
+        data = page_data.find("span", {"class": "published", })
     return data.text
 
+
+# Returns date last updated, falling back to date created.
 def date_updated(list: List) -> list:
     if type(list) != List:
         raise Exception("Improper parameter")
 
-    ret = []
-
-    data = list.get_parsed_page(list.url)
-    data = data.find("span", {"class": "updated", })
-    data = data.findChild("time")
-
+    page_data = list.get_parsed_page(list.url)
+    data = page_data.find("span", {"class": "updated", })
+    if type(data) != type(None):
+        data = data.findChild("time")
+    else:
+        data = page_data.find("span", {"class": "published", })
     return data.text
     
 def list_tags(list: List) -> list:
