@@ -157,35 +157,35 @@ def movie_details(movie: Movie) -> dict:
 
     return res
 
-def movie_watchers(movie: Movie) -> dict: 
+def movie_watchers(movie: Movie) -> dict:
     if type(movie) != Movie:
         raise Exception("Improper parameter")
 
     page = movie.get_parsed_page(movie.url + "members/")
 
     res = {}
-    watch_count = 0
-    fan_count = 0
-    like_count = 0
-    review_count = 0
-    list_count = 0
+    res['watch_count'] = 0
+    res['fan_count'] = 0
+    res['like_count'] = 0
+    res['review_count'] = 0
+    res['list_count'] = 0
 
     div = page.find("div", {"id": ["content-nav"], })
-    a = div.find_all("a")
+    if type(div) != type(None):
+        a = div.find_all("a")
 
-    for item in a:
-    	if item.get('title'):
-    		if item['title'].find('people',-6) != -1:
-    			res['watch_count'] = item['title'][:-7]
-    		elif item['title'].find('fans',-4) != -1:
-    			res['fan_count'] = item['title'][:-5]
-    		elif item['title'].find('likes',-5) != -1:
-    			res['like_count'] = item['title'][:-6]
-    		elif item['title'].find('reviews',-7) != -1:
-    			res['review_count'] = item['title'][:-8]
-    		elif item['title'].find('lists',-5) != -1:
-    			res['list_count'] = item['title'][:-6]
-
+        for item in a:
+        	if item.get('title'):
+        		if item['title'].find('people',-6) != -1:
+        			res['watch_count'] = item['title'][:-7]
+        		elif item['title'].find('fans',-4) != -1:
+        			res['fan_count'] = item['title'][:-5]
+        		elif item['title'].find('likes',-5) != -1:
+        			res['like_count'] = item['title'][:-6]
+        		elif item['title'].find('reviews',-7) != -1:
+        			res['review_count'] = item['title'][:-8]
+        		elif item['title'].find('lists',-5) != -1:
+        			res['list_count'] = item['title'][:-6]
     return res
 
 def movie_tmdb_link(movie: Movie) -> str:

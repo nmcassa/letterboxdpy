@@ -57,7 +57,8 @@ class List:
             prev = len(movie_list)
             page = self.get_parsed_page(url + "page/" + str(count) + "/")
 
-            img = page.find_all("img", {"class": ["image"], })
+            img = page.find("ul",{"class": ["js-list-entries poster-list -p125 -grid film-list"], })
+            img = img.find_all("img", {"class": ["image"], })
 
             for item in img:
                 movie_url = item.parent['data-film-slug']
@@ -70,7 +71,33 @@ class List:
 
         if self.filmCount == 0:
             raise Exception("No list exists")
+            
+def date_created(list: List) -> list:
+    if type(list) != List:
+        raise Exception("Improper parameter")
 
+    page_data = list.get_parsed_page(list.url)
+    data = page_data.find("span", {"class": "published is-updated", })
+    if type(data) != type(None):
+        data = data.findChild("time")
+    else:
+        data = page_data.find("span", {"class": "published", })
+    return data.text
+
+
+# Returns date last updated, falling back to date created.
+def date_updated(list: List) -> list:
+    if type(list) != List:
+        raise Exception("Improper parameter")
+
+    page_data = list.get_parsed_page(list.url)
+    data = page_data.find("span", {"class": "updated", })
+    if type(data) != type(None):
+        data = data.findChild("time")
+    else:
+        data = page_data.find("span", {"class": "published", })
+    return data.text
+    
 def list_tags(list: List) -> list:
     if type(list) != List:
         raise Exception("Improper parameter")
