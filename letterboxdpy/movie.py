@@ -86,15 +86,11 @@ class Movie:
         res = []
 
         data = page.find("div",{"id": ["tab-genres"], })
-        try:
+        if type(data) != type(None):
             data = data.find_all("a")
-        except:
-            raise Exception("No movie found")
-
-        for item in data:
-            if item['href'][7:12] == 'genre':
-                res.append(item.text)
-
+            for item in data:
+                if item['href'][7:12] == 'genre':
+                    res.append(item.text)
         self.genres = res
 
 def movie_popular_reviews(movie: Movie) -> dict:
