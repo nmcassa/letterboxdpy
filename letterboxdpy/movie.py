@@ -62,12 +62,13 @@ class Movie:
             self.rating = "None found"
 
     def movie_year(self, page: None) -> str:
-        try:
-            data = page.find_all("meta", attrs={'name': 'twitter:title'})
-            data = data[0]['content']
-            self.year = data[data.find('(')+1:data.find(')')]
-        except:
-            self.year = "None found"
+        data = page.find_all("meta", attrs={'name': 'twitter:title'})
+        data = data[0]['content']
+        self.year = None
+        if data.find('(') != -1:
+            data = data.split('(')[-1][:-1]
+            if data.isdigit():
+                self.year = data
 
     def check_year(self, year: str, page: None) -> bool:
         try:
@@ -85,15 +86,11 @@ class Movie:
         res = []
 
         data = page.find("div",{"id": ["tab-genres"], })
-        try:
+        if type(data) != type(None):
             data = data.find_all("a")
-        except:
-            raise Exception("No movie found")
-
-        for item in data:
-            if item['href'][7:12] == 'genre':
-                res.append(item.text)
-
+            for item in data:
+                if item['href'][7:12] == 'genre':
+                    res.append(item.text)
         self.genres = res
 
 def movie_popular_reviews(movie: Movie) -> dict:
