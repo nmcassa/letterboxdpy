@@ -40,19 +40,13 @@ class Movie:
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
     def movie_director(self, page: None) -> str or list:
-        try:
-            data = page.find_all("span", text = 'Director')
-            director = data[0].parent.parent.findChildren("a")
-            self.director = director[0].text
-        except:
-            data = page.find_all("span", text = 'Directors')
-            if len(data) == 0: #check for no directors
-                return []
-            directors = data[0].parent.parent.findChildren("p")[0]
-            directors = directors.findChildren("a")
-            self.directors = []
-            for item in directors:
-                self.directors.append(item.text)
+        self.directors = []
+        data = page.find("div",{"id": ["tab-crew"], })
+        if type(data) != type(None):
+            data = data.find_all("a")
+            for item in data:
+                if item['href'][:10] == '/director/':
+                    self.directors.append(item.text)
 
     def movie_rating(self, page: None) -> str:
         try:
