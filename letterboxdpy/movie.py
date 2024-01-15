@@ -195,7 +195,7 @@ def movie_tmdb_link(movie: Movie) -> str:
         div = page.find("p", {"class": ["text-link text-footer"], })
         a = div.find_all("a")
         for item in a:
-        	if item['href'].find('themoviedb.org/movie/') != -1:
+        	if item['href'].find('themoviedb.org/') != -1:
         		return (item['href']) 
     except:
         return None
