@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "letterboxdpy"
-version = "4.02"
+version = "4.5"
 authors = [
   { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
 ]
@@ -20,3 +20,6 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/nmcassa/letterboxdpy"
 "Bug Tracker" = "https://github.com/nmcassa/letterboxdpy/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["letterboxdpy"]

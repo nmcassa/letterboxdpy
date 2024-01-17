@@ -209,6 +209,20 @@ print(movie.movie_popular_reviews(king))
 [{'reviewer': 'BRAT', 'rating': ' ★★★½ ', 'review': 'naomi watts: bitch, it’s king kongking kong: yes, i’m king kongadrien brody: this is king kong?jack black: yes, miss king kong!!kyle chandler: and i’m kyle chandler :)'}, {'reviewer': 'josh lewis', 'rating': ' ★★★★ ', 'review': 'This review may contain spoilers. I can handle the truth.'}, {'reviewer': 'ashley 🥀', 'rating': ' ★½ ', 'review': 'To quote one of the funniest tweets I have ever seen: did King Kong really think he was gonna date that lady?'}, ...
 ```
 
+## **movie_tmdb_link**
+
+```python
+from letterboxdpy import movie
+rock = movie.Movie("rocky")
+print(movie.movie_tmdb_link(rock))
+
+https://www.themoviedb.org/movie/1366/
+```
+
+## **movie_watchers**
+
+ To be documented 
+
 ## **movie_poster**
 
  To be documented.
