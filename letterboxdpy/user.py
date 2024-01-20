@@ -71,28 +71,32 @@ class User:
         self.watchlist_length = ret
 
 
-def user_films_watched(user: User) -> list:
+def user_films_watched(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
 
     #returns all movies
-    prev = count = 0
-    curr = 1
-    movie_list = []
+    count = 0
+    movie_list = {'movies': []}
 
-    while prev != curr:
+    while True:
         count += 1
-        prev = len(movie_list)
         page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
 
-        img = page.find_all("img", {"class": ["image"], })
+        posters = page.find_all("div", {"class": ["film-poster"], })
 
-        for item in img:
-            movie_url = item.parent['data-film-slug']
-            movie_list.append((item['alt'], movie_url))
+        for poster in posters:
+            movie_list["movies"].append({
+                poster["data-film-slug"] : {
+                    'name': poster.img["alt"],
+                    "id": poster["data-film-id"],
+                    }}
+                )
 
-        curr = len(movie_list)
-            
+        if len(posters) < 72:
+            movie_list['length'] = len(movie_list['movies'])
+            break
+
     return movie_list
 
 
