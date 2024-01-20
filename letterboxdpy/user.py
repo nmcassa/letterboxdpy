@@ -135,7 +135,7 @@ def user_films_rated(user: User) -> list:
     return rating_list
 
 
-def user_following(user: User) -> list:
+def user_following(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
 
@@ -143,15 +143,17 @@ def user_following(user: User) -> list:
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/following/")
     data = page.find_all("img", attrs={'height': '40'})
 
-    ret = []
+    ret = {}
 
     for person in data:
-        ret.append(person['alt'])
+        ret[person.parent['href'].replace('/', '')] = {
+            'display_name': person['alt'],
+        }
 
     return ret
 
 
-def user_followers(user: User) -> list:
+def user_followers(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
 
@@ -159,10 +161,12 @@ def user_followers(user: User) -> list:
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/followers/")
     data = page.find_all("img", attrs={'height': '40'})
 
-    ret = []
+    ret = {}
 
     for person in data:
-        ret.append(person['alt'])
+        ret[person.parent['href'].replace('/', '')] = {
+            'display_name': person['alt'],
+        }
 
     return ret
 
