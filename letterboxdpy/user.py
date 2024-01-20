@@ -143,10 +143,10 @@ def user_following(user: User) -> list:
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/following/")
     data = page.find_all("img", attrs={'height': '40'})
 
-    ret = []
+    ret = {}
 
     for person in data:
-        ret.append(person['alt'])
+        ret[person.parent['href']] = person['alt']
 
     return ret
 
@@ -159,10 +159,10 @@ def user_followers(user: User) -> list:
     page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/followers/")
     data = page.find_all("img", attrs={'height': '40'})
 
-    ret = []
+    ret = {}
 
     for person in data:
-        ret.append(person['alt'])
+        ret[person.parent['href']] = person['alt']
 
     return ret
 
