@@ -77,8 +77,27 @@ print(user.user_followers(nick))
 ```
 
 ```python
-['ryanshubert', 'Sean Baker', '24framesofnick', 'ConnorEatsPants', 'IHE', 'karsten', 'jordynhf']
-['ryanshubert', 'Crescendo House', 'Brendonyu668', 'Parker Bobbitt', 'jordynhf', 'Dan']
+{
+    "ppark": {
+        "display_name": "ppark"
+    },
+    "ryanshubert": {
+        "display_name": "ryanshubert"
+    },
+    "crescendohouse": {
+        "display_name": "Crescendo House"
+    },...
+}
+   "ppark": {
+        "display_name": "ppark"
+    },
+    "joacogarcia2023": {
+        "display_name": "joacogarcia2023"
+    },
+    "ryanshubert": {
+        "display_name": "ryanshubert"
+    },...
+}
 ```
 
 ## **user_films_watched(user object)**
