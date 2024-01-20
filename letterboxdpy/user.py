@@ -135,7 +135,7 @@ def user_films_rated(user: User) -> list:
     return rating_list
 
 
-def user_following(user: User) -> list:
+def user_following(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
 
@@ -153,7 +153,7 @@ def user_following(user: User) -> list:
     return ret
 
 
-def user_followers(user: User) -> list:
+def user_followers(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
 
