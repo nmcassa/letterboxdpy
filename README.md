@@ -108,8 +108,18 @@ nick = user.User("nmcassa")
 print(user.user_films_watched(nick))
 ```
 
-```
-...all of the users watched movies in a tuple formatted (movie title, movie url)...
+```python
+{
+    'movies': [
+        {
+            'the-kid': {
+                'name': 'The Kid',
+                'id': '46549'
+            }
+        },...
+    ],
+    'length': 101
+}
 ```
 
 ## **user_reviews(user object)**
