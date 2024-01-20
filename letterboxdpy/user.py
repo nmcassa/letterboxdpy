@@ -146,7 +146,9 @@ def user_following(user: User) -> list:
     ret = {}
 
     for person in data:
-        ret[person.parent['href']] = person['alt']
+        ret[person.parent['href'].replace('/', '')] = {
+            'display_name': person['alt'],
+        }
 
     return ret
 
@@ -162,7 +164,9 @@ def user_followers(user: User) -> list:
     ret = {}
 
     for person in data:
-        ret[person.parent['href']] = person['alt']
+        ret[person.parent['href'].replace('/', '')] = {
+            'display_name': person['alt'],
+        }
 
     return ret
 
