@@ -23,6 +23,9 @@ nick = user.User("nmcassa")
 print(nick)
 ```
 
+<details>
+  <summary>Click to expand User object response</summary>
+  
 ```json
 {
     "username": "nmcassa",
@@ -54,6 +57,7 @@ print(nick)
     }
 }
 ```
+</details>
 
 ## **user_genre_info(user object)**
 
@@ -63,9 +67,33 @@ nick = user.User("nmcassa")
 print(user.user_genre_info(nick))
 ```
 
+<details>
+  <summary>Click to expand user_genre_info method response</summary>
+
 ```python
-{'action': 55, 'adventure': 101, 'animation': 95, 'comedy': 188, 'crime': 22, 'documentary': 16, 'drama': 94, 'family': 109, 'fantasy': 54, 'history': 5, 'horror': 27, 'music': 9, 'mystery': 30, 'romance': 29, 'science-fiction': 48, 'thriller': 43, 'tv-movie': 13, 'war': 4, 'western': 5}
+{
+    "action":55,
+    "adventure":101,
+    "animation":95,
+    "comedy":188,
+    "crime":22,
+    "documentary":16,
+    "drama":94,
+    "family":109,
+    "fantasy":54,
+    "history":5,
+    "horror":27,
+    "music":9,
+    "mystery":30,
+    "romance":29,
+    "science-fiction":48,
+    "thriller":43,
+    "tv-movie":13,
+    "war":4,
+    "western":5
+}
 ```
+</details>
 
 ## **user_following(user object) / user_followers(user object)**
 
@@ -75,6 +103,9 @@ nick = user.User("nmcassa")
 print(user.user_following(nick))
 print(user.user_followers(nick))
 ```
+
+<details>
+  <summary>Click to expand user_following & user_followers methods response</summary>
 
 ```python
 {
@@ -99,6 +130,7 @@ print(user.user_followers(nick))
     },...
 }
 ```
+</details>
 
 ## **user_films_watched(user object)**
 
@@ -107,6 +139,9 @@ from letterboxdpy import user
 nick = user.User("nmcassa")
 print(user.user_films_watched(nick))
 ```
+
+<details>
+  <summary>Click to expand user_films_watched method response</summary>
 
 ```python
 {
@@ -132,6 +167,7 @@ print(user.user_films_watched(nick))
     "liked_percentage": 13.83
 }
 ```
+</details>
 
 ## **user_reviews(user object)**
 
@@ -140,6 +176,9 @@ from letterboxdpy import user
 nick = user.User("nmcassa")
 print(user.user_reviews(nick))
 ```
+
+<details>
+  <summary>Click to expand user_reviews method response</summary>
 
 ```python
 {
@@ -165,6 +204,7 @@ print(user.user_reviews(nick))
     "last_page": 1
 }
 ```
+</details>
 
 ## **user_diary and user_diary_page and user_films_rated**
 
@@ -185,6 +225,9 @@ print(king)
 house = movie.Movie("/film/the-house-2022-1/")
 print(house)
 ```
+
+<details>
+  <summary>Click to expand Movie object response</summary>
 
 ```json
 {
@@ -233,6 +276,7 @@ print(house)
     ]
 }
 ```
+</details>
 
 ## **movie_details(movie object)**
 
@@ -266,9 +310,29 @@ king = movie.Movie("king kong" 2005)
 print(movie.movie_popular_reviews(king))
 ```
 
+<details>
+  <summary>Click to expand movie_popular_reviews method response</summary>
 ```
-[{'reviewer': 'BRAT', 'rating': ' ★★★½ ', 'review': 'naomi watts: bitch, it’s king kongking kong: yes, i’m king kongadrien brody: this is king kong?jack black: yes, miss king kong!!kyle chandler: and i’m kyle chandler :)'}, {'reviewer': 'josh lewis', 'rating': ' ★★★★ ', 'review': 'This review may contain spoilers. I can handle the truth.'}, {'reviewer': 'ashley 🥀', 'rating': ' ★½ ', 'review': 'To quote one of the funniest tweets I have ever seen: did King Kong really think he was gonna date that lady?'}, ...
+[
+    {
+        "reviewer":"BRAT",
+        "rating":" ★★★½ ",
+        "review":"naomi watts: bitch, it’s king kongking kong: yes, i’m king kongadrien brody: this is king kong?jack black: yes, miss king kong!!kyle chandler: and i’m kyle chandler :)"
+    },
+    {
+        "reviewer":"josh lewis",
+        "rating":" ★★★★ ",
+        "review":"This review may contain spoilers. I can handle the truth."
+    },
+    {
+        "reviewer":"ashley 🥀",
+        "rating":" ★½ ",
+        "review":"To quote one of the funniest tweets I have ever seen: did King Kong really think he was gonna date that lady?"
+    },
+    ...
+]
 ```
+</details>
 
 ## **movie_tmdb_link**
 
@@ -296,6 +360,9 @@ list = list.List("Horrorville", "The Official Top 25 Horror Films of 2022")
 print(list)
 ```
 
+<details>
+  <summary>Click to expand List object response</summary>
+
 ```json
 {
     "title": "the-official-top-25-horror-films-of-2022",
@@ -316,6 +383,7 @@ print(list)
             "Barbarian",
            ...
 ```
+</details>
 
 ## **list_tags(list object)**
 
