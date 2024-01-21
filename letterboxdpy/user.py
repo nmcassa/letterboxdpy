@@ -249,7 +249,6 @@ def user_reviews(user: User) -> dict:
                 'date': item.find("span", {"class": ["_nobr"], }).text
             }
 
-
         if len(contents) < 12:
             data['count'] = len(data['reviews'])
             data['last_page'] = paginate
@@ -297,23 +296,16 @@ def user_diary_page(user: User, page) -> list:
 
 def user_diary(user: User) -> list:
     '''Returns a list of dictionaries with the user's diary'''
-
-    page = user.get_parsed_page(
-        "https://letterboxd.com/" + user.username + "/films/diary/")
-
-    # Get the max number of pages
-    try:
-        max_page = page.findAll("li", {"class": ["paginate-page"], })[-1].text
-        print(max_page)
-        ret = []
-
-        for i in range(1, int(max_page)+1):
-            page_result = user_diary_page(user, i)
-            ret.extend(page_result)
-
-    except IndexError:
-        print('No diary found')
-        ret =[]
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+    
+    ret = []
+    pagination = 1
+    while True:
+        page_result = user_diary_page(user, pagination)
+        ret.extend(page_result)
+        if len(page_result) < 50:
+            break
+        pagination += 1
 
     return ret
 
