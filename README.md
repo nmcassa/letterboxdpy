@@ -142,7 +142,28 @@ print(user.user_reviews(nick))
 ```
 
 ```python
-[{'movie': 'Beast', 'rating': ' ★½ ', 'date': '23 Aug 2022', 'review': 'Did not like it'}, {'movie': 'Men', 'rating': ' ★ ', 'date': '25 May 2022', 'review': 'What could he possibly be trying to say with this'}, {'movie': 'Nightcrawler', 'rating': ' ★★★ ', 'date': '04 May 2022', 'review': 'Jake is a pussy nerd loser in this'}, {'movie': 'The Graduate', 'rating': ' ★★★★ ', 'date': '30 Jan 2022', 'review': 'If only they didn’t play the same song like 20 times'}, {'movie': "I'm Thinking of Ending Things", 'rating': ' ★★★★ ', 'date': '14 Feb 2021', 'review': 'yeah i dont get it'}]
+{
+    "reviews": {
+        "poor-things-2023": {
+            "movie": "Poor Things",
+            "movie_id": "710352",
+            "movie_year": 2023,
+            "rating": 6,
+            "review": "It looks like AI art and weird movie",
+            "date": "26 Dec 2023"
+        },
+        "sisu-2022": {
+            "movie": "Sisu",
+            "movie_id": "755504",
+            "movie_year": 2022,
+            "rating": 5,
+            "review": "gross",
+            "date": "03 May 2023"
+        },...
+    },
+    "count": 7,
+    "last_page": 1
+}
 ```
 
 ## **user_diary and user_diary_page and user_films_rated**
