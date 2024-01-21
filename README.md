@@ -312,6 +312,7 @@ print(movie.movie_popular_reviews(king))
 
 <details>
   <summary>Click to expand movie_popular_reviews method response</summary>
+
 ```
 [
     {
