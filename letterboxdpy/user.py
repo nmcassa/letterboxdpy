@@ -208,18 +208,17 @@ def user_followers(user: User) -> dict:
 
 
 def user_genre_info(user: User) -> dict:
-    if type(user) != User:
-        raise Exception("Improper parameter")
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
     genres = ["action", "adventure", "animation", "comedy", "crime", "documentary",
               "drama", "family", "fantasy", "history", "horror", "music", "mystery",
               "romance", "science-fiction", "thriller", "tv-movie", "war", "western"]
     ret = {}
     for genre in genres:
-        page = user.get_parsed_page("https://letterboxd.com/" + user.username +
+        page = user.get_parsed_page("https://letterboxd.com/" + user.username + 
                                     "/films/genre/" + genre + "/")
         data = page.find("span", {"class": ["replace-if-you"], })
-        data = data.next_sibling
+        data = data.next_sibling.replace(',', '')
         ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
         
     return ret
