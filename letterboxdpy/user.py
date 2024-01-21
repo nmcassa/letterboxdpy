@@ -226,26 +226,36 @@ def user_genre_info(user: User) -> dict:
 
 
 #gives reviews that the user selected has made
-def user_reviews(user: User) -> list:
-    if type(user) != User:
-        raise Exception("Improper parameter")
+def user_reviews(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/reviews/")
-    ret = []
+    paginate = 0
+    data = {'reviews': {}}
+    while True:
+        paginate += 1
+        page = user.get_parsed_page(f"https://letterboxd.com/{user.username}/films/reviews/page/{paginate}/")
 
-    data = page.find_all("div", {"class": ["film-detail-content"], })
+        contents = page.find_all("div", {"class": ["film-detail-content"], })
 
-    for item in data:
-        curr = {}
+        for item in contents:
+            rating = item.find("span", {"class": ["rating"], })
 
-        curr['movie'] = item.find("a").text #movie title
-        curr['rating'] = item.find("span", {"class": ["rating"], }).text #movie rating
-        curr['date'] = item.find("span", {"class": ["_nobr"], }).text #rating date
-        curr['review'] = item.find("div", {"class": ["body-text"], }).findChildren()[0].text #review
+            data['reviews'][item.parent.div['data-film-slug']] = {
+                'movie': item.a.text,
+                'movie_id': item.parent.div['data-film-id'],
+                'movie_year': int(item.small.text) if item.small else None,
+                'rating': int(rating['class'][-1].split('-')[-1]) if rating else None,
+                'review': item.find("div", {"class": ["body-text"], }).findChildren()[0].text,
+                'date': item.find("span", {"class": ["_nobr"], }).text
+            }
 
-        ret.append(curr)
 
-    return ret
+        if len(contents) < 12:
+            data['count'] = len(data['reviews'])
+            data['last_page'] = paginate
+            break
+
+    return data
 
 
 def user_diary_page(user: User, page) -> list:
