@@ -72,8 +72,7 @@ class User:
 
 
 def user_films_watched(user: User) -> dict:
-    if type(user) != User:
-        raise Exception("Improper parameter")
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
     #returns all movies
     count = 0
