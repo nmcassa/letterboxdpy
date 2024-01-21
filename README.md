@@ -110,15 +110,26 @@ print(user.user_films_watched(nick))
 
 ```python
 {
-    'movies': [
-        {
-            'the-kid': {
-                'name': 'The Kid',
-                'id': '46549'
-            }
+    "movies": {
+        "godzilla-minus-one": {
+            "name": "Godzilla Minus One",
+            "id": "845706",
+            "rating": 10,
+            "liked": true
+        },
+        "flcl": {
+            "name": "FLCL",
+            "id": "284640",
+            "rating": null,
+            "liked": true
         },...
-    ],
-    'length': 101
+    },
+    "count": 528,
+    "liked_count": 73,
+    "rating_count": 493,
+    "rating_average": 6.43,
+    "rating_percentage": 93.37,
+    "liked_percentage": 13.83
 }
 ```
 
