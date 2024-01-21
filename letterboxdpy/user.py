@@ -77,24 +77,57 @@ def user_films_watched(user: User) -> dict:
 
     #returns all movies
     count = 0
-    movie_list = {'movies': []}
+    rating_count = 0
+    liked_count = 0
+    movie_list = {'movies': {}}
 
     while True:
         count += 1
         page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
 
-        posters = page.find_all("div", {"class": ["film-poster"], })
+        poster_containers = page.find_all("li", {"class": ["poster-container"], })
+        for poster_container in poster_containers:
+            poster = poster_container.div
+            poster_viewingdata = poster_container.p
 
-        for poster in posters:
-            movie_list["movies"].append({
-                poster["data-film-slug"] : {
+            if '-rated-and-liked' in poster_viewingdata['class']:
+                rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
+                liked = True
+                liked_count += 1
+                rating_count += 1
+            else:
+                rating = None
+                liked = False
+                if poster_viewingdata.span:
+                    if 'rating' in poster_viewingdata.span['class']:
+                        # ['rating', '-tiny', '-darker', 'rated-9']
+                        rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
+                        rating_count += 1
+                    elif 'like' in poster_viewingdata.span['class']:
+                        # ['like', 'has-icon', 'icon-liked', 'icon-16']
+                        liked = True
+                        liked_count += 1
+
+            movie_list["movies"][poster["data-film-slug"]] = {
                     'name': poster.img["alt"],
                     "id": poster["data-film-id"],
-                    }}
-                )
+                    "rating": rating,
+                    "liked": liked
+                }
 
-        if len(posters) < 72:
-            movie_list['length'] = len(movie_list['movies'])
+        if len(poster_containers) < 72:
+            movie_list['count'] = len(movie_list['movies'])
+            movie_list['liked_count'] = liked_count
+            movie_list['rating_count'] = rating_count
+            movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
+            movie_list['rating_percentage'] = 0.0
+            movie_list['rating_average'] = 0.0
+
+            if rating_count:
+                ratings = [movie['rating'] for movie in movie_list['movies'].values() if movie['rating'] is not None]
+                movie_list['rating_percentage'] = round(rating_count / movie_list['count'] * 100, 2)
+                movie_list['rating_average'] = round(sum(ratings) / rating_count, 2)
+
             break
 
     return movie_list
