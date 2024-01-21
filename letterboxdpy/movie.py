@@ -168,15 +168,15 @@ def movie_watchers(movie: Movie) -> dict:
         for item in a:
         	if item.get('title'):
         		if item['title'].find('people',-6) != -1:
-        			res['watch_count'] = item['title'][:-7]
+        			res['watch_count'] = item['title'][:-7].replace(',','')
         		elif item['title'].find('fans',-4) != -1:
-        			res['fan_count'] = item['title'][:-5]
+        			res['fan_count'] = item['title'][:-5].replace(',','')
         		elif item['title'].find('likes',-5) != -1:
-        			res['like_count'] = item['title'][:-6]
+        			res['like_count'] = item['title'][:-6].replace(',','')
         		elif item['title'].find('reviews',-7) != -1:
-        			res['review_count'] = item['title'][:-8]
+        			res['review_count'] = item['title'][:-8].replace(',','')
         		elif item['title'].find('lists',-5) != -1:
-        			res['list_count'] = item['title'][:-6]
+        			res['list_count'] = item['title'][:-6].replace(',','')
     return res
 
 def movie_tmdb_link(movie: Movie) -> str:
