@@ -71,28 +71,64 @@ class User:
         self.watchlist_length = ret
 
 
-def user_films_watched(user: User) -> list:
-    if type(user) != User:
-        raise Exception("Improper parameter")
+def user_films_watched(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
     #returns all movies
-    prev = count = 0
-    curr = 1
-    movie_list = []
+    count = 0
+    rating_count = 0
+    liked_count = 0
+    movie_list = {'movies': {}}
 
-    while prev != curr:
+    while True:
         count += 1
-        prev = len(movie_list)
         page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
 
-        img = page.find_all("img", {"class": ["image"], })
+        poster_containers = page.find_all("li", {"class": ["poster-container"], })
+        for poster_container in poster_containers:
+            poster = poster_container.div
+            poster_viewingdata = poster_container.p
 
-        for item in img:
-            movie_url = item.parent['data-film-slug']
-            movie_list.append((item['alt'], movie_url))
+            if '-rated-and-liked' in poster_viewingdata['class']:
+                rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
+                liked = True
+                liked_count += 1
+                rating_count += 1
+            else:
+                rating = None
+                liked = False
+                if poster_viewingdata.span:
+                    if 'rating' in poster_viewingdata.span['class']:
+                        # ['rating', '-tiny', '-darker', 'rated-9']
+                        rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
+                        rating_count += 1
+                    elif 'like' in poster_viewingdata.span['class']:
+                        # ['like', 'has-icon', 'icon-liked', 'icon-16']
+                        liked = True
+                        liked_count += 1
 
-        curr = len(movie_list)
-            
+            movie_list["movies"][poster["data-film-slug"]] = {
+                    'name': poster.img["alt"],
+                    "id": poster["data-film-id"],
+                    "rating": rating,
+                    "liked": liked
+                }
+
+        if len(poster_containers) < 72:
+            movie_list['count'] = len(movie_list['movies'])
+            movie_list['liked_count'] = liked_count
+            movie_list['rating_count'] = rating_count
+            movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
+            movie_list['rating_percentage'] = 0.0
+            movie_list['rating_average'] = 0.0
+
+            if rating_count:
+                ratings = [movie['rating'] for movie in movie_list['movies'].values() if movie['rating'] is not None]
+                movie_list['rating_percentage'] = round(rating_count / movie_list['count'] * 100, 2)
+                movie_list['rating_average'] = round(sum(ratings) / rating_count, 2)
+
+            break
+
     return movie_list
 
 
@@ -172,44 +208,52 @@ def user_followers(user: User) -> dict:
 
 
 def user_genre_info(user: User) -> dict:
-    if type(user) != User:
-        raise Exception("Improper parameter")
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
     genres = ["action", "adventure", "animation", "comedy", "crime", "documentary",
               "drama", "family", "fantasy", "history", "horror", "music", "mystery",
               "romance", "science-fiction", "thriller", "tv-movie", "war", "western"]
     ret = {}
     for genre in genres:
-        page = user.get_parsed_page("https://letterboxd.com/" + user.username +
+        page = user.get_parsed_page("https://letterboxd.com/" + user.username + 
                                     "/films/genre/" + genre + "/")
         data = page.find("span", {"class": ["replace-if-you"], })
-        data = data.next_sibling
+        data = data.next_sibling.replace(',', '')
         ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
         
     return ret
 
 
 #gives reviews that the user selected has made
-def user_reviews(user: User) -> list:
-    if type(user) != User:
-        raise Exception("Improper parameter")
+def user_reviews(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/reviews/")
-    ret = []
+    paginate = 0
+    data = {'reviews': {}}
+    while True:
+        paginate += 1
+        page = user.get_parsed_page(f"https://letterboxd.com/{user.username}/films/reviews/page/{paginate}/")
 
-    data = page.find_all("div", {"class": ["film-detail-content"], })
+        contents = page.find_all("div", {"class": ["film-detail-content"], })
 
-    for item in data:
-        curr = {}
+        for item in contents:
+            rating = item.find("span", {"class": ["rating"], })
 
-        curr['movie'] = item.find("a").text #movie title
-        curr['rating'] = item.find("span", {"class": ["rating"], }).text #movie rating
-        curr['date'] = item.find("span", {"class": ["_nobr"], }).text #rating date
-        curr['review'] = item.find("div", {"class": ["body-text"], }).findChildren()[0].text #review
+            data['reviews'][item.parent.div['data-film-slug']] = {
+                'movie': item.a.text,
+                'movie_id': item.parent.div['data-film-id'],
+                'movie_year': int(item.small.text) if item.small else None,
+                'rating': int(rating['class'][-1].split('-')[-1]) if rating else None,
+                'review': item.find("div", {"class": ["body-text"], }).findChildren()[0].text,
+                'date': item.find("span", {"class": ["_nobr"], }).text
+            }
 
-        ret.append(curr)
+        if len(contents) < 12:
+            data['count'] = len(data['reviews'])
+            data['last_page'] = paginate
+            break
 
-    return ret
+    return data
 
 
 def user_diary_page(user: User, page) -> list:
@@ -251,23 +295,16 @@ def user_diary_page(user: User, page) -> list:
 
 def user_diary(user: User) -> list:
     '''Returns a list of dictionaries with the user's diary'''
-
-    page = user.get_parsed_page(
-        "https://letterboxd.com/" + user.username + "/films/diary/")
-
-    # Get the max number of pages
-    try:
-        max_page = page.findAll("li", {"class": ["paginate-page"], })[-1].text
-        print(max_page)
-        ret = []
-
-        for i in range(1, int(max_page)+1):
-            page_result = user_diary_page(user, i)
-            ret.extend(page_result)
-
-    except IndexError:
-        print('No diary found')
-        ret =[]
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+    
+    ret = []
+    pagination = 1
+    while True:
+        page_result = user_diary_page(user, pagination)
+        ret.extend(page_result)
+        if len(page_result) < 50:
+            break
+        pagination += 1
 
     return ret
 

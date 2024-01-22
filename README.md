@@ -23,6 +23,9 @@ nick = user.User("nmcassa")
 print(nick)
 ```
 
+<details>
+  <summary>Click to expand User object response</summary>
+  
 ```json
 {
     "username": "nmcassa",
@@ -54,6 +57,7 @@ print(nick)
     }
 }
 ```
+</details>
 
 ## **user_genre_info(user object)**
 
@@ -63,9 +67,33 @@ nick = user.User("nmcassa")
 print(user.user_genre_info(nick))
 ```
 
+<details>
+  <summary>Click to expand user_genre_info method response</summary>
+
 ```python
-{'action': 55, 'adventure': 101, 'animation': 95, 'comedy': 188, 'crime': 22, 'documentary': 16, 'drama': 94, 'family': 109, 'fantasy': 54, 'history': 5, 'horror': 27, 'music': 9, 'mystery': 30, 'romance': 29, 'science-fiction': 48, 'thriller': 43, 'tv-movie': 13, 'war': 4, 'western': 5}
+{
+    "action":55,
+    "adventure":101,
+    "animation":95,
+    "comedy":188,
+    "crime":22,
+    "documentary":16,
+    "drama":94,
+    "family":109,
+    "fantasy":54,
+    "history":5,
+    "horror":27,
+    "music":9,
+    "mystery":30,
+    "romance":29,
+    "science-fiction":48,
+    "thriller":43,
+    "tv-movie":13,
+    "war":4,
+    "western":5
+}
 ```
+</details>
 
 ## **user_following(user object) / user_followers(user object)**
 
@@ -75,6 +103,9 @@ nick = user.User("nmcassa")
 print(user.user_following(nick))
 print(user.user_followers(nick))
 ```
+
+<details>
+  <summary>Click to expand user_following & user_followers methods response</summary>
 
 ```python
 {
@@ -99,6 +130,7 @@ print(user.user_followers(nick))
     },...
 }
 ```
+</details>
 
 ## **user_films_watched(user object)**
 
@@ -108,9 +140,34 @@ nick = user.User("nmcassa")
 print(user.user_films_watched(nick))
 ```
 
+<details>
+  <summary>Click to expand user_films_watched method response</summary>
+
+```python
+{
+    "movies": {
+        "godzilla-minus-one": {
+            "name": "Godzilla Minus One",
+            "id": "845706",
+            "rating": 10,
+            "liked": true
+        },
+        "flcl": {
+            "name": "FLCL",
+            "id": "284640",
+            "rating": null,
+            "liked": true
+        },...
+    },
+    "count": 528,
+    "liked_count": 73,
+    "rating_count": 493,
+    "rating_average": 6.43,
+    "rating_percentage": 93.37,
+    "liked_percentage": 13.83
+}
 ```
-...all of the users watched movies in a tuple formatted (movie title, movie url)...
-```
+</details>
 
 ## **user_reviews(user object)**
 
@@ -120,9 +177,34 @@ nick = user.User("nmcassa")
 print(user.user_reviews(nick))
 ```
 
+<details>
+  <summary>Click to expand user_reviews method response</summary>
+
 ```python
-[{'movie': 'Beast', 'rating': ' ★½ ', 'date': '23 Aug 2022', 'review': 'Did not like it'}, {'movie': 'Men', 'rating': ' ★ ', 'date': '25 May 2022', 'review': 'What could he possibly be trying to say with this'}, {'movie': 'Nightcrawler', 'rating': ' ★★★ ', 'date': '04 May 2022', 'review': 'Jake is a pussy nerd loser in this'}, {'movie': 'The Graduate', 'rating': ' ★★★★ ', 'date': '30 Jan 2022', 'review': 'If only they didn’t play the same song like 20 times'}, {'movie': "I'm Thinking of Ending Things", 'rating': ' ★★★★ ', 'date': '14 Feb 2021', 'review': 'yeah i dont get it'}]
+{
+    "reviews": {
+        "poor-things-2023": {
+            "movie": "Poor Things",
+            "movie_id": "710352",
+            "movie_year": 2023,
+            "rating": 6,
+            "review": "It looks like AI art and weird movie",
+            "date": "26 Dec 2023"
+        },
+        "sisu-2022": {
+            "movie": "Sisu",
+            "movie_id": "755504",
+            "movie_year": 2022,
+            "rating": 5,
+            "review": "gross",
+            "date": "03 May 2023"
+        },...
+    },
+    "count": 7,
+    "last_page": 1
+}
 ```
+</details>
 
 ## **user_diary and user_diary_page and user_films_rated**
 
@@ -143,6 +225,9 @@ print(king)
 house = movie.Movie("/film/the-house-2022-1/")
 print(house)
 ```
+
+<details>
+  <summary>Click to expand Movie object response</summary>
 
 ```json
 {
@@ -191,6 +276,7 @@ print(house)
     ]
 }
 ```
+</details>
 
 ## **movie_details(movie object)**
 
@@ -224,9 +310,30 @@ king = movie.Movie("king kong" 2005)
 print(movie.movie_popular_reviews(king))
 ```
 
+<details>
+  <summary>Click to expand movie_popular_reviews method response</summary>
+
 ```
-[{'reviewer': 'BRAT', 'rating': ' ★★★½ ', 'review': 'naomi watts: bitch, it’s king kongking kong: yes, i’m king kongadrien brody: this is king kong?jack black: yes, miss king kong!!kyle chandler: and i’m kyle chandler :)'}, {'reviewer': 'josh lewis', 'rating': ' ★★★★ ', 'review': 'This review may contain spoilers. I can handle the truth.'}, {'reviewer': 'ashley 🥀', 'rating': ' ★½ ', 'review': 'To quote one of the funniest tweets I have ever seen: did King Kong really think he was gonna date that lady?'}, ...
+[
+    {
+        "reviewer":"BRAT",
+        "rating":" ★★★½ ",
+        "review":"naomi watts: bitch, it’s king kongking kong: yes, i’m king kongadrien brody: this is king kong?jack black: yes, miss king kong!!kyle chandler: and i’m kyle chandler :)"
+    },
+    {
+        "reviewer":"josh lewis",
+        "rating":" ★★★★ ",
+        "review":"This review may contain spoilers. I can handle the truth."
+    },
+    {
+        "reviewer":"ashley 🥀",
+        "rating":" ★½ ",
+        "review":"To quote one of the funniest tweets I have ever seen: did King Kong really think he was gonna date that lady?"
+    },
+    ...
+]
 ```
+</details>
 
 ## **movie_tmdb_link**
 
@@ -254,6 +361,9 @@ list = list.List("Horrorville", "The Official Top 25 Horror Films of 2022")
 print(list)
 ```
 
+<details>
+  <summary>Click to expand List object response</summary>
+
 ```json
 {
     "title": "the-official-top-25-horror-films-of-2022",
@@ -274,6 +384,7 @@ print(list)
             "Barbarian",
            ...
 ```
+</details>
 
 ## **list_tags(list object)**
 
