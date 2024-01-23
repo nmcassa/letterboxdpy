@@ -206,9 +206,63 @@ print(user.user_reviews(nick))
 ```
 </details>
 
-## **user_diary and user_diary_page and user_films_rated**
+## **user_diary_page and user_films_rated**
 
  To be documented.
+
+## **user_diary(user object)**
+
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_diary(nick))
+```
+
+<details>
+  <summary>Click to expand user_diary method response</summary>
+
+```json
+{
+    "entrys": {
+        "513520182": {
+            "name": "Black Swan",
+            "slug": "black-swan",
+            "id": "20956",
+            "release": 2010,
+            "rewatched": false,
+            "rating": 9,
+            "liked": true,
+            "reviewed": false,
+            "date": {
+                "year": 2024,
+                "month": 1,
+                "day": 15
+            },
+            "page": 1
+        },...
+        ...},
+        "129707465": {
+            "name": "mid90s",
+            "slug": "mid90s",
+            "id": "370451",
+            "release": 2018,
+            "rewatched": false,
+            "rating": 8,
+            "liked": false,
+            "reviewed": false,
+            "date": {
+                "year": 2020,
+                "month": 10,
+                "day": 20
+            },
+            "page": 7
+        }
+    },
+    "count": 337,
+    "last_page": 7
+}
+```
+</details>
 
 ## **Member Listing and top_users **
 
