@@ -364,9 +364,29 @@ king = movie.Movie("king kong", 2005)
 print(movie.movie_details(king))
 ```
 
+<details>
+  <summary>Click to expand movie_details method response</summary>
+
 ```json
-{'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
+{
+  "Country": [
+    "New Zealand",
+    "USA",
+    "Germany"
+  ],
+  "Studio": [
+    "Universal Pictures",
+    "WingNut Films",
+    "Big Primate Pictures",
+    "MFPV Film"
+  ],
+  "Language": [
+    "English"
+  ]
+}
+
 ```
+</details>
 
 <h2 id="movie_description">movie_description(movie object)</h2>
 
