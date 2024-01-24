@@ -224,33 +224,108 @@ def user_genre_info(user: User) -> dict:
     return ret
 
 
-#gives reviews that the user selected has made
 def user_reviews(user: User) -> dict:
+    '''
+    Returns a dictionary containing user reviews. The keys are unique log IDs,
+    and each value is a dictionary with details about the review,
+    including movie information, review type, rating, review content, date, etc.
+    '''
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+    
+    LOGS_PER_PAGE = 12
+    MONTH_ABBREVIATIONS = [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep",
+        "Oct", "Nov", "Dec"
+        ]
 
-    paginate = 0
+    page = 0
     data = {'reviews': {}}
     while True:
-        paginate += 1
-        page = user.get_parsed_page(f"https://letterboxd.com/{user.username}/films/reviews/page/{paginate}/")
+        page += 1
+        dom = user.get_parsed_page(
+            f"https://letterboxd.com/{user.username}/films/reviews/page/{page}/")
 
-        contents = page.find_all("div", {"class": ["film-detail-content"], })
+        logs = dom.find_all("li", {"class": ["film-detail"], })
 
-        for item in contents:
-            rating = item.find("span", {"class": ["rating"], })
+        for log in logs:
+            details = log.find("div", {"class": ["film-detail-content"], })
 
-            data['reviews'][item.parent.div['data-film-slug']] = {
-                'movie': item.a.text,
-                'movie_id': item.parent.div['data-film-id'],
-                'movie_year': int(item.small.text) if item.small else None,
-                'rating': int(rating['class'][-1].split('-')[-1]) if rating else None,
-                'review': item.find("div", {"class": ["body-text"], }).findChildren()[0].text,
-                'date': item.find("span", {"class": ["_nobr"], }).text
+            movie_name = details.a.text
+            slug = details.parent.div['data-film-slug']
+            movie_id = details.parent.div['data-film-id']
+            # str   ^^^--- movie_id: unique id of the movie.
+            release = int(details.small.text) if details.small else None
+            movie_link = 'ltrbxd.com/film/' + slug + '/'
+            log_id = log['data-object-id'].split(':')[-1]
+            # str ^^^--- log_id: unique id of the review.
+            log_link = 'ltrbxd.com' + details.a['href']
+            log_no = int(log_link.split('/')[-2]) if log_link.count('/') == 5 else 0
+            # int ^^^--- log_no: there can be multiple reviews for a movie.
+            #            counting starts from zero.
+            #            example for first review:  /username/film/movie_name/
+            #            example for first review:  /username/film/movie_name/0/
+            #            example for second review: /username/film/movie_name/1/
+            #                the number is specified at the end of the url ---^
+            rating = details.find("span", {"class": ["rating"], })
+            rating = int(rating['class'][-1].split('-')[-1]) if rating else None
+            # int ^^^--- rating: the numerical value of the rating given in the review (1-10)
+            review = details.find("div", {"class": ["body-text"], })
+            spoiler = bool(review.find("p", {"class": ["contains-spoilers"], }))
+            # bool ^^^--- spoiler: whether the review contains spoiler warnings
+            review = review.find_all('p')[1 if spoiler else 0:]
+            review = '\n'.join([p.text for p in review])
+            # str ^^^--- review: the text content of the review.
+            #            spoiler warning is checked to include or exclude the first paragraph.
+            date = details.find("span", {"class": ["_nobr"], })
+            log_type = date.previous_sibling.text.strip()
+            # str   ^^^--- log_type: Types of logs, such as:
+            #              'Rewatched': (in diary) review, watched and rewatched 
+            #              'Watched':   (in diary) review and watched
+            #              'Added': (not in diary) review 
+            if log_type == 'Added':
+                # 2024-01-01T05:45:00.268Z
+                date = dict(zip(
+                    ['year', 'month', 'day'],
+                    map(int, date.time['datetime'][:10].split('-')
+                    )))
+            else:
+                # 01 Jan 2024
+                date = date.text.split()
+                date = {
+                    'year': int(date[2]),
+                    'month': MONTH_ABBREVIATIONS.index(date[1]) + 1,
+                    'day': int(date[0])
+                }
+            # dict ^^^--- date: the date of the review.
+            #             example: {'year': 2024, 'month': 1, 'day': 1}
+
+            data['reviews'][log_id] = {
+                # static
+                'movie': {
+                    'name': movie_name,
+                    'slug': slug,
+                    'id': movie_id,
+                    'release': release,
+                    'link': movie_link,
+                },
+                # dynamic
+                'type': log_type,
+                'no': log_no,
+                'link': log_link,
+                'rating': rating,
+                'review': {
+                    'content': review,
+                    'spoiler': spoiler
+                },
+                'date': date,
+                'page': page,
             }
 
-        if len(contents) < 12:
+        if len(logs) < LOGS_PER_PAGE:
             data['count'] = len(data['reviews'])
-            data['last_page'] = paginate
+            data['last_page'] = page
             break
 
     return data
