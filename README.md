@@ -199,22 +199,52 @@ print(user.user_reviews(nick))
 ```json
 {
     "reviews": {
-        "poor-things-2023": {
-            "movie": "Poor Things",
-            "movie_id": "710352",
-            "movie_year": 2023,
+        "495592379": {
+            "movie": {
+                "name": "Poor Things",
+                "slug": "poor-things-2023",
+                "id": "710352",
+                "release": 2023,
+                "link": "ltrbxd.com/film/poor-things-2023/"
+            },
+            "type": "Watched",
+            "no": 0,
+            "link": "ltrbxd.com/nmcassa/film/poor-things-2023/",
             "rating": 6,
-            "review": "It looks like AI art and weird movie",
-            "date": "26 Dec 2023"
+            "review": {
+                "content": "It looks like AI art and weird movie",
+                "spoiler": false
+            },
+            "date": {
+                "year": 2023,
+                "month": 12,
+                "day": 26
+            },
+            "page": 1
         },
-        "sisu-2022": {
-            "movie": "Sisu",
-            "movie_id": "755504",
-            "movie_year": 2022,
-            "rating": 5,
-            "review": "gross",
-            "date": "03 May 2023"
-        },...
+        "152420824": {
+            "movie": {
+                "name": "I'm Thinking of Ending Things",
+                "slug": "im-thinking-of-ending-things",
+                "id": "430806",
+                "release": 2020,
+                "link": "ltrbxd.com/film/im-thinking-of-ending-things/"
+            },
+            "type": "Watched",
+            "no": 0,
+            "link": "ltrbxd.com/nmcassa/film/im-thinking-of-ending-things/",
+            "rating": 8,
+            "review": {
+                "content": "yeah i dont get it",
+                "spoiler": false
+            },
+            "date": {
+                "year": 2021,
+                "month": 2,
+                "day": 14
+            },
+            "page": 1
+        }
     },
     "count": 7,
     "last_page": 1
