@@ -12,8 +12,24 @@ pip install letterboxdpy
 
 # Directory
  - [User Objects](#User)
+    - [user_genre_info](#user_genre_info)
+    - [user_following & user_followers](#user_following)
+    - [user_films_watched](#user_films_watched)
+    - [user_reviews](#user_reviews)
+    - [user_diary](#user_diary)
+    - [user_diary_page](#user_diary_page) (todo)
+    - [user_films_rated](#user_films_rated) (todo)
+ - [Members](#Members) (todo)
+    - [top_users](#top_users) (todo)
  - [Movie Objects](#Movie)
+    - [movie_details](#movie_details)
+    - [movie_description](#movie_description)
+    - [movie_popular_reviews](#movie_popular_reviews)
+    - [movie_tmdb_link](#movie_tmdb_link)
+    - [movie_watchers](#movie_watchers) (todo)
+    - [movie_poster](#movie_poster) (todo)
  - [List Objects](#List)
+    - [list_tags](#list_tags)
 
 <h1 id="User">User Objects</h1>
 
@@ -59,7 +75,7 @@ print(nick)
 ```
 </details>
 
-## **user_genre_info(user object)**
+<h2 id="user_genre_info">user_genre_info(user object)</h2>
 
 ```python
 from letterboxdpy import user
@@ -70,7 +86,7 @@ print(user.user_genre_info(nick))
 <details>
   <summary>Click to expand user_genre_info method response</summary>
 
-```python
+```json
 {
     "action":55,
     "adventure":101,
@@ -95,7 +111,7 @@ print(user.user_genre_info(nick))
 ```
 </details>
 
-## **user_following(user object) / user_followers(user object)**
+<h2 id="user_following">user_following(user object) / user_followers(user object)</h2>
 
 ```python
 from letterboxdpy import user
@@ -107,7 +123,7 @@ print(user.user_followers(nick))
 <details>
   <summary>Click to expand user_following & user_followers methods response</summary>
 
-```python
+```json
 {
     "ppark": {
         "display_name": "ppark"
@@ -132,7 +148,7 @@ print(user.user_followers(nick))
 ```
 </details>
 
-## **user_films_watched(user object)**
+<h2 id="user_films_watched">user_films_watched(user object)</h2>
 
 ```python
 from letterboxdpy import user
@@ -143,7 +159,7 @@ print(user.user_films_watched(nick))
 <details>
   <summary>Click to expand user_films_watched method response</summary>
 
-```python
+```json
 {
     "movies": {
         "godzilla-minus-one": {
@@ -169,7 +185,7 @@ print(user.user_films_watched(nick))
 ```
 </details>
 
-## **user_reviews(user object)**
+<h2 id="user_reviews">user_reviews(user object)</h2>
 
 ```python
 from letterboxdpy import user
@@ -180,25 +196,55 @@ print(user.user_reviews(nick))
 <details>
   <summary>Click to expand user_reviews method response</summary>
 
-```python
+```json
 {
     "reviews": {
-        "poor-things-2023": {
-            "movie": "Poor Things",
-            "movie_id": "710352",
-            "movie_year": 2023,
+        "495592379": {
+            "movie": {
+                "name": "Poor Things",
+                "slug": "poor-things-2023",
+                "id": "710352",
+                "release": 2023,
+                "link": "ltrbxd.com/film/poor-things-2023/"
+            },
+            "type": "Watched",
+            "no": 0,
+            "link": "ltrbxd.com/nmcassa/film/poor-things-2023/",
             "rating": 6,
-            "review": "It looks like AI art and weird movie",
-            "date": "26 Dec 2023"
+            "review": {
+                "content": "It looks like AI art and weird movie",
+                "spoiler": false
+            },
+            "date": {
+                "year": 2023,
+                "month": 12,
+                "day": 26
+            },
+            "page": 1
         },
-        "sisu-2022": {
-            "movie": "Sisu",
-            "movie_id": "755504",
-            "movie_year": 2022,
-            "rating": 5,
-            "review": "gross",
-            "date": "03 May 2023"
-        },...
+        "152420824": {
+            "movie": {
+                "name": "I'm Thinking of Ending Things",
+                "slug": "im-thinking-of-ending-things",
+                "id": "430806",
+                "release": 2020,
+                "link": "ltrbxd.com/film/im-thinking-of-ending-things/"
+            },
+            "type": "Watched",
+            "no": 0,
+            "link": "ltrbxd.com/nmcassa/film/im-thinking-of-ending-things/",
+            "rating": 8,
+            "review": {
+                "content": "yeah i dont get it",
+                "spoiler": false
+            },
+            "date": {
+                "year": 2021,
+                "month": 2,
+                "day": 14
+            },
+            "page": 1
+        }
     },
     "count": 7,
     "last_page": 1
@@ -206,13 +252,75 @@ print(user.user_reviews(nick))
 ```
 </details>
 
-## **user_diary and user_diary_page and user_films_rated**
+<h2 id="user_diary">user_diary(user object)</h2>
 
- To be documented.
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_diary(nick))
+```
 
-## **Member Listing and top_users **
+<details>
+  <summary>Click to expand user_diary method response</summary>
 
- To be documented.
+```json
+{
+    "entrys": {
+        "513520182": {
+            "name": "Black Swan",
+            "slug": "black-swan",
+            "id": "20956",
+            "release": 2010,
+            "rewatched": false,
+            "rating": 9,
+            "liked": true,
+            "reviewed": false,
+            "date": {
+                "year": 2024,
+                "month": 1,
+                "day": 15
+            },
+            "page": 1
+        },...
+        ...},
+        "129707465": {
+            "name": "mid90s",
+            "slug": "mid90s",
+            "id": "370451",
+            "release": 2018,
+            "rewatched": false,
+            "rating": 8,
+            "liked": false,
+            "reviewed": false,
+            "date": {
+                "year": 2020,
+                "month": 10,
+                "day": 20
+            },
+            "page": 7
+        }
+    },
+    "count": 337,
+    "last_page": 7
+}
+```
+</details>
+
+<h2 id="user_diary_page">user_diary_page(user object)</h2>
+
+[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+user_diary_page)
+
+ <h2 id="user_films_rated">user_films_rated(user object)</h2>
+
+[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+user_films_rated)
+
+<h1 id="Members">Members Objects</h1>
+
+[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+MemberListing)
+
+<h2 id="top_users">top_users(members object)</h2>
+
+[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+top_users)
 
 <h1 id="Movie">Movie Objects</h1>
 
@@ -278,7 +386,7 @@ print(house)
 ```
 </details>
 
-## **movie_details(movie object)**
+<h2 id="movie_details">movie_details(movie object)</h2>
 
 ```python
 from letterboxdpy import movie
@@ -286,11 +394,31 @@ king = movie.Movie("king kong", 2005)
 print(movie.movie_details(king))
 ```
 
-```python
-{'Country': ['New Zealand', 'USA', 'Germany'], 'Studio': ['Universal Pictures', 'WingNut Films', 'Big Primate Pictures', 'MFPV Film'], 'Language': ['English']}
-```
+<details>
+  <summary>Click to expand movie_details method response</summary>
 
-## **movie_description(movie object)**
+```json
+{
+  "Country": [
+    "New Zealand",
+    "USA",
+    "Germany"
+  ],
+  "Studio": [
+    "Universal Pictures",
+    "WingNut Films",
+    "Big Primate Pictures",
+    "MFPV Film"
+  ],
+  "Language": [
+    "English"
+  ]
+}
+
+```
+</details>
+
+<h2 id="movie_description">movie_description(movie object)</h2>
 
 ```python
 from letterboxdpy import movie
@@ -302,7 +430,7 @@ print(movie.movie_description(king))
 In 1933 New York, an overly ambitious movie producer coerces his cast and hired ship crew to travel to mysterious Skull Island, where they encounter Kong, a giant ape who is immediately smitten with...
 ```
 
-## **movie_popular_reviews(movie object)**
+<h2 id="movie_popular_reviews">movie_popular_reviews(movie object)</h2>
 
 ```python
 from letterboxdpy import movie
@@ -313,7 +441,7 @@ print(movie.movie_popular_reviews(king))
 <details>
   <summary>Click to expand movie_popular_reviews method response</summary>
 
-```
+```json
 [
     {
         "reviewer":"BRAT",
@@ -335,7 +463,7 @@ print(movie.movie_popular_reviews(king))
 ```
 </details>
 
-## **movie_tmdb_link**
+<h2 id="movie_tmdb_link">movie_tmdb_link(movie object)</h2>
 
 ```python
 from letterboxdpy import movie
@@ -345,13 +473,13 @@ print(movie.movie_tmdb_link(rock))
 https://www.themoviedb.org/movie/1366/
 ```
 
-## **movie_watchers**
+<h2 id="movie_watchers">movie_watchers(movie object)</h2>
 
- To be documented 
+[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+movie_watchers)
 
-## **movie_poster**
+<h2 id="movie_poster">movie_poster(movie object)</h2>
 
- To be documented.
+[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+movie_poster)
 
 <h1 id="List">List Objects</h1>
 
@@ -386,7 +514,7 @@ print(list)
 ```
 </details>
 
-## **list_tags(list object)**
+<h2 id="list_tags">list_tags(list object)</h2>
 
 ```python
 from letterboxdpy import list
