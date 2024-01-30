@@ -14,7 +14,7 @@ pip install letterboxdpy
  - [User Objects](#User)
     - [user_genre_info](#user_genre_info)
     - [user_following & user_followers](#user_following)
-    - [user_films_watched](#user_films_watched)
+    - [user_films](#user_films)
     - [user_reviews](#user_reviews)
     - [user_diary](#user_diary)
     - [user_diary_page](#user_diary_page) (todo)
@@ -147,12 +147,12 @@ print(user.user_followers(nick))
 ```
 </details>
 
-<h2 id="user_films_watched">user_films_watched(user object)</h2>
+<h2 id="user_films">user_films(user object)</h2>
 
 ```python
 from letterboxdpy import user
 nick = user.User("nmcassa")
-print(user.user_films_watched(nick))
+print(user.user_films(nick))
 ```
 
 <details>

@@ -71,7 +71,7 @@ class User:
         self.watchlist_length = ret
 
 
-def user_films_watched(user: User) -> dict:
+def user_films(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
     #returns all movies
@@ -393,4 +393,4 @@ if __name__ == "__main__":
         print(f"{user=}")
         userinfo = User(user)
         print(userinfo)
-        print(user_films_watched(userinfo))
+        print(user_films(userinfo))
