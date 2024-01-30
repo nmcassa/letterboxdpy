@@ -18,7 +18,6 @@ pip install letterboxdpy
     - [user_reviews](#user_reviews)
     - [user_diary](#user_diary)
     - [user_diary_page](#user_diary_page) (todo)
-    - [user_films_rated](#user_films_rated) (todo)
  - [Members](#Members) (todo)
     - [top_users](#top_users) (todo)
  - [Movie Objects](#Movie)
@@ -309,10 +308,6 @@ print(user.user_diary(nick))
 <h2 id="user_diary_page">user_diary_page(user object)</h2>
 
 [To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+user_diary_page)
-
- <h2 id="user_films_rated">user_films_rated(user object)</h2>
-
-[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+user_films_rated)
 
 <h1 id="Members">Members Objects</h1>
 

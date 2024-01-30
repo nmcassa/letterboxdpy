@@ -132,45 +132,6 @@ def user_films_watched(user: User) -> dict:
     return movie_list
 
 
-def user_films_rated(user: User) -> list:
-    """ """
-    if type(user) != User:
-        raise Exception("Improper parameter")
-
-    prev = count = 0
-    curr = -1
-    rating_list = []
-
-    while prev != curr:
-        count += 1
-        prev = len(rating_list)
-        page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
-
-        ps = page.find_all("p", {"class": ["poster-viewingdata"], })
-        for p in ps:
-            film_id = p.parent.div['data-film-id']
-            film_url_pattern = p.parent.div['data-film-slug']
-            rating = "NR"
-            film_title_unreliable = ""
-            try:
-                film_title_unreliable = p.parent.img['alt']
-            except Exception as e:
-                print(f"[Error]: couldn't get film title. {e=}")
-
-            try:
-                spans = p.find_all('span')
-                if spans:
-                    rating = spans[0].text
-            except Exception as e:
-                print(f"[Error]: couldn't get film rating. {e=}")
-            finally:
-                rating_list.append( (film_title_unreliable, film_id, film_url_pattern, rating ) )
-
-        curr = len(rating_list)
-
-    return rating_list
-
-
 def user_following(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
@@ -432,7 +393,4 @@ if __name__ == "__main__":
         print(f"{user=}")
         userinfo = User(user)
         print(userinfo)
-        # print(user_films_watched(userinfo))
-        ratings = user_films_rated(userinfo)
-        print(ratings)
-
+        print(user_films_watched(userinfo))
