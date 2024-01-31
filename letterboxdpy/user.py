@@ -14,7 +14,7 @@ class User:
         self.username = username.lower()
 
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/")
-        
+
         self.user_watchlist()
         self.user_favorites(page)
         self.user_stats(page)
@@ -31,8 +31,12 @@ class User:
             "referer": "https://letterboxd.com",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+        except requests.exceptions.Timeout:
+            raise Exception("Request timeout, site may be down")
 
-        return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
+        return BeautifulSoup(response.text, "lxml")
 
     def user_favorites(self, page: None) -> list:        
         data = page.find("section", {"id": ["favourites"], }).findChildren("div")
@@ -292,107 +296,96 @@ def user_reviews(user: User) -> dict:
 
     return data
 
-
-def user_diary_page(user: User, page:int=1) -> dict:
+def user_diary(user: User, page: int=None) -> dict:
     '''
-    Returns the user's diary entries for a specific page.
-
     Returns:
-    - dict: A dictionary containing diary entries for the specified page.
+      Returns a list of dictionaries with the user's diary'
       Each entry is represented as a dictionary with details such as movie name,
       release information,rewatch status, rating, like status, review status,
       and the date of the entry.
     '''
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-
-    dom = user.get_parsed_page(
-        f"https://letterboxd.com/{user.username}/films/diary/page/{page}/")
-
-    ret = {'entrys': {}}
-
-    table = dom.find("table", {"id": ["diary-table"], })
-
-    if table:
-        # extract the headers class of the table to use as keys for the entries
-        # ['month','day','film','released','rating','like','rewatch','review', actions']
-        headers = [elem['class'][0].split('-')[-1] for elem in table.find_all("th")]
-        rows = dom.tbody.find_all("tr")
-
-        for row in rows:
-            # create a dictionary by mapping headers class
-            # to corresponding columns in the row
-            cols = dict(zip(headers, row.find_all('td')))
-
-            # <tr class="diary-entry-row .." data-viewing-id="516951060" ..>
-            log_id = row["data-viewing-id"]
-
-            # day column
-            date = dict(zip(
-                    ["year", "month", "day"],
-                    map(int, cols['day'].a['href'].split('/')[-4:])
-                ))
-            # film column
-            poster = cols['film'].div
-            name = poster.img["alt"] or row.h3.text
-            slug = poster["data-film-slug"]
-            id = poster["data-film-id"]
-            # released column
-            release = cols["released"].text
-            release = int(release) if len(release) else None
-            # rewatch column
-            rewatched = "icon-status-off" not in cols["rewatch"]["class"]
-            # rating column
-            rating = cols["rating"].span
-            is_rating = 'rated-' in ''.join(rating["class"])
-            rating = int(rating["class"][-1].split("-")[-1]) if is_rating else None
-            # like column
-            liked = bool(cols["like"].find("span", attrs={"class": "icon-liked"}))
-            # review column
-            reviewed = bool(cols["review"].a)
-            # actions column
-            actions = cols["actions"]
-            """
-            id = actions["data-film-id"] # !film col
-            name = actions["data-film-name"] !# film col
-            slug = actions["data-film-slug"] # !film col
-            release = actions["ddata-film-release-year"] # !released col
-            """
-            runtime = actions["data-film-run-time"]
-            runtime = int(runtime) if runtime else None
-
-            # create entry
-            ret["entrys"][log_id] = {
-                "name": name,
-                "slug": slug,
-                "id":  id,
-                "release": release,
-                "runtime": runtime,
-                "rewatched": rewatched,
-                "rating": rating,
-                "liked": liked,
-                "reviewed": reviewed,
-                "date": date,
-                "page": page,
-            }
-
-    return ret
-
-
-def user_diary(user: User) -> dict:
-    '''Returns a list of dictionaries with the user's diary'''
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
     
     ret = {'entrys': {}}
-    pagination = 1
+    pagination = page if page else 1
     while True:
-        page_result = user_diary_page(user, pagination)
-        entrys = page_result['entrys']
-        ret['entrys'].update(entrys)
-        if len(entrys) < 50:
-            print(f"Last page: {pagination}")
+        url = f"https://letterboxd.com/{user.username}/films/diary/page/{pagination}/"
+        dom = user.get_parsed_page(url)
+        table = dom.find("table", {"id": ["diary-table"], })
+
+        if table:
+            # extract the headers class of the table to use as keys for the entries
+            # ['month','day','film','released','rating','like','rewatch','review', actions']
+            headers = [elem['class'][0].split('-')[-1] for elem in table.find_all("th")]
+            rows = dom.tbody.find_all("tr")
+
+            for row in rows:
+                # create a dictionary by mapping headers class
+                # to corresponding columns in the row
+                cols = dict(zip(headers, row.find_all('td')))
+
+                # <tr class="diary-entry-row .." data-viewing-id="516951060" ..>
+                log_id = row["data-viewing-id"]
+
+                # day column
+                date = dict(zip(
+                        ["year", "month", "day"],
+                        map(int, cols['day'].a['href'].split('/')[-4:])
+                    ))
+                # film column
+                poster = cols['film'].div
+                name = poster.img["alt"] or row.h3.text
+                slug = poster["data-film-slug"]
+                id = poster["data-film-id"]
+                # released column
+                release = cols["released"].text
+                release = int(release) if len(release) else None
+                # rewatch column
+                rewatched = "icon-status-off" not in cols["rewatch"]["class"]
+                # rating column
+                rating = cols["rating"].span
+                is_rating = 'rated-' in ''.join(rating["class"])
+                rating = int(rating["class"][-1].split("-")[-1]) if is_rating else None
+                # like column
+                liked = bool(cols["like"].find("span", attrs={"class": "icon-liked"}))
+                # review column
+                reviewed = bool(cols["review"].a)
+                # actions column
+                actions = cols["actions"]
+                """
+                id = actions["data-film-id"] # !film col
+                name = actions["data-film-name"] !# film col
+                slug = actions["data-film-slug"] # !film col
+                release = actions["ddata-film-release-year"] # !released col
+                """
+                runtime = actions["data-film-run-time"]
+                runtime = int(runtime) if runtime else None
+
+                # create entry
+                ret["entrys"][log_id] = {
+                    "name": name,
+                    "slug": slug,
+                    "id":  id,
+                    "release": release,
+                    "runtime": runtime,
+                    "rewatched": rewatched,
+                    "rating": rating,
+                    "liked": liked,
+                    "reviewed": reviewed,
+                    "date": date,
+                    "page": page,
+                }
+            else:
+                # no more rows
+                pass
+        else:
+            # no table
+            pass
+        if len(rows) < 50 or pagination == page:
+            # no more entries
+            # or reached the requested page
             break
         pagination += 1
-
     ret['count'] = len(ret['entrys'])
     ret['last_page'] = pagination
 

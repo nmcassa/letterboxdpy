@@ -17,7 +17,6 @@ pip install letterboxdpy
     - [user_films](#user_films)
     - [user_reviews](#user_reviews)
     - [user_diary](#user_diary)
-    - [user_diary_page](#user_diary_page) (todo)
     - [user_wrapped](#user_wrapped)
  - [Members](#Members) (todo)
     - [top_users](#top_users) (todo)
@@ -157,7 +156,7 @@ print(user.user_films(nick))
 ```
 
 <details>
-  <summary>Click to expand user_films_watched method response</summary>
+  <summary>Click to expand user_films method response</summary>
 
 ```json
 {
@@ -425,10 +424,6 @@ print(user.user_wrapped(nick, 2023))
 }
 ```
 </details>
-
-<h2 id="user_diary_page">user_diary_page(user object)</h2>
-
-[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+user_diary_page)
 
 <h1 id="Members">Members Objects</h1>
 
