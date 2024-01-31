@@ -18,6 +18,7 @@ pip install letterboxdpy
     - [user_reviews](#user_reviews)
     - [user_diary](#user_diary)
     - [user_diary_page](#user_diary_page) (todo)
+    - [user_wrapped](#user_wrapped)
  - [Members](#Members) (todo)
     - [top_users](#top_users) (todo)
  - [Movie Objects](#Movie)
@@ -303,6 +304,115 @@ print(user.user_diary(nick))
     },
     "count": 337,
     "last_page": 7
+}
+```
+</details>
+
+<h2 id="user_wrapped">user_wrapped(user object)</h2>
+
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_wrapped(nick, 2023))
+```
+
+<details>
+  <summary>Click to expand user_wrapped method response</summary>
+
+```json
+{
+    "year": 2023,
+    "logged": 120,
+    "total_review": 2,
+    "hours_watched": 223,
+    "total_runtime": 13427,
+    "first_watched": {
+        "332289592": {
+            "name": "The Gift",
+            "slug": "the-gift-2015-1",
+            "id": "255927",
+            "release": 2015,
+            "runtime": 108,
+            "rewatched": false,
+            "rating": 6,
+            "liked": false,
+            "reviewed": false,
+            "date": {
+                "year": 2023,
+                "month": 1,
+                "day": 1
+            },
+            "page": 3
+        }
+    },
+    "last_watched": {
+        "495592379": {
+            ...
+            ...
+        }
+    },
+    "movies": {
+        "495592379": {
+            "name": "Poor Things",
+            "slug": "poor-things-2023",
+            "id": "710352",
+            "release": 2023,
+            "runtime": 141,
+            "rewatched": false,
+            "rating": 6,
+            "liked": false,
+            "reviewed": true,
+            "date": {
+                "year": 2023,
+                "month": 12,
+                "day": 26
+            },
+            "page": 1
+        },
+        ...
+        ...
+    },
+    "months": {
+        "1": 21,
+        "2": 7,
+        "3": 7,
+        "4": 6,
+        "5": 11,
+        "6": 9,
+        "7": 15,
+        "8": 11,
+        "9": 5,
+        "10": 9,
+        "11": 7,
+        "12": 12
+    },
+    "milestones": {
+        "50": {
+            "413604382": {
+                "name": "Richard Pryor: Live in Concert",
+                "slug": "richard-pryor-live-in-concert",
+                "id": "37594",
+                "release": 1979,
+                "runtime": 78,
+                "rewatched": false,
+                "rating": 7,
+                "liked": false,
+                "reviewed": false,
+                "date": {
+                    "year": 2023,
+                    "month": 7,
+                    "day": 13
+                },
+                "page": 2
+            }
+        },
+        "100": {
+            "347318246": {
+                ...
+                ...
+            }
+        }
+    }
 }
 ```
 </details>

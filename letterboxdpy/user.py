@@ -398,6 +398,61 @@ def user_diary(user: User) -> dict:
     return ret
 
 
+def user_wrapped(user: User, year: int=2024) -> dict:
+
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    diary = user_diary(user)
+
+    movies = {}
+    milestones = {}
+    months = {}.fromkeys([1,2,3,4,5,6,7,8,9,10,11,12], 0)
+    total_review = 0
+    total_runtime = 0
+    first_watched = None
+    last_watched = None
+
+    no = 0
+    for log_id, data in diary['entrys'].items():
+        watched_date = data['date']
+
+        if watched_date['year'] == year:
+            no += 1
+
+            movies[log_id] = data
+            months[watched_date['month']] += 1
+
+            reviewed = data['reviewed']
+            total_review += 1 if reviewed else 0
+
+            runtime = data['runtime']
+            total_runtime += runtime if runtime else 0
+
+            if not no % 50:
+                milestones[no] = {log_id:data}
+
+            if not last_watched:
+                # first item is last watched
+                last_watched = {log_id:data}
+            else:
+                # last item is first watched
+                first_watched = {log_id:data}
+    
+    wrapped = {
+        'logged': len(movies),
+        'total_review': total_review,
+        'hours_watched': total_runtime // 60,
+        'total_runtime': total_runtime,
+        'first_watched': first_watched,
+        'last_watched': last_watched,
+        'movies': movies,
+        'months': months,
+        'milestones': milestones
+    }
+
+    return wrapped
+
+
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
