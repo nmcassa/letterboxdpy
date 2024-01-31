@@ -3,6 +3,7 @@ from json import JSONEncoder
 import re
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 
 class User:
@@ -407,6 +408,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
     movies = {}
     milestones = {}
     months = {}.fromkeys([1,2,3,4,5,6,7,8,9,10,11,12], 0)
+    days = {}.fromkeys([1,2,3,4,5,6,7], 0)
     total_review = 0
     total_runtime = 0
     first_watched = None
@@ -420,6 +422,8 @@ def user_wrapped(user: User, year: int=2024) -> dict:
             no += 1
 
             movies[log_id] = data
+
+            days[datetime(**watched_date).weekday()+1] += 1
             months[watched_date['month']] += 1
 
             reviewed = data['reviewed']
@@ -447,6 +451,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
         'last_watched': last_watched,
         'movies': movies,
         'months': months,
+        'days': days,
         'milestones': milestones
     }
 
