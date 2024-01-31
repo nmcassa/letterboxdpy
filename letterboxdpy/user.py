@@ -312,39 +312,60 @@ def user_diary_page(user: User, page:int=1) -> dict:
     table = dom.find("table", {"id": ["diary-table"], })
 
     if table:
-        # extract the headers of the table to use as keys for the entries
-        headers = [elem.text.lower() for elem in table.find_all("th")]
+        # extract the headers class of the table to use as keys for the entries
+        # ['month','day','film','released','rating','like','rewatch','review', actions']
+        headers = [elem['class'][0].split('-')[-1] for elem in table.find_all("th")]
         rows = dom.tbody.find_all("tr")
 
         for row in rows:
-            # create a dictionary by mapping headers
+            # create a dictionary by mapping headers class
             # to corresponding columns in the row
             cols = dict(zip(headers, row.find_all('td')))
 
-            poster = cols['film'].div
-            rating = cols["rating"].span
-            release = cols["released"].text
-
+            # <tr class="diary-entry-row .." data-viewing-id="516951060" ..>
             log_id = row["data-viewing-id"]
+
+            # day column
             date = dict(zip(
                     ["year", "month", "day"],
                     map(int, cols['day'].a['href'].split('/')[-4:])
                 ))
+            # film column
+            poster = cols['film'].div
             name = poster.img["alt"] or row.h3.text
             slug = poster["data-film-slug"]
             id = poster["data-film-id"]
+            # released column
+            release = cols["released"].text
             release = int(release) if len(release) else None
+            # rewatch column
             rewatched = "icon-status-off" not in cols["rewatch"]["class"]
+            # rating column
+            rating = cols["rating"].span
             is_rating = 'rated-' in ''.join(rating["class"])
             rating = int(rating["class"][-1].split("-")[-1]) if is_rating else None
+            # like column
             liked = bool(cols["like"].find("span", attrs={"class": "icon-liked"}))
+            # review column
             reviewed = bool(cols["review"].a)
+            # actions column
+            actions = cols["actions"]
+            """
+            id = actions["data-film-id"] # !film col
+            name = actions["data-film-name"] !# film col
+            slug = actions["data-film-slug"] # !film col
+            release = actions["ddata-film-release-year"] # !released col
+            """
+            runtime = actions["data-film-run-time"]
+            runtime = int(runtime) if runtime else None
 
+            # create entry
             ret["entrys"][log_id] = {
                 "name": name,
                 "slug": slug,
                 "id":  id,
                 "release": release,
+                "runtime": runtime,
                 "rewatched": rewatched,
                 "rating": rating,
                 "liked": liked,
