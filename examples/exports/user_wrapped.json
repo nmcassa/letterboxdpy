@@ -1,0 +1,291 @@
+{
+  "logged": 13,
+  "total_review": 0,
+  "hours_watched": 22,
+  "total_runtime": 1354,
+  "first_watched": {
+    "502212161": {
+      "name": "How to Train Your Dragon",
+      "slug": "how-to-train-your-dragon",
+      "id": "46460",
+      "release": 2010,
+      "runtime": 98,
+      "rewatched": false,
+      "rating": 8,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 2
+      },
+      "page": null
+    }
+  },
+  "last_watched": {
+    "524202738": {
+      "name": "PlayTime",
+      "slug": "playtime",
+      "id": "46424",
+      "release": 1967,
+      "runtime": 115,
+      "rewatched": false,
+      "rating": 8,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 29
+      },
+      "page": null
+    }
+  },
+  "movies": {
+    "524202738": {
+      "name": "PlayTime",
+      "slug": "playtime",
+      "id": "46424",
+      "release": 1967,
+      "runtime": 115,
+      "rewatched": false,
+      "rating": 8,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 29
+      },
+      "page": null
+    },
+    "521620480": {
+      "name": "The Zone of Interest",
+      "slug": "the-zone-of-interest",
+      "id": "398800",
+      "release": 2023,
+      "runtime": 105,
+      "rewatched": false,
+      "rating": 7,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 26
+      },
+      "page": null
+    },
+    "521004508": {
+      "name": "Maestro",
+      "slug": "maestro-2023",
+      "id": "453069",
+      "release": 2023,
+      "runtime": 131,
+      "rewatched": false,
+      "rating": 5,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 25
+      },
+      "page": null
+    },
+    "519469533": {
+      "name": "Society of the Snow",
+      "slug": "society-of-the-snow",
+      "id": "813840",
+      "release": 2023,
+      "runtime": 144,
+      "rewatched": false,
+      "rating": 10,
+      "liked": true,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 23
+      },
+      "page": null
+    },
+    "513520182": {
+      "name": "Black Swan",
+      "slug": "black-swan",
+      "id": "20956",
+      "release": 2010,
+      "runtime": 108,
+      "rewatched": false,
+      "rating": 9,
+      "liked": true,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 15
+      },
+      "page": null
+    },
+    "512524578": {
+      "name": "Gravity",
+      "slug": "gravity-2013",
+      "id": "16529",
+      "release": 2013,
+      "runtime": 91,
+      "rewatched": false,
+      "rating": 7,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 14
+      },
+      "page": null
+    },
+    "509190765": {
+      "name": "Death Race 2000",
+      "slug": "death-race-2000",
+      "id": "44012",
+      "release": 1975,
+      "runtime": 80,
+      "rewatched": false,
+      "rating": 5,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 10
+      },
+      "page": null
+    },
+    "508709056": {
+      "name": "The Conversation",
+      "slug": "the-conversation",
+      "id": "51529",
+      "release": 1974,
+      "runtime": 113,
+      "rewatched": false,
+      "rating": 10,
+      "liked": true,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 9
+      },
+      "page": null
+    },
+    "508559593": {
+      "name": "Total Recall",
+      "slug": "total-recall-2012",
+      "id": "331",
+      "release": 2012,
+      "runtime": 118,
+      "rewatched": false,
+      "rating": 4,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 9
+      },
+      "page": null
+    },
+    "506072802": {
+      "name": "My Life as a Zucchini",
+      "slug": "my-life-as-a-zucchini",
+      "id": "327909",
+      "release": 2016,
+      "runtime": 66,
+      "rewatched": false,
+      "rating": 9,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 6
+      },
+      "page": null
+    },
+    "505708868": {
+      "name": "Neighbors",
+      "slug": "neighbors-2014",
+      "id": "140512",
+      "release": 2014,
+      "runtime": 97,
+      "rewatched": false,
+      "rating": 3,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 6
+      },
+      "page": null
+    },
+    "502947123": {
+      "name": "Airplane!",
+      "slug": "airplane",
+      "id": "51339",
+      "release": 1980,
+      "runtime": 88,
+      "rewatched": false,
+      "rating": 8,
+      "liked": true,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 3
+      },
+      "page": null
+    },
+    "502212161": {
+      "name": "How to Train Your Dragon",
+      "slug": "how-to-train-your-dragon",
+      "id": "46460",
+      "release": 2010,
+      "runtime": 98,
+      "rewatched": false,
+      "rating": 8,
+      "liked": false,
+      "reviewed": false,
+      "date": {
+        "year": 2024,
+        "month": 1,
+        "day": 2
+      },
+      "page": null
+    }
+  },
+  "months": {
+    "1": 13,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0
+  },
+  "days": {
+    "1": 2,
+    "2": 4,
+    "3": 2,
+    "4": 1,
+    "5": 1,
+    "6": 2,
+    "7": 1
+  },
+  "milestones": {}
+}
