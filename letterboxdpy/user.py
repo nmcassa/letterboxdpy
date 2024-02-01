@@ -316,7 +316,6 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
 
     while True:
         url = BASE_URL + f"page/{pagination}/"
-        print(url)
 
         dom = user.get_parsed_page(url)
         table = dom.find("table", {"id": ["diary-table"], })
@@ -444,6 +443,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
                 first_watched = {log_id:data}
     
     wrapped = {
+        'year': year,
         'logged': len(movies),
         'total_review': total_review,
         'hours_watched': total_runtime // 60,
