@@ -39,7 +39,7 @@ print(nick)
 ```
 
 <details>
-  <summary>Click to expand User object response</summary>
+  <summary>Click to expand <code>User</code> object response</summary>
   
 ```json
 {
@@ -83,7 +83,7 @@ print(user.user_genre_info(nick))
 ```
 
 <details>
-  <summary>Click to expand user_genre_info method response</summary>
+  <summary>Click to expand <code>user_genre_info</code> method response</summary>
 
 ```json
 {
@@ -120,7 +120,7 @@ print(user.user_followers(nick))
 ```
 
 <details>
-  <summary>Click to expand user_following & user_followers methods response</summary>
+  <summary>Click to expand <code>user_following</code> & <code>user_followers</code> methods response</summary>
 
 ```json
 {
@@ -156,7 +156,7 @@ print(user.user_films(nick))
 ```
 
 <details>
-  <summary>Click to expand user_films method response</summary>
+    <summary>Click to expand the demo response for <code>user_films</code> method or <a href="/examples/exports/user_films.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
@@ -193,7 +193,7 @@ print(user.user_reviews(nick))
 ```
 
 <details>
-  <summary>Click to expand user_reviews method response</summary>
+  <summary>Click to expand <code>user_reviews</code> method response</summary>
 
 ```json
 {
@@ -260,7 +260,7 @@ print(user.user_diary(nick))
 ```
 
 <details>
-  <summary>Click to expand user_diary method response</summary>
+    <summary>Click to expand the demo response for <code>user_diary</code> method or <a href="/examples/exports/user_diary.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
@@ -316,7 +316,7 @@ print(user.user_wrapped(nick, 2023))
 ```
 
 <details>
-  <summary>Click to expand user_wrapped method response</summary>
+    <summary>Click to expand the demo response for <code>user_wrapped</code> method or <a href="/examples/exports/user_wrapped.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
@@ -446,7 +446,7 @@ print(house)
 ```
 
 <details>
-  <summary>Click to expand Movie object response</summary>
+  <summary>Click to expand <code>Movie</code> object response</summary>
 
 ```json
 {
@@ -506,7 +506,7 @@ print(movie.movie_details(king))
 ```
 
 <details>
-  <summary>Click to expand movie_details method response</summary>
+  <summary>Click to expand <code>movie_details</code> method response</summary>
 
 ```json
 {
@@ -550,7 +550,7 @@ print(movie.movie_popular_reviews(king))
 ```
 
 <details>
-  <summary>Click to expand movie_popular_reviews method response</summary>
+  <summary>Click to expand <code>movie_popular_reviews</code> method response</summary>
 
 ```json
 [
@@ -601,7 +601,7 @@ print(list)
 ```
 
 <details>
-  <summary>Click to expand List object response</summary>
+  <summary>Click to expand <code>List</code> object response</summary>
 
 ```json
 {
