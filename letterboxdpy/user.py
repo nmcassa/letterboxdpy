@@ -38,6 +38,7 @@ class User:
 
         return BeautifulSoup(response.text, "lxml")
 
+    # letterboxd.com/?/
     def user_favorites(self, page: None) -> list:        
         data = page.find("section", {"id": ["favourites"], }).findChildren("div")
         names = []
@@ -49,6 +50,7 @@ class User:
             
         self.favorites = names
 
+    # letterboxd.com/?/
     def user_stats(self, page: None) -> dict:
         span = []
         stats = {}
@@ -63,6 +65,7 @@ class User:
 
         self.stats = stats
 
+    # letterboxd.com/?/watchlist/
     def user_watchlist(self) -> str:
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
         data = page.find("span", {"class": ["watchlist-count"], })
@@ -75,7 +78,7 @@ class User:
 
         self.watchlist_length = ret
 
-
+# letterboxd.com/?/films/
 def user_films(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
@@ -136,7 +139,7 @@ def user_films(user: User) -> dict:
 
     return movie_list
 
-
+# letterboxd.com/?/following/
 def user_following(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
@@ -154,7 +157,7 @@ def user_following(user: User) -> dict:
 
     return ret
 
-
+# letterboxd.com/?/followers/
 def user_followers(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
@@ -172,7 +175,7 @@ def user_followers(user: User) -> dict:
 
     return ret
 
-
+# letterboxd.com/?/films/genre/*/
 def user_genre_info(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
@@ -189,7 +192,7 @@ def user_genre_info(user: User) -> dict:
         
     return ret
 
-
+# letterboxd.com/?/films/reviews/
 def user_reviews(user: User) -> dict:
     '''
     Returns a dictionary containing user reviews. The keys are unique log IDs,
@@ -296,7 +299,8 @@ def user_reviews(user: User) -> dict:
 
     return data
 
-def user_diary(user: User, page: int=None) -> dict:
+# letterboxd.com/?/films/diary/
+def user_diary(user: User, year: int=None, page: int=None) -> dict:
     '''
     Returns:
       Returns a list of dictionaries with the user's diary'
@@ -306,10 +310,14 @@ def user_diary(user: User, page: int=None) -> dict:
     '''
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
     
-    ret = {'entrys': {}}
+    BASE_URL = f"https://letterboxd.com/{user.username}/films/diary/{f'for/{year}/'*bool(year)}"
     pagination = page if page else 1
+    ret = {'entrys': {}}
+
     while True:
-        url = f"https://letterboxd.com/{user.username}/films/diary/page/{pagination}/"
+        url = BASE_URL + f"page/{pagination}/"
+        print(url)
+
         dom = user.get_parsed_page(url)
         table = dom.find("table", {"id": ["diary-table"], })
 
@@ -391,12 +399,12 @@ def user_diary(user: User, page: int=None) -> dict:
 
     return ret
 
-
+# dependency: user_diary()
 def user_wrapped(user: User, year: int=2024) -> dict:
 
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    diary = user_diary(user)
+    diary = user_diary(user, year)
 
     movies = {}
     milestones = {}
@@ -450,11 +458,9 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 
     return wrapped
 
-
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
-
 
 if __name__ == "__main__":
     import argparse
