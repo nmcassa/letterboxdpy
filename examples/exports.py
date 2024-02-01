@@ -13,7 +13,8 @@ methods = [
     user.user_genre_info,
     user.user_reviews,
     user.user_diary,
-    user.user_wrapped
+    user.user_wrapped,
+    user.user_activity,
 ]
 
 exports_dir = 'exports'

@@ -458,6 +458,101 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 
     return wrapped
 
+# letterboxd.com/?/activity
+# letterboxd.com/ajax/activity-pagination/?/
+def user_activity(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    BASE_URL = f"https://letterboxd.com/ajax/activity-pagination/{user.username}"
+    data = {'user': user.username, 'logs': {}}
+    url = BASE_URL
+
+    dom = user.get_parsed_page(url)
+    sections = dom.find_all("section")
+    if not sections:
+        print(f"User {user.username} has no activity.")
+        return data
+
+    for section in sections:
+        
+        log_id = None
+        event_type = None
+
+        if any(x.startswith('-') for x in section['class']):
+            event_type = list(filter(lambda x: x.startswith('-'), section['class']))[0][1:]
+
+        if event_type == 'review' or event_type == 'basic':
+            log_id = section["data-activity-id"]
+            data['logs'][log_id] = {}
+            # event time
+            date = section.find("time")
+            date = datetime.strptime(date['datetime'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            data['logs'][log_id] |= {
+                'event_type': event_type,
+                'time': {
+                    'year': date.year,
+                    'month': date.month,
+                    'day': date.day,
+                    'hour': date.hour,
+                    'minute': date.minute,
+                    'second': date.second
+                }
+            }
+
+            if event_type == 'review':
+                # film
+                detail = section.find("div", {"class": "film-detail-content"})
+                log_title = detail.p.text.strip()
+                log_type = log_title.split()[-1]
+                film = detail.h2.find(text=True)
+                # rating
+                rating = section.find("span", {"class": ["rating"], })
+                rating = int(rating['class'][-1].split('-')[-1]) if rating else None
+                # year
+                film_year = detail.h2.small.text
+                film_year = int(film_year) if film_year else None
+                # review
+                review = detail.find("div", {"class": ["body-text"], })
+                spoiler = bool(review.find("p", {"class": ["contains-spoilers"], }))
+                review = review.find_all('p')[1 if spoiler else 0:]
+                review = '\n'.join([p.text for p in review])
+                data['logs'][log_id]|= {
+                    'event': event_type,
+                    'type': log_type,
+                    'title': log_title,
+                    'film': film,
+                    'film_year': film_year,
+                    'rating': rating,
+                    'spoiler': spoiler,
+                    'review': review
+                }
+            elif event_type == 'basic':
+                log_title = section.p.text.strip()
+                log_type = log_title.split()[1]
+                data['logs'][log_id] |= {
+                    'log_type': log_type,
+                    'title': log_title
+                    }
+
+                # specials
+                if log_type == 'followed':
+                    username = section.find("a",{"class":["target"]})['href'].replace('/','')
+                    data['logs'][log_id] |= {'username': username}
+                elif log_type == 'liked':
+                    # display name
+                    # display_name = section.find("strong",{"class":["name"]}).text.replace('\u2019s',"")
+                    username = section.find("a",{"class":["target"]})['href'].split('/')[1]
+                    data['logs'][log_id] |= {'username': username}
+                elif log_type == 'watched':
+                    film = section.find("a",{"class":["target"]}).text.split('  ')[-1].strip()
+                    film  = film if film else None
+                    data['logs'][log_id] |= {'film': film}
+
+        elif 'no-activity-message' in section['class']:
+            break
+
+    return data
+
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
