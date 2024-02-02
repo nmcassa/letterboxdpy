@@ -157,7 +157,7 @@ print(user.user_films(nick))
 ```
 
 <details>
-    <summary>Click to expand the demo response for <code>user_films</code> method or <a href="/examples/exports/user_films.json" target="_blank">view the full response</a></summary>
+    <summary>Click to expand the demo response for <code>user_films</code> method or <a href="/examples/exports/users/nmcassa/user_films.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
@@ -261,7 +261,7 @@ print(user.user_diary(nick))
 ```
 
 <details>
-    <summary>Click to expand the demo response for <code>user_diary</code> method or <a href="/examples/exports/user_diary.json" target="_blank">view the full response</a></summary>
+    <summary>Click to expand the demo response for <code>user_diary</code> method or <a href="/examples/exports/users/nmcassa/user_diary.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
@@ -317,7 +317,7 @@ print(user.user_wrapped(nick, 2023))
 ```
 
 <details>
-    <summary>Click to expand the demo response for <code>user_wrapped</code> method or <a href="/examples/exports/user_wrapped.json" target="_blank">view the full response</a></summary>
+    <summary>Click to expand the demo response for <code>user_wrapped</code> method or <a href="/examples/exports/users/nmcassa/user_wrapped.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
@@ -436,7 +436,7 @@ print(user.user_activity(nick))
 ```
 
 <details>
-    <summary>Click to expand the demo response for <code>user_activity</code> method or <a href="/examples/exports/user_activity.json" target="_blank">view the full response</a></summary>
+    <summary>Click to expand the demo response for <code>user_activity</code> method or <a href="/examples/exports/users/nmcassa/user_activity.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
