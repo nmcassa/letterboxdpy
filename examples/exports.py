@@ -16,6 +16,13 @@ if not len(username):
 
 nick = user.User(username.lower())
 
+# Export directories
+EXPORTS_DIR = 'exports'
+USERS_FOLDER = os.path.join(EXPORTS_DIR, 'users')
+USER_FOLDER = os.path.join(USERS_FOLDER, nick.username)
+
+# Export methods
+# If you want to add a new method, add it here
 methods = [
     user.user_films,
     user.user_following,
@@ -26,11 +33,6 @@ methods = [
     user.user_wrapped,
     user.user_activity,
 ]
-
-EXPORTS_DIR = 'exports'
-USERS_FOLDER = os.path.join(EXPORTS_DIR, 'users')
-USER_FOLDER = os.path.join(USERS_FOLDER, nick.username)
-
 
 print('\nChecking directories...')
 for dir in [EXPORTS_DIR, USERS_FOLDER, USER_FOLDER]:
@@ -44,21 +46,26 @@ else:
 
 total_time = time.time()
 for no, method in enumerate(methods, 1):
+    method_start_time = time.time()
+
     os.system(f'title Exporting {method.__name__}... ({no}/{len(methods)})')
     print(f'[{no}/{len(methods)}]: Processing "{method.__name__}" method...', end='\r')
-    method_start_time = time.time()
-    data = method(nick)
-    file_path = os.path.join(USER_FOLDER, f'{method.__name__}.json')
 
+    data = method(nick)
+
+    file_path = os.path.join(USER_FOLDER, f'{method.__name__}.json')
     with open(file_path, 'w') as f:
         json.dump(data, f, indent=2)
 
-    click_url = 'file:///' + os.path.join(os.getcwd(), file_path).replace("\\", "/").replace("Aade", "?")
+    # Clickable path
+    click_url = f"file:///{os.path.join(os.getcwd(), file_path)}".replace("\\", "/")
     print(f'{time.time() - method_start_time:<7.2f} seconds - {method.__name__:<16} - {click_url}')
 
+# Finish
 os.system('title Completed!')
 print('\nProcessing complete!')
 print(f'\tTotal time: {time.time() - total_time:.2f} seconds')
-click_url = 'file:///' + os.path.join(os.getcwd(), USER_FOLDER).replace("\\", "/").replace("Aade", "?")
+# Clickable path
+click_url = f'file:///{os.path.join(os.getcwd(), USER_FOLDER)}'.replace("\\", "/")
 print('\tAt', click_url, end='\n\n')
-os.system('pause')
+os.system('pause') # for title
