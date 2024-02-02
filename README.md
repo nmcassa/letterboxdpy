@@ -14,11 +14,11 @@ pip install letterboxdpy
  - [User Objects](#User)
     - [user_genre_info](#user_genre_info)
     - [user_following & user_followers](#user_following)
-    - [user_films_watched](#user_films_watched)
+    - [user_films](#user_films)
     - [user_reviews](#user_reviews)
     - [user_diary](#user_diary)
-    - [user_diary_page](#user_diary_page) (todo)
-    - [user_films_rated](#user_films_rated) (todo)
+    - [user_wrapped](#user_wrapped)
+    - [user_activity](#user_activity)
  - [Members](#Members) (todo)
     - [top_users](#top_users) (todo)
  - [Movie Objects](#Movie)
@@ -40,7 +40,7 @@ print(nick)
 ```
 
 <details>
-  <summary>Click to expand User object response</summary>
+  <summary>Click to expand <code>User</code> object response</summary>
   
 ```json
 {
@@ -84,7 +84,7 @@ print(user.user_genre_info(nick))
 ```
 
 <details>
-  <summary>Click to expand user_genre_info method response</summary>
+  <summary>Click to expand <code>user_genre_info</code> method response</summary>
 
 ```json
 {
@@ -121,7 +121,7 @@ print(user.user_followers(nick))
 ```
 
 <details>
-  <summary>Click to expand user_following & user_followers methods response</summary>
+  <summary>Click to expand <code>user_following</code> & <code>user_followers</code> methods response</summary>
 
 ```json
 {
@@ -148,16 +148,16 @@ print(user.user_followers(nick))
 ```
 </details>
 
-<h2 id="user_films_watched">user_films_watched(user object)</h2>
+<h2 id="user_films">user_films(user object)</h2>
 
 ```python
 from letterboxdpy import user
 nick = user.User("nmcassa")
-print(user.user_films_watched(nick))
+print(user.user_films(nick))
 ```
 
 <details>
-  <summary>Click to expand user_films_watched method response</summary>
+    <summary>Click to expand the demo response for <code>user_films</code> method or <a href="/examples/exports/user_films.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
@@ -194,7 +194,7 @@ print(user.user_reviews(nick))
 ```
 
 <details>
-  <summary>Click to expand user_reviews method response</summary>
+  <summary>Click to expand <code>user_reviews</code> method response</summary>
 
 ```json
 {
@@ -261,7 +261,7 @@ print(user.user_diary(nick))
 ```
 
 <details>
-  <summary>Click to expand user_diary method response</summary>
+    <summary>Click to expand the demo response for <code>user_diary</code> method or <a href="/examples/exports/user_diary.json" target="_blank">view the full response</a></summary>
 
 ```json
 {
@@ -271,6 +271,7 @@ print(user.user_diary(nick))
             "slug": "black-swan",
             "id": "20956",
             "release": 2010,
+            "runtime": 108,
             "rewatched": false,
             "rating": 9,
             "liked": true,
@@ -288,6 +289,7 @@ print(user.user_diary(nick))
             "slug": "mid90s",
             "id": "370451",
             "release": 2018,
+            "runtime": 86,
             "rewatched": false,
             "rating": 8,
             "liked": false,
@@ -306,13 +308,192 @@ print(user.user_diary(nick))
 ```
 </details>
 
-<h2 id="user_diary_page">user_diary_page(user object)</h2>
+<h2 id="user_wrapped">user_wrapped(user object)</h2>
 
-[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+user_diary_page)
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_wrapped(nick, 2023))
+```
 
- <h2 id="user_films_rated">user_films_rated(user object)</h2>
+<details>
+    <summary>Click to expand the demo response for <code>user_wrapped</code> method or <a href="/examples/exports/user_wrapped.json" target="_blank">view the full response</a></summary>
 
-[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+user_films_rated)
+```json
+{
+    "year": 2023,
+    "logged": 120,
+    "total_review": 2,
+    "hours_watched": 223,
+    "total_runtime": 13427,
+    "first_watched": {
+        "332289592": {
+            "name": "The Gift",
+            "slug": "the-gift-2015-1",
+            "id": "255927",
+            "release": 2015,
+            "runtime": 108,
+            "rewatched": false,
+            "rating": 6,
+            "liked": false,
+            "reviewed": false,
+            "date": {
+                "year": 2023,
+                "month": 1,
+                "day": 1
+            },
+            "page": 3
+        }
+    },
+    "last_watched": {
+        "495592379": {
+            ...
+            ...
+        }
+    },
+    "movies": {
+        "495592379": {
+            "name": "Poor Things",
+            "slug": "poor-things-2023",
+            "id": "710352",
+            "release": 2023,
+            "runtime": 141,
+            "rewatched": false,
+            "rating": 6,
+            "liked": false,
+            "reviewed": true,
+            "date": {
+                "year": 2023,
+                "month": 12,
+                "day": 26
+            },
+            "page": 1
+        },
+        ...
+        ...
+    },
+    "months": {
+        "1": 21,
+        "2": 7,
+        "3": 7,
+        "4": 6,
+        "5": 11,
+        "6": 9,
+        "7": 15,
+        "8": 11,
+        "9": 5,
+        "10": 9,
+        "11": 7,
+        "12": 12
+    },
+    "days": {
+        "1": 18,
+        "2": 14,
+        "3": 9,
+        "4": 17,
+        "5": 14,
+        "6": 27,
+        "7": 21
+    },
+    "milestones": {
+        "50": {
+            "413604382": {
+                "name": "Richard Pryor: Live in Concert",
+                "slug": "richard-pryor-live-in-concert",
+                "id": "37594",
+                "release": 1979,
+                "runtime": 78,
+                "rewatched": false,
+                "rating": 7,
+                "liked": false,
+                "reviewed": false,
+                "date": {
+                    "year": 2023,
+                    "month": 7,
+                    "day": 13
+                },
+                "page": 2
+            }
+        },
+        "100": {
+            "347318246": {
+                ...
+                ...
+            }
+        }
+    }
+}
+```
+</details>
+
+
+<h2 id="user_activity">user_activity(user object)</h2>
+
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_activity(nick))
+```
+
+<details>
+    <summary>Click to expand the demo response for <code>user_activity</code> method or <a href="/examples/exports/user_activity.json" target="_blank">view the full response</a></summary>
+
+```json
+{
+  "user": "nmcassa",
+  "logs": {
+    "6302725458": {
+      "event_type": "basic",
+      "time": {
+        "year": 2024,
+        "month": 1,
+        "day": 30,
+        "hour": 4,
+        "minute": 7,
+        "second": 42
+      },
+      "log_type": "watched",
+      "title": "nmcassa   watched and rated  PlayTime   \u2605\u2605\u2605\u2605  on Monday Jan 29, 2024",
+      "film": "PlayTime"
+    },
+    "6171883694": {
+        "event_type": "review",
+        "time": {
+            "year": 2024,
+            "month": 1,
+            "day": 29,
+            "hour": 12,
+            "minute": 59,
+            "second": 59
+        },
+        "event": "review",
+        "type": "watched",
+        "title": "nmcassa watched",
+        "film": "example movie name",
+        "film_year": 2000,
+        "rating": 10,
+        "spoiler": true,
+        "review": "example review"
+    },
+    "6263706885": {
+      "event_type": "basic",
+      "time": {
+        "year": 2024,
+        "month": 1,
+        "day": 23,
+        "hour": 14,
+        "minute": 32,
+        "second": 12
+      },
+      "log_type": "liked",
+      "title": "nmcassa liked L\u00e9o Barbosa\u2019s \ud83c\udfc6 Oscars 2024 list",
+      "username": "000_leo"
+    },
+    ...
+    ...
+}
+```
+</details>
 
 <h1 id="Members">Members Objects</h1>
 
@@ -335,7 +516,7 @@ print(house)
 ```
 
 <details>
-  <summary>Click to expand Movie object response</summary>
+  <summary>Click to expand <code>Movie</code> object response</summary>
 
 ```json
 {
@@ -395,7 +576,7 @@ print(movie.movie_details(king))
 ```
 
 <details>
-  <summary>Click to expand movie_details method response</summary>
+  <summary>Click to expand <code>movie_details</code> method response</summary>
 
 ```json
 {
@@ -439,7 +620,7 @@ print(movie.movie_popular_reviews(king))
 ```
 
 <details>
-  <summary>Click to expand movie_popular_reviews method response</summary>
+  <summary>Click to expand <code>movie_popular_reviews</code> method response</summary>
 
 ```json
 [
@@ -490,7 +671,7 @@ print(list)
 ```
 
 <details>
-  <summary>Click to expand List object response</summary>
+  <summary>Click to expand <code>List</code> object response</summary>
 
 ```json
 {

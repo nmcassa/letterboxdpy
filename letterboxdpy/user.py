@@ -3,6 +3,7 @@ from json import JSONEncoder
 import re
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 
 class User:
@@ -13,7 +14,7 @@ class User:
         self.username = username.lower()
 
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/")
-        
+
         self.user_watchlist()
         self.user_favorites(page)
         self.user_stats(page)
@@ -30,9 +31,14 @@ class User:
             "referer": "https://letterboxd.com",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+        except requests.exceptions.Timeout:
+            raise Exception("Request timeout, site may be down")
 
-        return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
+        return BeautifulSoup(response.text, "lxml")
 
+    # letterboxd.com/?/
     def user_favorites(self, page: None) -> list:        
         data = page.find("section", {"id": ["favourites"], }).findChildren("div")
         names = []
@@ -44,6 +50,7 @@ class User:
             
         self.favorites = names
 
+    # letterboxd.com/?/
     def user_stats(self, page: None) -> dict:
         span = []
         stats = {}
@@ -58,6 +65,7 @@ class User:
 
         self.stats = stats
 
+    # letterboxd.com/?/watchlist/
     def user_watchlist(self) -> str:
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
         data = page.find("span", {"class": ["watchlist-count"], })
@@ -70,8 +78,8 @@ class User:
 
         self.watchlist_length = ret
 
-
-def user_films_watched(user: User) -> dict:
+# letterboxd.com/?/films/
+def user_films(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
     #returns all movies
@@ -131,46 +139,7 @@ def user_films_watched(user: User) -> dict:
 
     return movie_list
 
-
-def user_films_rated(user: User) -> list:
-    """ """
-    if type(user) != User:
-        raise Exception("Improper parameter")
-
-    prev = count = 0
-    curr = -1
-    rating_list = []
-
-    while prev != curr:
-        count += 1
-        prev = len(rating_list)
-        page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
-
-        ps = page.find_all("p", {"class": ["poster-viewingdata"], })
-        for p in ps:
-            film_id = p.parent.div['data-film-id']
-            film_url_pattern = p.parent.div['data-film-slug']
-            rating = "NR"
-            film_title_unreliable = ""
-            try:
-                film_title_unreliable = p.parent.img['alt']
-            except Exception as e:
-                print(f"[Error]: couldn't get film title. {e=}")
-
-            try:
-                spans = p.find_all('span')
-                if spans:
-                    rating = spans[0].text
-            except Exception as e:
-                print(f"[Error]: couldn't get film rating. {e=}")
-            finally:
-                rating_list.append( (film_title_unreliable, film_id, film_url_pattern, rating ) )
-
-        curr = len(rating_list)
-
-    return rating_list
-
-
+# letterboxd.com/?/following/
 def user_following(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
@@ -188,7 +157,7 @@ def user_following(user: User) -> dict:
 
     return ret
 
-
+# letterboxd.com/?/followers/
 def user_followers(user: User) -> dict:
     if type(user) != User:
         raise Exception("Improper parameter")
@@ -206,7 +175,7 @@ def user_followers(user: User) -> dict:
 
     return ret
 
-
+# letterboxd.com/?/films/genre/*/
 def user_genre_info(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
@@ -223,7 +192,7 @@ def user_genre_info(user: User) -> dict:
         
     return ret
 
-
+# letterboxd.com/?/films/reviews/
 def user_reviews(user: User) -> dict:
     '''
     Returns a dictionary containing user reviews. The keys are unique log IDs,
@@ -330,96 +299,263 @@ def user_reviews(user: User) -> dict:
 
     return data
 
-
-def user_diary_page(user: User, page:int=1) -> dict:
+# letterboxd.com/?/films/diary/
+def user_diary(user: User, year: int=None, page: int=None) -> dict:
     '''
-    Returns the user's diary entries for a specific page.
-
     Returns:
-    - dict: A dictionary containing diary entries for the specified page.
+      Returns a list of dictionaries with the user's diary'
       Each entry is represented as a dictionary with details such as movie name,
       release information,rewatch status, rating, like status, review status,
       and the date of the entry.
     '''
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-
-    dom = user.get_parsed_page(
-        f"https://letterboxd.com/{user.username}/films/diary/page/{page}/")
-
-    ret = {'entrys': {}}
-
-    table = dom.find("table", {"id": ["diary-table"], })
-
-    if table:
-        # extract the headers of the table to use as keys for the entries
-        headers = [elem.text.lower() for elem in table.find_all("th")]
-        rows = dom.tbody.find_all("tr")
-
-        for row in rows:
-            # create a dictionary by mapping headers
-            # to corresponding columns in the row
-            cols = dict(zip(headers, row.find_all('td')))
-
-            poster = cols['film'].div
-            rating = cols["rating"].span
-            release = cols["released"].text
-
-            log_id = row["data-viewing-id"]
-            date = dict(zip(
-                    ["year", "month", "day"],
-                    map(int, cols['day'].a['href'].split('/')[-4:])
-                ))
-            name = poster.img["alt"] or row.h3.text
-            slug = poster["data-film-slug"]
-            id = poster["data-film-id"]
-            release = int(release) if len(release) else None
-            rewatched = "icon-status-off" not in cols["rewatch"]["class"]
-            is_rating = 'rated-' in ''.join(rating["class"])
-            rating = int(rating["class"][-1].split("-")[-1]) if is_rating else None
-            liked = bool(cols["like"].find("span", attrs={"class": "icon-liked"}))
-            reviewed = bool(cols["review"].a)
-
-            ret["entrys"][log_id] = {
-                "name": name,
-                "slug": slug,
-                "id":  id,
-                "release": release,
-                "rewatched": rewatched,
-                "rating": rating,
-                "liked": liked,
-                "reviewed": reviewed,
-                "date": date,
-                "page": page,
-            }
-
-    return ret
-
-
-def user_diary(user: User) -> dict:
-    '''Returns a list of dictionaries with the user's diary'''
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
     
+    BASE_URL = f"https://letterboxd.com/{user.username}/films/diary/{f'for/{year}/'*bool(year)}"
+    pagination = page if page else 1
     ret = {'entrys': {}}
-    pagination = 1
+
     while True:
-        page_result = user_diary_page(user, pagination)
-        entrys = page_result['entrys']
-        ret['entrys'].update(entrys)
-        if len(entrys) < 50:
-            print(f"Last page: {pagination}")
+        url = BASE_URL + f"page/{pagination}/"
+
+        dom = user.get_parsed_page(url)
+        table = dom.find("table", {"id": ["diary-table"], })
+
+        if table:
+            # extract the headers class of the table to use as keys for the entries
+            # ['month','day','film','released','rating','like','rewatch','review', actions']
+            headers = [elem['class'][0].split('-')[-1] for elem in table.find_all("th")]
+            rows = dom.tbody.find_all("tr")
+
+            for row in rows:
+                # create a dictionary by mapping headers class
+                # to corresponding columns in the row
+                cols = dict(zip(headers, row.find_all('td')))
+
+                # <tr class="diary-entry-row .." data-viewing-id="516951060" ..>
+                log_id = row["data-viewing-id"]
+
+                # day column
+                date = dict(zip(
+                        ["year", "month", "day"],
+                        map(int, cols['day'].a['href'].split('/')[-4:])
+                    ))
+                # film column
+                poster = cols['film'].div
+                name = poster.img["alt"] or row.h3.text
+                slug = poster["data-film-slug"]
+                id = poster["data-film-id"]
+                # released column
+                release = cols["released"].text
+                release = int(release) if len(release) else None
+                # rewatch column
+                rewatched = "icon-status-off" not in cols["rewatch"]["class"]
+                # rating column
+                rating = cols["rating"].span
+                is_rating = 'rated-' in ''.join(rating["class"])
+                rating = int(rating["class"][-1].split("-")[-1]) if is_rating else None
+                # like column
+                liked = bool(cols["like"].find("span", attrs={"class": "icon-liked"}))
+                # review column
+                reviewed = bool(cols["review"].a)
+                # actions column
+                actions = cols["actions"]
+                """
+                id = actions["data-film-id"] # !film col
+                name = actions["data-film-name"] !# film col
+                slug = actions["data-film-slug"] # !film col
+                release = actions["ddata-film-release-year"] # !released col
+                """
+                runtime = actions["data-film-run-time"]
+                runtime = int(runtime) if runtime else None
+
+                # create entry
+                ret["entrys"][log_id] = {
+                    "name": name,
+                    "slug": slug,
+                    "id":  id,
+                    "release": release,
+                    "runtime": runtime,
+                    "rewatched": rewatched,
+                    "rating": rating,
+                    "liked": liked,
+                    "reviewed": reviewed,
+                    "date": date,
+                    "page": page,
+                }
+            else:
+                # no more rows
+                pass
+        else:
+            # no table
+            pass
+        if len(rows) < 50 or pagination == page:
+            # no more entries
+            # or reached the requested page
             break
         pagination += 1
-
     ret['count'] = len(ret['entrys'])
     ret['last_page'] = pagination
 
     return ret
 
+# dependency: user_diary()
+def user_wrapped(user: User, year: int=2024) -> dict:
+
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    diary = user_diary(user, year)
+
+    movies = {}
+    milestones = {}
+    months = {}.fromkeys([1,2,3,4,5,6,7,8,9,10,11,12], 0)
+    days = {}.fromkeys([1,2,3,4,5,6,7], 0)
+    total_review = 0
+    total_runtime = 0
+    first_watched = None
+    last_watched = None
+
+    no = 0
+    for log_id, data in diary['entrys'].items():
+        watched_date = data['date']
+
+        if watched_date['year'] == year:
+            no += 1
+
+            movies[log_id] = data
+
+            days[datetime(**watched_date).weekday()+1] += 1
+            months[watched_date['month']] += 1
+
+            reviewed = data['reviewed']
+            total_review += 1 if reviewed else 0
+
+            runtime = data['runtime']
+            total_runtime += runtime if runtime else 0
+
+            if not no % 50:
+                milestones[no] = {log_id:data}
+
+            if not last_watched:
+                # first item is last watched
+                last_watched = {log_id:data}
+            else:
+                # last item is first watched
+                first_watched = {log_id:data}
+    
+    wrapped = {
+        'year': year,
+        'logged': len(movies),
+        'total_review': total_review,
+        'hours_watched': total_runtime // 60,
+        'total_runtime': total_runtime,
+        'first_watched': first_watched,
+        'last_watched': last_watched,
+        'movies': movies,
+        'months': months,
+        'days': days,
+        'milestones': milestones
+    }
+
+    return wrapped
+
+# letterboxd.com/?/activity
+# letterboxd.com/ajax/activity-pagination/?/
+def user_activity(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    BASE_URL = f"https://letterboxd.com/ajax/activity-pagination/{user.username}"
+    data = {'user': user.username, 'logs': {}}
+    url = BASE_URL
+
+    dom = user.get_parsed_page(url)
+    sections = dom.find_all("section")
+    if not sections:
+        print(f"User {user.username} has no activity.")
+        return data
+
+    for section in sections:
+        
+        log_id = None
+        event_type = None
+
+        if any(x.startswith('-') for x in section['class']):
+            event_type = list(filter(lambda x: x.startswith('-'), section['class']))[0][1:]
+
+        if event_type == 'review' or event_type == 'basic':
+            log_id = section["data-activity-id"]
+            data['logs'][log_id] = {}
+            # event time
+            date = section.find("time")
+            date = datetime.strptime(date['datetime'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            data['logs'][log_id] |= {
+                'event_type': event_type,
+                'time': {
+                    'year': date.year,
+                    'month': date.month,
+                    'day': date.day,
+                    'hour': date.hour,
+                    'minute': date.minute,
+                    'second': date.second
+                }
+            }
+
+            if event_type == 'review':
+                # film
+                detail = section.find("div", {"class": "film-detail-content"})
+                log_title = detail.p.text.strip()
+                log_type = log_title.split()[-1]
+                film = detail.h2.find(text=True)
+                # rating
+                rating = section.find("span", {"class": ["rating"], })
+                rating = int(rating['class'][-1].split('-')[-1]) if rating else None
+                # year
+                film_year = detail.h2.small.text
+                film_year = int(film_year) if film_year else None
+                # review
+                review = detail.find("div", {"class": ["body-text"], })
+                spoiler = bool(review.find("p", {"class": ["contains-spoilers"], }))
+                review = review.find_all('p')[1 if spoiler else 0:]
+                review = '\n'.join([p.text for p in review])
+                data['logs'][log_id]|= {
+                    'event': event_type,
+                    'type': log_type,
+                    'title': log_title,
+                    'film': film,
+                    'film_year': film_year,
+                    'rating': rating,
+                    'spoiler': spoiler,
+                    'review': review
+                }
+            elif event_type == 'basic':
+                log_title = section.p.text.strip()
+                log_type = log_title.split()[1]
+                data['logs'][log_id] |= {
+                    'log_type': log_type,
+                    'title': log_title
+                    }
+
+                # specials
+                if log_type == 'followed':
+                    username = section.find("a",{"class":["target"]})['href'].replace('/','')
+                    data['logs'][log_id] |= {'username': username}
+                elif log_type == 'liked':
+                    # display name
+                    # display_name = section.find("strong",{"class":["name"]}).text.replace('\u2019s',"")
+                    username = section.find("a",{"class":["target"]})['href'].split('/')[1]
+                    data['logs'][log_id] |= {'username': username}
+                elif log_type == 'watched':
+                    film = section.find("a",{"class":["target"]}).text.split('  ')[-1].strip()
+                    film  = film if film else None
+                    data['logs'][log_id] |= {'film': film}
+
+        elif 'no-activity-message' in section['class']:
+            break
+
+    return data
 
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
-
 
 if __name__ == "__main__":
     import argparse
@@ -432,7 +568,4 @@ if __name__ == "__main__":
         print(f"{user=}")
         userinfo = User(user)
         print(userinfo)
-        # print(user_films_watched(userinfo))
-        ratings = user_films_rated(userinfo)
-        print(ratings)
-
+        print(user_films(userinfo))
