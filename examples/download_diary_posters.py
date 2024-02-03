@@ -121,12 +121,12 @@ class App:
 if __name__ == '__main__':
     username = ''
 
-if not len(username):
-    try:
-        username = sys.argv[1]
-    except IndexError:
-        print(f'Quick usage: python {sys.argv[0]} <username>')
-        username = input('Enter username: ')
+    if not len(username):   
+        try:
+            username = sys.argv[1]
+        except IndexError:
+            print(f'Quick usage: python {sys.argv[0]} <username>')
+            username = input('Enter username: ')
 
-    app = App(username.lower())
-    app.run()
+        app = App(username.lower())
+        app.run()
