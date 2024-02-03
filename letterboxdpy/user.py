@@ -565,6 +565,7 @@ def user_lists(user: User) -> dict:
         'list_set': ('section', {'class': 'list-set', }),
         'lists': ('section', {'class': 'list', }),
         'title': ('h2', {'class': 'title', }),
+        'description': ('div', {'class': 'body-text', }),
         'value': ('small', {'class': 'value', }),
         'likes': ('a', {'class': 'icon-like', }),
         'comments': ('a', {'class': 'icon-comment', }),
@@ -585,12 +586,14 @@ def user_lists(user: User) -> dict:
             # title
             list_title = item.find(*selectors['title']).text.strip()
             # description
-            description = item.find('div', {'class': 'body-text'})
+            description = item.find(*selectors['description'])
             if description:
                 description = description.find_all('p')
                 description = '\n'.join([p.text for p in description])
             # url
-            list_url = DOMAIN + item.find(*selectors['title']).a['href']
+            list_url = item.find(*selectors['title']).a['href']
+            # slug
+            list_slug = list_url.split('/')[-2]
             # count
             count = int(item.find(*selectors['value']).text.split()[0].replace(',',''))
             # likes
@@ -603,8 +606,9 @@ def user_lists(user: User) -> dict:
 
             data['lists'][list_id] = {
                 'title': list_title,
+                'slug': list_slug,
                 'description': description,
-                'url': list_url,
+                'url': DOMAIN + list_url,
                 'count': count,
                 'likes': likes,
                 'comments': comments

@@ -511,6 +511,7 @@ print(user.user_lists(nick))
   "lists": {
     "30052453": {
       "title": "DEF CON Movie List",
+      "slug": "def-con-movie-list",
       "description": "The DEF CON Hacking Conference's suggested movie list. defcon.org/html/links/movie-list.html",
       "url": "https://letterboxd.com/nmcassa/list/def-con-movie-list/",
       "count": 11,
