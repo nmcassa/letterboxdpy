@@ -578,6 +578,8 @@ def user_lists(user: User) -> dict:
         dom = user.get_parsed_page(f'{BASE_URL}/page/{page}')
 
         list_set = dom.find(*selectors['list_set'])
+        if not list_set:
+            break
         lists = list_set.find_all(*selectors['lists'])
 
         for item in lists:
@@ -615,10 +617,10 @@ def user_lists(user: User) -> dict:
                 }
 
         if len(lists) < LISTS_PER_PAGE:
-            data['count'] = len(data['lists'])
-            data['last_page'] = page
             break
 
+    data['count'] = len(data['lists'])
+    data['last_page'] = page
     return data
 
 class Encoder(JSONEncoder):
