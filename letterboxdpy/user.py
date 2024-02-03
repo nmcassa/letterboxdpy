@@ -188,8 +188,11 @@ def user_genre_info(user: User) -> dict:
                                     "/films/genre/" + genre + "/")
         data = page.find("span", {"class": ["replace-if-you"], })
         data = data.next_sibling.replace(',', '')
-        ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
-        
+        try:
+            ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
+        except IndexError:
+            ret[genre] = 0
+
     return ret
 
 # letterboxd.com/?/films/reviews/
