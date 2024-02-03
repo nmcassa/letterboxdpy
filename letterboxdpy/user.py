@@ -385,17 +385,14 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
                     "date": date,
                     "page": page,
                 }
-            else:
-                # no more rows
-                pass
-        else:
-            # no table
-            pass
-        if len(rows) < 50 or pagination == page:
-            # no more entries
-            # or reached the requested page
+            if len(rows) < 50 or pagination == page:
+                    # no more entries
+                    # or reached the requested page
+                    break
+            pagination += 1
+        else: # no table
             break
-        pagination += 1
+
     ret['count'] = len(ret['entrys'])
     ret['last_page'] = pagination
 
