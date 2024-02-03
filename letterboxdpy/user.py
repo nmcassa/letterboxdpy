@@ -553,6 +553,70 @@ def user_activity(user: User) -> dict:
 
     return data
 
+# https://letterboxd.com/?/lists/
+def user_lists(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    DOMAIN = "https://letterboxd.com"
+    BASE_URL = f"{DOMAIN}/{user.username}/lists/"
+    LISTS_PER_PAGE = 12
+
+    selectors = {
+        'list_set': ('section', {'class': 'list-set', }),
+        'lists': ('section', {'class': 'list', }),
+        'title': ('h2', {'class': 'title', }),
+        'value': ('small', {'class': 'value', }),
+        'likes': ('a', {'class': 'icon-like', }),
+        'comments': ('a', {'class': 'icon-comment', }),
+    }
+
+    page = 0
+    data = {'lists': {}}
+    while True:
+        page += 1
+        dom = user.get_parsed_page(f'{BASE_URL}/page/{page}')
+
+        list_set = dom.find(*selectors['list_set'])
+        lists = list_set.find_all(*selectors['lists'])
+
+        for item in lists:
+            # id
+            list_id = item['data-film-list-id']
+            # title
+            list_title = item.find(*selectors['title']).text.strip()
+            # description
+            description = item.find('div', {'class': 'body-text'})
+            if description:
+                description = description.find_all('p')
+                description = '\n'.join([p.text for p in description])
+            # url
+            list_url = DOMAIN + item.find(*selectors['title']).a['href']
+            # count
+            count = int(item.find(*selectors['value']).text.split()[0].replace(',',''))
+            # likes
+            likes = item.find(*selectors['likes'])
+            likes = int(likes.text.split()[0].replace(',','')) if likes else 0
+            # comments
+            # feature: https://letterboxd.com/ajax/filmlist:<list-id>/comments/
+            comments = item.find(*selectors['comments'])
+            comments = int(comments.text.split()[0].replace(',','')) if comments else 0
+
+            data['lists'][list_id] = {
+                'title': list_title,
+                'description': description,
+                'url': list_url,
+                'count': count,
+                'likes': likes,
+                'comments': comments
+                }
+
+        if len(lists) < LISTS_PER_PAGE:
+            data['count'] = len(data['lists'])
+            data['last_page'] = page
+            break
+
+    return data
+
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
