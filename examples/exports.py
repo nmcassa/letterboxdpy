@@ -32,6 +32,7 @@ methods = [
     user.user_diary,
     user.user_wrapped,
     user.user_activity,
+    user.user_lists
 ]
 
 print('\nChecking directories...')

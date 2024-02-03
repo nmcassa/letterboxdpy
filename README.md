@@ -19,6 +19,7 @@ pip install letterboxdpy
     - [user_diary](#user_diary)
     - [user_wrapped](#user_wrapped)
     - [user_activity](#user_activity)
+    - [user_lists](#user_lists)
  - [Members](#Members) (todo)
     - [top_users](#top_users) (todo)
  - [Movie Objects](#Movie)
@@ -426,7 +427,6 @@ print(user.user_wrapped(nick, 2023))
 ```
 </details>
 
-
 <h2 id="user_activity">user_activity(user object)</h2>
 
 ```python
@@ -491,6 +491,35 @@ print(user.user_activity(nick))
     },
     ...
     ...
+}
+```
+</details>
+
+<h2 id="user_lists">user_lists(user object)</h2>
+
+```python
+from letterboxdpy import user
+nick = user.User("nmcassa")
+print(user.user_lists(nick))
+```
+
+<details>
+  <summary>Click to expand <code>user_lists</code> method response</summary>
+
+```json
+{
+  "lists": {
+    "30052453": {
+      "title": "DEF CON Movie List",
+      "description": "The DEF CON Hacking Conference's suggested movie list. defcon.org/html/links/movie-list.html",
+      "url": "https://letterboxd.com/nmcassa/list/def-con-movie-list/",
+      "count": 11,
+      "likes": 0,
+      "comments": 0
+    }
+  },
+  "count": 1,
+  "last_page": 1
 }
 ```
 </details>
