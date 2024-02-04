@@ -20,6 +20,7 @@ pip install letterboxdpy
     - [user_wrapped](#user_wrapped)
     - [user_activity](#user_activity)
     - [user_lists](#user_lists)
+    - [user_watchlist](#user_watchlist)
  - [Members](#Members) (todo)
     - [top_users](#top_users) (todo)
  - [Movie Objects](#Movie)
@@ -36,8 +37,8 @@ pip install letterboxdpy
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(nick)
+user_instance = user.User("nmcassa")
+print(user_instance)
 ```
 
 <details>
@@ -80,8 +81,8 @@ print(nick)
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(user.user_genre_info(nick))
+user_instance = user.User("nmcassa")
+print(user.user_genre_info(user_instance))
 ```
 
 <details>
@@ -116,9 +117,9 @@ print(user.user_genre_info(nick))
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(user.user_following(nick))
-print(user.user_followers(nick))
+user_instance = user.User("nmcassa")
+print(user.user_following(user_instance))
+print(user.user_followers(user_instance))
 ```
 
 <details>
@@ -153,8 +154,8 @@ print(user.user_followers(nick))
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(user.user_films(nick))
+user_instance = user.User("nmcassa")
+print(user.user_films(user_instance))
 ```
 
 <details>
@@ -190,8 +191,8 @@ print(user.user_films(nick))
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(user.user_reviews(nick))
+user_instance = user.User("nmcassa")
+print(user.user_reviews(user_instance))
 ```
 
 <details>
@@ -257,8 +258,8 @@ print(user.user_reviews(nick))
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(user.user_diary(nick))
+user_instance = user.User("nmcassa")
+print(user.user_diary(user_instance))
 ```
 
 <details>
@@ -313,8 +314,8 @@ print(user.user_diary(nick))
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(user.user_wrapped(nick, 2023))
+user_instance = user.User("nmcassa")
+print(user.user_wrapped(user_instance, 2023))
 ```
 
 <details>
@@ -431,8 +432,8 @@ print(user.user_wrapped(nick, 2023))
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(user.user_activity(nick))
+user_instance = user.User("nmcassa")
+print(user.user_activity(user_instance))
 ```
 
 <details>
@@ -499,8 +500,8 @@ print(user.user_activity(nick))
 
 ```python
 from letterboxdpy import user
-nick = user.User("nmcassa")
-print(user.user_lists(nick))
+user_instance = user.User("nmcassa")
+print(user.user_lists(user_instance))
 ```
 
 <details>
@@ -521,6 +522,53 @@ print(user.user_lists(nick))
   },
   "count": 1,
   "last_page": 1
+}
+```
+</details>
+
+<h2 id="user_watchlist">user_watchlist(user object)</h2>
+
+```python
+from letterboxdpy import user
+user_instance = user.User("nmcassa")
+watchlist_result = user.user_watchlist(user_instance, {'genre':['action','-drama']})
+print(watchlist_result)
+```
+
+<details>
+  <summary>Click to expand <code>user_watchlist</code> method response</summary>
+
+```json
+{
+  "available": true,
+  "count": 57,
+  "data_count": 6,
+  "last_page": 1,
+  "filters": {
+    "genre": [
+      "action",
+      "-drama"
+    ]
+  },
+  "data": {
+    "51397": {
+      "name": "From Dusk Till Dawn",
+      "slug": "from-dusk-till-dawn",
+      "no": 6,
+      "page": 1,
+      "url": "https://letterboxd.com/films/from-dusk-till-dawn/"
+    },
+    ....
+    ...
+    ..
+    "62780": {
+      "name": "Mad Max: Fury Road",
+      "slug": "mad-max-fury-road",
+      "no": 1,
+      "page": 1,
+      "url": "https://letterboxd.com/films/mad-max-fury-road/"
+    }
+  }
 }
 ```
 </details>

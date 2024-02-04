@@ -1,0 +1,56 @@
+{
+  "available": true,
+  "count": 57,
+  "data_count": 6,
+  "last_page": 1,
+  "filters": {
+    "genre": [
+      "action",
+      "-drama"
+    ]
+  },
+  "data": {
+    "51397": {
+      "name": "From Dusk Till Dawn",
+      "slug": "from-dusk-till-dawn",
+      "no": 6,
+      "page": 1,
+      "url": "https://letterboxd.com/films/from-dusk-till-dawn/"
+    },
+    "51291": {
+      "name": "Total Recall",
+      "slug": "total-recall",
+      "no": 5,
+      "page": 1,
+      "url": "https://letterboxd.com/films/total-recall/"
+    },
+    "51871": {
+      "name": "Minority Report",
+      "slug": "minority-report",
+      "no": 4,
+      "page": 1,
+      "url": "https://letterboxd.com/films/minority-report/"
+    },
+    "46908": {
+      "name": "Ichi the Killer",
+      "slug": "ichi-the-killer",
+      "no": 3,
+      "page": 1,
+      "url": "https://letterboxd.com/films/ichi-the-killer/"
+    },
+    "45479": {
+      "name": "Drunken Master",
+      "slug": "drunken-master",
+      "no": 2,
+      "page": 1,
+      "url": "https://letterboxd.com/films/drunken-master/"
+    },
+    "62780": {
+      "name": "Mad Max: Fury Road",
+      "slug": "mad-max-fury-road",
+      "no": 1,
+      "page": 1,
+      "url": "https://letterboxd.com/films/mad-max-fury-road/"
+    }
+  }
+}

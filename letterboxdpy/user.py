@@ -84,6 +84,7 @@ class User:
 def user_films(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
+    FILMS_PER_PAGE = 12*6
     count = 0
     rating_count = 0
     liked_count = 0
@@ -123,7 +124,7 @@ def user_films(user: User) -> dict:
                     "liked": liked
                 }
 
-        if len(poster_containers) < 72:
+        if len(poster_containers) < FILMS_PER_PAGE:
             movie_list['count'] = len(movie_list['movies'])
             movie_list['liked_count'] = liked_count
             movie_list['rating_count'] = rating_count
@@ -620,6 +621,100 @@ def user_lists(user: User) -> dict:
     data['count'] = len(data['lists'])
     data['last_page'] = page
     return data
+
+# https://letterboxd.com/?/watchlist/
+def user_watchlist(user: User, filters: dict=None) -> dict:
+    """
+    filter examples:
+        - keys: decade, year, genre
+
+        # positive genre & negative genre (start with '-')
+        - {genre: ['mystery']}  <- same -> {genre: 'mystery'}
+        - {genre: ['-mystery']} <- same -> {genre: '-mystery'}
+
+        # multiple genres
+        - {genre: ['mystery', 'comedy'], decade: '1990s'}
+        - {genre: ['mystery', '-comedy'], year: '2019'}
+        - /decade/1990s/genre/action+-drama/
+          ^^---> {'decade':'1990s','genre':['action','-drama']}
+    """
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    data = {
+        'available': None,
+        'count': user.watchlist_length,
+        'data_count': None,
+        'last_page': None,
+        'filters': filters,
+        'data': {}
+        }
+
+    if user.watchlist_length is None:
+        # user watchlist is private
+        return data | {'available': False}
+    elif user.watchlist_length == 0:
+        # user watchlist is empty
+        return data | {'available': True}
+
+    FILMS_PER_PAGE = 7*4
+    BASE_URL = f"{user.DOMAIN}/{user.username}/watchlist/"
+
+    if filters and isinstance(filters, dict):
+        f = ""
+        for key, values in filters.items():
+            if not isinstance(values, list):
+                values = [values]
+            f += f"{key}/"
+            f += "+".join([str(v) for v in values]) + "/"
+
+        BASE_URL += f
+
+    page = 1
+    no = user.watchlist_length
+    while True:
+        dom = user.get_parsed_page(f'{BASE_URL}/page/{page}')
+
+        poster_containers = dom.find_all("li", {"class": ["poster-container"], })
+        for poster_container in poster_containers:
+            poster = poster_container.div
+            img = poster_container.div.img
+
+            film_id = poster['data-film-id']
+            slug = poster['data-film-slug']
+            name = img['alt']
+
+            data['data'][film_id] = {
+                'name': name,
+                'slug': slug,
+                'no': no,
+                'page': page,
+                'url': f"{user.DOMAIN}/films/{slug}/",
+            }
+
+            no -= 1
+
+        if len(poster_containers) < FILMS_PER_PAGE:
+            # last page
+            break
+        page += 1
+
+    data_count = len(data['data'])
+
+    if filters:
+        if data_count != data['count']:
+            no = data_count
+            for item in data['data'].keys():
+                data['data'][item]['no'] = no
+                no -= 1
+
+    data = data | {
+        'available': True,
+        'data_count': data_count,
+        'last_page': page,
+        }
+
+    return data
+
 
 class Encoder(JSONEncoder):
     def default(self, o):

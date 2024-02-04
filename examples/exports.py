@@ -32,7 +32,8 @@ methods = [
     user.user_diary,
     user.user_wrapped,
     user.user_activity,
-    user.user_lists
+    user.user_lists,
+    [user.user_watchlist, {'filters': {'genre': ['action', '-drama']}}],
 ]
 
 print('\nChecking directories...')
@@ -49,10 +50,19 @@ total_time = time.time()
 for no, method in enumerate(methods, 1):
     method_start_time = time.time()
 
-    os.system(f'title Exporting {method.__name__}... ({no}/{len(methods)})')
-    print(f'[{no}/{len(methods)}]: Processing "{method.__name__}" method...', end='\r')
+    args = {}
+    if isinstance(method, list):
+        method, args = method
 
-    data = method(nick)
+    os.system(f'title [{len(methods)}/{no:0>2}] Exporting {method.__name__}... ')
+    print(f'[{len(methods)}/{no:0>2}]: Processing "{method.__name__}" method', end='')
+
+    if args:
+        print(f' with args: {args}', end='\r')
+        data = method(nick, **args)
+    else:
+        print(end='\r')
+        data = method(nick)
 
     file_path = os.path.join(USER_FOLDER, f'{method.__name__}.json')
     with open(file_path, 'w') as f:
