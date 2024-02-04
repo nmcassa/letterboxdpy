@@ -14,12 +14,12 @@ if not len(username):
         print(f'Quick usage: python {sys.argv[0]} <username>')
         username = input('Enter username: ')
 
-nick = user.User(username.lower())
+user_instance = user.User(username.lower())
 
 # Export directories
 EXPORTS_DIR = 'exports'
 USERS_FOLDER = os.path.join(EXPORTS_DIR, 'users')
-USER_FOLDER = os.path.join(USERS_FOLDER, nick.username)
+USER_FOLDER = os.path.join(USERS_FOLDER, user_instance.username)
 
 # Export methods
 # If you want to add a new method, add it here
@@ -34,6 +34,7 @@ methods = [
     user.user_activity,
     user.user_lists,
     [user.user_watchlist, {'filters': {'genre': ['action', '-drama']}}],
+    user.user_tags
 ]
 
 print('\nChecking directories...')
@@ -47,6 +48,7 @@ else:
     print('All directories checked, continuing...', end='\n\n')
 
 total_time = time.time()
+methods_str_length = len(str(len(methods)))
 for no, method in enumerate(methods, 1):
     method_start_time = time.time()
 
@@ -54,15 +56,11 @@ for no, method in enumerate(methods, 1):
     if isinstance(method, list):
         method, args = method
 
-    os.system(f'title [{len(methods)}/{no:0>2}] Exporting {method.__name__}... ')
-    print(f'[{len(methods)}/{no:0>2}]: Processing "{method.__name__}" method', end='')
+    os.system(f'title [{len(methods)}/{no:0>{methods_str_length}}] Exporting {method.__name__}...')
+    print(f'[{len(methods)}/{no:0>{methods_str_length}}]: Processing "{method.__name__}" method',
+          end=f' with args: {args}...\r' if args else '...\r')
 
-    if args:
-        print(f' with args: {args}', end='\r')
-        data = method(nick, **args)
-    else:
-        print(end='\r')
-        data = method(nick)
+    data = method(user_instance, **args) if args else method(user_instance)
 
     file_path = os.path.join(USER_FOLDER, f'{method.__name__}.json')
     with open(file_path, 'w') as f:

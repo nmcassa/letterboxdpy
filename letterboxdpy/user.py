@@ -41,15 +41,16 @@ class User:
 
     # letterboxd.com/?/
     def user_favorites(self) -> list:        
-        data = self.page.find("section", {"id": ["favourites"], }).findChildren("div")
-        names = []
+        data = self.page.find("section", {"id": ["favourites"], })
+        if data:
+            names = []
 
-        for div in data:
-            img = div.find("img")
-            movie_url = img.parent['data-film-slug']
-            names.append((img['alt'], movie_url))
+            for div in data.findChildren("div"):
+                img = div.find("img")
+                movie_url = img.parent['data-film-slug']
+                names.append((img['alt'], movie_url))
             
-        self.favorites = names
+            self.favorites = names
 
     # letterboxd.com/?/
     def user_stats(self) -> dict:
@@ -75,10 +76,16 @@ class User:
                if "rel" in link.attrs:
                     # 'User watchlist is not visible'
                     self.watchlist_length = None # feature: PrivateData(Exception)
+                    break
                else:
                     # 'User watchlist is visible'
                     widget = self.page.find("section", {"class": ["watchlist-aside"]})
                     self.watchlist_length = int(widget.find("a", {"class": ["all-link"], }).text) if widget else 0
+                    break
+            else:
+                # hq members
+                self.watchlist_length = None
+
 
 # letterboxd.com/?/films/
 def user_films(user: User) -> dict:
@@ -128,7 +135,10 @@ def user_films(user: User) -> dict:
             movie_list['count'] = len(movie_list['movies'])
             movie_list['liked_count'] = liked_count
             movie_list['rating_count'] = rating_count
-            movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
+            if liked_count:
+                movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
+            else:
+                movie_list['liked_percentage'] = 0.0
             movie_list['rating_percentage'] = 0.0
             movie_list['rating_average'] = 0.0
 
@@ -599,7 +609,13 @@ def user_lists(user: User) -> dict:
             count = int(item.find(*selectors['value']).text.split()[0].replace(',',''))
             # likes
             likes = item.find(*selectors['likes'])
-            likes = int(likes.text.split()[0].replace(',','')) if likes else 0
+            if likes:
+                likes = likes.text.split()[0].replace(',','').lower()
+                if 'k' in likes:
+                    likes = likes.replace('k', '')
+                    likes = int(float(likes) * 1000)
+            else:
+                likes = 0
             # comments
             # feature: https://letterboxd.com/ajax/filmlist:<list-id>/comments/
             comments = item.find(*selectors['comments'])
@@ -715,6 +731,50 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
 
     return data
 
+# https://letterboxd.com/?/tags/*
+def user_tags(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+    import sys
+    sys.stdout.reconfigure(encoding='utf-8')
+    BASE_URL = f"{user.DOMAIN}/{user.username}/tags/"
+
+    pages = ['films', 'diary', 'reviews', 'lists']
+    data = {page: {'tags': {}, 'count': 0} for page in pages}
+
+    for page in pages:
+        dom = user.get_parsed_page(BASE_URL + page)
+        tags_columns = dom.find("ul", {"class": ["tags-columns"]})
+
+        if not tags_columns:
+            continue
+
+        tags = tags_columns.find_all("li")
+
+        no = 0
+        for tag in tags:
+            if 'href' in tag.a.attrs:
+                no += 1
+                name = tag.a.text.strip()
+                title = tag.a['title']
+                link = tag.a['href']
+                slug = link.split('/')[-3]
+                count = tag.span.text.strip()
+                count = int(count) if count else 1
+
+                data[page]['tags'][slug] = {
+                    'name': name,
+                    'title': title,
+                    'link': link,
+                    'count': count,
+                    'no': no
+                    }
+            else:
+                pass # not a tag
+
+        data[page]['count'] = no
+    data['count'] = sum([data[page]['count'] for page in pages])
+
+    return data
 
 class Encoder(JSONEncoder):
     def default(self, o):
