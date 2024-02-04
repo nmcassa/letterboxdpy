@@ -72,12 +72,10 @@ class User:
 
         for link in nav_links:
             if "Watchlist" in link.text:
-               try: 
-                    link['rel'] # nofollow
+               if "rel" in link.attrs:
                     # 'User watchlist is not visible'
-                    # feature: PrivateData(Exception)
-                    self.watchlist_length = None
-               except KeyError:
+                    self.watchlist_length = None # feature: PrivateData(Exception)
+               else:
                     # 'User watchlist is visible'
                     widget = self.page.find("section", {"class": ["watchlist-aside"]})
                     self.watchlist_length = int(widget.find("a", {"class": ["all-link"], }).text) if widget else 0
