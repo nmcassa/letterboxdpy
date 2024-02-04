@@ -7,17 +7,18 @@ from datetime import datetime
 
 
 class User:
+    DOMAIN = "https://letterboxd.com"
+
     def __init__(self, username: str) -> None:
         if not re.match("^[A-Za-z0-9_]*$", username):
             raise Exception("Invalid username")
 
         self.username = username.lower()
-
-        page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/")
-
-        self.user_watchlist()
-        self.user_favorites(page)
-        self.user_stats(page)
+        
+        self.page = self.get_parsed_page(f"{self.DOMAIN}/{self.username}/")
+        self.user_watchlist_length() # .watchlist_length feature: self._watchlist_length
+        self.user_favorites() # .favorites feature: self._favorites
+        self.user_stats() # .stats feature: self._stats
     
     def __str__(self):
         return self.jsonify()
@@ -28,7 +29,7 @@ class User:
     def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
         headers = {
-            "referer": "https://letterboxd.com",
+            "referer": self.DOMAIN,
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
         try:
@@ -39,8 +40,8 @@ class User:
         return BeautifulSoup(response.text, "lxml")
 
     # letterboxd.com/?/
-    def user_favorites(self, page: None) -> list:        
-        data = page.find("section", {"id": ["favourites"], }).findChildren("div")
+    def user_favorites(self) -> list:        
+        data = self.page.find("section", {"id": ["favourites"], }).findChildren("div")
         names = []
 
         for div in data:
@@ -51,11 +52,11 @@ class User:
         self.favorites = names
 
     # letterboxd.com/?/
-    def user_stats(self, page: None) -> dict:
+    def user_stats(self) -> dict:
         span = []
         stats = {}
 
-        data = page.find_all("h4", {"class": ["profile-statistic"], })
+        data = self.page.find_all("h4", {"class": ["profile-statistic"], })
 
         for item in data:
             span.append(item.findChildren("span"))
@@ -65,24 +66,26 @@ class User:
 
         self.stats = stats
 
-    # letterboxd.com/?/watchlist/
-    def user_watchlist(self) -> str:
-        page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
-        data = page.find("span", {"class": ["watchlist-count"], })
-        if not data:
-            data = page.find("span", {"class": ["js-watchlist-count"], })
-        try:
-            ret = data.text.split('\xa0')[0] #remove 'films' from '76 films'
-        except:
-            raise Exception("No user found")
+    # letterboxd.com/?
+    def user_watchlist_length(self) -> str:
+        nav_links = self.page.find_all("a", {"class": ["navlink"]})
 
-        self.watchlist_length = ret
+        for link in nav_links:
+            if "Watchlist" in link.text:
+               try: 
+                    link['rel'] # nofollow
+                    # 'User watchlist is not visible'
+                    # feature: PrivateData(Exception)
+                    self.watchlist_length = None
+               except KeyError:
+                    # 'User watchlist is visible'
+                    widget = self.page.find("section", {"class": ["watchlist-aside"]})
+                    self.watchlist_length = int(widget.find("a", {"class": ["all-link"], }).text) if widget else 0
 
 # letterboxd.com/?/films/
 def user_films(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    #returns all movies
     count = 0
     rating_count = 0
     liked_count = 0
@@ -90,7 +93,7 @@ def user_films(user: User) -> dict:
 
     while True:
         count += 1
-        page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
+        page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/page/{count}/")
 
         poster_containers = page.find_all("li", {"class": ["poster-container"], })
         for poster_container in poster_containers:
@@ -145,7 +148,7 @@ def user_following(user: User) -> dict:
         raise Exception("Improper parameter")
 
     # returns the first page of following
-    page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/following/")
+    page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/following/")
     data = page.find_all("img", attrs={'height': '40'})
 
     ret = {}
@@ -163,7 +166,7 @@ def user_followers(user: User) -> dict:
         raise Exception("Improper parameter")
 
     #returns the first page of followers
-    page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/followers/")
+    page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/followers/")
     data = page.find_all("img", attrs={'height': '40'})
 
     ret = {}
@@ -184,8 +187,7 @@ def user_genre_info(user: User) -> dict:
               "romance", "science-fiction", "thriller", "tv-movie", "war", "western"]
     ret = {}
     for genre in genres:
-        page = user.get_parsed_page("https://letterboxd.com/" + user.username + 
-                                    "/films/genre/" + genre + "/")
+        page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/genre/{genre}/")
         data = page.find("span", {"class": ["replace-if-you"], })
         data = data.next_sibling.replace(',', '')
         try:
@@ -216,9 +218,7 @@ def user_reviews(user: User) -> dict:
     data = {'reviews': {}}
     while True:
         page += 1
-        dom = user.get_parsed_page(
-            f"https://letterboxd.com/{user.username}/films/reviews/page/{page}/")
-
+        dom = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/reviews/page/{page}/")
         logs = dom.find_all("li", {"class": ["film-detail"], })
 
         for log in logs:
@@ -229,11 +229,12 @@ def user_reviews(user: User) -> dict:
             movie_id = details.parent.div['data-film-id']
             # str   ^^^--- movie_id: unique id of the movie.
             release = int(details.small.text) if details.small else None
-            movie_link = 'ltrbxd.com/film/' + slug + '/'
+            movie_link = f"{user.DOMAIN}/film/{slug}/"
             log_id = log['data-object-id'].split(':')[-1]
             # str ^^^--- log_id: unique id of the review.
-            log_link = 'ltrbxd.com' + details.a['href']
-            log_no = int(log_link.split('/')[-2]) if log_link.count('/') == 5 else 0
+            log_link = user.DOMAIN + details.a['href']
+            log_no = log_link.split(slug)[-1]
+            log_no = int(log_no.replace('/', '')) if log_no.count('/') == 2 else 0
             # int ^^^--- log_no: there can be multiple reviews for a movie.
             #            counting starts from zero.
             #            example for first review:  /username/film/movie_name/
@@ -313,7 +314,7 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
     '''
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
     
-    BASE_URL = f"https://letterboxd.com/{user.username}/films/diary/{f'for/{year}/'*bool(year)}"
+    BASE_URL = f"{user.DOMAIN}/{user.username}/films/diary/{f'for/{year}/'*bool(year)}"
     pagination = page if page else 1
     ret = {'entrys': {}}
 
@@ -463,7 +464,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 def user_activity(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    BASE_URL = f"https://letterboxd.com/ajax/activity-pagination/{user.username}"
+    BASE_URL = f"{user.DOMAIN}/ajax/activity-pagination/{user.username}"
     data = {'user': user.username, 'logs': {}}
     url = BASE_URL
 
@@ -557,8 +558,7 @@ def user_activity(user: User) -> dict:
 def user_lists(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    DOMAIN = "https://letterboxd.com"
-    BASE_URL = f"{DOMAIN}/{user.username}/lists/"
+    BASE_URL = f"{user.DOMAIN}/{user.username}/lists/"
     LISTS_PER_PAGE = 12
 
     selectors = {
@@ -610,7 +610,7 @@ def user_lists(user: User) -> dict:
                 'title': list_title,
                 'slug': list_slug,
                 'description': description,
-                'url': DOMAIN + list_url,
+                'url': user.DOMAIN + list_url,
                 'count': count,
                 'likes': likes,
                 'comments': comments

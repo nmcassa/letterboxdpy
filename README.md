@@ -206,11 +206,11 @@ print(user.user_reviews(nick))
                 "slug": "poor-things-2023",
                 "id": "710352",
                 "release": 2023,
-                "link": "ltrbxd.com/film/poor-things-2023/"
+                "link": "https://letterboxd.com/film/poor-things-2023/"
             },
             "type": "Watched",
             "no": 0,
-            "link": "ltrbxd.com/nmcassa/film/poor-things-2023/",
+            "link": "https://letterboxd.com/nmcassa/film/poor-things-2023/",
             "rating": 6,
             "review": {
                 "content": "It looks like AI art and weird movie",
@@ -229,11 +229,11 @@ print(user.user_reviews(nick))
                 "slug": "im-thinking-of-ending-things",
                 "id": "430806",
                 "release": 2020,
-                "link": "ltrbxd.com/film/im-thinking-of-ending-things/"
+                "link": "https://letterboxd.com/film/im-thinking-of-ending-things/"
             },
             "type": "Watched",
             "no": 0,
-            "link": "ltrbxd.com/nmcassa/film/im-thinking-of-ending-things/",
+            "link": "https://letterboxd.com/nmcassa/film/im-thinking-of-ending-things/",
             "rating": 8,
             "review": {
                 "content": "yeah i dont get it",
