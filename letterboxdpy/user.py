@@ -14,17 +14,26 @@ class User:
             raise Exception("Invalid username")
 
         self.username = username.lower()
-        
-        self.page = self.get_parsed_page(f"{self.DOMAIN}/{self.username}/")
-        self.user_watchlist_length() # .watchlist_length feature: self._watchlist_length
-        self.user_favorites() # .favorites feature: self._favorites
-        self.user_stats() # .stats feature: self._stats
+
+        page = self.get_parsed_page(f"{self.DOMAIN}/{self.username}/")
+        self.user_watchlist_length(page) # .watchlist_length feature: self._watchlist_length
+        self.user_favorites(page) # .favorites feature: self._favorites
+        self.user_stats(page) # .stats feature: self._stats
     
     def __str__(self):
         return self.jsonify()
 
     def jsonify(self) -> str:
-        return json.dumps(self, indent=4,cls=Encoder)
+        """
+        user_info = {
+            "username": self.username,
+            "watchlist_length": self.watchlist_length,
+            "favorites": self.favorites,
+            "stats": self.stats,
+        }
+        """
+        return json.dumps(self, indent=4, cls=Encoder)
+
 
     def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
@@ -40,8 +49,8 @@ class User:
         return BeautifulSoup(response.text, "lxml")
 
     # letterboxd.com/?/
-    def user_favorites(self) -> list:        
-        data = self.page.find("section", {"id": ["favourites"], })
+    def user_favorites(self, page) -> list:        
+        data = page.find("section", {"id": ["favourites"], })
         if data:
             names = []
 
@@ -53,23 +62,20 @@ class User:
             self.favorites = names
 
     # letterboxd.com/?/
-    def user_stats(self) -> dict:
-        span = []
-        stats = {}
+    def user_stats(self, page) -> dict:
+        data = {}
+        stats = page.find_all("h4", {"class": ["profile-statistic"], })
 
-        data = self.page.find_all("h4", {"class": ["profile-statistic"], })
+        for stat in stats:
+            value = stat.span.text
+            key = stat.text.lower().replace(value,'').replace(' ','_')
+            data[key] = int(value.replace(',',''))
 
-        for item in data:
-            span.append(item.findChildren("span"))
-
-        for item in span:
-            stats[item[1].text.replace(u'\xa0', ' ')] = item[0].text
-
-        self.stats = stats
+        self.stats = data
 
     # letterboxd.com/?
-    def user_watchlist_length(self) -> str:
-        nav_links = self.page.find_all("a", {"class": ["navlink"]})
+    def user_watchlist_length(self, page) -> str:
+        nav_links = page.find_all("a", {"class": ["navlink"]})
 
         for link in nav_links:
             if "Watchlist" in link.text:
@@ -79,7 +85,7 @@ class User:
                     break
                else:
                     # 'User watchlist is visible'
-                    widget = self.page.find("section", {"class": ["watchlist-aside"]})
+                    widget = page.find("section", {"class": ["watchlist-aside"]})
                     self.watchlist_length = int(widget.find("a", {"class": ["all-link"], }).text) if widget else 0
                     break
             else:

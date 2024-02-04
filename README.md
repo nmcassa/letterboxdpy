@@ -48,31 +48,31 @@ print(user_instance)
 ```json
 {
     "username": "nmcassa",
-    "watchlist_length": "72",
+    "watchlist_length": 57,
     "favorites": [
         [
             "The Grand Budapest Hotel",
-            "/film/the-grand-budapest-hotel/"
+            "the-grand-budapest-hotel"
         ],
         [
             "The King of Comedy",
-            "/film/the-king-of-comedy/"
+            "the-king-of-comedy"
         ],
         [
-            "The Alpinist",
-            "/film/the-alpinist/"
+            "The Conversation",
+            "the-conversation"
         ],
         [
-            "The Graduate",
-            "/film/the-graduate/"
+            "Rocky",
+            "rocky"
         ]
     ],
     "stats": {
-        "Films": "372",
-        "This year": "97",
-        "List": "1",
-        "Following": "7",
-        "Followers": "6"
+        "films": 534,
+        "this_year": 15,
+        "list": 1,
+        "following": 9,
+        "followers": 7
     }
 }
 ```
