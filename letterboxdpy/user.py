@@ -19,6 +19,7 @@ class User:
         self.user_watchlist_length(page) # .watchlist_length feature: self._watchlist_length
         self.user_favorites(page) # .favorites feature: self._favorites
         self.user_stats(page) # .stats feature: self._stats
+        self.user_id(page)
     
     def __str__(self):
         return self.jsonify()
@@ -47,6 +48,18 @@ class User:
             raise Exception("Request timeout, site may be down")
 
         return BeautifulSoup(response.text, "lxml")
+
+    # letterboxd.com/?/
+    def user_id(self, page) -> str:
+        """ alternative:
+        button_report = page.find("button", {"data-js-trigger": ["report"]})
+        self.id = int(button_report['data-report-url'].split(':')[-1].split('/')[0])
+        """
+        pattern = r"/ajax/person:(\d+)/report-for"
+        self.id  = re.search(
+            pattern,
+            page.prettify()
+        ).group(1)
 
     # letterboxd.com/?/
     def user_favorites(self, page) -> list:        
