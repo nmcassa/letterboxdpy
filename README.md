@@ -819,3 +819,6 @@ print(list.list_tags(a))
 ```python
 ['official', 'horror', 'letterboxd official', 'letterboxd', '2022', 'topprofile', 'top 25']
 ```
+
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636)](https://starchart.cc/nmcassa/letterboxdpy)
