@@ -18,8 +18,9 @@ class User:
         page = self.get_parsed_page(f"{self.DOMAIN}/{self.username}/")
         self.user_watchlist_length(page) # .watchlist_length feature: self._watchlist_length
         self.user_favorites(page) # .favorites feature: self._favorites
+        self.user_avatar(page) # .avatar feature: self._avatar
         self.user_stats(page) # .stats feature: self._stats
-        self.user_id(page)
+        self.user_id(page) # .id feature: self._id
     
     def __str__(self):
         return self.jsonify()
@@ -105,6 +106,34 @@ class User:
                 # hq members
                 self.watchlist_length = None
 
+
+    def user_avatar(self, page) -> str:
+        upscale_size = (1000, 1000)
+        default_size = (220, 220)
+
+        elem_avatar = page.find("div", {"class": ["profile-avatar"]})
+        avatar_url = elem_avatar.img['src']
+        top_level = avatar_url.split('.')[0].split('//')[1]
+
+        # top levels: avatar=a, static=s
+        avatar_exists = top_level == 'a'
+        if avatar_exists:
+            avatar_url = avatar_url.split('?')[0]
+            avatar_url = avatar_url.replace(
+                '-0-'.join(map(str, default_size)),
+                '-0-'.join(map(str, upscale_size))
+            )
+            avatar_size = upscale_size
+        else:
+            avatar_size = default_size
+
+        data = {
+            'exists': avatar_exists,
+            'size': avatar_size,
+            'url': avatar_url
+        }
+
+        self.avatar = data
 
 # letterboxd.com/?/films/
 def user_films(user: User) -> dict:
