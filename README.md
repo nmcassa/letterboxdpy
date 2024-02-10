@@ -336,16 +336,21 @@ print(user.user_wrapped(user_instance, 2023))
             "id": "255927",
             "release": 2015,
             "runtime": 108,
-            "rewatched": false,
-            "rating": 6,
-            "liked": false,
-            "reviewed": false,
+            "actions": {
+                "rewatched": false,
+                "rating": 6,
+                "liked": false,
+                "reviewed": false
+            },
             "date": {
                 "year": 2023,
                 "month": 1,
                 "day": 1
             },
-            "page": 3
+            "page": {
+                "url": "https://letterboxd.com/nmcassa/films/diary/for/2023/page/3/",
+                "no": 3
+            }
         }
     },
     "last_watched": {
@@ -361,16 +366,21 @@ print(user.user_wrapped(user_instance, 2023))
             "id": "710352",
             "release": 2023,
             "runtime": 141,
-            "rewatched": false,
-            "rating": 6,
-            "liked": false,
-            "reviewed": true,
+            "actions": {
+                "rewatched": false,
+                "rating": 6,
+                "liked": false,
+                "reviewed": true
+            },
             "date": {
                 "year": 2023,
                 "month": 12,
                 "day": 26
             },
-            "page": 1
+            "page": {
+                "url": "https://letterboxd.com/nmcassa/films/diary/for/2023/page/1/",
+                "no": 1
+            }
         },
         ...
         ...
@@ -406,16 +416,21 @@ print(user.user_wrapped(user_instance, 2023))
                 "id": "37594",
                 "release": 1979,
                 "runtime": 78,
-                "rewatched": false,
-                "rating": 7,
-                "liked": false,
-                "reviewed": false,
+                "actions": {
+                    "rewatched": false,
+                    "rating": 7,
+                    "liked": false,
+                    "reviewed": false
+                },
                 "date": {
                     "year": 2023,
                     "month": 7,
                     "day": 13
                 },
-                "page": 2
+                "page": {
+                    "url": "https://letterboxd.com/nmcassa/films/diary/for/2023/page/1/",
+                    "no": 1
+                }
             }
         },
         "100": {
