@@ -8,6 +8,12 @@ from datetime import datetime
 
 class User:
     DOMAIN = "https://letterboxd.com"
+    MONTH_ABBREVIATIONS = [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep",
+        "Oct", "Nov", "Dec"
+        ]
 
     def __init__(self, username: str) -> None:
         if not re.match("^[A-Za-z0-9_]*$", username):
@@ -19,6 +25,7 @@ class User:
         self.user_watchlist_length(page) # .watchlist_length feature: self._watchlist_length
         self.user_favorites(page) # .favorites feature: self._favorites
         self.user_avatar(page) # .avatar feature: self._avatar
+        self.user_recent(page) # .recent feature: self._recent
         self.user_stats(page) # .stats feature: self._stats
         self.user_id(page) # .id feature: self._id
     
@@ -35,7 +42,6 @@ class User:
         }
         """
         return json.dumps(self, indent=4, cls=Encoder)
-
 
     def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
@@ -108,7 +114,7 @@ class User:
                 # hq members
                 self.watchlist_length = None
 
-
+    # letterboxd.com/?
     def user_avatar(self, page) -> str:
         upscale_size = (1000, 1000)
         default_size = (220, 220)
@@ -136,6 +142,48 @@ class User:
         }
 
         self.avatar = data
+
+    # letterboxd.com/?
+    def user_recent(self, page) -> list:
+        watchlist_recent = {}
+        diary_recent = {'months':{}}
+
+        # watchlist
+        if self.watchlist_length:
+            section_watclist = page.find("section", {"class": ["watchlist-aside"]})
+            watchlist_items = section_watclist.find_all("li")
+            for item in watchlist_items:
+                watchlist_recent[item['data-film-id']] = {
+                    'name': item.img['alt'],
+                    'slug': item['data-film-slug'],
+                }
+        
+        # diary
+        sections = page.find_all("section", {"class": ["section"]})
+        for section in sections:
+            if section.h2 is None:
+                continue
+    
+            if section.h2.text == "Diary":
+                entry_list = section.find_all("li", {"class": ["listitem"]})
+
+                for entry in entry_list:
+                    month = entry.h3.text
+                    month_index = self.MONTH_ABBREVIATIONS.index(month) + 1
+                    diary_recent['months'] |= {month_index: []}
+                    days = entry.find_all("dt")
+                    items = entry.find_all("dd")
+                    for day, item in zip(days, items):
+                        diary_recent['months'][month_index].append([day.text, item.text])
+                else:
+                    break
+  
+        data = {
+            'watchlist': watchlist_recent,
+            'diary': diary_recent
+        }
+
+        self.recent = data
 
 # letterboxd.com/?/films/
 def user_films(user: User) -> dict:
@@ -266,12 +314,6 @@ def user_reviews(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
     
     LOGS_PER_PAGE = 12
-    MONTH_ABBREVIATIONS = [
-        "Jan", "Feb", "Mar",
-        "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep",
-        "Oct", "Nov", "Dec"
-        ]
 
     page = 0
     data = {'reviews': {}}
@@ -327,7 +369,7 @@ def user_reviews(user: User) -> dict:
                 date = date.text.split()
                 date = {
                     'year': int(date[2]),
-                    'month': MONTH_ABBREVIATIONS.index(date[1]) + 1,
+                    'month': user.MONTH_ABBREVIATIONS.index(date[1]) + 1,
                     'day': int(date[0])
                 }
             # dict ^^^--- date: the date of the review.
