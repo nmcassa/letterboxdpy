@@ -407,12 +407,17 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
                     "id":  id,
                     "release": release,
                     "runtime": runtime,
-                    "rewatched": rewatched,
-                    "rating": rating,
-                    "liked": liked,
-                    "reviewed": reviewed,
+                    "actions": {
+                        "rewatched": rewatched,
+                        "rating": rating,
+                        "liked": liked,
+                        "reviewed": reviewed,
+                    },
                     "date": date,
-                    "page": page,
+                    "page": {
+                        'url': url,
+                        'no': pagination
+                        }
                 }
             if len(rows) < 50 or pagination == page:
                     # no more entries
@@ -455,7 +460,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
             days[datetime(**watched_date).weekday()+1] += 1
             months[watched_date['month']] += 1
 
-            reviewed = data['reviewed']
+            reviewed = data["actions"]['reviewed']
             total_review += 1 if reviewed else 0
 
             runtime = data['runtime']

@@ -1,9 +1,9 @@
 {
   "year": 2024,
-  "logged": 13,
+  "logged": 17,
   "total_review": 0,
-  "hours_watched": 22,
-  "total_runtime": 1354,
+  "hours_watched": 30,
+  "total_runtime": 1810,
   "first_watched": {
     "502212161": {
       "name": "How to Train Your Dragon",
@@ -11,54 +11,157 @@
       "id": "46460",
       "release": 2010,
       "runtime": 98,
-      "rewatched": false,
-      "rating": 8,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 8,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 2
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     }
   },
   "last_watched": {
-    "524202738": {
-      "name": "PlayTime",
-      "slug": "playtime",
-      "id": "46424",
-      "release": 1967,
-      "runtime": 115,
-      "rewatched": false,
-      "rating": 8,
-      "liked": false,
-      "reviewed": false,
+    "531364149": {
+      "name": "Argylle",
+      "slug": "argylle",
+      "id": "763160",
+      "release": 2024,
+      "runtime": 139,
+      "actions": {
+        "rewatched": false,
+        "rating": 2,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
-        "month": 1,
-        "day": 29
+        "month": 2,
+        "day": 9
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     }
   },
   "movies": {
+    "531364149": {
+      "name": "Argylle",
+      "slug": "argylle",
+      "id": "763160",
+      "release": 2024,
+      "runtime": 139,
+      "actions": {
+        "rewatched": false,
+        "rating": 2,
+        "liked": false,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 9
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
+    },
+    "529006028": {
+      "name": "Fallen Leaves",
+      "slug": "fallen-leaves-2023",
+      "id": "888054",
+      "release": 2023,
+      "runtime": 81,
+      "actions": {
+        "rewatched": false,
+        "rating": 8,
+        "liked": true,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 6
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
+    },
+    "528065678": {
+      "name": "Anatomy of a Fall",
+      "slug": "anatomy-of-a-fall",
+      "id": "822093",
+      "release": 2023,
+      "runtime": 152,
+      "actions": {
+        "rewatched": false,
+        "rating": 9,
+        "liked": true,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 4
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
+    },
+    "527808713": {
+      "name": "Liverpool",
+      "slug": "liverpool",
+      "id": "82344",
+      "release": 2008,
+      "runtime": 84,
+      "actions": {
+        "rewatched": false,
+        "rating": 5,
+        "liked": false,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 4
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
+    },
     "524202738": {
       "name": "PlayTime",
       "slug": "playtime",
       "id": "46424",
       "release": 1967,
       "runtime": 115,
-      "rewatched": false,
-      "rating": 8,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 8,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 29
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "521620480": {
       "name": "The Zone of Interest",
@@ -66,16 +169,21 @@
       "id": "398800",
       "release": 2023,
       "runtime": 105,
-      "rewatched": false,
-      "rating": 7,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 7,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 26
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "521004508": {
       "name": "Maestro",
@@ -83,16 +191,21 @@
       "id": "453069",
       "release": 2023,
       "runtime": 131,
-      "rewatched": false,
-      "rating": 5,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 5,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 25
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "519469533": {
       "name": "Society of the Snow",
@@ -100,16 +213,21 @@
       "id": "813840",
       "release": 2023,
       "runtime": 144,
-      "rewatched": false,
-      "rating": 10,
-      "liked": true,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 10,
+        "liked": true,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 23
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "513520182": {
       "name": "Black Swan",
@@ -117,16 +235,21 @@
       "id": "20956",
       "release": 2010,
       "runtime": 108,
-      "rewatched": false,
-      "rating": 9,
-      "liked": true,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 9,
+        "liked": true,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 15
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "512524578": {
       "name": "Gravity",
@@ -134,16 +257,21 @@
       "id": "16529",
       "release": 2013,
       "runtime": 91,
-      "rewatched": false,
-      "rating": 7,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 7,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 14
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "509190765": {
       "name": "Death Race 2000",
@@ -151,16 +279,21 @@
       "id": "44012",
       "release": 1975,
       "runtime": 80,
-      "rewatched": false,
-      "rating": 5,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 5,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 10
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "508709056": {
       "name": "The Conversation",
@@ -168,16 +301,21 @@
       "id": "51529",
       "release": 1974,
       "runtime": 113,
-      "rewatched": false,
-      "rating": 10,
-      "liked": true,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 10,
+        "liked": true,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 9
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "508559593": {
       "name": "Total Recall",
@@ -185,16 +323,21 @@
       "id": "331",
       "release": 2012,
       "runtime": 118,
-      "rewatched": false,
-      "rating": 4,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 4,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 9
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "506072802": {
       "name": "My Life as a Zucchini",
@@ -202,16 +345,21 @@
       "id": "327909",
       "release": 2016,
       "runtime": 66,
-      "rewatched": false,
-      "rating": 9,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 9,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 6
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "505708868": {
       "name": "Neighbors",
@@ -219,16 +367,21 @@
       "id": "140512",
       "release": 2014,
       "runtime": 97,
-      "rewatched": false,
-      "rating": 3,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 3,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 6
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "502947123": {
       "name": "Airplane!",
@@ -236,16 +389,21 @@
       "id": "51339",
       "release": 1980,
       "runtime": 88,
-      "rewatched": false,
-      "rating": 8,
-      "liked": true,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 8,
+        "liked": true,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 3
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     },
     "502212161": {
       "name": "How to Train Your Dragon",
@@ -253,21 +411,26 @@
       "id": "46460",
       "release": 2010,
       "runtime": 98,
-      "rewatched": false,
-      "rating": 8,
-      "liked": false,
-      "reviewed": false,
+      "actions": {
+        "rewatched": false,
+        "rating": 8,
+        "liked": false,
+        "reviewed": false
+      },
       "date": {
         "year": 2024,
         "month": 1,
         "day": 2
       },
-      "page": null
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/for/2024/page/1/",
+        "no": 1
+      }
     }
   },
   "months": {
     "1": 13,
-    "2": 0,
+    "2": 4,
     "3": 0,
     "4": 0,
     "5": 0,
@@ -281,12 +444,12 @@
   },
   "days": {
     "1": 2,
-    "2": 4,
+    "2": 5,
     "3": 2,
     "4": 1,
-    "5": 1,
+    "5": 2,
     "6": 2,
-    "7": 1
+    "7": 3
   },
   "milestones": {}
 }
