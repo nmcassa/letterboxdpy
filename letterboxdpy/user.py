@@ -100,7 +100,9 @@ class User:
                else:
                     # 'User watchlist is visible'
                     widget = page.find("section", {"class": ["watchlist-aside"]})
-                    self.watchlist_length = int(widget.find("a", {"class": ["all-link"], }).text) if widget else 0
+                    self.watchlist_length = int(
+                        widget.find("a", {"class": ["all-link"]}).text.replace(',','')
+                        ) if widget else 0
                     break
             else:
                 # hq members
