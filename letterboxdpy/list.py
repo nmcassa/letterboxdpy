@@ -11,8 +11,10 @@ class List:
 
         self.title = title.replace(' ', '-').lower()
         self.author = author.lower()
-        self.url = "https://letterboxd.com/" + self.author +"/list/" + self.title + "/"
-
+        if title != '/watchlist/': # For regular lists
+            self.url = "https://letterboxd.com/" + self.author +"/list/" + self.title + "/"
+        else: # For watchlists
+            self.url = "https://letterboxd.com/" + self.author +"/watchlist/"
         page = self.get_parsed_page(self.url)
     
         self.description(page)
@@ -57,19 +59,23 @@ class List:
             prev = len(movie_list)
             page = self.get_parsed_page(url + "page/" + str(count) + "/")
 
-            img = page.find("ul",{"class": ["js-list-entries poster-list -p125 -grid film-list"], })
-            img = img.find_all("img", {"class": ["image"], })
+            if self.url.find('/list/') != -1: # For regular lists
+                img = page.find("ul",{"class": ["js-list-entries poster-list -p125 -grid film-list"], })
+            else: # For watchlists
+                img = page.find("ul",{"class": ["poster-list -p125 -grid -scaled128"], })
+            if img != None:
+                img = img.find_all("img", {"class": ["image"], })
 
-            for item in img:
-                movie_url = item.parent['data-film-slug']
-                movie_list.append((item['alt'], movie_url))
+                for item in img:
+                    movie_url = item.parent['data-film-slug']
+                    movie_list.append((item['alt'], movie_url))
                 
             curr = len(movie_list)
 
         self.filmCount = curr
         self.movies = movie_list
 
-        if self.filmCount == 0:
+        if self.filmCount == 0 and self.url.find('/list/') != -1: # No exception needed for an empty watchlist
             raise Exception("No list exists")
             
 def date_created(list: List) -> list:
@@ -78,11 +84,14 @@ def date_created(list: List) -> list:
 
     page_data = list.get_parsed_page(list.url)
     data = page_data.find("span", {"class": "published is-updated", })
-    if type(data) != type(None):
-        data = data.findChild("time")
+    if data != None:
+        data = data.findChild("time").text
     else:
         data = page_data.find("span", {"class": "published", })
-    return data.text
+        if data != None: # Watchlists won't have a date created
+            data = data.text
+
+    return data
 
 
 # Returns date last updated, falling back to date created.
@@ -92,11 +101,14 @@ def date_updated(list: List) -> list:
 
     page_data = list.get_parsed_page(list.url)
     data = page_data.find("span", {"class": "updated", })
-    if type(data) != type(None):
-        data = data.findChild("time")
+    if data != None:
+        data = data.findChild("time").text
     else:
         data = page_data.find("span", {"class": "published", })
-    return data.text
+        if data != None: # Watchlists won't have a date updated
+            data = data.text
+
+    return data
     
 def list_tags(list: List) -> list:
     if type(list) != List:
@@ -106,10 +118,11 @@ def list_tags(list: List) -> list:
 
     data = list.get_parsed_page(list.url)
     data = data.find("ul", {"class": ["tags"], })
-    data = data.findChildren("a")
+    if data != None:
+        data = data.findChildren("a")
 
-    for item in data:
-        ret.append(item.text)
+        for item in data:
+            ret.append(item.text)
 
     return ret
 
@@ -118,6 +131,7 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    list = List("eddiebergman", "movie-references-made-in-nbcs-community")
-    #print(list)
-    print(list_tags(list))
+    # test_list = List("eddiebergman", "movie-references-made-in-nbcs-community")
+    # test_list= List("mrbs","the-suspense-is-killing-us-siku-main-feed-6")
+    test_list =  List("mrbs", "/watchlist/")
+    print(test_list)
