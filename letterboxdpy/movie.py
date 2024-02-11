@@ -5,24 +5,21 @@ from json import JSONEncoder
 
 
 class Movie:
-    def __init__(self, title: str, year: str = '') -> None:
-        if title[0] == "/":
-            self.url = "https://letterboxd.com" + title
-        else:
-            if year != '':
-                title = title + ' ' + str(year)
-            self.title = title.replace(' ', '-').lower()
-            self.url = "https://letterboxd.com/film/" + self.title + "/"
+    DOMAIN = 'https://letterboxd.com'
+    FILM_URL = DOMAIN + '/film/'
 
+    def __init__(self, slug: str) -> None:
+        self.url = self.FILM_URL + slug
         page = self.get_parsed_page(self.url)
 
-        if not self.check_year(year, page):
-            year = ''
-        
+        script = page.find("script", type="application/ld+json")
+        script = json.loads(script.text.split('*/')[1].split('/*')[0]) if script else None
+
         self.movie_director(page)
-        self.movie_rating(page)
-        self.movie_year(page)
+        self.movie_rating(page, script)
+        self.movie_year(page, script)
         self.movie_genre(page)
+        self.movie_poster(script)
 
     def __str__(self):
         return self.jsonify()
@@ -33,13 +30,14 @@ class Movie:
     def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
         headers = {
-            "referer": "https://letterboxd.com",
+            "referer": self.DOMAIN,
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
+        response = requests.get(url, headers=headers)
+        return BeautifulSoup(response.text, "lxml")
 
-        return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
-
-    def movie_director(self, page: None) -> str or list:
+    # letterboxd.com/film/?
+    def movie_director(self, page: BeautifulSoup) -> list:
         self.directors = []
         data = page.find("div",{"id": ["tab-crew"], })
         if type(data) != type(None):
@@ -48,45 +46,45 @@ class Movie:
                 if item['href'][:10] == '/director/':
                     self.directors.append(item.text)
 
-    def movie_rating(self, page: None) -> str:
-        try:
-            data = page.find_all("meta", attrs={'name':'twitter:data2'})
-            self.rating = data[0]['content']
-        except:
-            self.rating = "None found"
+    # letterboxd.com/film/?
+    def movie_rating(self, page: BeautifulSoup, script: dict=None) -> float:
+        elem = page.find('span', attrs={'class': 'average-rating'})
+        rating = float(elem.text) if elem else None
+        rating = rating if rating else (
+             script['aggregateRating']['ratingValue'] if script else None
+             )
+        self.rating = float(rating)
 
-    def movie_year(self, page: None) -> str:
-        data = page.find_all("meta", attrs={'name': 'twitter:title'})
-        data = data[0]['content']
-        self.year = None
-        if data.find('(') != -1:
-            data = data.split('(')[-1][:-1]
-            if data.isdigit():
-                self.year = data
+    # letterboxd.com/film/?
+    def movie_year(self, page: BeautifulSoup, script: dict=None) -> int:
+        elem = page.find('small', attrs={'class': 'number'})
+        year = int(elem.text) if elem else None
+        year = year if year else (
+             script['releasedEvent']['startDate'] if script else None
+             )
+        self.year = int(year)
 
-    def check_year(self, year: str, page: None) -> bool:
-        try:
-            data = page.find_all("meta", attrs={'name': 'twitter:title'})
-            data = data[0]['content']
-            true_year = data[data.find('(')+1:data.find(')')]
-        except:
-            return True
-
-        if str(true_year) != str(year) and year != '':
-            return False
-        return True
-
-    def movie_genre(self, page: None) -> list:
-        res = []
+    # letterboxd.com/film/?
+    def movie_genre(self, page: BeautifulSoup) -> list:
+        genres = []
 
         data = page.find("div",{"id": ["tab-genres"], })
-        if type(data) != type(None):
+        if data is not None:
             data = data.find_all("a")
             for item in data:
                 if item['href'][7:12] == 'genre':
-                    res.append(item.text)
-        self.genres = res
+                    genres.append(item.text)
+        self.genres = genres
 
+    def movie_poster(self, script) -> str:
+        # crop: list=(1500, 1000)
+        # .replace('230-0-345', f'{crop[0]}-0-{crop[1]}')
+        if script:
+            poster = script['image']
+            self.poster = poster.split('?')[0] if poster else None
+        self.poster = None
+
+# letterboxd.com/film/?
 def movie_popular_reviews(movie: Movie) -> dict:
     if type(movie) != Movie:
         raise Exception("Improper parameter")
@@ -120,11 +118,12 @@ def movie_popular_reviews(movie: Movie) -> dict:
 
     return ret
 
+# letterboxd.com/film/?/details
 def movie_details(movie: Movie) -> dict:
     if type(movie) != Movie:
         raise Exception("Improper parameter")
 
-    page = movie.get_parsed_page(movie.url + "details/")
+    page = movie.get_parsed_page("/".join([movie.url, "details"]))
 
     res = {}
     studio = []
@@ -148,11 +147,12 @@ def movie_details(movie: Movie) -> dict:
 
     return res
 
+# letterboxd.com/film/?/members
 def movie_watchers(movie: Movie) -> dict:
     if type(movie) != Movie:
         raise Exception("Improper parameter")
 
-    page = movie.get_parsed_page(movie.url + "members/")
+    page = movie.get_parsed_page("/".join([movie.url, "members"]))
 
     res = {}
     res['watch_count'] = 0
@@ -166,19 +166,20 @@ def movie_watchers(movie: Movie) -> dict:
         a = div.find_all("a")
 
         for item in a:
-        	if item.get('title'):
-        		if item['title'].find('people',-6) != -1:
-        			res['watch_count'] = item['title'][:-7].replace(',','')
-        		elif item['title'].find('fans',-4) != -1:
-        			res['fan_count'] = item['title'][:-5].replace(',','')
-        		elif item['title'].find('likes',-5) != -1:
-        			res['like_count'] = item['title'][:-6].replace(',','')
-        		elif item['title'].find('reviews',-7) != -1:
-        			res['review_count'] = item['title'][:-8].replace(',','')
-        		elif item['title'].find('lists',-5) != -1:
-        			res['list_count'] = item['title'][:-6].replace(',','')
+            if item.get('title'):
+                if item['title'].find('people',-6) != -1:
+                    res['watch_count'] = item['title'][:-7].replace(',','')
+                elif item['title'].find('fans',-4) != -1:
+                    res['fan_count'] = item['title'][:-5].replace(',','')
+                elif item['title'].find('likes',-5) != -1:
+                    res['like_count'] = item['title'][:-6].replace(',','')
+                elif item['title'].find('reviews',-7) != -1:
+                    res['review_count'] = item['title'][:-8].replace(',','')
+                elif item['title'].find('lists',-5) != -1:
+                    res['list_count'] = item['title'][:-6].replace(',','')
     return res
 
+# letterboxd.com/film/?
 def movie_tmdb_link(movie: Movie) -> str:
     if type(movie) != Movie:
         raise Exception("Improper parameter")
@@ -189,13 +190,14 @@ def movie_tmdb_link(movie: Movie) -> str:
         div = page.find("p", {"class": ["text-link text-footer"], })
         a = div.find_all("a")
         for item in a:
-        	if item['href'].find('themoviedb.org/') != -1:
-        		return (item['href']) 
+            if item['href'].find('themoviedb.org/') != -1:
+                return (item['href']) 
     except:
         return None
-        
+
+# letterboxd.com/film/?
 def movie_description(movie: Movie) -> str:
-    if type(movie) != Movie:
+    if isinstance(movie, type(None)):
         raise Exception("Improper parameter")
         
     page = movie.get_parsed_page(movie.url)
@@ -203,35 +205,21 @@ def movie_description(movie: Movie) -> str:
     try:
         data = page.find_all("meta", attrs={'name':'twitter:description'})
         return data[0]['content']
-    except:
+    except (KeyError, IndexError):
         return None
-
-
-def movie_poster(movie_id):
-    '''Returns the poster link of a movie'''
-    try:
-        page = requests.get("https://letterboxd.com/film/" + movie_id + "/", timeout=5)
-        page = BeautifulSoup(page.text, 'lxml')
-
-        script_w_data = page.select_one('script[type="application/ld+json"]')
-        link = json.loads(script_w_data.text.split(
-            ' */')[1].split('/* ]]>')[0])['image']
-
-    except AttributeError as exception:
-        print(f'error on {movie_id}. Exception:' + str(exception))
-        link = ''
-
-    return link
 
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
 if __name__ == "__main__":
-    king = Movie("king kong")
-    print(king)
-    #king = Movie("king kong", 2005)
-    #print(king)
-    #house = Movie("/film/the-house-2022-1/")
-    #print(house)
-    #print(movie_popular_reviews(house))
+    import sys
+    sys.stdout.reconfigure(encoding='utf-8')
+
+    movie_instance = Movie("v-for-vendetta")
+    print(movie_instance)
+    print(movie_details(movie_instance))
+    print(movie_description(movie_instance))
+    print(movie_popular_reviews(movie_instance))
+    print(movie_tmdb_link(movie_instance))
+    print(movie_watchers(movie_instance))
