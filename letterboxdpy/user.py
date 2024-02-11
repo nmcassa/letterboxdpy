@@ -18,6 +18,7 @@ class User:
         self.user_watchlist()
         self.user_favorites(page)
         self.user_stats(page)
+        self.user_details(page)
     
     def __str__(self):
         return self.jsonify()
@@ -64,7 +65,38 @@ class User:
             stats[item[1].text.replace(u'\xa0', ' ')] = item[0].text
 
         self.stats = stats
+        
+    # letterboxd.com/?/    
+    def user_details(self, page: None) -> dict:
+        details = {}
+        data = page.find("meta", attrs={'property': 'og:title'})
+        details['display_name']=data['content'][:-10]
 
+        data = page.find("meta", attrs={'property': 'og:description'})
+        if data['content'].find('Bio: ') != -1:
+            details['bio']=data['content'].split('Bio: ')[-1]
+        else:
+            details['bio']=None
+
+        details['avatar'] = page.find("div", {"class": ["profile-avatar"], }).find("img")['src'].split('?')[0]
+        data = page.find("div", {"class": ["profile-metadata js-profile-metadata"], })
+        if data != None:
+            location = data.find("div", {"class": ["metadatum -has-label js-metadatum"], })
+            if location != None:
+                details['location'] = location.find("span").text
+            else:
+                details['location'] = None
+            website = data.find("a")
+            if website != None:
+                details['website'] = website['href']
+            else:
+                details['website'] = None
+
+        else:
+            details['location']=None
+            details['bio']=None
+
+        self.details = details
     # letterboxd.com/?/watchlist/
     def user_watchlist(self) -> str:
         page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
