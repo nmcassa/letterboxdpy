@@ -31,15 +31,7 @@ class User:
         return self.jsonify()
 
     def jsonify(self) -> str:
-        """
-        user_info = {
-            "username": self.username,
-            "watchlist_length": self.watchlist_length,
-            "favorites": self.favorites,
-            "stats": self.stats,
-        }
-        """
-        return json.dumps(self, indent=4, cls=Encoder)
+        return json.dumps(self, indent=2, cls=Encoder)
 
     def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
@@ -843,8 +835,7 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
 # https://letterboxd.com/?/tags/*
 def user_tags(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-    import sys
-    sys.stdout.reconfigure(encoding='utf-8')
+
     BASE_URL = f"{user.DOMAIN}/{user.username}/tags/"
 
     pages = ['films', 'diary', 'reviews', 'lists']
@@ -890,18 +881,33 @@ class Encoder(JSONEncoder):
         return o.__dict__
 
 if __name__ == "__main__":
-    # import argparse
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('--user', dest="user", help="Username to gather stats on")
-    # args = parser.parse_args()
-    # user = args.user
+    import argparse
+    import sys
 
-    # if user:
-    #     print(f"{user=}")
-    #     userinfo = User(user)
-    #     print(userinfo)
-    #     print(user_films(userinfo))
-    testUser = User('mrbs')
-    # for item in user_films(testUser)['movies'].items():
-    #     print(item)
-    print(testUser)
+    # Reconfigure stdout encoding to UTF-8 to support non-ASCII characters
+    sys.stdout.reconfigure(encoding='utf-8')
+
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--user', dest="user", help="Username to gather stats on")
+    args = parser.parse_args()
+
+    # Extract username from command-line arguments or prompt user for input
+    username = args.user or ''
+
+    # Keep prompting user until a valid username is provided
+    while not len(username.strip()):
+        username = input('Enter username: ')
+
+    # Display the username being processed
+    print(f"Processing username: {username}")
+
+    # Initialize a User instance with the provided username
+    user_instance = User(username.lower())
+
+    # Print user statistics
+    print(user_instance)
+
+    # Iterate over user's film data and print each movie
+    for item in user_films(user_instance)['movies'].items():
+        print(item)
