@@ -22,14 +22,11 @@ class User:
         self.username = username.lower()
 
         page = self.get_parsed_page(f"{self.DOMAIN}/{self.username}/")
-        self.user_watchlist_length(page) # .watchlist_length feature: self._watchlist_length
-        self.user_favorites(page) # .favorites feature: self._favorites
-        self.user_details(page) # .details feature: self._details
-        self.user_avatar(page) # .avatar feature: self._avatar
-        self.user_recent(page) # .recent feature: self._recent
-        self.user_stats(page) # .stats feature: self._stats
-        self.user_id(page) # .id feature: self._id
-    
+
+        self.user_details(page)
+        self.user_avatar(page)
+        self.user_recent(page)
+
     def __str__(self):
         return self.jsonify()
 
@@ -56,64 +53,6 @@ class User:
             raise Exception("Request timeout, site may be down")
 
         return BeautifulSoup(response.text, "lxml")
-
-    # letterboxd.com/?/
-    def user_id(self, page) -> str:
-        """ alternative:
-        button_report = page.find("button", {"data-js-trigger": ["report"]})
-        self.id = int(button_report['data-report-url'].split(':')[-1].split('/')[0])
-        """
-        pattern = r"/ajax/person:(\d+)/report-for"
-        self.id  = re.search(
-            pattern,
-            page.prettify()
-        ).group(1)
-
-    # letterboxd.com/?/
-    def user_favorites(self, page) -> list:        
-        data = page.find("section", {"id": ["favourites"], })
-        if data:
-            names = []
-
-            for div in data.findChildren("div"):
-                img = div.find("img")
-                movie_url = img.parent['data-film-slug']
-                names.append((img['alt'], movie_url))
-            
-            self.favorites = names
-
-    # letterboxd.com/?/
-    def user_stats(self, page) -> dict:
-        data = {}
-        stats = page.find_all("h4", {"class": ["profile-statistic"], })
-
-        for stat in stats:
-            value = stat.span.text
-            key = stat.text.lower().replace(value,'').replace(' ','_')
-            data[key] = int(value.replace(',',''))
-
-        self.stats = data
-
-    # letterboxd.com/?
-    def user_watchlist_length(self, page) -> str:
-        nav_links = page.find_all("a", {"class": ["navlink"]})
-
-        for link in nav_links:
-            if "Watchlist" in link.text:
-               if "rel" in link.attrs:
-                    # 'User watchlist is not visible'
-                    self.watchlist_length = None # feature: PrivateData(Exception)
-                    break
-               else:
-                    # 'User watchlist is visible'
-                    widget = page.find("section", {"class": ["watchlist-aside"]})
-                    self.watchlist_length = int(
-                        widget.find("a", {"class": ["all-link"]}).text.replace(',','')
-                        ) if widget else 0
-                    break
-            else:
-                # hq members
-                self.watchlist_length = None
 
     # letterboxd.com/?
     def user_avatar(self, page) -> str:
@@ -183,43 +122,80 @@ class User:
             'watchlist': watchlist_recent,
             'diary': diary_recent
         }
+        
+        self.recent = data
 
     # letterboxd.com/?/
     def user_details(self, page) -> dict:
-        details = {}
-        stats = page.find_all("h4", {"class": ["profile-statistic"], })
+        """
+        methods:
+        .id, .display_name, .bio, .location,
+        .website, .watchlist_length, .stats, .favorites
+        """
 
+        # id
+        """ alternative:
+        button_report = page.find("button", {"data-js-trigger": ["report"]})
+        self.id = int(button_report['data-report-url'].split(':')[-1].split('/')[0])
+        """
+        pattern = r"/ajax/person:(\d+)/report-for"
+        self.id  = re.search(
+            pattern,
+            page.prettify()
+        ).group(1)
+
+        # display name
+        data = page.find("meta", attrs={'property': 'og:title'})
+        self.display_name = data['content'][:-10]
+
+        # bio
+        data = page.find("meta", attrs={'property': 'og:description'})
+        self.bio = data['content'].split('Bio: ')[-1] if data['content'].find('Bio: ') != -1 else None
+
+        # location and website
+        data = page.find("div", {"class": ["profile-metadata"], })
+        location = data.find("div", {"class": ["metadatum"], }) if data else None
+        website = data.find("a") if data else None
+        self.location = location.find("span").text if location else None
+        self.website = website['href'] if website else None         
+
+        # watchlist_length
+        nav_links = page.find_all("a", {"class": ["navlink"]})
+        for link in nav_links:
+            if "Watchlist" in link.text:
+               if "rel" in link.attrs:
+                    # 'User watchlist is not visible'
+                    self.watchlist_length = None # feature: PrivateData(Exception)
+                    break
+               else:
+                    # 'User watchlist is visible'
+                    widget = page.find("section", {"class": ["watchlist-aside"]})
+                    self.watchlist_length = int(
+                        widget.find("a", {"class": ["all-link"]}).text.replace(',','')
+                        ) if widget else 0
+                    break
+            else:
+                # hq members
+                self.watchlist_length = None
+
+        # stats
+        stats = page.find_all("h4", {"class": ["profile-statistic"], })
+        self.stats = {} if stats else None
         for stat in stats:
             value = stat.span.text
             key = stat.text.lower().replace(value,'').replace(' ','_')
-            details[key] = int(value.replace(',',''))
+            self.stats[key]= int(value.replace(',',''))
 
-        data = page.find("meta", attrs={'property': 'og:title'})
-        details['display_name']=data['content'][:-10]
-
-        data = page.find("meta", attrs={'property': 'og:description'})
-        if data['content'].find('Bio: ') != -1:
-            details['bio']=data['content'].split('Bio: ')[-1]
-        else:
-            details['bio']=None
-
-        data = page.find("div", {"class": ["profile-metadata js-profile-metadata"], })
-        if data != None:
-            location = data.find("div", {"class": ["metadatum -has-label js-metadatum"], })
-            if location != None:
-                details['location'] = location.find("span").text
-            else:
-                details['location'] = None
-            website = data.find("a")
-            if website != None:
-                details['website'] = website['href']
-            else:
-                details['website'] = None
-        else:
-            details['location']=None
-            details['bio']=None            
-
-        self.details = details
+        # favorites
+        data = page.find("section", {"id": ["favourites"], })
+        data = data.findChildren("div") if data else []
+        self.favorites = []
+        for div in data:
+            poster = div.find("img")
+            self.favorites.append((
+                poster['alt'], # movie name
+                poster.parent['data-film-slug'] # movie slug
+                ))
     
 # letterboxd.com/?/films/
 def user_films(user: User) -> dict:
