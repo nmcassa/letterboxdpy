@@ -5,6 +5,10 @@ import time
 sys.path.append("../")
 from letterboxdpy import user
 
+def save_json(path, data):
+    with open(path, 'w') as f:
+        json.dump(data, f, indent=2)
+
 username = ''
 
 if not len(username):
@@ -47,7 +51,13 @@ for dir in [EXPORTS_DIR, USERS_FOLDER, USER_FOLDER]:
 else:
     print('All directories checked, continuing...', end='\n\n')
 
-total_time = time.time()
+
+start_time = time.time()
+
+# user instance, method results
+save_json(os.path.join(USER_FOLDER, 'user.json'), user_instance.__dict__)
+
+# user functions
 methods_str_length = len(str(len(methods)))
 for no, method in enumerate(methods, 1):
     method_start_time = time.time()
@@ -63,8 +73,7 @@ for no, method in enumerate(methods, 1):
     data = method(user_instance, **args) if args else method(user_instance)
 
     file_path = os.path.join(USER_FOLDER, f'{method.__name__}.json')
-    with open(file_path, 'w') as f:
-        json.dump(data, f, indent=2)
+    save_json(file_path, data)
 
     # Clickable path
     click_url = f"file:///{os.path.join(os.getcwd(), file_path)}".replace("\\", "/")
@@ -73,7 +82,7 @@ for no, method in enumerate(methods, 1):
 # Finish
 os.system('title Completed!')
 print('\nProcessing complete!')
-print(f'\tTotal time: {time.time() - total_time:.2f} seconds')
+print(f'\tTotal time: {time.time() - start_time:.2f} seconds')
 # Clickable path
 click_url = f'file:///{os.path.join(os.getcwd(), USER_FOLDER)}'.replace("\\", "/")
 print('\tAt', click_url, end='\n\n')
