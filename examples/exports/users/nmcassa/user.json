@@ -1,0 +1,114 @@
+{
+  "username": "nmcassa",
+  "id": "1500306",
+  "display_name": "nmcassa",
+  "bio": null,
+  "location": null,
+  "website": null,
+  "watchlist_length": 58,
+  "stats": {
+    "films": 536,
+    "this_year": 17,
+    "list": 1,
+    "following": 9,
+    "followers": 7
+  },
+  "favorites": [
+    [
+      "The Grand Budapest Hotel",
+      "the-grand-budapest-hotel"
+    ],
+    [
+      "The King of Comedy",
+      "the-king-of-comedy"
+    ],
+    [
+      "The Conversation",
+      "the-conversation"
+    ],
+    [
+      "Rocky",
+      "rocky"
+    ]
+  ],
+  "avatar": {
+    "exists": true,
+    "size": [
+      1000,
+      1000
+    ],
+    "url": "https://a.ltrbxd.com/resized/avatar/upload/1/5/0/0/3/0/6/shard/avtr-0-1000-0-1000-crop.jpg"
+  },
+  "recent": {
+    "watchlist": {
+      "51707": {
+        "name": "Raising Arizona",
+        "slug": "raising-arizona"
+      },
+      "19573": {
+        "name": "The Hourglass Sanatorium",
+        "slug": "the-hourglass-sanatorium"
+      },
+      "50912": {
+        "name": "La Chinoise",
+        "slug": "la-chinoise"
+      },
+      "45909": {
+        "name": "Network",
+        "slug": "network"
+      },
+      "50168": {
+        "name": "The Game",
+        "slug": "the-game"
+      }
+    },
+    "diary": {
+      "months": {
+        "2": [
+          [
+            "9",
+            "Argylle"
+          ],
+          [
+            "6",
+            "Fallen Leaves"
+          ],
+          [
+            "4",
+            "Anatomy of a Fall"
+          ],
+          [
+            "4",
+            "Liverpool"
+          ]
+        ],
+        "1": [
+          [
+            "29",
+            "PlayTime"
+          ],
+          [
+            "26",
+            "The Zone of Interest"
+          ],
+          [
+            "25",
+            "Maestro"
+          ],
+          [
+            "23",
+            "Society of the Snow"
+          ],
+          [
+            "15",
+            "Black Swan"
+          ],
+          [
+            "14",
+            "Gravity"
+          ]
+        ]
+      }
+    }
+  }
+}
