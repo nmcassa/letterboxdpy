@@ -46,33 +46,62 @@ print(user_instance)
   
 ```json
 {
-    "username": "nmcassa",
-    "watchlist_length": 57,
-    "favorites": [
-        [
-            "The Grand Budapest Hotel",
-            "the-grand-budapest-hotel"
-        ],
-        [
-            "The King of Comedy",
-            "the-king-of-comedy"
-        ],
-        [
-            "The Conversation",
-            "the-conversation"
-        ],
-        [
-            "Rocky",
-            "rocky"
-        ]
+  "username": "nmcassa",
+  "id": "1500306",
+  "display_name": "nmcassa",
+  "bio": null,
+  "location": null,
+  "website": null,
+  "watchlist_length": 58,
+  "stats": {
+    "films": 536,
+    "this_year": 17,
+    "list": 1,
+    "following": 9,
+    "followers": 7
+  },
+  "favorites": [
+    [
+      "The Grand Budapest Hotel",
+      "the-grand-budapest-hotel"
     ],
-    "stats": {
-        "films": 534,
-        "this_year": 15,
-        "list": 1,
-        "following": 9,
-        "followers": 7
+    ...
+  ],
+  "avatar": {
+    "exists": true,
+    "size": [
+      1000,
+      1000
+    ],
+    "url": "https://a.ltrbxd.com/resized/avatar/upload/1/5/0/0/3/0/6/shard/avtr-0-1000-0-1000-crop.jpg"
+  },
+  "recent": {
+    "watchlist": {
+      "51707": {
+        "name": "Raising Arizona",
+        "slug": "raising-arizona"
+      },
+      ...
+    },
+    "diary": {
+      "months": {
+        "2": [
+          [
+            "9",
+            "Argylle"
+          ],
+          ...
+        ],
+        "1": [
+          [
+            "29",
+            "PlayTime"
+          ],
+          ...
+        ]
+      }
     }
+  }
 }
 ```
 </details>
