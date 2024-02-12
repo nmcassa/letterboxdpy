@@ -24,9 +24,10 @@ class User:
         page = self.get_parsed_page(f"{self.DOMAIN}/{self.username}/")
         self.user_watchlist_length(page) # .watchlist_length feature: self._watchlist_length
         self.user_favorites(page) # .favorites feature: self._favorites
+        self.user_details(page) # .details feature: self._details
         self.user_avatar(page) # .avatar feature: self._avatar
         self.user_recent(page) # .recent feature: self._recent
-        self.user_details(page) # .details feature: self._details
+        self.user_stats(page) # .stats feature: self._stats
         self.user_id(page) # .id feature: self._id
     
     def __str__(self):
@@ -82,41 +83,16 @@ class User:
             self.favorites = names
 
     # letterboxd.com/?/
-    def user_details(self, page) -> dict:
-        details = {}
+    def user_stats(self, page) -> dict:
+        data = {}
         stats = page.find_all("h4", {"class": ["profile-statistic"], })
 
         for stat in stats:
             value = stat.span.text
             key = stat.text.lower().replace(value,'').replace(' ','_')
-            details[key] = int(value.replace(',',''))
+            data[key] = int(value.replace(',',''))
 
-        data = page.find("meta", attrs={'property': 'og:title'})
-        details['display_name']=data['content'][:-10]
-
-        data = page.find("meta", attrs={'property': 'og:description'})
-        if data['content'].find('Bio: ') != -1:
-            details['bio']=data['content'].split('Bio: ')[-1]
-        else:
-            details['bio']=None
-
-        data = page.find("div", {"class": ["profile-metadata js-profile-metadata"], })
-        if data != None:
-            location = data.find("div", {"class": ["metadatum -has-label js-metadatum"], })
-            if location != None:
-                details['location'] = location.find("span").text
-            else:
-                details['location'] = None
-            website = data.find("a")
-            if website != None:
-                details['website'] = website['href']
-            else:
-                details['website'] = None
-        else:
-            details['location']=None
-            details['bio']=None            
-
-        self.details = details
+        self.stats = data
 
     # letterboxd.com/?
     def user_watchlist_length(self, page) -> str:
@@ -208,8 +184,43 @@ class User:
             'diary': diary_recent
         }
 
-        self.recent = data
+    # letterboxd.com/?/
+    def user_details(self, page) -> dict:
+        details = {}
+        stats = page.find_all("h4", {"class": ["profile-statistic"], })
 
+        for stat in stats:
+            value = stat.span.text
+            key = stat.text.lower().replace(value,'').replace(' ','_')
+            details[key] = int(value.replace(',',''))
+
+        data = page.find("meta", attrs={'property': 'og:title'})
+        details['display_name']=data['content'][:-10]
+
+        data = page.find("meta", attrs={'property': 'og:description'})
+        if data['content'].find('Bio: ') != -1:
+            details['bio']=data['content'].split('Bio: ')[-1]
+        else:
+            details['bio']=None
+
+        data = page.find("div", {"class": ["profile-metadata js-profile-metadata"], })
+        if data != None:
+            location = data.find("div", {"class": ["metadatum -has-label js-metadatum"], })
+            if location != None:
+                details['location'] = location.find("span").text
+            else:
+                details['location'] = None
+            website = data.find("a")
+            if website != None:
+                details['website'] = website['href']
+            else:
+                details['website'] = None
+        else:
+            details['location']=None
+            details['bio']=None            
+
+        self.details = details
+    
 # letterboxd.com/?/films/
 def user_films(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
