@@ -26,8 +26,6 @@ pip install letterboxdpy
     - [top_users](#top_users) (todo)
  - [Movie Objects](#Movie)
     - [movie_details](#movie_details)
-    - [movie_popular_reviews](#movie_popular_reviews)
-    - [movie_tmdb_link](#movie_tmdb_link)
     - [movie_watchers](#movie_watchers) (todo)
  - [List Objects](#List)
     - [list_tags](#list_tags)
@@ -659,17 +657,30 @@ print(movie_instance)
 ```json
 {
     "url": "https://letterboxd.com/film/v-for-vendetta",
+    "tmdb_link": "https://www.themoviedb.org/movie/752/",
+    "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-230-0-345-crop.jpg",
+    "rating": 3.83,
+    "year": 2005,
+    "description": "In a world in which Great Britain has become a fascist state, a masked vigilante known only as \u201cV\u201d conducts guerrilla warfare against the oppressive British government. When V rescues a young woman from the secret police, he finds in her an ally with whom he can continue his fight to free the people of Britain.",
     "directors": [
         "James McTeigue"
     ],
-    "rating": 3.83,
-    "year": 2005,
     "genres": [
         "Thriller",
-        "Science Fiction",
-        "Action"
+        "Science Fiction",...
     ],
-    "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-230-0-345-crop.jpg"
+    "popular_reviews": [
+        {
+            "reviewer": "zoey luke",
+            "rating": " \u2605\u2605\u2605\u2605\u00bd ",
+            "review": "I love natalie Portman and I hate the government"
+        },
+        {
+            "reviewer": "shay",
+            "rating": " \u2605\u2605\u2605\u2605\u2605 ",
+            "review": "i'm like natalie portman in this film because after watching this i, too, became bald."
+        },...
+    ]
 }
 ```
 </details>
@@ -706,44 +717,6 @@ print(movie.movie_details(movie_instance))
 }
 ```
 </details>
-
-<h2 id="movie_popular_reviews">movie_popular_reviews(movie object)</h2>
-
-```python
-from letterboxdpy import movie
-movie_instance = movie.Movie("v-for-vendetta")
-print(movie.movie_popular_reviews(movie_instance))
-```
-
-<details>
-  <summary>Click to expand <code>movie_popular_reviews</code> method response</summary>
-
-```json
-[
-    {
-        "reviewer": "zoey luke",
-        "rating": " \u2605\u2605\u2605\u2605\u00bd ",
-        "review": "I love natalie Portman and I hate the government"
-    },
-    {
-        "reviewer": "shay",
-        "rating": " \u2605\u2605\u2605\u2605\u2605 ",
-        "review": "i'm like natalie portman in this film because after watching this i, too, became bald."
-    },...
-]
-```
-</details>
-
-<h2 id="movie_tmdb_link">movie_tmdb_link(movie object)</h2>
-
-```python
-from letterboxdpy import movie
-movie_instance = movie.Movie("v-for-vendetta")
-print(movie.movie_tmdb_link(movie_instance))
-```
-```
-https://www.themoviedb.org/movie/752/
-```
 
 <h2 id="movie_watchers">movie_watchers(movie object)</h2>
 
