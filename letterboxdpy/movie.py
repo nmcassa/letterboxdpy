@@ -20,6 +20,7 @@ class Movie:
         self.movie_year(page, script)
         self.movie_genre(page)
         self.movie_poster(script)
+        self.movie_description(page)
 
     def __str__(self):
         return self.jsonify()
@@ -76,6 +77,7 @@ class Movie:
                     genres.append(item.text)
         self.genres = genres
 
+    # letterboxd.com/film/?
     def movie_poster(self, script) -> str:
         # crop: list=(1500, 1000)
         # .replace('230-0-345', f'{crop[0]}-0-{crop[1]}')
@@ -83,6 +85,12 @@ class Movie:
             poster = script['image']
             self.poster = poster.split('?')[0] if poster else None
         self.poster = None
+
+    # letterboxd.com/film/?
+    def movie_description(self, page: BeautifulSoup) -> str:
+        elem = page.find("meta", attrs={'name':'description'})
+        # elem_section = page.find("div", attrs={'class': 'truncate'}).text
+        self.description = elem['content'] if elem else None
 
 # letterboxd.com/film/?
 def movie_popular_reviews(movie: Movie) -> dict:
@@ -195,19 +203,6 @@ def movie_tmdb_link(movie: Movie) -> str:
     except:
         return None
 
-# letterboxd.com/film/?
-def movie_description(movie: Movie) -> str:
-    if isinstance(movie, type(None)):
-        raise Exception("Improper parameter")
-        
-    page = movie.get_parsed_page(movie.url)
-
-    try:
-        data = page.find_all("meta", attrs={'name':'twitter:description'})
-        return data[0]['content']
-    except (KeyError, IndexError):
-        return None
-
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
@@ -219,7 +214,6 @@ if __name__ == "__main__":
     movie_instance = Movie("v-for-vendetta")
     print(movie_instance)
     print(movie_details(movie_instance))
-    print(movie_description(movie_instance))
     print(movie_popular_reviews(movie_instance))
     print(movie_tmdb_link(movie_instance))
     print(movie_watchers(movie_instance))
