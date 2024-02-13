@@ -26,7 +26,6 @@ pip install letterboxdpy
     - [top_users](#top_users) (todo)
  - [Movie Objects](#Movie)
     - [movie_details](#movie_details)
-    - [movie_description](#movie_description)
     - [movie_popular_reviews](#movie_popular_reviews)
     - [movie_tmdb_link](#movie_tmdb_link)
     - [movie_watchers](#movie_watchers) (todo)
@@ -382,10 +381,7 @@ print(user.user_wrapped(user_instance, 2023))
         }
     },
     "last_watched": {
-        "495592379": {
-            ...
-            ...
-        }
+        "495592379": {...}
     },
     "movies": {
         "495592379": {
@@ -409,9 +405,7 @@ print(user.user_wrapped(user_instance, 2023))
                 "url": "https://letterboxd.com/nmcassa/films/diary/for/2023/page/1/",
                 "no": 1
             }
-        },
-        ...
-        ...
+        },...
     },
     "months": {
         "1": 21,
@@ -462,10 +456,7 @@ print(user.user_wrapped(user_instance, 2023))
             }
         },
         "100": {
-            "347318246": {
-                ...
-                ...
-            }
+            "347318246": {...}
         }
     }
 }
@@ -533,9 +524,7 @@ print(user.user_activity(user_instance))
       "log_type": "liked",
       "title": "nmcassa liked L\u00e9o Barbosa\u2019s \ud83c\udfc6 Oscars 2024 list",
       "username": "000_leo"
-    },
-    ...
-    ...
+    },...
 }
 ```
 </details>
@@ -601,10 +590,7 @@ print(watchlist_result)
       "no": 6,
       "page": 1,
       "url": "https://letterboxd.com/films/from-dusk-till-dawn/"
-    },
-    ....
-    ...
-    ..
+    },...
     "62780": {
       "name": "Mad Max: Fury Road",
       "slug": "mad-max-fury-road",
@@ -721,18 +707,6 @@ print(movie.movie_details(movie_instance))
 ```
 </details>
 
-<h2 id="movie_description">movie_description(movie object)</h2>
-
-```python
-from letterboxdpy import movie
-movie_instance = movie.Movie("v-for-vendetta")
-print(movie.movie_description(movie_instance))
-```
-
-```
-"In a world in which Great Britain has become a fascist state, a masked vigilante known only as \u201cV\u201d conducts guerrilla warfare against the oppressive British government. When V rescues a young woman\u2026"
-```
-
 <h2 id="movie_popular_reviews">movie_popular_reviews(movie object)</h2>
 
 ```python
@@ -755,8 +729,7 @@ print(movie.movie_popular_reviews(movie_instance))
         "reviewer": "shay",
         "rating": " \u2605\u2605\u2605\u2605\u2605 ",
         "review": "i'm like natalie portman in this film because after watching this i, too, became bald."
-    },
-    ...
+    },...
 ]
 ```
 </details>
@@ -767,8 +740,9 @@ print(movie.movie_popular_reviews(movie_instance))
 from letterboxdpy import movie
 movie_instance = movie.Movie("v-for-vendetta")
 print(movie.movie_tmdb_link(movie_instance))
-
-# https://www.themoviedb.org/movie/752/
+```
+```
+https://www.themoviedb.org/movie/752/
 ```
 
 <h2 id="movie_watchers">movie_watchers(movie object)</h2>
@@ -777,8 +751,9 @@ print(movie.movie_tmdb_link(movie_instance))
 from letterboxdpy import movie
 movie_instance = movie.Movie("v-for-vendetta")
 print(movie.movie_watchers(movie_instance))
+```
 
-"""
+```json
 {
     "watch_count": "981721",
     "fan_count": "8389",
@@ -786,7 +761,6 @@ print(movie.movie_watchers(movie_instance))
     "review_count": "35360",
     "list_count": "86666"
 }
-"""
 ```
 
 <h1 id="List">List Objects</h1>
@@ -811,14 +785,8 @@ print(list)
         [
             "Nope",
             "/film/nope/"
-        ],
-        [
-            "Pearl",
-            "/film/pearl-2022/"
-        ],
-        [
-            "Barbarian",
-           ...
+        ],...
+}
 ```
 </details>
 
