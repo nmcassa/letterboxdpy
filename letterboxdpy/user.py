@@ -204,24 +204,19 @@ def user_films(user: User) -> dict:
         page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/page/{count}/")
 
         poster_containers = page.find_all("li", {"class": ["poster-container"], })
+
         for poster_container in poster_containers:
             poster = poster_container.div
             poster_viewingdata = poster_container.p
-
-            if '-rated-and-liked' in poster_viewingdata['class']:
-                rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
-                liked = True
-                liked_count += 1
-                rating_count += 1
-            else:
-                rating = None
-                liked = False
-                if poster_viewingdata.span:
-                    if 'rating' in poster_viewingdata.span['class']:
+            rating = None
+            liked = False
+            if poster_viewingdata.span:
+                for span in poster_viewingdata.find_all("span"):
+                    if 'rating' in span['class']:
                         # ['rating', '-tiny', '-darker', 'rated-9']
                         rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
                         rating_count += 1
-                    elif 'like' in poster_viewingdata.span['class']:
+                    elif 'like' in span['class']:
                         # ['like', 'has-icon', 'icon-liked', 'icon-16']
                         liked = True
                         liked_count += 1
