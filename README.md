@@ -6,9 +6,23 @@
 
 ## Installation
 
-```
+### From PyPI
+
+You can easily install the stable version of `letterboxdpy` from PyPI using pip:
+
+```bash
 pip install letterboxdpy
 ```
+
+### From GitHub Repository
+
+Alternatively, if you wish to access the latest (potentially unstable) version directly from the GitHub repository, you can execute the following command:
+
+```bash
+pip install git+https://github.com/nmcassa/letterboxdpy.git
+```
+
+**Note:** Please be aware that installing directly from the GitHub repository might give you access to the most recent features and bug fixes, but it could also include changes that haven't been thoroughly tested and may not be stable for production use.
 
 # Directory
  - [User Objects](#User)
