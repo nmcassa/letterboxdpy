@@ -7,28 +7,36 @@ from datetime import datetime
 
 
 class User:
+    DOMAIN = "https://letterboxd.com"
+    MONTH_ABBREVIATIONS = [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep",
+        "Oct", "Nov", "Dec"
+        ]
+
     def __init__(self, username: str) -> None:
         if not re.match("^[A-Za-z0-9_]*$", username):
             raise Exception("Invalid username")
 
         self.username = username.lower()
 
-        page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/")
+        page = self.get_parsed_page(f"{self.DOMAIN}/{self.username}/")
 
-        self.user_watchlist()
-        self.user_favorites(page)
-        self.user_stats(page)
-    
+        self.user_details(page)
+        self.user_avatar(page)
+        self.user_recent(page)
+
     def __str__(self):
         return self.jsonify()
 
     def jsonify(self) -> str:
-        return json.dumps(self, indent=4,cls=Encoder)
+        return json.dumps(self, indent=2, cls=Encoder)
 
     def get_parsed_page(self, url: str) -> None:
         # This fixes a blocked by cloudflare error i've encountered
         headers = {
-            "referer": "https://letterboxd.com",
+            "referer": self.DOMAIN,
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
         try:
@@ -38,51 +46,154 @@ class User:
 
         return BeautifulSoup(response.text, "lxml")
 
-    # letterboxd.com/?/
-    def user_favorites(self, page: None) -> list:        
-        data = page.find("section", {"id": ["favourites"], }).findChildren("div")
-        names = []
+    # letterboxd.com/?
+    def user_avatar(self, page) -> str:
+        upscale_size = (1000, 1000)
+        default_size = (220, 220)
 
+        elem_avatar = page.find("div", {"class": ["profile-avatar"]})
+        avatar_url = elem_avatar.img['src']
+        top_level = avatar_url.split('.')[0].split('//')[1]
+
+        # top levels: avatar=a, static=s
+        avatar_exists = top_level == 'a'
+        if avatar_exists:
+            avatar_url = avatar_url.split('?')[0]
+            avatar_url = avatar_url.replace(
+                '-0-'.join(map(str, default_size)),
+                '-0-'.join(map(str, upscale_size))
+            )
+            avatar_size = upscale_size
+        else:
+            avatar_size = default_size
+
+        data = {
+            'exists': avatar_exists,
+            'size': avatar_size,
+            'url': avatar_url
+        }
+
+        self.avatar = data
+
+    # letterboxd.com/?
+    def user_recent(self, page) -> list:
+        watchlist_recent = {}
+        diary_recent = {'months':{}}
+
+        # watchlist
+        if self.watchlist_length:
+            section_watclist = page.find("section", {"class": ["watchlist-aside"]})
+            watchlist_items = section_watclist.find_all("li")
+            for item in watchlist_items:
+                watchlist_recent[item['data-film-id']] = {
+                    'name': item.img['alt'],
+                    'slug': item['data-film-slug'],
+                }
+        
+        # diary
+        sections = page.find_all("section", {"class": ["section"]})
+        for section in sections:
+            if section.h2 is None:
+                continue
+    
+            if section.h2.text == "Diary":
+                entry_list = section.find_all("li", {"class": ["listitem"]})
+
+                for entry in entry_list:
+                    month = entry.h3.text
+                    month_index = self.MONTH_ABBREVIATIONS.index(month) + 1
+                    diary_recent['months'] |= {month_index: []}
+                    days = entry.find_all("dt")
+                    items = entry.find_all("dd")
+                    for day, item in zip(days, items):
+                        diary_recent['months'][month_index].append([day.text, item.text])
+                else:
+                    break
+  
+        data = {
+            'watchlist': watchlist_recent,
+            'diary': diary_recent
+        }
+        
+        self.recent = data
+
+    # letterboxd.com/?/
+    def user_details(self, page) -> dict:
+        """
+        methods:
+        .id, .display_name, .bio, .location,
+        .website, .watchlist_length, .stats, .favorites
+        """
+
+        # id
+        """ alternative:
+        button_report = page.find("button", {"data-js-trigger": ["report"]})
+        self.id = int(button_report['data-report-url'].split(':')[-1].split('/')[0])
+        """
+        pattern = r"/ajax/person:(\d+)/report-for"
+        self.id  = re.search(
+            pattern,
+            page.prettify()
+        ).group(1)
+
+        # display name
+        data = page.find("meta", attrs={'property': 'og:title'})
+        self.display_name = data['content'][:-10]
+
+        # bio
+        data = page.find("meta", attrs={'property': 'og:description'})
+        self.bio = data['content'].split('Bio: ')[-1] if data['content'].find('Bio: ') != -1 else None
+
+        # location and website
+        data = page.find("div", {"class": ["profile-metadata"], })
+        location = data.find("div", {"class": ["metadatum"], }) if data else None
+        website = data.find("a") if data else None
+        self.location = location.find("span").text if location else None
+        self.website = website['href'] if website else None         
+
+        # watchlist_length
+        nav_links = page.find_all("a", {"class": ["navlink"]})
+        for link in nav_links:
+            if "Watchlist" in link.text:
+               if "rel" in link.attrs:
+                    # 'User watchlist is not visible'
+                    self.watchlist_length = None # feature: PrivateData(Exception)
+                    break
+               else:
+                    # 'User watchlist is visible'
+                    widget = page.find("section", {"class": ["watchlist-aside"]})
+                    self.watchlist_length = int(
+                        widget.find("a", {"class": ["all-link"]}).text.replace(',','')
+                        ) if widget else 0
+                    break
+            else:
+                # hq members
+                self.watchlist_length = None
+
+        # stats
+        stats = page.find_all("h4", {"class": ["profile-statistic"], })
+        self.stats = {} if stats else None
+        for stat in stats:
+            value = stat.span.text
+            key = stat.text.lower().replace(value,'').replace(' ','_')
+            self.stats[key]= int(value.replace(',',''))
+
+        # favorites
+        data = page.find("section", {"id": ["favourites"], })
+        data = data.findChildren("div") if data else []
+        self.favorites = []
         for div in data:
-            img = div.find("img")
-            movie_url = img.parent['data-film-slug']
-            names.append((img['alt'], movie_url))
-            
-        self.favorites = names
-
-    # letterboxd.com/?/
-    def user_stats(self, page: None) -> dict:
-        span = []
-        stats = {}
-
-        data = page.find_all("h4", {"class": ["profile-statistic"], })
-
-        for item in data:
-            span.append(item.findChildren("span"))
-
-        for item in span:
-            stats[item[1].text.replace(u'\xa0', ' ')] = item[0].text
-
-        self.stats = stats
-
-    # letterboxd.com/?/watchlist/
-    def user_watchlist(self) -> str:
-        page = self.get_parsed_page("https://letterboxd.com/" + self.username + "/watchlist/")
-        data = page.find("span", {"class": ["watchlist-count"], })
-        if not data:
-            data = page.find("span", {"class": ["js-watchlist-count"], })
-        try:
-            ret = data.text.split('\xa0')[0] #remove 'films' from '76 films'
-        except:
-            raise Exception("No user found")
-
-        self.watchlist_length = ret
-
+            poster = div.find("img")
+            self.favorites.append((
+                poster['alt'], # movie name
+                poster.parent['data-film-slug'] # movie slug
+                ))
+    
 # letterboxd.com/?/films/
 def user_films(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    #returns all movies
+    FILMS_PER_PAGE = 12*6
     count = 0
     rating_count = 0
     liked_count = 0
@@ -90,27 +201,22 @@ def user_films(user: User) -> dict:
 
     while True:
         count += 1
-        page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/films/page/" + str(count) + "/")
+        page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/page/{count}/")
 
         poster_containers = page.find_all("li", {"class": ["poster-container"], })
+
         for poster_container in poster_containers:
             poster = poster_container.div
             poster_viewingdata = poster_container.p
-
-            if '-rated-and-liked' in poster_viewingdata['class']:
-                rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
-                liked = True
-                liked_count += 1
-                rating_count += 1
-            else:
-                rating = None
-                liked = False
-                if poster_viewingdata.span:
-                    if 'rating' in poster_viewingdata.span['class']:
+            rating = None
+            liked = False
+            if poster_viewingdata.span:
+                for span in poster_viewingdata.find_all("span"):
+                    if 'rating' in span['class']:
                         # ['rating', '-tiny', '-darker', 'rated-9']
                         rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
                         rating_count += 1
-                    elif 'like' in poster_viewingdata.span['class']:
+                    elif 'like' in span['class']:
                         # ['like', 'has-icon', 'icon-liked', 'icon-16']
                         liked = True
                         liked_count += 1
@@ -122,11 +228,14 @@ def user_films(user: User) -> dict:
                     "liked": liked
                 }
 
-        if len(poster_containers) < 72:
+        if len(poster_containers) < FILMS_PER_PAGE:
             movie_list['count'] = len(movie_list['movies'])
             movie_list['liked_count'] = liked_count
             movie_list['rating_count'] = rating_count
-            movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
+            if liked_count:
+                movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
+            else:
+                movie_list['liked_percentage'] = 0.0
             movie_list['rating_percentage'] = 0.0
             movie_list['rating_average'] = 0.0
 
@@ -145,7 +254,7 @@ def user_following(user: User) -> dict:
         raise Exception("Improper parameter")
 
     # returns the first page of following
-    page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/following/")
+    page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/following/")
     data = page.find_all("img", attrs={'height': '40'})
 
     ret = {}
@@ -163,7 +272,7 @@ def user_followers(user: User) -> dict:
         raise Exception("Improper parameter")
 
     #returns the first page of followers
-    page = user.get_parsed_page("https://letterboxd.com/" + user.username + "/followers/")
+    page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/followers/")
     data = page.find_all("img", attrs={'height': '40'})
 
     ret = {}
@@ -184,12 +293,14 @@ def user_genre_info(user: User) -> dict:
               "romance", "science-fiction", "thriller", "tv-movie", "war", "western"]
     ret = {}
     for genre in genres:
-        page = user.get_parsed_page("https://letterboxd.com/" + user.username + 
-                                    "/films/genre/" + genre + "/")
+        page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/genre/{genre}/")
         data = page.find("span", {"class": ["replace-if-you"], })
         data = data.next_sibling.replace(',', '')
-        ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
-        
+        try:
+            ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
+        except IndexError:
+            ret[genre] = 0
+
     return ret
 
 # letterboxd.com/?/films/reviews/
@@ -202,20 +313,12 @@ def user_reviews(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
     
     LOGS_PER_PAGE = 12
-    MONTH_ABBREVIATIONS = [
-        "Jan", "Feb", "Mar",
-        "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep",
-        "Oct", "Nov", "Dec"
-        ]
 
     page = 0
     data = {'reviews': {}}
     while True:
         page += 1
-        dom = user.get_parsed_page(
-            f"https://letterboxd.com/{user.username}/films/reviews/page/{page}/")
-
+        dom = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/reviews/page/{page}/")
         logs = dom.find_all("li", {"class": ["film-detail"], })
 
         for log in logs:
@@ -226,11 +329,12 @@ def user_reviews(user: User) -> dict:
             movie_id = details.parent.div['data-film-id']
             # str   ^^^--- movie_id: unique id of the movie.
             release = int(details.small.text) if details.small else None
-            movie_link = 'ltrbxd.com/film/' + slug + '/'
+            movie_link = f"{user.DOMAIN}/film/{slug}/"
             log_id = log['data-object-id'].split(':')[-1]
             # str ^^^--- log_id: unique id of the review.
-            log_link = 'ltrbxd.com' + details.a['href']
-            log_no = int(log_link.split('/')[-2]) if log_link.count('/') == 5 else 0
+            log_link = user.DOMAIN + details.a['href']
+            log_no = log_link.split(slug)[-1]
+            log_no = int(log_no.replace('/', '')) if log_no.count('/') == 2 else 0
             # int ^^^--- log_no: there can be multiple reviews for a movie.
             #            counting starts from zero.
             #            example for first review:  /username/film/movie_name/
@@ -264,7 +368,7 @@ def user_reviews(user: User) -> dict:
                 date = date.text.split()
                 date = {
                     'year': int(date[2]),
-                    'month': MONTH_ABBREVIATIONS.index(date[1]) + 1,
+                    'month': user.MONTH_ABBREVIATIONS.index(date[1]) + 1,
                     'day': int(date[0])
                 }
             # dict ^^^--- date: the date of the review.
@@ -310,7 +414,7 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
     '''
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
     
-    BASE_URL = f"https://letterboxd.com/{user.username}/films/diary/{f'for/{year}/'*bool(year)}"
+    BASE_URL = f"{user.DOMAIN}/{user.username}/films/diary/{f'for/{year}/'*bool(year)}"
     pagination = page if page else 1
     ret = {'entrys': {}}
 
@@ -375,24 +479,26 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
                     "id":  id,
                     "release": release,
                     "runtime": runtime,
-                    "rewatched": rewatched,
-                    "rating": rating,
-                    "liked": liked,
-                    "reviewed": reviewed,
+                    "actions": {
+                        "rewatched": rewatched,
+                        "rating": rating,
+                        "liked": liked,
+                        "reviewed": reviewed,
+                    },
                     "date": date,
-                    "page": page,
+                    "page": {
+                        'url': url,
+                        'no': pagination
+                        }
                 }
-            else:
-                # no more rows
-                pass
-        else:
-            # no table
-            pass
-        if len(rows) < 50 or pagination == page:
-            # no more entries
-            # or reached the requested page
+            if len(rows) < 50 or pagination == page:
+                    # no more entries
+                    # or reached the requested page
+                    break
+            pagination += 1
+        else: # no table
             break
-        pagination += 1
+
     ret['count'] = len(ret['entrys'])
     ret['last_page'] = pagination
 
@@ -426,7 +532,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
             days[datetime(**watched_date).weekday()+1] += 1
             months[watched_date['month']] += 1
 
-            reviewed = data['reviewed']
+            reviewed = data["actions"]['reviewed']
             total_review += 1 if reviewed else 0
 
             runtime = data['runtime']
@@ -463,7 +569,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 def user_activity(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    BASE_URL = f"https://letterboxd.com/ajax/activity-pagination/{user.username}"
+    BASE_URL = f"{user.DOMAIN}/ajax/activity-pagination/{user.username}"
     data = {'user': user.username, 'logs': {}}
     url = BASE_URL
 
@@ -553,19 +659,250 @@ def user_activity(user: User) -> dict:
 
     return data
 
+# https://letterboxd.com/?/lists/
+def user_lists(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    BASE_URL = f"{user.DOMAIN}/{user.username}/lists/"
+    LISTS_PER_PAGE = 12
+
+    selectors = {
+        'list_set': ('section', {'class': 'list-set', }),
+        'lists': ('section', {'class': 'list', }),
+        'title': ('h2', {'class': 'title', }),
+        'description': ('div', {'class': 'body-text', }),
+        'value': ('small', {'class': 'value', }),
+        'likes': ('a', {'class': 'icon-like', }),
+        'comments': ('a', {'class': 'icon-comment', }),
+    }
+
+    page = 0
+    data = {'lists': {}}
+    while True:
+        page += 1
+        dom = user.get_parsed_page(f'{BASE_URL}/page/{page}')
+
+        list_set = dom.find(*selectors['list_set'])
+        if not list_set:
+            break
+        lists = list_set.find_all(*selectors['lists'])
+
+        for item in lists:
+            # id
+            list_id = item['data-film-list-id']
+            # title
+            list_title = item.find(*selectors['title']).text.strip()
+            # description
+            description = item.find(*selectors['description'])
+            if description:
+                description = description.find_all('p')
+                description = '\n'.join([p.text for p in description])
+            # url
+            list_url = item.find(*selectors['title']).a['href']
+            # slug
+            list_slug = list_url.split('/')[-2]
+            # count
+            count = int(item.find(*selectors['value']).text.split()[0].replace(',',''))
+            # likes
+            likes = item.find(*selectors['likes'])
+            if likes:
+                likes = likes.text.split()[0].replace(',','').lower()
+                if 'k' in likes:
+                    likes = likes.replace('k', '')
+                    likes = int(float(likes) * 1000)
+            else:
+                likes = 0
+            # comments
+            # feature: https://letterboxd.com/ajax/filmlist:<list-id>/comments/
+            comments = item.find(*selectors['comments'])
+            comments = int(comments.text.split()[0].replace(',','')) if comments else 0
+
+            data['lists'][list_id] = {
+                'title': list_title,
+                'slug': list_slug,
+                'description': description,
+                'url': user.DOMAIN + list_url,
+                'count': count,
+                'likes': likes,
+                'comments': comments
+                }
+
+        if len(lists) < LISTS_PER_PAGE:
+            break
+
+    data['count'] = len(data['lists'])
+    data['last_page'] = page
+    return data
+
+# https://letterboxd.com/?/watchlist/
+def user_watchlist(user: User, filters: dict=None) -> dict:
+    """
+    filter examples:
+        - keys: decade, year, genre
+
+        # positive genre & negative genre (start with '-')
+        - {genre: ['mystery']}  <- same -> {genre: 'mystery'}
+        - {genre: ['-mystery']} <- same -> {genre: '-mystery'}
+
+        # multiple genres
+        - {genre: ['mystery', 'comedy'], decade: '1990s'}
+        - {genre: ['mystery', '-comedy'], year: '2019'}
+        - /decade/1990s/genre/action+-drama/
+          ^^---> {'decade':'1990s','genre':['action','-drama']}
+    """
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    data = {
+        'available': None,
+        'count': user.watchlist_length,
+        'data_count': None,
+        'last_page': None,
+        'filters': filters,
+        'data': {}
+        }
+
+    if user.watchlist_length is None:
+        # user watchlist is private
+        return data | {'available': False}
+    elif user.watchlist_length == 0:
+        # user watchlist is empty
+        return data | {'available': True}
+
+    FILMS_PER_PAGE = 7*4
+    BASE_URL = f"{user.DOMAIN}/{user.username}/watchlist/"
+
+    if filters and isinstance(filters, dict):
+        f = ""
+        for key, values in filters.items():
+            if not isinstance(values, list):
+                values = [values]
+            f += f"{key}/"
+            f += "+".join([str(v) for v in values]) + "/"
+
+        BASE_URL += f
+
+    page = 1
+    no = user.watchlist_length
+    while True:
+        dom = user.get_parsed_page(f'{BASE_URL}/page/{page}')
+
+        poster_containers = dom.find_all("li", {"class": ["poster-container"], })
+        for poster_container in poster_containers:
+            poster = poster_container.div
+            img = poster_container.div.img
+
+            film_id = poster['data-film-id']
+            slug = poster['data-film-slug']
+            name = img['alt']
+
+            data['data'][film_id] = {
+                'name': name,
+                'slug': slug,
+                'no': no,
+                'page': page,
+                'url': f"{user.DOMAIN}/films/{slug}/",
+            }
+
+            no -= 1
+
+        if len(poster_containers) < FILMS_PER_PAGE:
+            # last page
+            break
+        page += 1
+
+    data_count = len(data['data'])
+
+    if filters:
+        if data_count != data['count']:
+            no = data_count
+            for item in data['data'].keys():
+                data['data'][item]['no'] = no
+                no -= 1
+
+    data = data | {
+        'available': True,
+        'data_count': data_count,
+        'last_page': page,
+        }
+
+    return data
+
+# https://letterboxd.com/?/tags/*
+def user_tags(user: User) -> dict:
+    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
+
+    BASE_URL = f"{user.DOMAIN}/{user.username}/tags/"
+
+    pages = ['films', 'diary', 'reviews', 'lists']
+    data = {page: {'tags': {}, 'count': 0} for page in pages}
+
+    for page in pages:
+        dom = user.get_parsed_page(BASE_URL + page)
+        tags_columns = dom.find("ul", {"class": ["tags-columns"]})
+
+        if not tags_columns:
+            continue
+
+        tags = tags_columns.find_all("li")
+
+        no = 0
+        for tag in tags:
+            if 'href' in tag.a.attrs:
+                no += 1
+                name = tag.a.text.strip()
+                title = tag.a['title']
+                link = tag.a['href']
+                slug = link.split('/')[-3]
+                count = tag.span.text.strip()
+                count = int(count) if count else 1
+
+                data[page]['tags'][slug] = {
+                    'name': name,
+                    'title': title,
+                    'link': link,
+                    'count': count,
+                    'no': no
+                    }
+            else:
+                pass # not a tag
+
+        data[page]['count'] = no
+    data['count'] = sum([data[page]['count'] for page in pages])
+
+    return data
+
 class Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
 if __name__ == "__main__":
     import argparse
+    import sys
+
+    # Reconfigure stdout encoding to UTF-8 to support non-ASCII characters
+    sys.stdout.reconfigure(encoding='utf-8')
+
+    # Parse command-line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('--user', dest="user", help="Username to gather stats on")
     args = parser.parse_args()
-    user = args.user
 
-    if user:
-        print(f"{user=}")
-        userinfo = User(user)
-        print(userinfo)
-        print(user_films(userinfo))
+    # Extract username from command-line arguments or prompt user for input
+    username = args.user or ''
+
+    # Keep prompting user until a valid username is provided
+    while not len(username.strip()):
+        username = input('Enter username: ')
+
+    # Display the username being processed
+    print(f"Processing username: {username}")
+
+    # Initialize a User instance with the provided username
+    user_instance = User(username.lower())
+
+    # Print user statistics
+    print(user_instance)
+
+    # Iterate over user's film data and print each movie
+    for item in user_films(user_instance)['movies'].items():
+        print(item)
