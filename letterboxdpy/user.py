@@ -44,7 +44,20 @@ class User:
         except requests.exceptions.Timeout:
             raise Exception("Request timeout, site may be down")
 
-        return BeautifulSoup(response.text, "lxml")
+        dom = BeautifulSoup(response.text, "lxml")
+
+        if response.status_code != 200:
+            message = dom.find("section", {"class": "message"})
+            message = message.strong.text if message else None
+            messages = json.dumps({
+                'code': response.status_code,
+                'reason': str(response.reason),
+                'url': url,
+                'message': message
+            }, indent=2)
+            raise Exception(messages)
+
+        return dom
 
     # letterboxd.com/?
     def user_avatar(self, page) -> str:
@@ -109,7 +122,7 @@ class User:
                         diary_recent['months'][month_index].append([day.text, item.text])
                 else:
                     break
-  
+
         data = {
             'watchlist': watchlist_recent,
             'diary': diary_recent
