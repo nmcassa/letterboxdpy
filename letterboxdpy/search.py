@@ -177,13 +177,25 @@ class Search:
              list_count.text.split('f')[0].strip().replace(',', '')
              ) if list_count else None
 
+          # owner
+          owner = result.find('strong', {'class': 'name'}).a
+          owner_name = owner.text
+          owner_url = owner['href']
+          owner_slug = owner_url.split('/')[-2]
+          owner_url = self.DOMAIN + owner_url
+
           data[result_type] = {
              'type': result_type,
              'id': list_id,
              'slug': list_slug,
              'url': list_url,
              'title': list_title,
-             'count': list_count
+             'count': list_count,
+             'owner': {
+               'username': owner_slug,
+               'name': owner_name,
+               'url': owner_url
+             }
           }
         case "tag":
             tag_url = self.DOMAIN + result.h2.a['href']
