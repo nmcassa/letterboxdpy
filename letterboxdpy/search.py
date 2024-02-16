@@ -143,7 +143,10 @@ class Search:
               }
         case "member":
           member_username = result.h3.a['href'].split('/')[-2]
-          member_name = result.h3.a.text.strip()
+          member_name = result.h3.a
+          member_badge = member_name.span
+          member_name = member_name.contents[0].text.strip()
+          member_badge = member_badge.text if member_badge else None
           member_avatar = result.img['src']
           # followers, following
           followers, following = [a.text for a in result.small.find_all("a")]
@@ -155,6 +158,7 @@ class Search:
           data[result_type] = {
              'username': member_username,
              'name': member_name,
+             'badge': member_badge,
              'avatar': member_avatar,
              'followers': followers,
              'following': following,
