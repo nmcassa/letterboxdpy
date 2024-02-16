@@ -176,14 +176,28 @@ class Search:
           item_count = int(
              item_count.text.split('f')[0].strip().replace(',', '')
              ) if item_count else None
+
+          # likes
           like_count = result.find('a', {'class': 'icon-like'})
-          like_count = int(
-             like_count.text.strip().replace(',', '')
-             ) if like_count else 0
+          like_count = like_count if like_count else 0
+          if like_count:
+            like_count = like_count.text.strip().replace(',', '')
+            if 'K' in like_count:
+                # example: 6.3K -> 6300
+                like_count = float(like_count.replace('K', ''))
+                like_count *= 1000
+            like_count = int(like_count)
+
+          # comments
           comment_count = result.find('a', {'class': 'icon-comment'})
-          comment_count = int(
-             comment_count.text.strip().replace(',', '')
-             ) if comment_count else 0
+          comment_count = comment_count if comment_count else 0
+          if comment_count:
+            comment_count = comment_count.text.strip().replace(',', '')
+            if 'K' in comment_count:
+                comment_count = float(comment_count.replace('K', ''))
+                comment_count *= 1000
+            comment_count = int(comment_count)
+
           # owner
           owner = result.find('strong', {'class': 'name'}).a
           owner_name = owner.text
