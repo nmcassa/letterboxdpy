@@ -1,9 +1,10 @@
-import json
-from json import JSONEncoder
-import re
 import requests
+import json
+import re
 from bs4 import BeautifulSoup
 from datetime import datetime
+from avatar import Avatar
+from json import JSONEncoder
 
 
 class User:
@@ -44,36 +45,26 @@ class User:
         except requests.exceptions.Timeout:
             raise Exception("Request timeout, site may be down")
 
-        return BeautifulSoup(response.text, "lxml")
+        dom = BeautifulSoup(response.text, "lxml")
+
+        if response.status_code != 200:
+            message = dom.find("section", {"class": "message"})
+            message = message.strong.text if message else None
+            messages = json.dumps({
+                'code': response.status_code,
+                'reason': str(response.reason),
+                'url': url,
+                'message': message
+            }, indent=2)
+            raise Exception(messages)
+
+        return dom
 
     # letterboxd.com/?
     def user_avatar(self, page) -> str:
-        upscale_size = (1000, 1000)
-        default_size = (220, 220)
-
         elem_avatar = page.find("div", {"class": ["profile-avatar"]})
         avatar_url = elem_avatar.img['src']
-        top_level = avatar_url.split('.')[0].split('//')[1]
-
-        # top levels: avatar=a, static=s
-        avatar_exists = top_level == 'a'
-        if avatar_exists:
-            avatar_url = avatar_url.split('?')[0]
-            avatar_url = avatar_url.replace(
-                '-0-'.join(map(str, default_size)),
-                '-0-'.join(map(str, upscale_size))
-            )
-            avatar_size = upscale_size
-        else:
-            avatar_size = default_size
-
-        data = {
-            'exists': avatar_exists,
-            'size': avatar_size,
-            'url': avatar_url
-        }
-
-        self.avatar = data
+        self.avatar = Avatar(avatar_url).upscaled_data
 
     # letterboxd.com/?
     def user_recent(self, page) -> list:
@@ -82,8 +73,8 @@ class User:
 
         # watchlist
         if self.watchlist_length:
-            section_watclist = page.find("section", {"class": ["watchlist-aside"]})
-            watchlist_items = section_watclist.find_all("li")
+            section_watchlist = page.find("section", {"class": ["watchlist-aside"]})
+            watchlist_items = section_watchlist.find_all("li", {"class": ["film-poster"]})
             for item in watchlist_items:
                 watchlist_recent[item['data-film-id']] = {
                     'name': item.img['alt'],
@@ -109,7 +100,7 @@ class User:
                         diary_recent['months'][month_index].append([day.text, item.text])
                 else:
                     break
-  
+
         data = {
             'watchlist': watchlist_recent,
             'diary': diary_recent

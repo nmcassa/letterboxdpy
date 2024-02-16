@@ -38,8 +38,25 @@ class Movie:
             "referer": self.DOMAIN,
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
-        response = requests.get(url, headers=headers)
-        return BeautifulSoup(response.text, "lxml")
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+        except requests.exceptions.Timeout:
+            raise Exception("Request timeout, site may be down")
+
+        dom = BeautifulSoup(response.text, "lxml")
+
+        if response.status_code != 200:
+            message = dom.find("section", {"class": "message"})
+            message = message.strong.text if message else None
+            messages = json.dumps({
+                'code': response.status_code,
+                'reason': str(response.reason),
+                'url': url,
+                'message': message
+            }, indent=2)
+            raise Exception(messages)
+
+        return dom
 
     # letterboxd.com/film/?
     def movie_director(self, page: BeautifulSoup) -> list:
