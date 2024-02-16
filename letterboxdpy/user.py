@@ -696,13 +696,13 @@ def user_lists(user: User) -> dict:
             count = int(item.find(*selectors['value']).text.split()[0].replace(',',''))
             # likes
             likes = item.find(*selectors['likes'])
+            likes = likes if likes else 0
             if likes:
-                likes = likes.text.split()[0].replace(',','').lower()
-                if 'k' in likes:
-                    likes = likes.replace('k', '')
-                    likes = int(float(likes) * 1000)
-            else:
-                likes = 0
+                likes = likes.text.split()[0].replace(',','')
+                if 'K' in likes:
+                    likes = likes.replace('K', '')
+                    likes = float(likes) * 1000
+                likes = int(likes)
             # comments
             # feature: https://letterboxd.com/ajax/filmlist:<list-id>/comments/
             comments = item.find(*selectors['comments'])
