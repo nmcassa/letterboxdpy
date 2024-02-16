@@ -168,17 +168,23 @@ class Search:
              }
         case "list":
           list_id = result.section['data-film-list-id']
+          list_url = result.a['href']
+          list_slug = list_url.split('/')[-2]
+          list_url = self.DOMAIN + list_url
           list_title = result.h2.text.strip()
           list_count = result.find('small', {'class': 'value'})
           list_count = int(
              list_count.text.split('f')[0].strip().replace(',', '')
              ) if list_count else None
+
           data[result_type] = {
              'type': result_type,
              'id': list_id,
+             'slug': list_slug,
+             'url': list_url,
              'title': list_title,
              'count': list_count
-             }
+          }
         case "tag":
             tag_url = self.DOMAIN + result.h2.a['href']
             tag_name = result.h2.a.text.strip()
