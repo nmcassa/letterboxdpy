@@ -172,11 +172,18 @@ class Search:
           list_slug = list_url.split('/')[-2]
           list_url = self.DOMAIN + list_url
           list_title = result.h2.text.strip()
-          list_count = result.find('small', {'class': 'value'})
-          list_count = int(
-             list_count.text.split('f')[0].strip().replace(',', '')
-             ) if list_count else None
-
+          item_count = result.find('small', {'class': 'value'})
+          item_count = int(
+             item_count.text.split('f')[0].strip().replace(',', '')
+             ) if item_count else None
+          like_count = result.find('a', {'class': 'icon-like'})
+          like_count = int(
+             like_count.text.strip().replace(',', '')
+             ) if like_count else 0
+          comment_count = result.find('a', {'class': 'icon-comment'})
+          comment_count = int(
+             comment_count.text.strip().replace(',', '')
+             ) if comment_count else 0
           # owner
           owner = result.find('strong', {'class': 'name'}).a
           owner_name = owner.text
@@ -190,7 +197,9 @@ class Search:
              'slug': list_slug,
              'url': list_url,
              'title': list_title,
-             'count': list_count,
+             'count': item_count,
+             'likes': like_count,
+             'comments': comment_count,
              'owner': {
                'username': owner_slug,
                'name': owner_name,
