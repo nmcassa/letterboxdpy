@@ -186,10 +186,13 @@ class Search:
             }
         case "actor":
             actor_name = result.a.text.strip()
-            actor_url = self.DOMAIN + result.a['href']
+            actor_slug = result.a['href']
+            actor_url = self.DOMAIN + actor_slug
+            actor_slug = actor_slug.split('/')[-2]
             data[result_type] = {
                'type': result_type,
                'name': actor_name,
+               'slug': actor_slug,
                'url': actor_url
             }
         case "studio":
