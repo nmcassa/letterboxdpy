@@ -1,9 +1,10 @@
-import json
-from json import JSONEncoder
-import re
 import requests
+import json
+import re
 from bs4 import BeautifulSoup
 from datetime import datetime
+from avatar import Avatar
+from json import JSONEncoder
 
 
 class User:
@@ -61,32 +62,9 @@ class User:
 
     # letterboxd.com/?
     def user_avatar(self, page) -> str:
-        upscale_size = (1000, 1000)
-        default_size = (220, 220)
-
         elem_avatar = page.find("div", {"class": ["profile-avatar"]})
         avatar_url = elem_avatar.img['src']
-        top_level = avatar_url.split('.')[0].split('//')[1]
-
-        # top levels: avatar=a, static=s
-        avatar_exists = top_level == 'a'
-        if avatar_exists:
-            avatar_url = avatar_url.split('?')[0]
-            avatar_url = avatar_url.replace(
-                '-0-'.join(map(str, default_size)),
-                '-0-'.join(map(str, upscale_size))
-            )
-            avatar_size = upscale_size
-        else:
-            avatar_size = default_size
-
-        data = {
-            'exists': avatar_exists,
-            'size': avatar_size,
-            'url': avatar_url
-        }
-
-        self.avatar = data
+        self.avatar = Avatar(avatar_url).upscaled_data
 
     # letterboxd.com/?
     def user_recent(self, page) -> list:

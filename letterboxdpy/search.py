@@ -1,3 +1,4 @@
+from avatar import Avatar
 from bs4 import BeautifulSoup
 from typing import List
 import requests
@@ -30,7 +31,7 @@ class Search:
 
     def __str__(self):
         return json.dumps(self.__dict__, indent=2)
-    
+
     def get_parsed_page(self, url: str) -> BeautifulSoup:
       headers = {
         "referer": self.DOMAIN,
@@ -148,6 +149,8 @@ class Search:
           member_name = member_name.contents[0].text.strip()
           member_badge = member_badge.text if member_badge else None
           member_avatar = result.img['src']
+          member_avatar = Avatar(member_avatar).upscaled_data
+
           # followers, following
           followers, following = [a.text for a in result.small.find_all("a")]
           followers = followers.split('f')[0].strip().replace(',', '')
