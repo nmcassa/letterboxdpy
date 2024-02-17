@@ -1,9 +1,12 @@
-import json
-import re
 from datetime import datetime
-from avatar import Avatar
 from scraper import Scraper
-from json import JSONEncoder
+from avatar import Avatar
+import re
+
+from json import (
+  JSONEncoder,
+  dumps as json_dumps,
+)
 
 
 class User:
@@ -32,7 +35,7 @@ class User:
         return self.jsonify()
 
     def jsonify(self) -> str:
-        return json.dumps(self, indent=2, cls=Encoder)
+        return json_dumps(self, indent=2, cls=Encoder)
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
@@ -153,11 +156,24 @@ class User:
                 poster['alt'], # movie name
                 poster.parent['data-film-slug'] # movie slug
                 ))
-    
-# letterboxd.com/?/films/
-def user_films(user: User) -> dict:
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
+class Encoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
+# -- DECORATORS --
+
+def assert_user_instance(func):
+    def wrapper(arg, *args, **kwargs):
+        assert isinstance(arg, User), f"function parameter must be a {User.__name__} instance"
+        return func(arg, *args, **kwargs)
+    return wrapper
+
+# -- FUNCTIONS --
+
+# letterboxd.com/?/films/
+@assert_user_instance
+def user_films(user: User) -> dict:
     FILMS_PER_PAGE = 12*6
     count = 0
     rating_count = 0
@@ -214,10 +230,8 @@ def user_films(user: User) -> dict:
     return movie_list
 
 # letterboxd.com/?/following/
+@assert_user_instance
 def user_following(user: User) -> dict:
-    if type(user) != User:
-        raise Exception("Improper parameter")
-
     # returns the first page of following
     dom = user.scraper.get_parsed_page(f"{user.url}/following/")
     data = dom.find_all("img", attrs={'height': '40'})
@@ -232,10 +246,8 @@ def user_following(user: User) -> dict:
     return ret
 
 # letterboxd.com/?/followers/
+@assert_user_instance
 def user_followers(user: User) -> dict:
-    if type(user) != User:
-        raise Exception("Improper parameter")
-
     #returns the first page of followers
     dom = user.scraper.get_parsed_page(f"{user.url}/followers/")
     data = dom.find_all("img", attrs={'height': '40'})
@@ -250,12 +262,12 @@ def user_followers(user: User) -> dict:
     return ret
 
 # letterboxd.com/?/films/genre/*/
+@assert_user_instance
 def user_genre_info(user: User) -> dict:
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-
-    genres = ["action", "adventure", "animation", "comedy", "crime", "documentary",
-              "drama", "family", "fantasy", "history", "horror", "music", "mystery",
-              "romance", "science-fiction", "thriller", "tv-movie", "war", "western"]
+    genres = ["action", "adventure", "animation", "comedy", "crime",
+              "documentary","drama", "family", "fantasy", "history",
+              "horror", "music", "mystery", "romance", "science-fiction",
+              "thriller", "tv-movie", "war", "western"]
     ret = {}
     for genre in genres:
         dom = user.scraper.get_parsed_page(f"{user.url}/films/genre/{genre}/")
@@ -269,14 +281,13 @@ def user_genre_info(user: User) -> dict:
     return ret
 
 # letterboxd.com/?/films/reviews/
+@assert_user_instance
 def user_reviews(user: User) -> dict:
     '''
     Returns a dictionary containing user reviews. The keys are unique log IDs,
     and each value is a dictionary with details about the review,
     including movie information, review type, rating, review content, date, etc.
     '''
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-    
     LOGS_PER_PAGE = 12
 
     page = 0
@@ -369,6 +380,7 @@ def user_reviews(user: User) -> dict:
     return data
 
 # letterboxd.com/?/films/diary/
+@assert_user_instance
 def user_diary(user: User, year: int=None, page: int=None) -> dict:
     '''
     Returns:
@@ -377,8 +389,6 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
       release information,rewatch status, rating, like status, review status,
       and the date of the entry.
     '''
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-    
     BASE_URL = f"{user.url}/films/diary/{f'for/{year}/'*bool(year)}"
     pagination = page if page else 1
     ret = {'entrys': {}}
@@ -470,10 +480,8 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
     return ret
 
 # dependency: user_diary()
+@assert_user_instance
 def user_wrapped(user: User, year: int=2024) -> dict:
-
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-
     diary = user_diary(user, year)
 
     movies = {}
@@ -531,9 +539,8 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 
 # letterboxd.com/?/activity
 # letterboxd.com/ajax/activity-pagination/?/
+@assert_user_instance
 def user_activity(user: User) -> dict:
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-
     BASE_URL = f"{user.DOMAIN}/ajax/activity-pagination/{user.username}"
     data = {'user': user.username, 'logs': {}}
     url = BASE_URL
@@ -625,9 +632,8 @@ def user_activity(user: User) -> dict:
     return data
 
 # https://letterboxd.com/?/lists/
+@assert_user_instance
 def user_lists(user: User) -> dict:
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-
     BASE_URL = f"{user.url}/lists/"
     LISTS_PER_PAGE = 12
 
@@ -700,6 +706,7 @@ def user_lists(user: User) -> dict:
     return data
 
 # https://letterboxd.com/?/watchlist/
+@assert_user_instance
 def user_watchlist(user: User, filters: dict=None) -> dict:
     """
     filter examples:
@@ -715,8 +722,6 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
         - /decade/1990s/genre/action+-drama/
           ^^---> {'decade':'1990s','genre':['action','-drama']}
     """
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-
     data = {
         'available': None,
         'count': user.watchlist_length,
@@ -793,9 +798,8 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
     return data
 
 # https://letterboxd.com/?/tags/*
+@assert_user_instance
 def user_tags(user: User) -> dict:
-    assert isinstance(user, User), "Improper parameter: user must be an instance of User."
-
     BASE_URL = f"{user.url}/tags/"
 
     pages = ['films', 'diary', 'reviews', 'lists']
@@ -835,10 +839,6 @@ def user_tags(user: User) -> dict:
     data['count'] = sum([data[page]['count'] for page in pages])
 
     return data
-
-class Encoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
 
 if __name__ == "__main__":
     import argparse
