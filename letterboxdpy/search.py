@@ -48,21 +48,20 @@ class Search:
       response = requests.get(url, headers=headers)
       return BeautifulSoup(response.text, "lxml")
 
-    def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=None):
+    def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=MAX_RESULTS):
       data = {
-        'available': False,
-        'query': self.query,
-        'filter': self.search_filter,
-        'end_page': end_page,
-        'count': 0,
-        'results': []
-        }
+         'available': False,
+         'query': self.query,
+         'filter': self.search_filter,
+         'end_page': end_page,
+         'count': 0,
+         'results': []
+         }
 
-      no = 1
+      result_count = 1
       for current_page in range(1, end_page+1):
-        url = "/".join(map(str, [
-           self.url, "page", current_page, "?adult"
-           ]))
+
+        url = f'{self.url}/page/{current_page}/?adult'
         page = self.get_parsed_page(url)
         results = self.get_page_results(page)
 
@@ -71,22 +70,25 @@ class Search:
           break
 
         for result in results:
-          key, value = list(result.items())[0]
+          key, value = next(iter(result.items()))
+
           data['results'].append({
-            key: {
-               'no': no,
-               'page': current_page 
-               } | value
-            })
-          if max and no >= max:
+             key: {
+                'no': result_count,
+                'page': current_page,
+                **value
+                }})
+
+          if result_count >= max:
             break
-          no += 1
-        if max and no >= max:
+
+          result_count += 1
+
+        if result_count >= max:
           break
   
-      count = len(data['results'])
-      data['available'] = bool(count)
-      data['count'] = count
+      data['count'] = result_count
+      data['available'] = result_count > 0
 
       return data
 
