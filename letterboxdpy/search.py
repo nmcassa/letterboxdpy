@@ -33,7 +33,6 @@ class Search:
 
     @property
     def results(self):
-      # .results returns 1 page
       if not self._results:
           self._results = self.get_results()
       return self._results
@@ -336,26 +335,32 @@ if __name__ == "__main__":
   import sys
   sys.stdout.reconfigure(encoding='utf-8')
 
-  # test: filter
-  q1 = Search("The") # general search
-  q2 = Search("V for Vendetta", 'films')
-  q3 = Search("MUBI", 'lists')
-
-  # test: multiple page
   """
-  Usage:
+  phrase usage:
+    q1 = Search("MUBI", 'lists')
+    q2 = Search("'MUBI'", 'lists') 
+    q1 searches for lists that contain the word 'MUBI' among other possible words
+    q2 searches for lists that specifically contain the exact phrase 'MUBI' and
+    ... exclude lists that don't contain this phrase
+
+  results usage:
    all page:
     .results
     .get_results()
    filtering:
     .get_results(2)
     .get_results(max=10)
+
   Note: search pages may sometimes contain previous results. (for now)
   """
-  # print(json.dumps(q1.results, indent=2))
-  # print(json.dumps(q2.get_results(), indent=2))
+
+  q3 = Search("The") # general search
+  q4 = Search("V for Vendetta", 'films')
+  # print(json.dumps(q3.results, indent=2))
+  # print(json.dumps(q4.get_results(), indent=2))
   print(json.dumps(q3.get_results(2), indent=2)) # max 2 page result
-  print(json.dumps(q3.get_results(max=5), indent=2)) #  max 5 result
+  print("\n- - -\n"*10)
+  print(json.dumps(q4.get_results(max=5), indent=2)) #  max 5 result
 
   # test: slug
   print('slug 1:', get_film_slug_from_title("V for Vendetta"))
