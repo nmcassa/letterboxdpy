@@ -1,7 +1,12 @@
 from scraper import Scraper
 from avatar import Avatar
 from typing import List
-import json
+
+from json import (
+  JSONEncoder,
+  dumps as json_dumps
+)
+
 
 class Search:
     DOMAIN = "https://letterboxd.com"
@@ -40,7 +45,7 @@ class Search:
       return self._results
 
     def __str__(self):
-      return json.dumps(self.__dict__, indent=2)
+      return json_dumps(self.__dict__, indent=2, cls=Encoder)
 
     def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=MAX_RESULTS):
 
@@ -320,6 +325,12 @@ class Search:
 
       return data
 
+class Encoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
+# -- FUNCTIONS --
+
 def get_film_slug_from_title(title: str) -> str:
     try:
       query = Search(title, 'films')
@@ -355,9 +366,9 @@ if __name__ == "__main__":
   q4 = Search("V for Vendetta", 'films')
   # print(json.dumps(q3.results, indent=2))
   # print(json.dumps(q4.get_results(), indent=2))
-  print(json.dumps(q3.get_results(2), indent=2)) # max 2 page result
+  print(json_dumps(q3.get_results(2), indent=2)) # max 2 page result
   print("\n- - -\n"*10)
-  print(json.dumps(q4.get_results(max=5), indent=2)) #  max 5 result
+  print(json_dumps(q4.get_results(max=5), indent=2)) #  max 5 result
 
   # test: slug
   print('slug 1:', get_film_slug_from_title("V for Vendetta"))
@@ -365,7 +376,7 @@ if __name__ == "__main__":
   print('slug 3:', get_film_slug_from_title("VENDETTA"))
 
   # test: combined
-  from letterboxdpy import movie
+  from movie import Movie
   movie_slug = get_film_slug_from_title("V for Vendetta")
-  movie_instance = movie.Movie(movie_slug)
+  movie_instance = Movie(movie_slug)
   print(movie_instance.description)
