@@ -1,9 +1,8 @@
-import requests
 import json
 import re
-from bs4 import BeautifulSoup
 from datetime import datetime
 from avatar import Avatar
+from scraper import Scraper
 from json import JSONEncoder
 
 
@@ -17,16 +16,17 @@ class User:
         ]
 
     def __init__(self, username: str) -> None:
-        if not re.match("^[A-Za-z0-9_]*$", username):
-            raise Exception("Invalid username")
+        assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
 
+        self.scraper = Scraper(self.DOMAIN)
         self.username = username.lower()
+        self.url = f"{self.DOMAIN}/{self.username}"
 
-        page = self.get_parsed_page(f"{self.DOMAIN}/{self.username}/")
+        dom = self.scraper.get_parsed_page(self.url)
 
-        self.user_details(page)
-        self.user_avatar(page)
-        self.user_recent(page)
+        self.user_details(dom)
+        self.user_avatar(dom)
+        self.user_recent(dom)
 
     def __str__(self):
         return self.jsonify()
@@ -34,46 +34,20 @@ class User:
     def jsonify(self) -> str:
         return json.dumps(self, indent=2, cls=Encoder)
 
-    def get_parsed_page(self, url: str) -> None:
-        # This fixes a blocked by cloudflare error i've encountered
-        headers = {
-            "referer": self.DOMAIN,
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-        }
-        try:
-            response = requests.get(url, headers=headers, timeout=30)
-        except requests.exceptions.Timeout:
-            raise Exception("Request timeout, site may be down")
-
-        dom = BeautifulSoup(response.text, "lxml")
-
-        if response.status_code != 200:
-            message = dom.find("section", {"class": "message"})
-            message = message.strong.text if message else None
-            messages = json.dumps({
-                'code': response.status_code,
-                'reason': str(response.reason),
-                'url': url,
-                'message': message
-            }, indent=2)
-            raise Exception(messages)
-
-        return dom
-
     # letterboxd.com/?
-    def user_avatar(self, page) -> str:
-        elem_avatar = page.find("div", {"class": ["profile-avatar"]})
+    def user_avatar(self, dom) -> str:
+        elem_avatar = dom.find("div", {"class": ["profile-avatar"]})
         avatar_url = elem_avatar.img['src']
         self.avatar = Avatar(avatar_url).upscaled_data
 
     # letterboxd.com/?
-    def user_recent(self, page) -> list:
+    def user_recent(self, dom) -> list:
         watchlist_recent = {}
         diary_recent = {'months':{}}
 
         # watchlist
         if self.watchlist_length:
-            section_watchlist = page.find("section", {"class": ["watchlist-aside"]})
+            section_watchlist = dom.find("section", {"class": ["watchlist-aside"]})
             watchlist_items = section_watchlist.find_all("li", {"class": ["film-poster"]})
             for item in watchlist_items:
                 watchlist_recent[item['data-film-id']] = {
@@ -82,7 +56,7 @@ class User:
                 }
         
         # diary
-        sections = page.find_all("section", {"class": ["section"]})
+        sections = dom.find_all("section", {"class": ["section"]})
         for section in sections:
             if section.h2 is None:
                 continue
@@ -109,7 +83,7 @@ class User:
         self.recent = data
 
     # letterboxd.com/?/
-    def user_details(self, page) -> dict:
+    def user_details(self, dom) -> dict:
         """
         methods:
         .id, .display_name, .bio, .location,
@@ -124,26 +98,26 @@ class User:
         pattern = r"/ajax/person:(\d+)/report-for"
         self.id  = re.search(
             pattern,
-            page.prettify()
+            dom.prettify()
         ).group(1)
 
         # display name
-        data = page.find("meta", attrs={'property': 'og:title'})
+        data = dom.find("meta", attrs={'property': 'og:title'})
         self.display_name = data['content'][:-10]
 
         # bio
-        data = page.find("meta", attrs={'property': 'og:description'})
+        data = dom.find("meta", attrs={'property': 'og:description'})
         self.bio = data['content'].split('Bio: ')[-1] if data['content'].find('Bio: ') != -1 else None
 
         # location and website
-        data = page.find("div", {"class": ["profile-metadata"], })
+        data = dom.find("div", {"class": ["profile-metadata"], })
         location = data.find("div", {"class": ["metadatum"], }) if data else None
         website = data.find("a") if data else None
         self.location = location.find("span").text if location else None
         self.website = website['href'] if website else None         
 
         # watchlist_length
-        nav_links = page.find_all("a", {"class": ["navlink"]})
+        nav_links = dom.find_all("a", {"class": ["navlink"]})
         for link in nav_links:
             if "Watchlist" in link.text:
                if "rel" in link.attrs:
@@ -152,7 +126,7 @@ class User:
                     break
                else:
                     # 'User watchlist is visible'
-                    widget = page.find("section", {"class": ["watchlist-aside"]})
+                    widget = dom.find("section", {"class": ["watchlist-aside"]})
                     self.watchlist_length = int(
                         widget.find("a", {"class": ["all-link"]}).text.replace(',','')
                         ) if widget else 0
@@ -162,7 +136,7 @@ class User:
                 self.watchlist_length = None
 
         # stats
-        stats = page.find_all("h4", {"class": ["profile-statistic"], })
+        stats = dom.find_all("h4", {"class": ["profile-statistic"], })
         self.stats = {} if stats else None
         for stat in stats:
             value = stat.span.text
@@ -170,7 +144,7 @@ class User:
             self.stats[key]= int(value.replace(',',''))
 
         # favorites
-        data = page.find("section", {"id": ["favourites"], })
+        data = dom.find("section", {"id": ["favourites"], })
         data = data.findChildren("div") if data else []
         self.favorites = []
         for div in data:
@@ -192,9 +166,9 @@ def user_films(user: User) -> dict:
 
     while True:
         count += 1
-        page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/page/{count}/")
+        dom = user.scraper.get_parsed_page(f"{user.url}/films/page/{count}/")
 
-        poster_containers = page.find_all("li", {"class": ["poster-container"], })
+        poster_containers = dom.find_all("li", {"class": ["poster-container"], })
 
         for poster_container in poster_containers:
             poster = poster_container.div
@@ -245,8 +219,8 @@ def user_following(user: User) -> dict:
         raise Exception("Improper parameter")
 
     # returns the first page of following
-    page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/following/")
-    data = page.find_all("img", attrs={'height': '40'})
+    dom = user.scraper.get_parsed_page(f"{user.url}/following/")
+    data = dom.find_all("img", attrs={'height': '40'})
 
     ret = {}
 
@@ -263,8 +237,8 @@ def user_followers(user: User) -> dict:
         raise Exception("Improper parameter")
 
     #returns the first page of followers
-    page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/followers/")
-    data = page.find_all("img", attrs={'height': '40'})
+    dom = user.scraper.get_parsed_page(f"{user.url}/followers/")
+    data = dom.find_all("img", attrs={'height': '40'})
 
     ret = {}
 
@@ -284,8 +258,8 @@ def user_genre_info(user: User) -> dict:
               "romance", "science-fiction", "thriller", "tv-movie", "war", "western"]
     ret = {}
     for genre in genres:
-        page = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/genre/{genre}/")
-        data = page.find("span", {"class": ["replace-if-you"], })
+        dom = user.scraper.get_parsed_page(f"{user.url}/films/genre/{genre}/")
+        data = dom.find("span", {"class": ["replace-if-you"], })
         data = data.next_sibling.replace(',', '')
         try:
             ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
@@ -309,7 +283,7 @@ def user_reviews(user: User) -> dict:
     data = {'reviews': {}}
     while True:
         page += 1
-        dom = user.get_parsed_page(f"{user.DOMAIN}/{user.username}/films/reviews/page/{page}/")
+        dom = user.scraper.get_parsed_page(f"{user.url}/films/reviews/page/{page}/")
         logs = dom.find_all("li", {"class": ["film-detail"], })
 
         for log in logs:
@@ -405,14 +379,14 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
     '''
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
     
-    BASE_URL = f"{user.DOMAIN}/{user.username}/films/diary/{f'for/{year}/'*bool(year)}"
+    BASE_URL = f"{user.url}/films/diary/{f'for/{year}/'*bool(year)}"
     pagination = page if page else 1
     ret = {'entrys': {}}
 
     while True:
         url = BASE_URL + f"page/{pagination}/"
 
-        dom = user.get_parsed_page(url)
+        dom = user.scraper.get_parsed_page(url)
         table = dom.find("table", {"id": ["diary-table"], })
 
         if table:
@@ -564,7 +538,7 @@ def user_activity(user: User) -> dict:
     data = {'user': user.username, 'logs': {}}
     url = BASE_URL
 
-    dom = user.get_parsed_page(url)
+    dom = user.scraper.get_parsed_page(url)
     sections = dom.find_all("section")
     if not sections:
         print(f"User {user.username} has no activity.")
@@ -654,7 +628,7 @@ def user_activity(user: User) -> dict:
 def user_lists(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    BASE_URL = f"{user.DOMAIN}/{user.username}/lists/"
+    BASE_URL = f"{user.url}/lists/"
     LISTS_PER_PAGE = 12
 
     selectors = {
@@ -671,7 +645,7 @@ def user_lists(user: User) -> dict:
     data = {'lists': {}}
     while True:
         page += 1
-        dom = user.get_parsed_page(f'{BASE_URL}/page/{page}')
+        dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
 
         list_set = dom.find(*selectors['list_set'])
         if not list_set:
@@ -760,7 +734,7 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
         return data | {'available': True}
 
     FILMS_PER_PAGE = 7*4
-    BASE_URL = f"{user.DOMAIN}/{user.username}/watchlist/"
+    BASE_URL = f"{user.url}/watchlist/"
 
     if filters and isinstance(filters, dict):
         f = ""
@@ -775,7 +749,7 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
     page = 1
     no = user.watchlist_length
     while True:
-        dom = user.get_parsed_page(f'{BASE_URL}/page/{page}')
+        dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
 
         poster_containers = dom.find_all("li", {"class": ["poster-container"], })
         for poster_container in poster_containers:
@@ -822,13 +796,13 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
 def user_tags(user: User) -> dict:
     assert isinstance(user, User), "Improper parameter: user must be an instance of User."
 
-    BASE_URL = f"{user.DOMAIN}/{user.username}/tags/"
+    BASE_URL = f"{user.url}/tags/"
 
     pages = ['films', 'diary', 'reviews', 'lists']
     data = {page: {'tags': {}, 'count': 0} for page in pages}
 
     for page in pages:
-        dom = user.get_parsed_page(BASE_URL + page)
+        dom = user.scraper.get_parsed_page(BASE_URL + page)
         tags_columns = dom.find("ul", {"class": ["tags-columns"]})
 
         if not tags_columns:
