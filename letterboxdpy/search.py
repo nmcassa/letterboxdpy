@@ -1,7 +1,6 @@
+from scraper import Scraper
 from avatar import Avatar
-from bs4 import BeautifulSoup
 from typing import List
-import requests
 import json
 
 class Search:
@@ -10,26 +9,29 @@ class Search:
     MAX_RESULTS = 250
     MAX_RESULTS_PER_PAGE = 20
     MAX_RESULTS_PAGE = MAX_RESULTS // MAX_RESULTS_PER_PAGE + 1
-
-    FILTERS = [
-       'films', 'reviews', 'lists', 'original-lists',
-       'stories', 'cast-crew', 'members', 'tags',
-       'articles', 'episodes', 'full-text'
-       ]
+    FILTERS = ['films', 'reviews', 'lists', 'original-lists',
+               'stories', 'cast-crew', 'members', 'tags',
+               'articles', 'episodes', 'full-text']
 
     def __init__(self, query: str, search_filter: str=None):
+      assert all([
+          isinstance(query, str),
+          not search_filter or search_filter in self.FILTERS
+          ]), " ".join([
+             "query and search_filter must be strings and",
+             "search_filter must be one of the following:",
+             ", ".join(self.FILTERS)
+             ])
 
-      if search_filter and search_filter not in self.FILTERS:
-          raise ValueError(f"Invalid filter: {search_filter}")
-
-      self.url = "/".join(filter(None, [
-        self.SEARCH_URL,
-        search_filter,
-        query
-        ]))
       self.query = query
       self.search_filter = search_filter
-      self._results = None
+      self.scraper = Scraper(self.DOMAIN)
+      self._results = None # .results
+      self.url = "/".join(filter(None, [
+          self.SEARCH_URL,
+          search_filter,
+          query
+          ]))
 
     @property
     def results(self):
@@ -38,17 +40,10 @@ class Search:
       return self._results
 
     def __str__(self):
-        return json.dumps(self.__dict__, indent=2)
-
-    def get_parsed_page(self, url: str) -> BeautifulSoup:
-      headers = {
-        "referer": self.DOMAIN,
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-      }
-      response = requests.get(url, headers=headers)
-      return BeautifulSoup(response.text, "lxml")
+      return json.dumps(self.__dict__, indent=2)
 
     def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=MAX_RESULTS):
+
       data = {
          'available': False,
          'query': self.query,
@@ -57,13 +52,13 @@ class Search:
          'count': 0,
          'results': []
          }
-
+  
       result_count = 1
       for current_page in range(1, end_page+1):
 
         url = f'{self.url}/page/{current_page}/?adult'
-        page = self.get_parsed_page(url)
-        results = self.get_page_results(page)
+        dom = self.scraper.get_parsed_page(url)
+        results = self.get_page_results(dom)
 
         if not results:
           # no more results
@@ -92,7 +87,7 @@ class Search:
 
       return data
 
-    def get_page_results(self, page) -> List:
+    def get_page_results(self, dom) -> List:
       result_types = {
         'film': [None, ["film-poster"]],
         'review': ["film-detail"],
@@ -110,7 +105,7 @@ class Search:
         'podcast': [None, ["card-summary", "-graph"]],
       }
 
-      elem_results = page.find("ul", {"class": "results"})
+      elem_results = dom.find("ul", {"class": "results"})
       data = []
 
       if not elem_results:
