@@ -7,6 +7,10 @@ import json
 class Search:
     DOMAIN = "https://letterboxd.com"
     SEARCH_URL = f"{DOMAIN}/search"
+    MAX_RESULTS = 250
+    MAX_RESULTS_PER_PAGE = 20
+    MAX_RESULTS_PAGE = MAX_RESULTS // MAX_RESULTS_PER_PAGE + 1
+
     FILTERS = [
        'films', 'reviews', 'lists', 'original-lists',
        'stories', 'cast-crew', 'members', 'tags',
@@ -18,16 +22,21 @@ class Search:
       if search_filter and search_filter not in self.FILTERS:
           raise ValueError(f"Invalid filter: {search_filter}")
 
-      url = "/".join(filter(None, [
+      self.url = "/".join(filter(None, [
         self.SEARCH_URL,
         search_filter,
-        query,
-        '?adult'
+        query
         ]))
       self.query = query
       self.search_filter = search_filter
-      page = self.get_parsed_page(url)
-      self.results = self.get_results(page)
+      self._results = None
+
+    @property
+    def results(self):
+      # .results returns 1 page
+      if not self._results:
+          self._results = self.get_results()
+      return self._results
 
     def __str__(self):
         return json.dumps(self.__dict__, indent=2)
@@ -40,8 +49,49 @@ class Search:
       response = requests.get(url, headers=headers)
       return BeautifulSoup(response.text, "lxml")
 
-    def get_results(self, page) -> List:
+    def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=None):
+      data = {
+        'available': False,
+        'query': self.query,
+        'filter': self.search_filter,
+        'end_page': end_page,
+        'count': 0,
+        'results': []
+        }
 
+      no = 1
+      for current_page in range(1, end_page+1):
+        url = "/".join(map(str, [
+           self.url, "page", current_page, "?adult"
+           ]))
+        page = self.get_parsed_page(url)
+        results = self.get_page_results(page)
+
+        if not results:
+          # no more results
+          break
+
+        for result in results:
+          key, value = list(result.items())[0]
+          data['results'].append({
+            key: {
+               'no': no,
+               'page': current_page 
+               } | value
+            })
+          if max and no >= max:
+            break
+          no += 1
+        if max and no >= max:
+          break
+  
+      count = len(data['results'])
+      data['available'] = bool(count)
+      data['count'] = count
+
+      return data
+
+    def get_page_results(self, page) -> List:
       result_types = {
         'film': [None, ["film-poster"]],
         'review': ["film-detail"],
@@ -59,21 +109,14 @@ class Search:
         'podcast': [None, ["card-summary", "-graph"]],
       }
 
-      data = {
-        'available': False,
-        'query': self.query,
-        'filter': self.search_filter,
-        'count': 0,
-        'results': []
-        }
-      results = page.find("ul", {"class": "results"})
+      elem_results = page.find("ul", {"class": "results"})
+      data = []
 
-      if not results:
+      if not elem_results:
         return data
 
       # recursive: pass list posters
-      results = results.find_all("li", recursive=False)
-      no = 0
+      results = elem_results.find_all("li", recursive=False)
       for item in results:
         item_type = None
 
@@ -94,15 +137,9 @@ class Search:
                 break
 
         # result content
-        no += 1
         result_content = self.parse_result(item, item_type)
-        result_content[item_type] = {'no': no} | result_content[item_type]
-        data['results'].append(result_content)
-      
-      # return content
-      count = len(data['results'])
-      data['available'] = bool(count)
-      data['count'] = count
+        result_content[item_type] = result_content[item_type]
+        data.append(result_content)
 
       return data
 
@@ -290,7 +327,8 @@ class Search:
 def get_film_slug_from_title(title: str) -> str:
     try:
       query = Search(title, 'films')
-      return query.results['results'][0]['film']['slug']
+      # return first page first result
+      return query.get_results(1)['results'][0]['film']['slug']
     except IndexError:
       return None
 
@@ -298,26 +336,34 @@ if __name__ == "__main__":
   import sys
   sys.stdout.reconfigure(encoding='utf-8')
 
-  # todo: multiple page parsing
+  # test: filter
+  q1 = Search("The") # general search
+  q2 = Search("V for Vendetta", 'films')
+  q3 = Search("MUBI", 'lists')
 
-  # tests
+  # test: multiple page
   """
+  Usage:
+   all page:
+    .results
+    .get_results()
+   filtering:
+    .get_results(2)
+    .get_results(max=10)
+  Note: search pages may sometimes contain previous results. (for now)
+  """
+  # print(json.dumps(q1.results, indent=2))
+  # print(json.dumps(q2.get_results(), indent=2))
+  print(json.dumps(q3.get_results(2), indent=2)) # max 2 page result
+  print(json.dumps(q3.get_results(max=5), indent=2)) #  max 5 result
+
+  # test: slug
   print('slug 1:', get_film_slug_from_title("V for Vendetta"))
   print('slug 2:', get_film_slug_from_title("v for"))
   print('slug 3:', get_film_slug_from_title("VENDETTA"))
-  """
-  # tests
-  """
+
+  # test: combined
   from letterboxdpy import movie
   movie_slug = get_film_slug_from_title("V for Vendetta")
   movie_instance = movie.Movie(movie_slug)
   print(movie_instance.description)
-  """
-  # tests
-  """
-  q1 = Search("The") # general search
-  q2 = Search("V for Vendetta", 'films')
-  q3 = Search("MUBI", 'lists')
-  """
-  q4 = Search("Nolan", 'members')
-  print(json.dumps(q4.results, indent=2))
