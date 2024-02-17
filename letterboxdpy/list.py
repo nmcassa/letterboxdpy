@@ -1,4 +1,4 @@
-from scraper import Scraper
+from letterboxdpy.scraper import Scraper
 import re
 
 from json import (

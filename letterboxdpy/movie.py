@@ -1,4 +1,4 @@
-from scraper import Scraper
+from letterboxdpy.scraper import Scraper
 
 from json import (
   JSONEncoder,
@@ -116,11 +116,10 @@ class Movie:
     # letterboxd.com/film/?
     def movie_tmdb_link(self, dom) -> str:
         try:
-            div = dom.find("p", {"class": ["text-link text-footer"], })
-            a = div.find_all("a")
-            for item in a:
-                if item['href'].find('themoviedb.org/') != -1:
-                    self.tmdb_link = (item['href']) 
+            div = dom.find("p", {"class": ["text-link text-footer"]})
+            for a in div.find_all("a"):
+                if a['href'].find('themoviedb.org/') != -1:
+                    self.tmdb_link = (a['href']) 
         except: 
             self.tmdb_link = None
 

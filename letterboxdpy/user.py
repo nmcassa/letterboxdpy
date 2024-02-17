@@ -1,6 +1,6 @@
+from letterboxdpy.scraper import Scraper
+from letterboxdpy.avatar import Avatar
 from datetime import datetime
-from scraper import Scraper
-from avatar import Avatar
 import re
 
 from json import (

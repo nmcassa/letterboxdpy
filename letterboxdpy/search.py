@@ -1,5 +1,5 @@
-from scraper import Scraper
-from avatar import Avatar
+from letterboxdpy.scraper import Scraper
+from letterboxdpy.avatar import Avatar
 from typing import List
 
 from json import (
@@ -376,7 +376,7 @@ if __name__ == "__main__":
   print('slug 3:', get_film_slug_from_title("VENDETTA"))
 
   # test: combined
-  from movie import Movie
+  from letterboxdpy.movie import Movie
   movie_slug = get_film_slug_from_title("V for Vendetta")
   movie_instance = Movie(movie_slug)
   print(movie_instance.description)
