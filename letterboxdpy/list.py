@@ -10,22 +10,46 @@ from json import (
 class List:
     DOMAIN = "https://letterboxd.com"
 
-    def __init__(self, author: str, title: str) -> None:
-        assert re.match("^[A-Za-z0-9_]*$", author), "Invalid author"
-        assert isinstance(title, str), "title must be a string"
+    LIST_CONTAINER = ("ul", {"class": ["poster-list"]})
+    WATCHLIST_CONTAINER = ("ul", {"class": ["poster-list"]})
 
+    LIST_PATTERN = f'{DOMAIN}/%s/list/%s'
+    WATCHLIST_PATTERN = f'{DOMAIN}/%s/watchlist'
+
+    LIST_ITEMS_PER_PAGE = 12*5
+    WATCHLIST_ITEMS_PER_PAGE = 7*4
+
+    def __init__(self, username: str, slug: str=None) -> None:
+        assert re.match("^[A-Za-z0-9_]*$", username), "Invalid author"
+
+        # Determine the URL and container based on if a slug was passed
+        if slug:
+            # If a slug was passed, use the list URL and container
+            url = self.LIST_PATTERN % (username, slug) 
+            container = self.LIST_CONTAINER
+            list_type = "list"
+            items_per_page = self.LIST_ITEMS_PER_PAGE
+        else:
+            # Otherwise use the watchlist URL and container  
+            url = self.WATCHLIST_PATTERN % (username)
+            container = self.WATCHLIST_CONTAINER
+            list_type = "watchlist"
+            items_per_page = self.WATCHLIST_ITEMS_PER_PAGE
+
+        # Initialize and get the parsed DOM from the URL
         self.scraper = Scraper(self.DOMAIN)
-        self.title = title.replace(' ', '-').lower()
-        self.author = author.lower()
+        dom = self.scraper.get_parsed_page(url) 
 
-        if title != '/watchlist/': # For regular lists
-            self.url = f'https://letterboxd.com/{self.author}/list/{self.title}/'
-        else: # For watchlists
-            self.url = f'https://letterboxd.com/{self.author}/watchlist/'
-
-        dom = self.scraper.get_parsed_page(self.url)
+        # Set the instance attributes
+        self.url = url
+        self.slug = slug
+        self.username = username
+        self.list_type = list_type
+        self.items_per_page = items_per_page
+        self.title = self.get_title(dom) 
         self.description = self.get_description(dom)
-        self.film_count(self.url)
+        self.movies = self.get_movies(url, container)
+        self.count = len(self.movies)
 
     def __str__(self):
         return self.jsonify()
@@ -48,34 +72,25 @@ class List:
         data = data['content'] if data else None
         return data
 
-    #:edit-syntax
-    def film_count(self, url: str) -> int: #and movie_list!!
-        prev = count = 0
-        curr = 1
+    def get_movies(self, url: str, container: tuple) -> list:
         movie_list = []
-        while prev != curr:
-            count += 1
-            prev = len(movie_list)
-            page = self.scraper.get_parsed_page(url + "page/" + str(count) + "/")
 
-            if self.url.find('/list/') != -1: # For regular lists
-                img = page.find("ul",{"class": ["js-list-entries poster-list -p125 -grid film-list"], })
-            else: # For watchlists
-                img = page.find("ul",{"class": ["poster-list -p125 -grid -scaled128"], })
-            if img:
-                img = img.find_all("img", {"class": ["image"], })
+        page = 1
+        while True:
+            dom = self.scraper.get_parsed_page(f'{url}/page/{page}/')
+            posters = dom.find(*container)
+            posters = posters.find_all("img", {"class": ["image"]}) if posters else []
 
-                for item in img:
-                    movie_url = item.parent['data-film-slug']
-                    movie_list.append((item['alt'], movie_url))
-                
-            curr = len(movie_list)
+            for poster in posters:
+                movie_url = poster.parent['data-film-slug']
+                movie_list.append((poster['alt'], movie_url))
 
-        self.filmCount = curr
-        self.movies = movie_list
+            if len(posters) < self.items_per_page:
+                break
 
-        if curr == 0 and self.url.find('/list/') != -1: # No exception needed for an empty watchlist
-            raise Exception("No list exists")
+            page += 1
+
+        return movie_list
 
 class Encoder(JSONEncoder):
     """
@@ -91,6 +106,9 @@ class Encoder(JSONEncoder):
 def assert_list_instance(func):
     def wrapper(arg):
         assert isinstance(arg, List), f"function parameter must be a {List.__name__} instance"
+        #:optional
+        # if not arg.slug:
+        #    print(f"WARNING: {func.__name__} function is for regular lists not watchlists.")
         return func(arg)
     return wrapper
 
@@ -155,17 +173,23 @@ def list_tags(instance: List) -> list:
     return data
 
 if __name__ == "__main__":
-    
-    # user watchlist usage:
-    watchlist_instance =  List("mrbs", "/watchlist/")
-    print(watchlist_instance)
-    # print(date_created(watchlist_instance)) # None
-    # print(date_updated(watchlist_instance)) # None
-    # print(list_tags(watchlist_instance)) # empty list
 
     # user list usage:
     list_instance = List("mrbs", "the-suspense-is-killing-us-siku-main-feed-6")
-    print(list_instance)
-    print(date_created(list_instance))
-    print(date_updated(list_instance))
-    print(list_tags(list_instance))
+    # print(list_instance) # all attributes
+    print('type:', list_instance.list_type)
+    print('url:', list_instance.url)
+    print('count:', list_instance.count)
+    print('created:', date_created(list_instance))
+    print('updated:', date_updated(list_instance))
+    print('tags:', list_tags(list_instance), end="\n\n")
+
+    # user watchlist usage:
+    watchlist_instance = List("mrbs")
+    # print(watchlist_instance) # all attributes
+    print('type:', watchlist_instance.list_type)
+    print('url:', watchlist_instance.url)
+    print('count:', watchlist_instance.count)
+    print('created:', date_created(watchlist_instance))
+    print('updated:', date_updated(watchlist_instance))
+    print('tags:', list_tags(watchlist_instance))
