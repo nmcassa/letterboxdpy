@@ -99,8 +99,8 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_popular_reviews(self, dom) -> dict:
-        data = dom.find("ul", {"class": ["film-popular-review"], })
-        items = data.find_all("div", {"class": ["film-detail-content"], })
+        data = dom.find("ul", {"class": ["film-popular-review"]})
+        items = data.find_all("div", {"class": ["film-detail-content"]}) if data else []
 
         self.popular_reviews = []
         for item in items:
