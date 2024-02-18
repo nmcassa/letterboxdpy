@@ -51,11 +51,14 @@ class Movie:
     # letterboxd.com/film/?
     def movie_rating(self, dom, script: dict=None) -> float:
         elem = dom.find('span', attrs={'class': 'average-rating'})
-        rating = float(elem.text) if elem else None
-        rating = rating if rating else (
-             script['aggregateRating']['ratingValue'] if script else None
-             )
-        self.rating = float(rating)
+        rating = elem.text if elem else None
+        try:
+            rating = rating if rating else (
+                script['aggregateRating']['ratingValue'] if script else None
+                )
+            self.rating = float(rating)
+        except KeyError:
+            self.rating = None
 
     # letterboxd.com/film/?
     def movie_year(self, dom, script: dict=None) -> int:
