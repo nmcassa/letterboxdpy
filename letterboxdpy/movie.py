@@ -64,10 +64,13 @@ class Movie:
     def movie_year(self, dom, script: dict=None) -> int:
         elem = dom.find('small', attrs={'class': 'number'})
         year = int(elem.text) if elem else None
-        year = year if year else (
-             script['releasedEvent']['startDate'] if script else None
-             )
-        self.year = int(year)
+        try:
+            year = year if year else (
+                script['releasedEvent']['startDate'] if script else None
+                )
+            self.year = int(year)
+        except KeyError:
+            self.year = None
 
     # letterboxd.com/film/?
     def movie_genre(self, dom) -> list:
