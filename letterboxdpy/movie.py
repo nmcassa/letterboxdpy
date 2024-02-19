@@ -86,7 +86,7 @@ class Movie:
         # crop: list=(1500, 1000)
         # .replace('230-0-345', f'{crop[0]}-0-{crop[1]}')
         if script:
-            poster = script['image'] if 'image ' in script else None
+            poster = script['image'] if 'image' in script else None
             self.poster = poster.split('?')[0] if poster else None
         else:
             self.poster = None
