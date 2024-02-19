@@ -1,137 +1,195 @@
-import json
+from letterboxdpy.scraper import Scraper
 import re
-import requests
-from bs4 import BeautifulSoup
-from json import JSONEncoder
+
+from json import (
+  JSONEncoder,
+  dumps as json_dumps
+)
+
 
 class List:
-    def __init__(self, author: str, title: str) -> None:
-        if not re.match("^[A-Za-z0-9_]*$", author):
-            raise Exception("Invalid author")
+    DOMAIN = "https://letterboxd.com"
 
-        self.title = title.replace(' ', '-').lower()
-        self.author = author.lower()
-        if title != '/watchlist/': # For regular lists
-            self.url = "https://letterboxd.com/" + self.author +"/list/" + self.title + "/"
-        else: # For watchlists
-            self.url = "https://letterboxd.com/" + self.author +"/watchlist/"
-        page = self.get_parsed_page(self.url)
-    
-        self.description(page)
-        self.film_count(self.url)
+    LIST_CONTAINER = ("ul", {"class": ["poster-list"]})
+    WATCHLIST_CONTAINER = ("ul", {"class": ["poster-list"]})
+
+    LIST_PATTERN = f'{DOMAIN}/%s/list/%s'
+    WATCHLIST_PATTERN = f'{DOMAIN}/%s/watchlist'
+
+    LIST_ITEMS_PER_PAGE = 12*5
+    WATCHLIST_ITEMS_PER_PAGE = 7*4
+
+    def __init__(self, username: str, slug: str=None) -> None:
+        assert re.match("^[A-Za-z0-9_]*$", username), "Invalid author"
+
+        # Determine the URL and container based on if a slug was passed
+        if slug:
+            # If a slug was passed, use the list URL and container
+            url = self.LIST_PATTERN % (username, slug) 
+            container = self.LIST_CONTAINER
+            list_type = "list"
+            items_per_page = self.LIST_ITEMS_PER_PAGE
+        else:
+            # Otherwise use the watchlist URL and container  
+            url = self.WATCHLIST_PATTERN % (username)
+            container = self.WATCHLIST_CONTAINER
+            list_type = "watchlist"
+            items_per_page = self.WATCHLIST_ITEMS_PER_PAGE
+
+        # Initialize and get the parsed DOM from the URL
+        self.scraper = Scraper(self.DOMAIN)
+        dom = self.scraper.get_parsed_page(url) 
+
+        # Set the instance attributes
+        self.url = url
+        self.slug = slug
+        self.username = username
+        self.list_type = list_type
+        self.items_per_page = items_per_page
+        self.title = self.get_title(dom) 
+        self.description = self.get_description(dom)
+        self.movies = self.get_movies(url, container)
+        self.count = len(self.movies)
 
     def __str__(self):
         return self.jsonify()
 
     def jsonify(self) -> str:
-        return json.dumps(self, indent=4,cls=Encoder)
+        return json_dumps(self, indent=4,cls=Encoder)
 
-    def get_parsed_page(self, url: str) -> None:
-        # This fixes a blocked by cloudflare error i've encountered
-        headers = {
-            "referer": "https://letterboxd.com",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-        }
+    def get_title(self, dom) -> str:
+        data = dom.find("meta", attrs={'property': 'og:title'})
+        data = data['content'] if 'content' in data.attrs else None
+        return data
 
-        return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
+    def get_author(self, dom) -> str:
+        data = dom.find("span", attrs={'itemprop': 'name'})
+        data = data.text if data else None
+        return data
 
-    def list_title(self, page: None) -> str:
-        data = page.find("meta", attrs={'property': 'og:title'})
-        return data['content']
+    def get_description(self, dom) -> str:
+        data = dom.find("meta", attrs={'property': 'og:description'})
+        data = data['content'] if data else None
+        return data
 
-    def author(self, page: None) -> str:
-        data = page.find("span", attrs={'itemprop': 'name'})
-        return data.text
-
-    def description(self, page: None) -> str:
-        try:
-            data = page.find_all("meta", attrs={'property': 'og:description'})
-            self.description = data[0]['content']
-        except:
-            return None
-
-    def film_count(self, url: str) -> int: #and movie_list!!
-        prev = count = 0
-        curr = 1
+    def get_movies(self, url: str, container: tuple) -> list:
         movie_list = []
-        while prev != curr:
-            count += 1
-            prev = len(movie_list)
-            page = self.get_parsed_page(url + "page/" + str(count) + "/")
 
-            if self.url.find('/list/') != -1: # For regular lists
-                img = page.find("ul",{"class": ["js-list-entries poster-list -p125 -grid film-list"], })
-            else: # For watchlists
-                img = page.find("ul",{"class": ["poster-list -p125 -grid -scaled128"], })
-            if img != None:
-                img = img.find_all("img", {"class": ["image"], })
+        page = 1
+        while True:
+            dom = self.scraper.get_parsed_page(f'{url}/page/{page}/')
+            posters = dom.find(*container)
+            posters = posters.find_all("img", {"class": ["image"]}) if posters else []
 
-                for item in img:
-                    movie_url = item.parent['data-film-slug']
-                    movie_list.append((item['alt'], movie_url))
-                
-            curr = len(movie_list)
+            for poster in posters:
+                movie_url = poster.parent['data-film-slug']
+                movie_list.append((poster['alt'], movie_url))
 
-        self.filmCount = curr
-        self.movies = movie_list
+            if len(posters) < self.items_per_page:
+                break
 
-        if self.filmCount == 0 and self.url.find('/list/') != -1: # No exception needed for an empty watchlist
-            raise Exception("No list exists")
-            
-def date_created(list: List) -> list:
-    if type(list) != List:
-        raise Exception("Improper parameter")
+            page += 1
 
-    page_data = list.get_parsed_page(list.url)
-    data = page_data.find("span", {"class": "published is-updated", })
-    if data != None:
-        data = data.findChild("time").text
-    else:
-        data = page_data.find("span", {"class": "published", })
-        if data != None: # Watchlists won't have a date created
-            data = data.text
-
-    return data
-
-
-# Returns date last updated, falling back to date created.
-def date_updated(list: List) -> list:
-    if type(list) != List:
-        raise Exception("Improper parameter")
-
-    page_data = list.get_parsed_page(list.url)
-    data = page_data.find("span", {"class": "updated", })
-    if data != None:
-        data = data.findChild("time").text
-    else:
-        data = page_data.find("span", {"class": "published", })
-        if data != None: # Watchlists won't have a date updated
-            data = data.text
-
-    return data
-    
-def list_tags(list: List) -> list:
-    if type(list) != List:
-        raise Exception("Improper parameter")
-
-    ret = []
-
-    data = list.get_parsed_page(list.url)
-    data = data.find("ul", {"class": ["tags"], })
-    if data != None:
-        data = data.findChildren("a")
-
-        for item in data:
-            ret.append(item.text)
-
-    return ret
+        return movie_list
 
 class Encoder(JSONEncoder):
+    """
+    Encoder class provides a way to serialize custom class
+    .. instances to JSON by overriding the default serialization
+    .. logic to return the object's namespace dictionary.
+    """
     def default(self, o):
         return o.__dict__
 
+# -- DECORATORS --
+
+def assert_list_instance(func):
+    def wrapper(arg):
+        assert isinstance(arg, List), f"function parameter must be a {List.__name__} instance"
+        #:optional
+        # if not arg.slug:
+        #    print(f"WARNING: {func.__name__} function is for regular lists not watchlists.")
+        return func(arg)
+    return wrapper
+
+# -- FUNCTIONS --
+
+@assert_list_instance
+def date_created(instance: List) -> list:
+    """
+    Scrapes the list page to find and return the creation
+    .. date as a string, defaulting to the last updated
+    .. date if creation is not available.
+    The decorator ensures a valid List is passed.
+    """
+    dom = instance.scraper.get_parsed_page(instance.url)
+    data = dom.find("span", {"class": "published is-updated"})
+
+    if data:
+        data = data.findChild("time").text
+    else:
+        data = dom.find("span", {"class": "published"})
+        if data: # Watchlists won't have a date created
+            data = data.text
+
+    return data
+
+@assert_list_instance
+def date_updated(instance: List) -> list:
+    """
+    Scrapes the list page to find and return either
+    .. the last updated or published date as a string.
+    The decorator ensures a valid List is passed.
+    """
+    dom = instance.scraper.get_parsed_page(instance.url)
+    data = dom.find("span", {"class": "updated"})
+
+    if data:
+        data = data.findChild("time").text
+    else:
+        data = dom.find("span", {"class": "published"})
+        if data: # Watchlists won't have a date updated
+            data = data.text
+
+    return data
+
+@assert_list_instance
+def list_tags(instance: List) -> list:
+    """
+    Scraping the tag links from a Letterboxd list page and
+    .. extracting just the tag names into a clean list.
+    The decorator ensures a valid List instance is passed.
+    """
+    dom = instance.scraper.get_parsed_page(instance.url)
+    dom = dom.find("ul", {"class": ["tags"]})
+
+    data = []
+
+    if dom:
+        dom = dom.findChildren("a")
+        for item in dom:
+            data.append(item.text)
+
+    return data
+
 if __name__ == "__main__":
-    # test_list = List("eddiebergman", "movie-references-made-in-nbcs-community")
-    # test_list= List("mrbs","the-suspense-is-killing-us-siku-main-feed-6")
-    test_list =  List("mrbs", "/watchlist/")
-    print(test_list)
+
+    # user list usage:
+    list_instance = List("mrbs", "the-suspense-is-killing-us-siku-main-feed-6")
+    # print(list_instance) # all attributes
+    print('type:', list_instance.list_type)
+    print('url:', list_instance.url)
+    print('count:', list_instance.count)
+    print('created:', date_created(list_instance))
+    print('updated:', date_updated(list_instance))
+    print('tags:', list_tags(list_instance), end="\n\n")
+
+    # user watchlist usage:
+    watchlist_instance = List("mrbs")
+    # print(watchlist_instance) # all attributes
+    print('type:', watchlist_instance.list_type)
+    print('url:', watchlist_instance.url)
+    print('count:', watchlist_instance.count)
+    print('created:', date_created(watchlist_instance))
+    print('updated:', date_updated(watchlist_instance))
+    print('tags:', list_tags(watchlist_instance))

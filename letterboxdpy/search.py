@@ -1,47 +1,98 @@
-from avatar import Avatar
-from bs4 import BeautifulSoup
+from letterboxdpy.scraper import Scraper
+from letterboxdpy.avatar import Avatar
 from typing import List
-import requests
-import json
+
+from json import (
+  JSONEncoder,
+  dumps as json_dumps
+)
+
 
 class Search:
     DOMAIN = "https://letterboxd.com"
     SEARCH_URL = f"{DOMAIN}/search"
-    FILTERS = [
-       'films', 'reviews', 'lists', 'original-lists',
-       'stories', 'cast-crew', 'members', 'tags',
-       'articles', 'episodes', 'full-text'
-       ]
+    MAX_RESULTS = 250
+    MAX_RESULTS_PER_PAGE = 20
+    MAX_RESULTS_PAGE = MAX_RESULTS // MAX_RESULTS_PER_PAGE + 1
+    FILTERS = ['films', 'reviews', 'lists', 'original-lists',
+               'stories', 'cast-crew', 'members', 'tags',
+               'articles', 'episodes', 'full-text']
 
     def __init__(self, query: str, search_filter: str=None):
+      assert all([
+          isinstance(query, str),
+          not search_filter or search_filter in self.FILTERS
+          ]), " ".join([
+             "query and search_filter must be strings and",
+             "search_filter must be one of the following:",
+             ", ".join(self.FILTERS)
+             ])
 
-      if search_filter and search_filter not in self.FILTERS:
-          raise ValueError(f"Invalid filter: {search_filter}")
-
-      url = "/".join(filter(None, [
-        self.SEARCH_URL,
-        search_filter,
-        query,
-        '?adult'
-        ]))
       self.query = query
       self.search_filter = search_filter
-      page = self.get_parsed_page(url)
-      self.results = self.get_results(page)
+      self.scraper = Scraper(self.DOMAIN)
+      self._results = None # .results
+      self.url = "/".join(filter(None, [
+          self.SEARCH_URL,
+          search_filter,
+          query
+          ]))
+
+    @property
+    def results(self):
+      if not self._results:
+          self._results = self.get_results()
+      return self._results
 
     def __str__(self):
-        return json.dumps(self.__dict__, indent=2)
+      return json_dumps(self.__dict__, indent=2, cls=Encoder)
 
-    def get_parsed_page(self, url: str) -> BeautifulSoup:
-      headers = {
-        "referer": self.DOMAIN,
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-      }
-      response = requests.get(url, headers=headers)
-      return BeautifulSoup(response.text, "lxml")
+    def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=MAX_RESULTS):
 
-    def get_results(self, page) -> List:
+      data = {
+         'available': False,
+         'query': self.query,
+         'filter': self.search_filter,
+         'end_page': end_page,
+         'count': 0,
+         'results': []
+         }
+  
+      result_count = 1
+      for current_page in range(1, end_page+1):
 
+        url = f'{self.url}/page/{current_page}/?adult'
+        dom = self.scraper.get_parsed_page(url)
+        results = self.get_page_results(dom)
+
+        if not results:
+          # no more results
+          break
+
+        for result in results:
+          key, value = next(iter(result.items()))
+
+          data['results'].append({
+             key: {
+                'no': result_count,
+                'page': current_page,
+                **value
+                }})
+
+          if result_count >= max:
+            break
+
+          result_count += 1
+
+        if result_count >= max:
+          break
+  
+      data['count'] = result_count
+      data['available'] = result_count > 0
+
+      return data
+
+    def get_page_results(self, dom) -> List:
       result_types = {
         'film': [None, ["film-poster"]],
         'review': ["film-detail"],
@@ -59,21 +110,14 @@ class Search:
         'podcast': [None, ["card-summary", "-graph"]],
       }
 
-      data = {
-        'available': False,
-        'query': self.query,
-        'filter': self.search_filter,
-        'count': 0,
-        'results': []
-        }
-      results = page.find("ul", {"class": "results"})
+      elem_results = dom.find("ul", {"class": "results"})
+      data = []
 
-      if not results:
+      if not elem_results:
         return data
 
       # recursive: pass list posters
-      results = results.find_all("li", recursive=False)
-      no = 0
+      results = elem_results.find_all("li", recursive=False)
       for item in results:
         item_type = None
 
@@ -94,15 +138,9 @@ class Search:
                 break
 
         # result content
-        no += 1
         result_content = self.parse_result(item, item_type)
-        result_content[item_type] = {'no': no} | result_content[item_type]
-        data['results'].append(result_content)
-      
-      # return content
-      count = len(data['results'])
-      data['available'] = bool(count)
-      data['count'] = count
+        result_content[item_type] = result_content[item_type]
+        data.append(result_content)
 
       return data
 
@@ -176,14 +214,28 @@ class Search:
           item_count = int(
              item_count.text.split('f')[0].strip().replace(',', '')
              ) if item_count else None
+
+          # likes
           like_count = result.find('a', {'class': 'icon-like'})
-          like_count = int(
-             like_count.text.strip().replace(',', '')
-             ) if like_count else 0
+          like_count = like_count if like_count else 0
+          if like_count:
+            like_count = like_count.text.strip().replace(',', '')
+            if 'K' in like_count:
+                # example: 6.3K -> 6300
+                like_count = float(like_count.replace('K', ''))
+                like_count *= 1000
+            like_count = int(like_count)
+
+          # comments
           comment_count = result.find('a', {'class': 'icon-comment'})
-          comment_count = int(
-             comment_count.text.strip().replace(',', '')
-             ) if comment_count else 0
+          comment_count = comment_count if comment_count else 0
+          if comment_count:
+            comment_count = comment_count.text.strip().replace(',', '')
+            if 'K' in comment_count:
+                comment_count = float(comment_count.replace('K', ''))
+                comment_count *= 1000
+            comment_count = int(comment_count)
+
           # owner
           owner = result.find('strong', {'class': 'name'}).a
           owner_name = owner.text
@@ -273,10 +325,17 @@ class Search:
 
       return data
 
+class Encoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
+# -- FUNCTIONS --
+
 def get_film_slug_from_title(title: str) -> str:
     try:
       query = Search(title, 'films')
-      return query.results['results'][0]['film']['slug']
+      # return first page first result
+      return query.get_results(1)['results'][0]['film']['slug']
     except IndexError:
       return None
 
@@ -284,26 +343,40 @@ if __name__ == "__main__":
   import sys
   sys.stdout.reconfigure(encoding='utf-8')
 
-  # todo: multiple page parsing
-
-  # tests
   """
+  phrase usage:
+    q1 = Search("MUBI", 'lists')
+    q2 = Search("'MUBI'", 'lists') 
+    q1 searches for lists that contain the word 'MUBI' among other possible words
+    q2 searches for lists that specifically contain the exact phrase 'MUBI' and
+    ... exclude lists that don't contain this phrase
+
+  results usage:
+   all page:
+    .results
+    .get_results()
+   filtering:
+    .get_results(2)
+    .get_results(max=10)
+
+  Note: search pages may sometimes contain previous results. (for now)
+  """
+
+  q3 = Search("The") # general search
+  q4 = Search("V for Vendetta", 'films')
+  # print(json.dumps(q3.results, indent=2))
+  # print(json.dumps(q4.get_results(), indent=2))
+  print(json_dumps(q3.get_results(2), indent=2)) # max 2 page result
+  print("\n- - -\n"*10)
+  print(json_dumps(q4.get_results(max=5), indent=2)) #  max 5 result
+
+  # test: slug
   print('slug 1:', get_film_slug_from_title("V for Vendetta"))
   print('slug 2:', get_film_slug_from_title("v for"))
   print('slug 3:', get_film_slug_from_title("VENDETTA"))
-  """
-  # tests
-  """
-  from letterboxdpy import movie
+
+  # test: combined
+  from letterboxdpy.movie import Movie
   movie_slug = get_film_slug_from_title("V for Vendetta")
-  movie_instance = movie.Movie(movie_slug)
+  movie_instance = Movie(movie_slug)
   print(movie_instance.description)
-  """
-  # tests
-  """
-  q1 = Search("The") # general search
-  q2 = Search("V for Vendetta", 'films')
-  q3 = Search("MUBI", 'lists')
-  """
-  q4 = Search("Nolan", 'members')
-  print(json.dumps(q4.results, indent=2))
