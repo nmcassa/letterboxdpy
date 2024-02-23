@@ -22,16 +22,16 @@ class Movie:
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
 
         # one line contents
+        self.movie_runtime(dom)
+        self.movie_rating(dom, script)
+        self.movie_year(dom, script)
         self.movie_tmdb_link(dom)
         self.movie_imdb_link(dom)
         self.movie_poster(script)
-        self.movie_rating(dom, script)
-        self.movie_year(dom, script)
-        self.movie_runtime(dom)
         # long contents
         self.movie_description(dom)
-        self.movie_director(dom)
         self.movie_genre(dom)
+        self.movie_crew(dom, script)
         self.movie_popular_reviews(dom)
 
     def __str__(self):
@@ -40,15 +40,28 @@ class Movie:
     def jsonify(self) -> str:
         return json_dumps(self, indent=2, cls=Encoder)
 
-    # letterboxd.com/film/?
-    def movie_director(self, dom) -> list:
-        self.directors = []
-        data = dom.find("div",{"id": ["tab-crew"], })
-        if type(data) != type(None):
-            data = data.find_all("a")
-            for item in data:
-                if item['href'][:10] == '/director/':
-                    self.directors.append(item.text)
+    def movie_crew(self, dom, script: dict=None) -> list:
+        data = dom.find("div", {"id": ["tab-crew"]})
+        data = data.find_all("a") if data else []
+
+        crew = {}
+        for person in data:
+            name = person.text
+            url = person['href']
+  
+            job, slug = filter(None, url.split('/'))
+            job = job.replace('-', '_')
+
+            if job not in crew:
+                crew[job] = []
+
+            crew[job].append({
+                'name': name,
+                'slug': slug,
+                'url': self.DOMAIN + url}
+                )
+
+        self.crew = crew
 
     # letterboxd.com/film/?
     def movie_rating(self, dom, script: dict=None) -> float:
