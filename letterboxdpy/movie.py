@@ -31,7 +31,8 @@ class Movie:
         # long contents
         self.movie_description(dom)
         self.movie_genre(dom)
-        self.movie_crew(dom, script)
+        self.movie_cast(dom)
+        self.movie_crew(dom)
         self.movie_popular_reviews(dom)
 
     def __str__(self):
@@ -40,7 +41,30 @@ class Movie:
     def jsonify(self) -> str:
         return json_dumps(self, indent=2, cls=Encoder)
 
-    def movie_crew(self, dom, script: dict=None) -> list:
+    # letterboxd.com/film/?
+    def movie_cast(self, dom) -> list:
+        data = dom.find("div", {"id": ["tab-cast"]})
+        data = data.find_all("a", {"class": {"tooltip"}}) if data else []
+
+        cast = []
+        for person in data:
+
+            name = person.text
+            role_name = person['title'] if 'title' in person.attrs else None
+            url = person['href']
+            slug = url.split('/')[-2]
+            
+            cast.append({
+                'name': name,
+                'role_name': role_name,
+                'slug': slug,
+                'url': self.DOMAIN + url}
+                )
+
+        self.cast = cast
+
+    # letterboxd.com/film/?
+    def movie_crew(self, dom) -> list:
         data = dom.find("div", {"id": ["tab-crew"]})
         data = data.find_all("a") if data else []
 
