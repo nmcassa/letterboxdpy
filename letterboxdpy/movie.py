@@ -31,6 +31,7 @@ class Movie:
         # long contents
         self.movie_tagline(dom)
         self.movie_description(dom)
+        self.movie_alternative_titles(dom)
         self.movie_details(dom)
         self.movie_genres(dom)
         self.movie_cast(dom)
@@ -109,6 +110,13 @@ class Movie:
             })
 
         self.details = details
+
+    # letterboxd.com/film/?
+    def movie_alternative_titles(self, dom):
+        data = dom.find(attrs={'class': 'text-indentedlist'})
+        text = data.text if data else None
+        titles = [i.strip() for i in text.split(',')] if text else None
+        self.alternative_titles = titles
 
     # letterboxd.com/film/?
     def movie_genres(self, dom) -> list:
