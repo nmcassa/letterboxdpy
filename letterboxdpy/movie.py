@@ -121,13 +121,8 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_tmdb_link(self, dom) -> str:
-        try:
-            div = dom.find("p", {"class": ["text-link text-footer"]})
-            for a in div.find_all("a"):
-                if a['href'].find('themoviedb.org/') != -1:
-                    self.tmdb_link = (a['href']) 
-        except: 
-            self.tmdb_link = None
+        a = dom.find("a", {"data-track-action": ["TMDb"]})
+        self.tmdb_link = a['href'] if a else None
 
 class Encoder(JSONEncoder):
     def default(self, o):
