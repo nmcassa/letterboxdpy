@@ -29,6 +29,7 @@ class Movie:
         self.movie_imdb_link(dom)
         self.movie_poster(script)
         # long contents
+        self.movie_tagline(dom)
         self.movie_description(dom)
         self.movie_genre(dom)
         self.movie_cast(dom)
@@ -132,6 +133,11 @@ class Movie:
             self.poster = poster.split('?')[0] if poster else None
         else:
             self.poster = None
+
+    # letterboxd.com/film/?
+    def movie_tagline(self, dom) -> str:
+        elem = dom.find(attrs={'class':'tagline'})
+        self.tagline = elem.text if elem else None
 
     # letterboxd.com/film/?
     def movie_description(self, dom) -> str:
