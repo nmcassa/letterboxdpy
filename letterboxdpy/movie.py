@@ -23,6 +23,7 @@ class Movie:
 
         # one line contents
         self.movie_tmdb_link(dom)
+        self.movie_imdb_link(dom)
         self.movie_poster(script)
         self.movie_rating(dom, script)
         self.movie_year(dom, script)
@@ -123,6 +124,11 @@ class Movie:
     def movie_tmdb_link(self, dom) -> str:
         a = dom.find("a", {"data-track-action": ["TMDb"]})
         self.tmdb_link = a['href'] if a else None
+
+    # letterboxd.com/film/?
+    def movie_imdb_link(self, dom) -> str:
+        a = dom.find("a", {"data-track-action": ["IMDb"]})
+        self.imdb_link = a['href'] if a else None
 
 class Encoder(JSONEncoder):
     def default(self, o):
