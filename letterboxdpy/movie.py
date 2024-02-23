@@ -31,7 +31,7 @@ class Movie:
         # long contents
         self.movie_tagline(dom)
         self.movie_description(dom)
-        self.movie_genre(dom)
+        self.movie_genres(dom)
         self.movie_cast(dom)
         self.movie_crew(dom)
         self.movie_popular_reviews(dom)
@@ -113,15 +113,21 @@ class Movie:
             self.year = None
 
     # letterboxd.com/film/?
-    def movie_genre(self, dom) -> list:
-        genres = []
+    def movie_genres(self, dom) -> list:
+        data = dom.find(attrs={"id": ["tab-genres"]})
+        data = data.find_all("a") if data else None
 
-        data = dom.find("div",{"id": ["tab-genres"], })
-        if data is not None:
-            data = data.find_all("a")
-            for item in data:
-                if item['href'][7:12] == 'genre':
-                    genres.append(item.text)
+        genres = []
+        for item in data:
+            url_parts = item['href'].split('/')
+            
+            genres.append({
+                'type': url_parts[2],
+                'name': item.text,
+                'slug': url_parts[3],
+                'url': self.DOMAIN + "/".join(url_parts)
+            })
+
         self.genres = genres
 
     # letterboxd.com/film/?
