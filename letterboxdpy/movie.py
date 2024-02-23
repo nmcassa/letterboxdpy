@@ -31,6 +31,7 @@ class Movie:
         # long contents
         self.movie_tagline(dom)
         self.movie_description(dom)
+        self.movie_details(dom)
         self.movie_genres(dom)
         self.movie_cast(dom)
         self.movie_crew(dom)
@@ -89,6 +90,45 @@ class Movie:
         self.crew = crew
 
     # letterboxd.com/film/?
+    def movie_details(self, dom) -> dict:
+        data = dom.find("div", {"id": ["tab-details"]})
+        data = data.find_all("a") if data else []
+
+        details = []
+        for item in data:
+            url_parts = item['href'].split('/')
+
+            _ =  url_parts[1] == 'films'
+            item_type, slug = url_parts[1+_:3+_] 
+
+            details.append({
+                'type': item_type,
+                'name': item.text,
+                'slug': slug,
+                'url': self.DOMAIN + "/".join(url_parts)
+            })
+
+        self.details = details
+
+    # letterboxd.com/film/?
+    def movie_genres(self, dom) -> list:
+        data = dom.find(attrs={"id": ["tab-genres"]})
+        data = data.find_all("a") if data else None
+
+        genres = []
+        for item in data:
+            url_parts = item['href'].split('/')
+            
+            genres.append({
+                'type': url_parts[2],
+                'name': item.text,
+                'slug': url_parts[3],
+                'url': self.DOMAIN + "/".join(url_parts)
+            })
+
+        self.genres = genres
+
+    # letterboxd.com/film/?
     def movie_rating(self, dom, script: dict=None) -> float:
         elem = dom.find('span', attrs={'class': 'average-rating'})
         rating = elem.text if elem else None
@@ -111,24 +151,6 @@ class Movie:
             self.year = int(year)
         except KeyError:
             self.year = None
-
-    # letterboxd.com/film/?
-    def movie_genres(self, dom) -> list:
-        data = dom.find(attrs={"id": ["tab-genres"]})
-        data = data.find_all("a") if data else None
-
-        genres = []
-        for item in data:
-            url_parts = item['href'].split('/')
-            
-            genres.append({
-                'type': url_parts[2],
-                'name': item.text,
-                'slug': url_parts[3],
-                'url': self.DOMAIN + "/".join(url_parts)
-            })
-
-        self.genres = genres
 
     # letterboxd.com/film/?
     def movie_poster(self, script) -> str:
