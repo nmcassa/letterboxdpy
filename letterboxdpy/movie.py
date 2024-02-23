@@ -27,6 +27,7 @@ class Movie:
         self.movie_poster(script)
         self.movie_rating(dom, script)
         self.movie_year(dom, script)
+        self.movie_runtime(dom)
         # long contents
         self.movie_description(dom)
         self.movie_director(dom)
@@ -119,6 +120,12 @@ class Movie:
             curr['review'] = review.text if review else None
 
             self.popular_reviews.append(curr)
+
+    # letterboxd.com/film/?
+    def movie_runtime(self, dom) -> int:
+        elem = dom.find("p", {"class": ["text-footer"]})
+        elem = elem.text if elem else None
+        self.runtime = int(elem.split('mins')[0].strip()) if 'mins' in elem else None
 
     # letterboxd.com/film/?
     def movie_tmdb_link(self, dom) -> str:
