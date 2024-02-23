@@ -149,13 +149,16 @@ class User:
         # favorites
         data = dom.find("section", {"id": ["favourites"], })
         data = data.findChildren("div") if data else []
-        self.favorites = []
+        self.favorites = {}
         for div in data:
             poster = div.find("img")
-            self.favorites.append((
-                poster['alt'], # movie name
-                poster.parent['data-film-slug'] # movie slug
-                ))
+            movie_slug = poster.parent['data-film-slug']
+            movie_id = poster.parent['data-film-id']
+            movie_name = poster['alt']
+            self.favorites[movie_id] = {
+                'slug': movie_slug,
+                'name': movie_name
+            }
 
 class Encoder(JSONEncoder):
     def default(self, o):
