@@ -1,4 +1,5 @@
 from letterboxdpy.scraper import Scraper
+from functools import wraps
 import re
 
 from json import (
@@ -104,6 +105,7 @@ class Encoder(JSONEncoder):
 # -- DECORATORS --
 
 def assert_list_instance(func):
+    @wraps(func)
     def wrapper(arg):
         assert isinstance(arg, List), f"function parameter must be a {List.__name__} instance"
         #:optional

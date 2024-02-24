@@ -1,6 +1,7 @@
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.avatar import Avatar
 from datetime import datetime
+from functools import wraps
 import re
 
 from json import (
@@ -167,6 +168,7 @@ class Encoder(JSONEncoder):
 # -- DECORATORS --
 
 def assert_user_instance(func):
+    @wraps(func)
     def wrapper(arg, *args, **kwargs):
         assert isinstance(arg, User), f"function parameter must be a {User.__name__} instance"
         return func(arg, *args, **kwargs)

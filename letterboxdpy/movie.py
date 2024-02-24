@@ -1,4 +1,5 @@
 from letterboxdpy.scraper import Scraper
+from functools import wraps
 
 from json import (
   JSONEncoder,
@@ -223,6 +224,7 @@ class Encoder(JSONEncoder):
 # -- DECORATORS --
 
 def assert_movie_instance(func):
+    @wraps(func)
     def wrapper(movie):
         assert isinstance(movie, Movie), f"movie parameter must be a {Movie.__name__} instance"
         return func(movie)
