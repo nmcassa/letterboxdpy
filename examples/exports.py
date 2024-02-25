@@ -1,24 +1,42 @@
 from json import dump as json_dump
-from letterboxdpy import user
 import time
 import sys
 import os
 
+try:
+    from letterboxdpy import user # package is installed
+except ImportError: # not installed
+    try:
+        sys.path.append(sys.path[0] + '/..')
+        from letterboxdpy import user # use local copy
+    except (ImportError, ValueError):
+        print("letterboxdpy not installed, would you like to install it?")
+        response = input("y/n: ").lower()
+        if response == "y":
+            os.system("pip install letterboxdpy --force")
+            print("Installation complete, running script again...")
+            sys.exit(0)
+        print("Exiting...")
+        sys.exit(1)
+
+# -- FUNCTIONS --
+
+def get_username(username: str='') -> str:
+  if not len(username):
+      try:
+          username = sys.argv[1]
+      except IndexError:
+          print(f'Quick usage: python {sys.argv[0]} <username>')
+          username = input('Enter username: ')
+  return username
 
 def save_json(path, data):
     with open(path, 'w') as f:
         json_dump(data, f, indent=2)
 
-username = ''
+# -- MAIN --
 
-if not len(username):
-    try:
-        username = sys.argv[1]
-    except IndexError:
-        print(f'Quick usage: python {sys.argv[0]} <username>')
-        username = input('Enter username: ')
-
-user_instance = user.User(username.lower())
+user_instance = user.User(get_username().lower())
 
 # Export directories
 EXPORTS_DIR = 'exports'

@@ -1,7 +1,22 @@
-from letterboxdpy import user
 import requests
 import sys
 import os
+
+try:
+    from letterboxdpy import user # package is installed
+except ImportError: # not installed
+    try:
+        sys.path.append(sys.path[0] + '/..')
+        from letterboxdpy import user # use local copy
+    except (ImportError, ValueError):
+        print("letterboxdpy not installed, would you like to install it?")
+        response = input("y/n: ").lower()
+        if response == "y":
+            os.system("pip install letterboxdpy --force")
+            print("Installation complete, running script again...")
+            sys.exit(0)
+        print("Exiting...")
+        sys.exit(1)
 
 
 class Settings:
