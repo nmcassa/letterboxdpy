@@ -1,15 +1,20 @@
-import json
-from typing import List
 from bs4 import BeautifulSoup
-import re
+from typing import List
 import requests
+import re
+
+from json import (
+    JSONEncoder,
+    dumps as json_dumps,
+    dump as json_dump,
+    loads as json_loads
+)
 
 
 MEMBERS_YEAR_TOP = "https://letterboxd.com/members/popular/this/year/"
 
-
 class MemberListing:
-    class Encoder(json.JSONEncoder):
+    class Encoder(JSONEncoder):
         def default(self, o):
             return o.__dict__
 
@@ -21,10 +26,10 @@ class MemberListing:
             raise Exception(f"Invalid {self.__class__.__name__}")
 
     def __str__(self):
-        return self.jsonify()
+      return json_dumps(self, indent=2, cls=MemberListing.Encoder)
 
-    def jsonify(self) -> str:
-        return json.dumps(self, indent=4,cls=MemberListing.Encoder)
+    def jsonify(self):
+      return json_loads(self.__str__())
 
     def get_parsed_page(self, url: str) -> BeautifulSoup:
         # This fixes a blocked by cloudflare error i've encountered
@@ -34,7 +39,6 @@ class MemberListing:
         }
 
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
-
 
 def top_users(n: int) -> List:
     ml = MemberListing(url=MEMBERS_YEAR_TOP)
@@ -68,4 +72,4 @@ if __name__=="__main__":
     member_list = top_users(N)
 
     with open(f'top_2023_members_{len(member_list)}.json', 'w') as f:
-        json.dump(member_list, f)
+        json_dump(member_list, f, indent=2)

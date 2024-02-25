@@ -1,13 +1,13 @@
-import os
-import sys
-import json
-import time
-sys.path.append("../")
+from json import dump as json_dump
 from letterboxdpy import user
+import time
+import sys
+import os
+
 
 def save_json(path, data):
     with open(path, 'w') as f:
-        json.dump(data, f, indent=2)
+        json_dump(data, f, indent=2)
 
 username = ''
 
@@ -55,7 +55,7 @@ else:
 start_time = time.time()
 
 # user instance, method results
-save_json(os.path.join(USER_FOLDER, 'user.json'), user_instance.__dict__)
+save_json(os.path.join(USER_FOLDER, 'user.json'), user_instance.jsonify())
 
 # user functions
 methods_str_length = len(str(len(methods)))
@@ -66,18 +66,20 @@ for no, method in enumerate(methods, 1):
     if isinstance(method, list):
         method, args = method
 
-    os.system(f'title [{len(methods)}/{no:0>{methods_str_length}}] Exporting {method.__name__}...')
-    print(f'[{len(methods)}/{no:0>{methods_str_length}}]: Processing "{method.__name__}" method',
+    method_name = method.__name__
+
+    os.system(f'title [{len(methods)}/{no:0>{methods_str_length}}] Exporting {method_name}...')
+    print(f'[{len(methods)}/{no:0>{methods_str_length}}]: Processing "{method_name}" method',
           end=f' with args: {args}...\r' if args else '...\r')
 
     data = method(user_instance, **args) if args else method(user_instance)
 
-    file_path = os.path.join(USER_FOLDER, f'{method.__name__}.json')
+    file_path = os.path.join(USER_FOLDER, f'{method_name}.json')
     save_json(file_path, data)
 
     # Clickable path
     click_url = f"file:///{os.path.join(os.getcwd(), file_path)}".replace("\\", "/")
-    print(f'{time.time() - method_start_time:<7.2f} seconds - {method.__name__:<16} - {click_url}')
+    print(f'{time.time() - method_start_time:<7.2f} seconds - {method_name:<16} - {click_url}')
 
 # Finish
 os.system('title Completed!')

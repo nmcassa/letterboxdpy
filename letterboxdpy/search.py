@@ -48,7 +48,6 @@ class Search:
       return json_dumps(self.__dict__, indent=2, cls=Encoder)
 
     def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=MAX_RESULTS):
-
       data = {
          'available': False,
          'query': self.query,
@@ -60,7 +59,6 @@ class Search:
   
       result_count = 1
       for current_page in range(1, end_page+1):
-
         url = f'{self.url}/page/{current_page}/?adult'
         dom = self.scraper.get_parsed_page(url)
         results = self.get_page_results(dom)
