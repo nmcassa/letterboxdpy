@@ -1,5 +1,115 @@
 {
   "entrys": {
+    "540915579": {
+      "name": "Drive-Away Dolls",
+      "slug": "drive-away-dolls",
+      "id": "861250",
+      "release": 2024,
+      "runtime": 84,
+      "actions": {
+        "rewatched": false,
+        "rating": 5,
+        "liked": false,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 23
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
+        "no": 1
+      }
+    },
+    "537456035": {
+      "name": "The Iron Giant",
+      "slug": "the-iron-giant",
+      "id": "46280",
+      "release": 1999,
+      "runtime": 86,
+      "actions": {
+        "rewatched": false,
+        "rating": 9,
+        "liked": true,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 18
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
+        "no": 1
+      }
+    },
+    "536029935": {
+      "name": "Cure",
+      "slug": "cure",
+      "id": "28195",
+      "release": 1997,
+      "runtime": 111,
+      "actions": {
+        "rewatched": false,
+        "rating": 10,
+        "liked": true,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 16
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
+        "no": 1
+      }
+    },
+    "535023600": {
+      "name": "Close Encounters of the Third Kind",
+      "slug": "close-encounters-of-the-third-kind",
+      "id": "51312",
+      "release": 1977,
+      "runtime": 135,
+      "actions": {
+        "rewatched": false,
+        "rating": 7,
+        "liked": false,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 15
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
+        "no": 1
+      }
+    },
+    "534179051": {
+      "name": "Man on the Moon",
+      "slug": "man-on-the-moon",
+      "id": "50749",
+      "release": 1999,
+      "runtime": 118,
+      "actions": {
+        "rewatched": false,
+        "rating": 8,
+        "liked": false,
+        "reviewed": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 14
+      },
+      "page": {
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
+        "no": 1
+      }
+    },
     "531364149": {
       "name": "Argylle",
       "slug": "argylle",
@@ -137,7 +247,7 @@
       "slug": "maestro-2023",
       "id": "453069",
       "release": 2023,
-      "runtime": 131,
+      "runtime": 129,
       "actions": {
         "rewatched": false,
         "rating": 5,
@@ -1008,8 +1118,8 @@
         "day": 30
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
-        "no": 1
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
+        "no": 2
       }
     },
     "450112095": {
@@ -1030,8 +1140,8 @@
         "day": 28
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
-        "no": 1
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
+        "no": 2
       }
     },
     "447735107": {
@@ -1052,8 +1162,8 @@
         "day": 22
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
-        "no": 1
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
+        "no": 2
       }
     },
     "441813938": {
@@ -1074,8 +1184,8 @@
         "day": 9
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
-        "no": 1
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
+        "no": 2
       }
     },
     "439106650": {
@@ -1096,8 +1206,8 @@
         "day": 2
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/1/",
-        "no": 1
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
+        "no": 2
       }
     },
     "436667114": {
@@ -2108,8 +2218,8 @@
         "day": 1
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
-        "no": 2
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
+        "no": 3
       }
     },
     "377582850": {
@@ -2130,8 +2240,8 @@
         "day": 14
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
-        "no": 2
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
+        "no": 3
       }
     },
     "377453455": {
@@ -2152,8 +2262,8 @@
         "day": 14
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
-        "no": 2
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
+        "no": 3
       }
     },
     "376226026": {
@@ -2174,8 +2284,8 @@
         "day": 10
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
-        "no": 2
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
+        "no": 3
       }
     },
     "375230318": {
@@ -2196,8 +2306,8 @@
         "day": 8
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/2/",
-        "no": 2
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
+        "no": 3
       }
     },
     "372292664": {
@@ -3208,8 +3318,8 @@
         "day": 14
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
-        "no": 3
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
+        "no": 4
       }
     },
     "322951257": {
@@ -3230,8 +3340,8 @@
         "day": 11
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
-        "no": 3
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
+        "no": 4
       }
     },
     "321873074": {
@@ -3252,8 +3362,8 @@
         "day": 8
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
-        "no": 3
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
+        "no": 4
       }
     },
     "321716181": {
@@ -3274,8 +3384,8 @@
         "day": 7
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
-        "no": 3
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
+        "no": 4
       }
     },
     "321060321": {
@@ -3296,8 +3406,8 @@
         "day": 6
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/3/",
-        "no": 3
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
+        "no": 4
       }
     },
     "320639237": {
@@ -4141,7 +4251,7 @@
       "slug": "perfect-blue",
       "id": "46175",
       "release": 1997,
-      "runtime": 81,
+      "runtime": 82,
       "actions": {
         "rewatched": false,
         "rating": 9,
@@ -4308,8 +4418,8 @@
         "day": 17
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
-        "no": 4
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
+        "no": 5
       }
     },
     "275832320": {
@@ -4330,8 +4440,8 @@
         "day": 10
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
-        "no": 4
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
+        "no": 5
       }
     },
     "275420800": {
@@ -4352,8 +4462,8 @@
         "day": 9
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
-        "no": 4
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
+        "no": 5
       }
     },
     "274963616": {
@@ -4374,8 +4484,8 @@
         "day": 7
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
-        "no": 4
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
+        "no": 5
       }
     },
     "273241440": {
@@ -4396,8 +4506,8 @@
         "day": 1
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/4/",
-        "no": 4
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
+        "no": 5
       }
     },
     "273005046": {
@@ -5408,8 +5518,8 @@
         "day": 10
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
-        "no": 5
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
+        "no": 6
       }
     },
     "235356607": {
@@ -5430,8 +5540,8 @@
         "day": 10
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
-        "no": 5
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
+        "no": 6
       }
     },
     "235261550": {
@@ -5452,8 +5562,8 @@
         "day": 9
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
-        "no": 5
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
+        "no": 6
       }
     },
     "234981110": {
@@ -5474,8 +5584,8 @@
         "day": 8
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
-        "no": 5
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
+        "no": 6
       }
     },
     "233556897": {
@@ -5496,8 +5606,8 @@
         "day": 3
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/5/",
-        "no": 5
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
+        "no": 6
       }
     },
     "233335167": {
@@ -5813,7 +5923,7 @@
       "slug": "jaws-2",
       "id": "51541",
       "release": 1978,
-      "runtime": 116,
+      "runtime": 117,
       "actions": {
         "rewatched": false,
         "rating": 5,
@@ -6508,8 +6618,8 @@
         "day": 15
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
-        "no": 6
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/7/",
+        "no": 7
       }
     },
     "202159101": {
@@ -6530,8 +6640,8 @@
         "day": 13
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
-        "no": 6
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/7/",
+        "no": 7
       }
     },
     "201733850": {
@@ -6552,8 +6662,8 @@
         "day": 11
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
-        "no": 6
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/7/",
+        "no": 7
       }
     },
     "201428562": {
@@ -6574,8 +6684,8 @@
         "day": 10
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
-        "no": 6
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/7/",
+        "no": 7
       }
     },
     "200867705": {
@@ -6596,8 +6706,8 @@
         "day": 8
       },
       "page": {
-        "url": "https://letterboxd.com/nmcassa/films/diary/page/6/",
-        "no": 6
+        "url": "https://letterboxd.com/nmcassa/films/diary/page/7/",
+        "no": 7
       }
     },
     "200718870": {
@@ -7591,6 +7701,6 @@
       }
     }
   },
-  "count": 345,
-  "last_page": 7
+  "count": 350,
+  "last_page": 8
 }
