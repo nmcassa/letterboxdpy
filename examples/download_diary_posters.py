@@ -1,9 +1,8 @@
-import os
-import sys
-import json
-import requests
-sys.path.append("../")
 from letterboxdpy import user
+import requests
+import sys
+import os
+
 
 class Settings:
     def __init__(self, foldering=True, size_check=False):
