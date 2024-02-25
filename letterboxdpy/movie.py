@@ -14,8 +14,9 @@ class Movie:
     def __init__(self, slug: str) -> None:
         assert isinstance(slug, str), f"Movie slug must be a string, not {type(slug)}"
 
-        self.url = f'{self.DOMAIN}/film/{slug}'
         self.scraper = Scraper(self.DOMAIN)
+        self.url = f'{self.DOMAIN}/film/{slug}'
+        self.slug = slug
 
         dom = self.scraper.get_parsed_page(self.url)
 
@@ -134,6 +135,9 @@ class Movie:
                 'slug': url_parts[3],
                 'url': self.DOMAIN + "/".join(url_parts)
             })
+
+        if genres and self.slug == genres[-1]['type']:
+            genres.pop() # for show all button
 
         self.genres = genres
 
