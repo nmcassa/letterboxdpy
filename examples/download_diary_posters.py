@@ -48,8 +48,8 @@ class App:
         self.USER_FOLDER = os.path.join(self.EXPORTS_USERS_DIR, self.username)
         self.USER_POSTERS_DIR = os.path.join(self.USER_FOLDER, "posters")
 
-        self.me = user.User(self.username)
-        self.data = user.user_diary(self.me)
+        self.user = user.User(self.username)
+        self.data = user.user_diary(self.user)
         self.config = Settings()
         
         self.foldering = self.config.foldering
@@ -57,7 +57,7 @@ class App:
 
     def get_poster_url(self, slug):
         poster_ajax = f"https://letterboxd.com/ajax/poster/film/{slug}/std/500x750/"
-        poster_page = self.me.get_parsed_page(poster_ajax)
+        poster_page = self.user.scraper.get_parsed_page(poster_ajax)
         return poster_page.img['srcset'].split('?')[0]
 
     def run(self):
