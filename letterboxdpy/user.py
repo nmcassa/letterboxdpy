@@ -106,6 +106,13 @@ class User:
             dom.prettify()
         ).group(1)
 
+        # hq check
+        self.is_hq = bool(dom.find("body", {'class': 'profile-hq'}))
+        #:alternative
+        # data = dom.find("div", {'class': 'profile-summary'})
+        # data = data['data-profile-summary-options'] if 'data-profile-summary-options'in data.attrs else None
+        # self.is_hq = json_loads(data)['isHQ']
+
         # display name
         data = dom.find("meta", attrs={'property': 'og:title'})
         self.display_name = data['content'][:-10]
