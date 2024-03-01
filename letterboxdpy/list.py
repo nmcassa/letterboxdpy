@@ -1,9 +1,11 @@
 from letterboxdpy.scraper import Scraper
+from functools import wraps
 import re
 
 from json import (
   JSONEncoder,
-  dumps as json_dumps
+  dumps as json_dumps,
+  loads as json_loads
 )
 
 
@@ -52,10 +54,10 @@ class List:
         self.count = len(self.movies)
 
     def __str__(self):
-        return self.jsonify()
+      return json_dumps(self, indent=2, cls=Encoder)
 
-    def jsonify(self) -> str:
-        return json_dumps(self, indent=4,cls=Encoder)
+    def jsonify(self):
+      return json_loads(self.__str__())
 
     def get_title(self, dom) -> str:
         data = dom.find("meta", attrs={'property': 'og:title'})
@@ -104,6 +106,7 @@ class Encoder(JSONEncoder):
 # -- DECORATORS --
 
 def assert_list_instance(func):
+    @wraps(func)
     def wrapper(arg):
         assert isinstance(arg, List), f"function parameter must be a {List.__name__} instance"
         #:optional
@@ -182,7 +185,7 @@ if __name__ == "__main__":
     print('count:', list_instance.count)
     print('created:', date_created(list_instance))
     print('updated:', date_updated(list_instance))
-    print('tags:', list_tags(list_instance), end="\n\n")
+    print('tags:', list_tags(list_instance), end="\n"*2)
 
     # user watchlist usage:
     watchlist_instance = List("mrbs")

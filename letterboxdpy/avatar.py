@@ -35,3 +35,9 @@ class Avatar:
                     })
         # Return the upscaled data
         return self._upscaled_data
+
+if __name__ == '__main__':
+    print(Avatar('https://unknown.example.com/test.png').upscaled_data)
+    print(Avatar('https://s.example.com/a/0-220-0-220.png').upscaled_data)
+    print(Avatar('https://a.example.com/a/0-220-0-220.png').upscaled_data)
+    print(Avatar('https://a.example.com/a/0-80-0-80.png').upscaled_data)

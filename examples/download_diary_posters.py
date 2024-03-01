@@ -1,9 +1,23 @@
-import os
-import sys
-import json
 import requests
-sys.path.append("../")
-from letterboxdpy import user
+import sys
+import os
+
+try:
+    from letterboxdpy import user # package is installed
+except ImportError: # not installed
+    try:
+        sys.path.append(sys.path[0] + '/..')
+        from letterboxdpy import user # use local copy
+    except (ImportError, ValueError):
+        print("letterboxdpy not installed, would you like to install it?")
+        response = input("y/n: ").lower()
+        if response == "y":
+            os.system("pip install letterboxdpy --force")
+            print("Installation complete, running script again...")
+            sys.exit(0)
+        print("Exiting...")
+        sys.exit(1)
+
 
 class Settings:
     def __init__(self, foldering=True, size_check=False):
@@ -34,8 +48,8 @@ class App:
         self.USER_FOLDER = os.path.join(self.EXPORTS_USERS_DIR, self.username)
         self.USER_POSTERS_DIR = os.path.join(self.USER_FOLDER, "posters")
 
-        self.me = user.User(self.username)
-        self.data = user.user_diary(self.me)
+        self.user = user.User(self.username)
+        self.data = user.user_diary(self.user)
         self.config = Settings()
         
         self.foldering = self.config.foldering
@@ -43,7 +57,7 @@ class App:
 
     def get_poster_url(self, slug):
         poster_ajax = f"https://letterboxd.com/ajax/poster/film/{slug}/std/500x750/"
-        poster_page = self.me.get_parsed_page(poster_ajax)
+        poster_page = self.user.scraper.get_parsed_page(poster_ajax)
         return poster_page.img['srcset'].split('?')[0]
 
     def run(self):

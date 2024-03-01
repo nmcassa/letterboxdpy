@@ -1,5 +1,13 @@
 {
+  "scraper": {
+    "headers": {
+      "referer": "https://letterboxd.com",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    },
+    "builder": "lxml"
+  },
   "username": "nmcassa",
+  "url": "https://letterboxd.com/nmcassa",
   "id": "1500306",
   "display_name": "nmcassa",
   "bio": null,
@@ -7,40 +15,41 @@
   "website": null,
   "watchlist_length": 58,
   "stats": {
-    "films": 536,
-    "this_year": 17,
+    "films": 543,
+    "this_year": 22,
     "list": 1,
-    "following": 9,
-    "followers": 7
+    "following": 10,
+    "followers": 8
   },
-  "favorites": [
-    [
-      "The Grand Budapest Hotel",
-      "the-grand-budapest-hotel"
-    ],
-    [
-      "The King of Comedy",
-      "the-king-of-comedy"
-    ],
-    [
-      "The Conversation",
-      "the-conversation"
-    ],
-    [
-      "Rocky",
-      "rocky"
-    ]
-  ],
+  "favorites": {
+    "95113": {
+      "slug": "the-grand-budapest-hotel",
+      "name": "The Grand Budapest Hotel"
+    },
+    "51794": {
+      "slug": "the-king-of-comedy",
+      "name": "The King of Comedy"
+    },
+    "51529": {
+      "slug": "the-conversation",
+      "name": "The Conversation"
+    },
+    "51090": {
+      "slug": "rocky",
+      "name": "Rocky"
+    }
+  },
   "avatar": {
     "exists": true,
-    "size": [
-      1000,
-      1000
-    ],
+    "upscaled": true,
     "url": "https://a.ltrbxd.com/resized/avatar/upload/1/5/0/0/3/0/6/shard/avtr-0-1000-0-1000-crop.jpg"
   },
   "recent": {
     "watchlist": {
+      "19921": {
+        "name": "The Fighter",
+        "slug": "the-fighter-2010"
+      },
       "51707": {
         "name": "Raising Arizona",
         "slug": "raising-arizona"
@@ -56,15 +65,31 @@
       "45909": {
         "name": "Network",
         "slug": "network"
-      },
-      "50168": {
-        "name": "The Game",
-        "slug": "the-game"
       }
     },
     "diary": {
       "months": {
         "2": [
+          [
+            "23",
+            "Drive-Away Dolls"
+          ],
+          [
+            "18",
+            "The Iron Giant"
+          ],
+          [
+            "16",
+            "Cure"
+          ],
+          [
+            "15",
+            "Close Encounters of the Third Kind"
+          ],
+          [
+            "14",
+            "Man on the Moon"
+          ],
           [
             "9",
             "Argylle"
@@ -86,26 +111,6 @@
           [
             "29",
             "PlayTime"
-          ],
-          [
-            "26",
-            "The Zone of Interest"
-          ],
-          [
-            "25",
-            "Maestro"
-          ],
-          [
-            "23",
-            "Society of the Snow"
-          ],
-          [
-            "15",
-            "Black Swan"
-          ],
-          [
-            "14",
-            "Gravity"
           ]
         ]
       }

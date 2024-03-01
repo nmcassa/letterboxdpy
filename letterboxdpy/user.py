@@ -1,11 +1,13 @@
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.avatar import Avatar
 from datetime import datetime
+from functools import wraps
 import re
 
 from json import (
   JSONEncoder,
   dumps as json_dumps,
+  loads as json_loads
 )
 
 
@@ -32,10 +34,10 @@ class User:
         self.user_recent(dom)
 
     def __str__(self):
-        return self.jsonify()
+      return json_dumps(self, indent=2, cls=Encoder)
 
-    def jsonify(self) -> str:
-        return json_dumps(self, indent=2, cls=Encoder)
+    def jsonify(self):
+      return json_loads(self.__str__())
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
@@ -104,6 +106,13 @@ class User:
             dom.prettify()
         ).group(1)
 
+        # hq check
+        self.is_hq = bool(dom.find("body", {'class': 'profile-hq'}))
+        #:alternative
+        # data = dom.find("div", {'class': 'profile-summary'})
+        # data = data['data-profile-summary-options'] if 'data-profile-summary-options'in data.attrs else None
+        # self.is_hq = json_loads(data)['isHQ']
+
         # display name
         data = dom.find("meta", attrs={'property': 'og:title'})
         self.display_name = data['content'][:-10]
@@ -149,13 +158,16 @@ class User:
         # favorites
         data = dom.find("section", {"id": ["favourites"], })
         data = data.findChildren("div") if data else []
-        self.favorites = []
+        self.favorites = {}
         for div in data:
             poster = div.find("img")
-            self.favorites.append((
-                poster['alt'], # movie name
-                poster.parent['data-film-slug'] # movie slug
-                ))
+            movie_slug = poster.parent['data-film-slug']
+            movie_id = poster.parent['data-film-id']
+            movie_name = poster['alt']
+            self.favorites[movie_id] = {
+                'slug': movie_slug,
+                'name': movie_name
+            }
 
 class Encoder(JSONEncoder):
     def default(self, o):
@@ -164,6 +176,7 @@ class Encoder(JSONEncoder):
 # -- DECORATORS --
 
 def assert_user_instance(func):
+    @wraps(func)
     def wrapper(arg, *args, **kwargs):
         assert isinstance(arg, User), f"function parameter must be a {User.__name__} instance"
         return func(arg, *args, **kwargs)
