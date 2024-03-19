@@ -126,15 +126,16 @@ class Movie:
         data = data.find_all("a") if data else None
 
         genres = []
-        for item in data:
-            url_parts = item['href'].split('/')
-            
-            genres.append({
-                'type': url_parts[2],
-                'name': item.text,
-                'slug': url_parts[3],
-                'url': self.DOMAIN + "/".join(url_parts)
-            })
+        if data != None:
+            for item in data:
+                url_parts = item['href'].split('/')
+                
+                genres.append({
+                    'type': url_parts[2],
+                    'name': item.text,
+                    'slug': url_parts[3],
+                    'url': self.DOMAIN + "/".join(url_parts)
+                })
 
         if genres and self.slug == genres[-1]['type']:
             genres.pop() # for show all button
