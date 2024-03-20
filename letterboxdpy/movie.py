@@ -24,6 +24,7 @@ class Movie:
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
 
         # one line contents
+        self.movie_title(dom)
         self.movie_runtime(dom)
         self.movie_rating(dom, script)
         self.movie_year(dom, script)
@@ -206,6 +207,13 @@ class Movie:
 
             self.popular_reviews.append(curr)
 
+    # letterboxd.com/film/?
+    def movie_title(self, dom) -> int:
+        elem = dom.find("section", {"id": ["featured-film-header"]})
+        elem = elem.find("h1")
+        elem = elem.text if elem else None
+        self.title = elem.strip()
+  
     # letterboxd.com/film/?
     def movie_runtime(self, dom) -> int:
         elem = dom.find("p", {"class": ["text-footer"]})
