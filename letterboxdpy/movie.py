@@ -220,7 +220,7 @@ class Movie:
         elem = elem.find_all(string=True, recursive=False)
         for i in elem:
             if 'min' in i.text:
-                self.runtime = int(i.split('min')[0].strip())
+                self.runtime = int(i.split('min')[0].replace(',','').strip())
                 return
         self.runtime = None
 
