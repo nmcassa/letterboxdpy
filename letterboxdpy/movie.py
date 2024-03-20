@@ -217,8 +217,12 @@ class Movie:
     # letterboxd.com/film/?
     def movie_runtime(self, dom) -> int:
         elem = dom.find("p", {"class": ["text-footer"]})
-        elem = elem.text if elem else None
-        self.runtime = int(elem.split('mins')[0].strip()) if 'mins' in elem else None
+        elem = elem.find_all(string=True, recursive=False)
+        for i in elem:
+            if 'min' in i.text:
+                self.runtime = int(i.split('min')[0].strip())
+                return
+        self.runtime = None
 
     # letterboxd.com/film/?
     def movie_tmdb_link(self, dom) -> str:
