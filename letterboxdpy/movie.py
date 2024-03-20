@@ -117,7 +117,7 @@ class Movie:
     def movie_alternative_titles(self, dom):
         data = dom.find(attrs={'class': 'text-indentedlist'})
         text = data.text if data else None
-        titles = [i.strip() for i in text.split(',')] if text else None
+        titles = [i.strip() for i in text.split(', ')] if text else None
         self.alternative_titles = titles
 
     # letterboxd.com/film/?
