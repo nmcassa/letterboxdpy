@@ -127,7 +127,7 @@ class Movie:
         data = data.find_all("a") if data else None
 
         genres = []
-        if data != None:
+        if data is not None:
             for item in data:
                 url_parts = item['href'].split('/')
                 
