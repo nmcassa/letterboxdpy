@@ -27,7 +27,22 @@ class Search:
              "search_filter must be one of the following:",
              ", ".join(self.FILTERS)
              ])
-
+      
+      # Mirroring Letterboxd search string subs - may be incomplete
+      query = query.replace('%','%25')
+      query = query.replace('+','%2B')
+      query = query.replace('"','%22')
+      query = query.replace('#','%23')
+      query = query.replace('$','%24')
+      query = query.replace('&','%26')
+      query = query.replace(',','%2C')
+      query = query.replace(':','%3A')
+      query = query.replace(';','%3B')
+      query = query.replace('=','%3D')
+      query = query.replace('?','%3F')
+      query = query.replace('@','%40')
+      query = query.replace('/','+')
+      query = query.replace(' ','+')
       self.query = query
       self.search_filter = search_filter
       self.scraper = Scraper(self.DOMAIN)
