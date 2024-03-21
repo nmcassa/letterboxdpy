@@ -25,6 +25,7 @@ class Movie:
 
         # one line contents
         self.movie_title(dom)
+        self.movie_original_title(dom)
         self.movie_runtime(dom)
         self.movie_rating(dom, script)
         self.movie_year(dom, script)
@@ -213,7 +214,14 @@ class Movie:
         elem = elem.find("h1")
         elem = elem.text if elem else None
         self.title = elem.strip()
-  
+
+    # letterboxd.com/film/?
+    def movie_original_title(self, dom) -> int:
+        elem = dom.find("section", {"id": ["featured-film-header"]})
+        elem = elem.find("em")
+        elem = elem.text.strip("'’‘ ") if elem else None
+        self.original_title = elem
+      
     # letterboxd.com/film/?
     def movie_runtime(self, dom) -> int:
         elem = dom.find("p", {"class": ["text-footer"]})
