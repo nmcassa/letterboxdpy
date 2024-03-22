@@ -200,7 +200,8 @@ class Movie:
 
             owner = item.find("strong", {"class": ["name"], })
             rating = item.find("span", {"class": ['rating'], })
-            review = item.find("div", {"class": ['body-text'], }).p
+            review = item.find("div", {"class": ['body-text'], })
+            review = review.p if review is not None else None
 
             curr['reviewer'] = owner.text if owner else None
             curr['rating'] = rating.text if rating else None
