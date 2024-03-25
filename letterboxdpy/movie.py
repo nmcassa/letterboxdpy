@@ -24,6 +24,8 @@ class Movie:
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
 
         # one line contents
+        self.movie_title(dom)
+        self.movie_original_title(dom)
         self.movie_runtime(dom)
         self.movie_rating(dom, script)
         self.movie_year(dom, script)
@@ -117,7 +119,7 @@ class Movie:
     def movie_alternative_titles(self, dom):
         data = dom.find(attrs={'class': 'text-indentedlist'})
         text = data.text if data else None
-        titles = [i.strip() for i in text.split(',')] if text else None
+        titles = [i.strip() for i in text.split(', ')] if text else None
         self.alternative_titles = titles
 
     # letterboxd.com/film/?
@@ -126,15 +128,16 @@ class Movie:
         data = data.find_all("a") if data else None
 
         genres = []
-        for item in data:
-            url_parts = item['href'].split('/')
-            
-            genres.append({
-                'type': url_parts[2],
-                'name': item.text,
-                'slug': url_parts[3],
-                'url': self.DOMAIN + "/".join(url_parts)
-            })
+        if data is not None:
+            for item in data:
+                url_parts = item['href'].split('/')
+                
+                genres.append({
+                    'type': url_parts[2],
+                    'name': item.text,
+                    'slug': url_parts[3],
+                    'url': self.DOMAIN + "/".join(url_parts)
+                })
 
         if genres and self.slug == genres[-1]['type']:
             genres.pop() # for show all button
@@ -197,7 +200,8 @@ class Movie:
 
             owner = item.find("strong", {"class": ["name"], })
             rating = item.find("span", {"class": ['rating'], })
-            review = item.find("div", {"class": ['body-text'], }).p
+            review = item.find("div", {"class": ['body-text'], })
+            review = review.p if review is not None else None
 
             curr['reviewer'] = owner.text if owner else None
             curr['rating'] = rating.text if rating else None
@@ -206,10 +210,28 @@ class Movie:
             self.popular_reviews.append(curr)
 
     # letterboxd.com/film/?
+    def movie_title(self, dom) -> int:
+        elem = dom.find("section", {"id": ["featured-film-header"]})
+        elem = elem.find("h1")
+        elem = elem.text if elem else None
+        self.title = elem.strip()
+
+    # letterboxd.com/film/?
+    def movie_original_title(self, dom) -> int:
+        elem = dom.find("section", {"id": ["featured-film-header"]})
+        elem = elem.find("em")
+        elem = elem.text.strip("'’‘ ") if elem else None
+        self.original_title = elem
+      
+    # letterboxd.com/film/?
     def movie_runtime(self, dom) -> int:
         elem = dom.find("p", {"class": ["text-footer"]})
-        elem = elem.text if elem else None
-        self.runtime = int(elem.split('mins')[0].strip()) if 'mins' in elem else None
+        elem = elem.find_all(string=True, recursive=False)
+        for i in elem:
+            if 'min' in i.text:
+                self.runtime = int(i.split('min')[0].replace(',','').strip())
+                return
+        self.runtime = None
 
     # letterboxd.com/film/?
     def movie_tmdb_link(self, dom) -> str:
