@@ -37,7 +37,7 @@ class User:
       return json_dumps(self, indent=2, cls=Encoder)
 
     def jsonify(self):
-      return json_loads(self.__str__())
+        return str(self)
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
