@@ -36,6 +36,11 @@ class Scraper:
 
     return dom
 
+# -- FUNCTIONS --
+
+def url_encode(query: str, safe='') -> str:
+      return requests.utils.quote(query, safe=safe)
+
 if __name__ == "__main__":
     import sys
     sys.stdout.reconfigure(encoding='utf-8')
