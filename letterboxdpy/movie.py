@@ -6,7 +6,8 @@ from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
-
+from url import fetchStatsUrl
+from utils import extractNumericText
 
 class Movie:
     DOMAIN = 'https://letterboxd.com'
@@ -24,6 +25,7 @@ class Movie:
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
 
         # one line contents
+        self.movie_title_id(script)
         self.movie_title(dom)
         self.movie_original_title(dom)
         self.movie_runtime(dom)
@@ -36,6 +38,7 @@ class Movie:
         self.movie_tagline(dom)
         self.movie_description(dom)
         self.movie_alternative_titles(dom)
+        self.movie_stats()
         self.movie_details(dom)
         self.movie_genres(dom)
         self.movie_cast(dom)
@@ -189,6 +192,14 @@ class Movie:
         # elem_section = page.find("div", attrs={'class': 'truncate'}).text
         self.description = elem['content'] if elem else None
 
+    # letterboxd.com/csi/film/?/stats
+    def movie_stats(self) -> int:
+        statsUrl = fetchStatsUrl(self.movie_title_id)
+        statsDom = self.scraper.get_parsed_page(url=statsUrl)
+        self.watchCount = extractNumericText(statsDom.find('li', 'filmstat-watches').a.get('title'))
+        self.listAppCount = extractNumericText(statsDom.find('li', 'filmstat-lists').a.get('title'))
+        self.likeCount = extractNumericText(statsDom.find('li', 'filmstat-likes').a.get('title'))
+
     # letterboxd.com/film/?
     def movie_popular_reviews(self, dom) -> dict:
         data = dom.find("ul", {"class": ["film-popular-review"]})
@@ -208,6 +219,13 @@ class Movie:
             curr['review'] = review.text if review else None
 
             self.popular_reviews.append(curr)
+
+    def movie_title_id(self, script) -> str:
+        try:
+            self.movie_title_id = script['url'].split('/')[4]
+        except Exception as e:
+            print(f"Error occurred while parsing movie title id: {e}")
+            self.movie_title_id = ''
 
     # letterboxd.com/film/?
     def movie_title(self, dom) -> int:
@@ -287,11 +305,11 @@ def movie_watchers(movie: Movie) -> dict:
     dom = dom.find("div", {"id": ["content-nav"]})
 
     data = {
-        'watch_count': 0,
+        'watch_count': movie.watchCount if movie.watchCount else 0,
         'fan_count': 0,
-        'like_count': 0,
+        'like_count': movie.likeCount if movie.likeCount else 0,
         'review_count': 0,
-        'list_count': 0
+        'list_count': movie.listAppCount if movie.listAppCount else 0
     }
 
     if dom:
