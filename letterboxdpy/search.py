@@ -37,7 +37,6 @@ class Search:
           search_filter,
           self.query
           ]))
-
     @property
     def results(self):
       if not self._results:
