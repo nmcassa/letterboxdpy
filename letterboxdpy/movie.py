@@ -1,6 +1,6 @@
+from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
-from functools import wraps
 
 from json import (
   dumps as json_dumps,
@@ -243,19 +243,10 @@ class Movie:
         a = dom.find("a", {"data-track-action": ["IMDb"]})
         self.imdb_link = a['href'] if a else None
 
-# -- DECORATORS --
-
-def assert_movie_instance(func):
-    @wraps(func)
-    def wrapper(movie):
-        assert isinstance(movie, Movie), f"movie parameter must be a {Movie.__name__} instance"
-        return func(movie)
-    return wrapper
-
 # -- FUNCTIONS --
 
 # letterboxd.com/film/?/details
-@assert_movie_instance
+@assert_instance(Movie)
 def movie_details(movie: Movie) -> dict:
     dom = movie.scraper.get_parsed_page("/".join([movie.url, "details"]))
     dom = dom.find("div", {"id": ["tab-details"]})
@@ -277,7 +268,7 @@ def movie_details(movie: Movie) -> dict:
     return data
 
 # letterboxd.com/film/?/members
-@assert_movie_instance
+@assert_instance(Movie)
 def movie_watchers(movie: Movie) -> dict:
     dom = movie.scraper.get_parsed_page("/".join([movie.url, "members"]))
     dom = dom.find("div", {"id": ["content-nav"]})
