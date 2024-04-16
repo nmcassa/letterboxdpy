@@ -1,13 +1,17 @@
+if __loader__.name == '__main__':
+    import sys
+    sys.path.append(sys.path[0] + '/..')
+
 from letterboxdpy.scraper import Scraper
+from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
 from datetime import datetime
 from functools import wraps
 import re
 
 from json import (
-  JSONEncoder,
   dumps as json_dumps,
-  loads as json_loads
+  #loads as json_loads
 )
 
 
@@ -168,10 +172,6 @@ class User:
                 'slug': movie_slug,
                 'name': movie_name
             }
-
-class Encoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
 
 # -- DECORATORS --
 

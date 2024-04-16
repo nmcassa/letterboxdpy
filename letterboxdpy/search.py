@@ -1,12 +1,12 @@
-from letterboxdpy.scraper import Scraper, url_encode
+from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
+from json import dumps as json_dumps
 from typing import List
 
-from json import (
-  JSONEncoder,
-  dumps as json_dumps
+from letterboxdpy.scraper import (
+  Scraper,
+  url_encode
 )
-
 
 class Search:
     DOMAIN = "https://letterboxd.com"
@@ -321,10 +321,6 @@ class Search:
           pass
 
       return data
-
-class Encoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
 
 # -- FUNCTIONS --
 

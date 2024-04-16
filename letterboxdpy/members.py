@@ -1,10 +1,10 @@
+from letterboxdpy.encoder import Encoder
 from bs4 import BeautifulSoup
 from typing import List
 import requests
 import re
 
 from json import (
-    JSONEncoder,
     dumps as json_dumps,
     dump as json_dump,
     loads as json_loads
@@ -14,9 +14,6 @@ from json import (
 MEMBERS_YEAR_TOP = "https://letterboxd.com/members/popular/this/year/"
 
 class MemberListing:
-    class Encoder(JSONEncoder):
-        def default(self, o):
-            return o.__dict__
 
     def __init__(self, url=""):
         self.listing_base = url
@@ -26,7 +23,7 @@ class MemberListing:
             raise Exception(f"Invalid {self.__class__.__name__}")
 
     def __str__(self):
-      return json_dumps(self, indent=2, cls=MemberListing.Encoder)
+      return json_dumps(self, indent=2, cls=Encoder)
 
     def jsonify(self):
       return json_loads(self.__str__())
@@ -39,6 +36,8 @@ class MemberListing:
         }
 
         return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
+
+# -- FUNCTIONS --
 
 def top_users(n: int) -> List:
     ml = MemberListing(url=MEMBERS_YEAR_TOP)

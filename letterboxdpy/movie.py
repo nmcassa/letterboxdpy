@@ -1,8 +1,8 @@
 from letterboxdpy.scraper import Scraper
+from letterboxdpy.encoder import Encoder
 from functools import wraps
 
 from json import (
-  JSONEncoder,
   dumps as json_dumps,
   loads as json_loads,
 )
@@ -242,10 +242,6 @@ class Movie:
     def movie_imdb_link(self, dom) -> str:
         a = dom.find("a", {"data-track-action": ["IMDb"]})
         self.imdb_link = a['href'] if a else None
-
-class Encoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
 
 # -- DECORATORS --
 
