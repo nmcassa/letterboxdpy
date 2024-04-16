@@ -1,4 +1,4 @@
-from letterboxdpy.scraper import Scraper
+from letterboxdpy.scraper import Scraper, url_encode
 from letterboxdpy.avatar import Avatar
 from typing import List
 
@@ -27,15 +27,15 @@ class Search:
              "search_filter must be one of the following:",
              ", ".join(self.FILTERS)
              ])
-
-      self.query = query
+      
+      self.query = url_encode(query)
       self.search_filter = search_filter
       self.scraper = Scraper(self.DOMAIN)
       self._results = None # .results
       self.url = "/".join(filter(None, [
           self.SEARCH_URL,
           search_filter,
-          query
+          self.query
           ]))
 
     @property
@@ -362,6 +362,12 @@ if __name__ == "__main__":
 
   q3 = Search("The") # general search
   q4 = Search("V for Vendetta", 'films')
+  
+  # test: instance printing
+  print(q3)
+  print(q4)
+
+  # test: results
   # print(json.dumps(q3.results, indent=2))
   # print(json.dumps(q4.get_results(), indent=2))
   print(json_dumps(q3.get_results(2), indent=2)) # max 2 page result
