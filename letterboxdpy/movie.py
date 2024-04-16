@@ -6,8 +6,8 @@ from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
-from url import fetchStatsUrl
-from utils import extractNumericText
+from url import fetch_stats_url
+from utils import extract_numeric_text
 
 class Movie:
     DOMAIN = 'https://letterboxd.com'
@@ -194,11 +194,11 @@ class Movie:
 
     # letterboxd.com/csi/film/?/stats
     def movie_stats(self) -> int:
-        statsUrl = fetchStatsUrl(self.movie_title_id)
-        statsDom = self.scraper.get_parsed_page(url=statsUrl)
-        self.watchCount = extractNumericText(statsDom.find('li', 'filmstat-watches').a.get('title'))
-        self.listAppCount = extractNumericText(statsDom.find('li', 'filmstat-lists').a.get('title'))
-        self.likeCount = extractNumericText(statsDom.find('li', 'filmstat-likes').a.get('title'))
+        stats_url = fetch_stats_url(self.movie_title_id)
+        stats_dom = self.scraper.get_parsed_page(url=stats_url)
+        self.watch_count = extract_numeric_text(stats_dom.find('li', 'filmstat-watches').a.get('title'))
+        self.list_count = extract_numeric_text(stats_dom.find('li', 'filmstat-lists').a.get('title'))
+        self.like_count = extract_numeric_text(stats_dom.find('li', 'filmstat-likes').a.get('title'))
 
     # letterboxd.com/film/?
     def movie_popular_reviews(self, dom) -> dict:
@@ -305,11 +305,11 @@ def movie_watchers(movie: Movie) -> dict:
     dom = dom.find("div", {"id": ["content-nav"]})
 
     data = {
-        'watch_count': movie.watchCount if movie.watchCount else 0,
+        'watch_count': movie.watch_count if movie.watch_count else 0,
         'fan_count': 0,
-        'like_count': movie.likeCount if movie.likeCount else 0,
+        'like_count': movie.like_count if movie.like_count else 0,
         'review_count': 0,
-        'list_count': movie.listAppCount if movie.listAppCount else 0
+        'list_count': movie.list_count if movie.list_count else 0
     }
 
     if dom:
