@@ -125,19 +125,18 @@ class Movie:
     # letterboxd.com/film/?
     def movie_genres(self, dom) -> list:
         data = dom.find(attrs={"id": ["tab-genres"]})
-        data = data.find_all("a") if data else None
+        data = data.find_all("a") if data else []
 
         genres = []
-        if data is not None:
-            for item in data:
-                url_parts = item['href'].split('/')
-                
-                genres.append({
-                    'type': url_parts[2],
-                    'name': item.text,
-                    'slug': url_parts[3],
-                    'url': self.DOMAIN + "/".join(url_parts)
-                })
+        for item in data:
+            url_parts = item['href'].split('/')
+            
+            genres.append({
+                'type': url_parts[2],
+                'name': item.text,
+                'slug': url_parts[3],
+                'url': self.DOMAIN + "/".join(url_parts)
+            })
 
         if genres and self.slug == genres[-1]['type']:
             genres.pop() # for show all button
@@ -198,9 +197,10 @@ class Movie:
         for item in items:
             curr = {}
 
-            owner = item.find("strong", {"class": ["name"], })
-            rating = item.find("span", {"class": ['rating'], })
-            review = item.find("div", {"class": ['body-text'], })
+            owner = item.find("strong", {"class": ["name"]})
+            rating = item.find("span", {"class": ['rating']})
+            review = item.find("div", {"class": ['body-text']})
+
             review = review.p if review is not None else None
 
             curr['reviewer'] = owner.text if owner else None
