@@ -305,11 +305,11 @@ def movie_watchers(movie: Movie) -> dict:
     dom = dom.find("div", {"id": ["content-nav"]})
 
     data = {
-        'watch_count': movie.watch_count if movie.watch_count else 0,
+        'watch_count': movie.watch_count*bool(movie.watch_count),
         'fan_count': 0,
-        'like_count': movie.like_count if movie.like_count else 0,
+        'like_count': movie.like_count*bool(movie.like_count),
         'review_count': 0,
-        'list_count': movie.list_count if movie.list_count else 0
+        'list_count': movie.list_count*bool(movie.list_count)
     }
 
     if dom:
