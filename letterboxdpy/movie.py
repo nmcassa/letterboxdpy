@@ -223,8 +223,7 @@ class Movie:
     def movie_title_id(self, script) -> str:
         try:
             self.movie_title_id = script['url'].split('/')[4]
-        except Exception as e:
-            print(f"Error occurred while parsing movie title id: {e}")
+        except Exception:
             self.movie_title_id = ''
 
     # letterboxd.com/film/?
