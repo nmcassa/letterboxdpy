@@ -1,6 +1,7 @@
+from json import dumps as json_dumps
 from bs4 import BeautifulSoup
 import requests
-import json
+
 
 class Scraper:
 
@@ -26,7 +27,7 @@ class Scraper:
     if response.status_code != 200:
       message = dom.find("section", {"class": "message"})
       message = message.strong.text if message else None
-      messages = json.dumps({
+      messages = json_dumps({
           'code': response.status_code,
           'reason': str(response.reason),
           'url': url,
