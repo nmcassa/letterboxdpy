@@ -6,7 +6,6 @@ from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
-from url import fetch_stats_url
 from utils import extract_numeric_text
 
 class Movie:
