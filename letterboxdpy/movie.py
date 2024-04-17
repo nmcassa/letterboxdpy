@@ -26,6 +26,7 @@ class Movie:
 
         # one line contents
         self.movie_title_id(script)
+        self.movie_id(dom)
         self.movie_title(dom)
         self.movie_original_title(dom)
         self.movie_runtime(dom)
@@ -38,7 +39,6 @@ class Movie:
         self.movie_tagline(dom)
         self.movie_description(dom)
         self.movie_alternative_titles(dom)
-        self.movie_stats()
         self.movie_details(dom)
         self.movie_genres(dom)
         self.movie_cast(dom)
@@ -192,14 +192,6 @@ class Movie:
         # elem_section = page.find("div", attrs={'class': 'truncate'}).text
         self.description = elem['content'] if elem else None
 
-    # letterboxd.com/csi/film/?/stats
-    def movie_stats(self) -> int:
-        stats_url = fetch_stats_url(self.movie_title_id)
-        stats_dom = self.scraper.get_parsed_page(url=stats_url)
-        self.watch_count = extract_numeric_text(stats_dom.find('li', 'filmstat-watches').a.get('title'))
-        self.list_count = extract_numeric_text(stats_dom.find('li', 'filmstat-lists').a.get('title'))
-        self.like_count = extract_numeric_text(stats_dom.find('li', 'filmstat-likes').a.get('title'))
-
     # letterboxd.com/film/?
     def movie_popular_reviews(self, dom) -> dict:
         data = dom.find("ul", {"class": ["film-popular-review"]})
@@ -225,6 +217,12 @@ class Movie:
             self.movie_title_id = script['url'].split('/')[4]
         except Exception:
             self.movie_title_id = ''
+    
+    def movie_id(self, dom) -> str:
+        elem = dom.find('span', 'block-flag-wrapper')
+        elem = elem.find('a')
+        elem = elem.get('data-report-url').split('/')[2].split(':')[1] if elem else None
+        self.movie_id = elem
 
     # letterboxd.com/film/?
     def movie_title(self, dom) -> int:
@@ -304,26 +302,26 @@ def movie_watchers(movie: Movie) -> dict:
     dom = dom.find("div", {"id": ["content-nav"]})
 
     data = {
-        'watch_count': movie.watch_count*bool(movie.watch_count),
+        'watch_count': 0,
         'fan_count': 0,
-        'like_count': movie.like_count*bool(movie.like_count),
+        'like_count': 0,
         'review_count': 0,
-        'list_count': movie.list_count*bool(movie.list_count)
+        'list_count': 0
     }
 
     if dom:
         for a in dom.find_all("a"):
             if a.get('title'):
                 if a['title'].find('people',-6) != -1:
-                    data['watch_count'] = a['title'][:-7].replace(',','')
+                    data['watch_count'] = extract_numeric_text(a['title'][:-7])
                 elif a['title'].find('fans',-4) != -1:
-                    data['fan_count'] = a['title'][:-5].replace(',','')
+                    data['fan_count'] = extract_numeric_text(a['title'][:-5])
                 elif a['title'].find('likes',-5) != -1:
-                    data['like_count'] = a['title'][:-6].replace(',','')
+                    data['like_count'] = extract_numeric_text(a['title'][:-6])
                 elif a['title'].find('reviews',-7) != -1:
-                    data['review_count'] = a['title'][:-8].replace(',','')
+                    data['review_count'] = extract_numeric_text(a['title'][:-8])
                 elif a['title'].find('lists',-5) != -1:
-                    data['list_count'] = a['title'][:-6].replace(',','')
+                    data['list_count'] = extract_numeric_text(a['title'][:-6])
     return data
 
 if __name__ == "__main__":
