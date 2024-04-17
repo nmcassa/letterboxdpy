@@ -226,12 +226,11 @@ class Movie:
     # letterboxd.com/film/?
     def movie_runtime(self, dom) -> int:
         elem = dom.find("p", {"class": ["text-footer"]})
-        elem = elem.find_all(string=True, recursive=False)
-        for i in elem:
-            if 'min' in i.text:
-                self.runtime = int(i.split('min')[0].replace(',','').strip())
-                return
-        self.runtime = None
+        elem = elem.text if elem else None
+        #future: extract_numeric_text(elem.split('min')[0])        
+        self.runtime = int(
+            elem.split('min')[0].replace(',', '').strip()
+            ) if elem and 'min' in elem else None
 
     # letterboxd.com/film/?
     def movie_tmdb_link(self, dom) -> str:
@@ -300,7 +299,10 @@ if __name__ == "__main__":
     import sys
     sys.stdout.reconfigure(encoding='utf-8')
 
-    movie_instance = Movie("v-for-vendetta")
+    movie_instance = Movie("v-for-vendetta") # 132 mins
+    # movie_instance_2 = Movie("honk-2013") # 1 min
+    # movie_instance_3 = Movie("logistics-2011") # 51420 mins
+
     print(movie_instance)
     print(movie_details(movie_instance))
     print(movie_watchers(movie_instance))
