@@ -36,3 +36,16 @@ def assert_instance(cls):
             return func(arg, *args, **kwargs)
         return wrapper
     return decorator
+
+
+if __name__ == "__main__":
+
+    @assert_instance(int)
+    def printint(arg: int):
+        print(arg)
+
+    try:
+        printint(1)
+        printint("2")
+    except AssertionError as e:
+        print(e)
