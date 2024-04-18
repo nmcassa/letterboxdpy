@@ -37,6 +37,7 @@ class Search:
           search_filter,
           self.query
           ]))
+
     @property
     def results(self):
       if not self._results:
@@ -157,17 +158,18 @@ class Search:
           movie_year = int(movie_year.text) if movie_year else None
           # directors
           film_metadata = film_metadata if film_metadata else None
-          directors = {}
+          directors = []
           if film_metadata:
             for a in film_metadata.find_all("a"):
               director_slug = a['href'].split('/')[-2]
               director_name = a.text
               director_url = self.DOMAIN + a['href']
       
-              directors[director_slug] = {
-                'name':director_name,
+              directors.append({
+                'name': director_name,
+                'slug': director_slug,
                 'url': director_url
-                }             
+                })
 
           data[result_type] = {
               "slug": slug,
