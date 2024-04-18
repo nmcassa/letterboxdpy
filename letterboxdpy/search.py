@@ -321,7 +321,7 @@ def get_film_slug_from_title(title: str) -> str:
     try:
       query = Search(title, 'films')
       # return first page first result
-      return query.get_results(1)['results'][0]['film']['slug']
+      return query.get_results(max=1)['results'][0]['slug']
     except IndexError:
       return None
 
