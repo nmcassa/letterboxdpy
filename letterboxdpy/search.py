@@ -134,13 +134,13 @@ class Search:
                 break
 
         # result content
-        result_content = self.parse_result(item, item_type)
-        data.append(result_content)
+        result = self.parse_result(item, item_type)
+        data.append(result)
 
       return data
 
     def parse_result(self, result, result_type):
-      data = {}
+      data = {'type': result_type}
       match result_type:
         case "film":
           film_poster = result.div
@@ -168,8 +168,7 @@ class Search:
                 'url': director_url
                 })
 
-          data = {
-             'type': result_type,
+          data |= {
              'slug': slug,
              'name': name,
              'year': movie_year,
@@ -193,8 +192,7 @@ class Search:
           followers = int(followers) if followers.isdigit() else None
           following = int(following) if following.isdigit() else None
 
-          data = {
-             'type': result_type,
+          data |= {
              'username': member_username,
              'name': member_name,
              'badge': member_badge,
@@ -241,8 +239,7 @@ class Search:
           owner_slug = owner_url.split('/')[-2]
           owner_url = self.DOMAIN + owner_url
 
-          data = {
-             'type': result_type,
+          data |= {
              'id': list_id,
              'slug': list_slug,
              'url': list_url,
@@ -259,8 +256,7 @@ class Search:
         case "tag":
             tag_url = self.DOMAIN + result.h2.a['href']
             tag_name = result.h2.a.text.strip()
-            data = {
-               'type': result_type,
+            data |= {
                'name': tag_name,
                'url': tag_url
             }
@@ -269,8 +265,7 @@ class Search:
             actor_slug = result.a['href']
             actor_url = self.DOMAIN + actor_slug
             actor_slug = actor_slug.split('/')[-2]
-            data = {
-               'type': result_type,
+            data |= {
                'name': actor_name,
                'slug': actor_slug,
                'url': actor_url
@@ -278,8 +273,7 @@ class Search:
         case "studio":
             studio_name = result.a.text.strip()
             studio_url = self.DOMAIN + result.a['href']
-            data = {
-               'type': result_type,
+            data |= {
                'name': studio_name,
                'url': studio_url
             }
@@ -289,8 +283,7 @@ class Search:
             story_writer_url = self.DOMAIN + story_writer.a['href'] if story_writer else None
             story_writer = story_writer.text.strip() if story_writer else None
             story_url = self.DOMAIN + result.figure.a['href']
-            data = {
-               'type': result_type,
+            data |= {
                'title': story_title,
                'url': story_url,
                'writer': {
@@ -307,8 +300,7 @@ class Search:
             writer = result.find("p", {"class": "attribution"})
             writer_url = self.DOMAIN + writer.a['href'] if writer else None
             writer_name = writer.text.strip() if writer else None
-            data = {
-               'type': result_type,
+            data |= {
                'title': journal_title,
                'url': journal_url,
                'time': journal_time,
