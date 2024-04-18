@@ -24,7 +24,6 @@ class Movie:
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
 
         # one line contents
-        self.movie_title_id(script)
         self.movie_id(dom)
         self.movie_title(dom)
         self.movie_original_title(dom)
@@ -210,17 +209,11 @@ class Movie:
             curr['review'] = review.text if review else None
 
             self.popular_reviews.append(curr)
-
-    def movie_title_id(self, script) -> str:
-        try:
-            self.movie_title_id = script['url'].split('/')[4]
-        except Exception:
-            self.movie_title_id = ''
     
     def movie_id(self, dom) -> str:
         elem = dom.find('span', 'block-flag-wrapper')
         elem = elem.find('a')
-        elem = elem.get('data-report-url').split('/')[2].split(':')[1] if elem else None
+        elem = extract_numeric_text(elem.get('data-report-url'))
         self.movie_id = elem
 
     # letterboxd.com/film/?
