@@ -11,7 +11,7 @@ import re
 
 from json import (
   dumps as json_dumps,
-  #loads as json_loads
+  loads as json_loads
 )
 
 
@@ -37,11 +37,11 @@ class User:
         self.user_avatar(dom)
         self.user_recent(dom)
 
-    def __str__(self):
-      return json_dumps(self, indent=2, cls=Encoder)
+    def __str__(self) -> str:
+        return json_dumps(self, indent=2, cls=Encoder)
 
-    def jsonify(self):
-        return str(self)
+    def jsonify(self) -> dict:
+        return json_loads(self.__str__())
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
