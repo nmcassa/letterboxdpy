@@ -6,7 +6,7 @@ from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
-
+from utils import extract_numeric_text
 
 class Movie:
     DOMAIN = 'https://letterboxd.com'
@@ -24,6 +24,7 @@ class Movie:
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
 
         # one line contents
+        self.movie_id(dom)
         self.movie_title(dom)
         self.movie_original_title(dom)
         self.movie_runtime(dom)
@@ -208,6 +209,12 @@ class Movie:
             curr['review'] = review.text if review else None
 
             self.popular_reviews.append(curr)
+    
+    def movie_id(self, dom) -> str:
+        elem = dom.find('span', 'block-flag-wrapper')
+        elem = elem.find('a')
+        elem = extract_numeric_text(elem.get('data-report-url'))
+        self.movie_id = elem
 
     # letterboxd.com/film/?
     def movie_title(self, dom) -> int:
@@ -298,15 +305,15 @@ def movie_watchers(movie: Movie) -> dict:
         for a in dom.find_all("a"):
             if a.get('title'):
                 if a['title'].find('people',-6) != -1:
-                    data['watch_count'] = a['title'][:-7].replace(',','')
+                    data['watch_count'] = extract_numeric_text(a['title'][:-7])
                 elif a['title'].find('fans',-4) != -1:
-                    data['fan_count'] = a['title'][:-5].replace(',','')
+                    data['fan_count'] = extract_numeric_text(a['title'][:-5])
                 elif a['title'].find('likes',-5) != -1:
-                    data['like_count'] = a['title'][:-6].replace(',','')
+                    data['like_count'] = extract_numeric_text(a['title'][:-6])
                 elif a['title'].find('reviews',-7) != -1:
-                    data['review_count'] = a['title'][:-8].replace(',','')
+                    data['review_count'] = extract_numeric_text(a['title'][:-8])
                 elif a['title'].find('lists',-5) != -1:
-                    data['list_count'] = a['title'][:-6].replace(',','')
+                    data['list_count'] = extract_numeric_text(a['title'][:-6])
     return data
 
 if __name__ == "__main__":
