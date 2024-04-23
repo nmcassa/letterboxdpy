@@ -32,6 +32,7 @@ class Movie:
         self.movie_tmdb_link(dom)
         self.movie_imdb_link(dom)
         self.movie_poster(script)
+        self.movie_banner(dom)
         self.movie_tagline(dom)
         # long contents
         self.movie_description(dom)
@@ -48,6 +49,11 @@ class Movie:
 
     def jsonify(self) -> dict:
         return json_loads(self.__str__())
+
+    # letterboxd.com/film/?
+    def movie_banner(self, dom) -> str:
+        elem = dom.find("div", {"id": ["backdrop"]})
+        self.banner = elem['data-backdrop2x'].split('?')[0] if elem else None
 
     # letterboxd.com/film/?
     def movie_trailer(self, dom) -> dict:
