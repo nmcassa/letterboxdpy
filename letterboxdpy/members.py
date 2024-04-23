@@ -13,7 +13,7 @@ from json import (
 
 MEMBERS_YEAR_TOP = "https://letterboxd.com/members/popular/this/year/"
 
-class MemberListing:
+class Members:
 
     def __init__(self, url=""):
         self.listing_base = url
@@ -40,7 +40,7 @@ class MemberListing:
 # -- FUNCTIONS --
 
 def top_users(n: int) -> List:
-    ml = MemberListing(url=MEMBERS_YEAR_TOP)
+    ml = Members(url=MEMBERS_YEAR_TOP)
     page = ml.get_parsed_page(ml.listing_base)
 
     # returns all movies
