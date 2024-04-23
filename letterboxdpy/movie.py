@@ -32,8 +32,8 @@ class Movie:
         self.movie_tmdb_link(dom)
         self.movie_imdb_link(dom)
         self.movie_poster(script)
-        # long contents
         self.movie_tagline(dom)
+        # long contents
         self.movie_description(dom)
         self.movie_alternative_titles(dom)
         self.movie_details(dom)
@@ -42,11 +42,11 @@ class Movie:
         self.movie_crew(dom)
         self.movie_popular_reviews(dom)
 
-    def __str__(self):
-        return self.jsonify()
-
-    def jsonify(self) -> str:
+    def __str__(self) -> str:
         return json_dumps(self, indent=2, cls=Encoder)
+
+    def jsonify(self) -> dict:
+        return json_loads(self.__str__())
 
     # letterboxd.com/film/?
     def movie_cast(self, dom) -> list:
