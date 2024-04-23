@@ -50,7 +50,7 @@ class Movie:
         return json_loads(self.__str__())
 
     # letterboxd.com/film/?
-    def movie_trailer(self, dom) -> str:
+    def movie_trailer(self, dom) -> dict:
         elem = dom.find("p", {"class": ["trailer-link"]})
 
         if elem:
@@ -110,7 +110,7 @@ class Movie:
         self.crew = crew
 
     # letterboxd.com/film/?
-    def movie_details(self, dom) -> dict:
+    def movie_details(self, dom) -> list:
         data = dom.find("div", {"id": ["tab-details"]})
         data = data.find_all("a") if data else []
 
@@ -131,7 +131,7 @@ class Movie:
         self.details = details
 
     # letterboxd.com/film/?
-    def movie_alternative_titles(self, dom):
+    def movie_alternative_titles(self, dom) -> list:
         data = dom.find(attrs={'class': 'text-indentedlist'})
         text = data.text if data else None
         titles = [i.strip() for i in text.split(', ')] if text else None
@@ -204,7 +204,7 @@ class Movie:
         self.description = elem['content'] if elem else None
 
     # letterboxd.com/film/?
-    def movie_popular_reviews(self, dom) -> dict:
+    def movie_popular_reviews(self, dom) -> list:
         data = dom.find("ul", {"class": ["film-popular-review"]})
         items = data.find_all("div", {"class": ["film-detail-content"]}) if data else []
 
@@ -225,14 +225,14 @@ class Movie:
             self.popular_reviews.append(curr)
 
     # letterboxd.com/film/?
-    def movie_title(self, dom) -> int:
+    def movie_title(self, dom) -> str:
         elem = dom.find("section", {"id": ["featured-film-header"]})
         elem = elem.find("h1")
         elem = elem.text if elem else None
         self.title = elem.strip()
 
     # letterboxd.com/film/?
-    def movie_original_title(self, dom) -> int:
+    def movie_original_title(self, dom) -> str:
         elem = dom.find("section", {"id": ["featured-film-header"]})
         elem = elem.find("em")
         elem = elem.text.strip("'’‘ ") if elem else None
