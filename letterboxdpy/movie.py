@@ -35,6 +35,7 @@ class Movie:
         self.movie_tagline(dom)
         # long contents
         self.movie_description(dom)
+        self.movie_trailer(dom)
         self.movie_alternative_titles(dom)
         self.movie_details(dom)
         self.movie_genres(dom)
@@ -48,6 +49,20 @@ class Movie:
     def jsonify(self) -> dict:
         return json_loads(self.__str__())
 
+    # letterboxd.com/film/?
+    def movie_trailer(self, dom) -> str:
+        elem = dom.find("p", {"class": ["trailer-link"]})
+
+        if elem:
+            elem = elem.a['href'].lstrip('/').split('?')[0]
+            trailer_id = elem.split('/')[-1]
+
+        self.trailer = {
+            'id': trailer_id,
+            'link': f"https://www.youtube.com/watch?v={trailer_id}",
+            'embed_url': f"https://{elem}",
+        } if elem else None
+ 
     # letterboxd.com/film/?
     def movie_cast(self, dom) -> list:
         data = dom.find("div", {"id": ["tab-cast"]})
