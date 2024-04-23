@@ -235,7 +235,7 @@ class Movie:
         elem = dom.find('span', 'block-flag-wrapper')
         elem = elem.find('a')
         elem = extract_numeric_text(elem.get('data-report-url'))
-        self.movie_id = elem
+        self.letterboxd_id = elem
 
     # letterboxd.com/film/?
     def movie_title(self, dom) -> str:
