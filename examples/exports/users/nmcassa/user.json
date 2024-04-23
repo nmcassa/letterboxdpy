@@ -9,14 +9,15 @@
   "username": "nmcassa",
   "url": "https://letterboxd.com/nmcassa",
   "id": "1500306",
+  "is_hq": false,
   "display_name": "nmcassa",
   "bio": null,
   "location": null,
   "website": null,
-  "watchlist_length": 58,
+  "watchlist_length": 64,
   "stats": {
-    "films": 543,
-    "this_year": 22,
+    "films": 560,
+    "this_year": 37,
     "list": 1,
     "following": 10,
     "followers": 8
@@ -46,71 +47,71 @@
   },
   "recent": {
     "watchlist": {
-      "19921": {
-        "name": "The Fighter",
-        "slug": "the-fighter-2010"
+      "7023": {
+        "name": "The Man Who Stole the Sun",
+        "slug": "the-man-who-stole-the-sun"
       },
-      "51707": {
-        "name": "Raising Arizona",
-        "slug": "raising-arizona"
+      "429628": {
+        "name": "An Elephant Sitting Still",
+        "slug": "an-elephant-sitting-still"
       },
-      "19573": {
-        "name": "The Hourglass Sanatorium",
-        "slug": "the-hourglass-sanatorium"
+      "51075": {
+        "name": "The Fountain",
+        "slug": "the-fountain"
       },
-      "50912": {
-        "name": "La Chinoise",
-        "slug": "la-chinoise"
+      "51481": {
+        "name": "Battleship Potemkin",
+        "slug": "battleship-potemkin"
       },
-      "45909": {
-        "name": "Network",
-        "slug": "network"
+      "49955": {
+        "name": "The Trial",
+        "slug": "the-trial"
       }
     },
     "diary": {
       "months": {
-        "2": [
-          [
-            "23",
-            "Drive-Away Dolls"
-          ],
-          [
-            "18",
-            "The Iron Giant"
-          ],
+        "4": [
           [
             "16",
-            "Cure"
+            "Civil War"
           ],
           [
-            "15",
-            "Close Encounters of the Third Kind"
-          ],
-          [
-            "14",
-            "Man on the Moon"
+            "13",
+            "We Need to Talk About Kevin"
           ],
           [
             "9",
-            "Argylle"
+            "Waking Life"
           ],
           [
-            "6",
-            "Fallen Leaves"
+            "7",
+            "Monkey Man"
           ],
           [
-            "4",
-            "Anatomy of a Fall"
+            "7",
+            "Dune: Part Two"
           ],
           [
-            "4",
-            "Liverpool"
+            "3",
+            "In Bruges"
+          ],
+          [
+            "2",
+            "Burn After Reading"
           ]
         ],
-        "1": [
+        "3": [
           [
-            "29",
-            "PlayTime"
+            "30",
+            "Dune"
+          ],
+          [
+            "26",
+            "Late Night with the Devil"
+          ],
+          [
+            "4",
+            "Superbad"
           ]
         ]
       }
