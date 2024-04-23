@@ -160,6 +160,7 @@ class Movie:
         except KeyError:
             self.rating = None
 
+    # letterboxd.com/csi/film/?/rating-histogram/
     def movie_histogram_rating(self, slug) -> float:
         hist_url = fetch_ratings_histogram_url(slug)
         hist_dom = self.scraper.get_parsed_page(hist_url)
