@@ -181,6 +181,19 @@ def user_films(user: User) -> dict:
     url = f"{user.url}/films"
     return extract_user_films(user, url)
 
+# letterboxd.com/?/likes/films
+assert_instance(User)
+def user_films_liked(user: User) -> dict:
+    url = f"{user.url}/likes/films/"
+    return extract_user_films(user, url)
+
+# letterboxd.com/?/films/rated/?
+@assert_instance(User)
+def user_films_rated(user: User, rating: float | int) -> dict:
+    assert rating in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5], "Invalid rating"
+    url = "{user.url}/films/rated/{rating}/by/date"
+    return extract_user_films(user, url)
+
 # user:films
 @assert_instance(User)
 def extract_user_films(user: User, url=None) -> dict:
