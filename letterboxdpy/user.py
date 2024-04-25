@@ -178,15 +178,27 @@ class User:
 # letterboxd.com/?/films/
 @assert_instance(User)
 def user_films(user: User) -> dict:
+    url = f"{user.url}/films"
+    return extract_user_films(user, url)
+
+# user:films
+@assert_instance(User)
+def extract_user_films(user: User, url=None) -> dict:
+    
+    if not url:
+        """If the url is not specified, all the movies that the user has watched
+        will be checked, you can use the user_films function to do this"""
+        return user_films(user)
+    
     FILMS_PER_PAGE = 12*6
+    movie_list = {'movies': {}}
     count = 0
     rating_count = 0
     liked_count = 0
-    movie_list = {'movies': {}}
 
     while True:
         count += 1
-        dom = user.scraper.get_parsed_page(f"{user.url}/films/page/{count}/")
+        dom = user.scraper.get_parsed_page(f"{url}/page/{count}/")
 
         poster_containers = dom.find_all("li", {"class": ["poster-container"], })
 
@@ -195,23 +207,22 @@ def user_films(user: User) -> dict:
             poster_viewingdata = poster_container.p
             rating = None
             liked = False
+
             if poster_viewingdata.span:
                 for span in poster_viewingdata.find_all("span"):
                     if 'rating' in span['class']:
-                        # ['rating', '-tiny', '-darker', 'rated-9']
                         rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
                         rating_count += 1
                     elif 'like' in span['class']:
-                        # ['like', 'has-icon', 'icon-liked', 'icon-16']
                         liked = True
                         liked_count += 1
 
             movie_list["movies"][poster["data-film-slug"]] = {
-                    'name': poster.img["alt"],
-                    "id": poster["data-film-id"],
-                    "rating": rating,
-                    "liked": liked
-                }
+                'name': poster.img["alt"],
+                "id": poster["data-film-id"],
+                "rating": rating,
+                "liked": liked
+            }
 
         if len(poster_containers) < FILMS_PER_PAGE:
             movie_list['count'] = len(movie_list['movies'])
