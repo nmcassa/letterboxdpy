@@ -1,8 +1,8 @@
+from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
-from functools import wraps
+from letterboxdpy.encoder import Encoder
 
 from json import (
-  JSONEncoder,
   dumps as json_dumps,
   loads as json_loads,
 )
@@ -33,9 +33,11 @@ class Movie:
         self.movie_tmdb_link(dom)
         self.movie_imdb_link(dom)
         self.movie_poster(script)
-        # long contents
+        self.movie_banner(dom)
         self.movie_tagline(dom)
+        # long contents
         self.movie_description(dom)
+        self.movie_trailer(dom)
         self.movie_alternative_titles(dom)
         self.movie_details(dom)
         self.movie_genres(dom)
@@ -43,12 +45,31 @@ class Movie:
         self.movie_crew(dom)
         self.movie_popular_reviews(dom)
 
-    def __str__(self):
-        return self.jsonify()
-
-    def jsonify(self) -> str:
+    def __str__(self) -> str:
         return json_dumps(self, indent=2, cls=Encoder)
 
+    def jsonify(self) -> dict:
+        return json_loads(self.__str__())
+
+    # letterboxd.com/film/?
+    def movie_banner(self, dom) -> str:
+        elem = dom.find("div", {"id": ["backdrop"]})
+        self.banner = elem['data-backdrop2x'].split('?')[0] if elem else None
+
+    # letterboxd.com/film/?
+    def movie_trailer(self, dom) -> dict:
+        elem = dom.find("p", {"class": ["trailer-link"]})
+
+        if elem:
+            elem = elem.a['href'].lstrip('/').split('?')[0]
+            trailer_id = elem.split('/')[-1]
+
+        self.trailer = {
+            'id': trailer_id,
+            'link': f"https://www.youtube.com/watch?v={trailer_id}",
+            'embed_url': f"https://{elem}",
+        } if elem else None
+ 
     # letterboxd.com/film/?
     def movie_cast(self, dom) -> list:
         data = dom.find("div", {"id": ["tab-cast"]})
@@ -96,7 +117,7 @@ class Movie:
         self.crew = crew
 
     # letterboxd.com/film/?
-    def movie_details(self, dom) -> dict:
+    def movie_details(self, dom) -> list:
         data = dom.find("div", {"id": ["tab-details"]})
         data = data.find_all("a") if data else []
 
@@ -117,7 +138,7 @@ class Movie:
         self.details = details
 
     # letterboxd.com/film/?
-    def movie_alternative_titles(self, dom):
+    def movie_alternative_titles(self, dom) -> list:
         data = dom.find(attrs={'class': 'text-indentedlist'})
         text = data.text if data else None
         titles = [i.strip() for i in text.split(', ')] if text else None
@@ -126,19 +147,18 @@ class Movie:
     # letterboxd.com/film/?
     def movie_genres(self, dom) -> list:
         data = dom.find(attrs={"id": ["tab-genres"]})
-        data = data.find_all("a") if data else None
+        data = data.find_all("a") if data else []
 
         genres = []
-        if data is not None:
-            for item in data:
-                url_parts = item['href'].split('/')
-                
-                genres.append({
-                    'type': url_parts[2],
-                    'name': item.text,
-                    'slug': url_parts[3],
-                    'url': self.DOMAIN + "/".join(url_parts)
-                })
+        for item in data:
+            url_parts = item['href'].split('/')
+            
+            genres.append({
+                'type': url_parts[2],
+                'name': item.text,
+                'slug': url_parts[3],
+                'url': self.DOMAIN + "/".join(url_parts)
+            })
 
         if genres and self.slug == genres[-1]['type']:
             genres.pop() # for show all button
@@ -191,7 +211,7 @@ class Movie:
         self.description = elem['content'] if elem else None
 
     # letterboxd.com/film/?
-    def movie_popular_reviews(self, dom) -> dict:
+    def movie_popular_reviews(self, dom) -> list:
         data = dom.find("ul", {"class": ["film-popular-review"]})
         items = data.find_all("div", {"class": ["film-detail-content"]}) if data else []
 
@@ -199,9 +219,10 @@ class Movie:
         for item in items:
             curr = {}
 
-            owner = item.find("strong", {"class": ["name"], })
-            rating = item.find("span", {"class": ['rating'], })
-            review = item.find("div", {"class": ['body-text'], })
+            owner = item.find("strong", {"class": ["name"]})
+            rating = item.find("span", {"class": ['rating']})
+            review = item.find("div", {"class": ['body-text']})
+
             review = review.p if review is not None else None
 
             curr['reviewer'] = owner.text if owner else None
@@ -214,17 +235,17 @@ class Movie:
         elem = dom.find('span', 'block-flag-wrapper')
         elem = elem.find('a')
         elem = extract_numeric_text(elem.get('data-report-url'))
-        self.movie_id = elem
+        self.letterboxd_id = elem
 
     # letterboxd.com/film/?
-    def movie_title(self, dom) -> int:
+    def movie_title(self, dom) -> str:
         elem = dom.find("section", {"id": ["featured-film-header"]})
         elem = elem.find("h1")
         elem = elem.text if elem else None
         self.title = elem.strip()
 
     # letterboxd.com/film/?
-    def movie_original_title(self, dom) -> int:
+    def movie_original_title(self, dom) -> str:
         elem = dom.find("section", {"id": ["featured-film-header"]})
         elem = elem.find("em")
         elem = elem.text.strip("'’‘ ") if elem else None
@@ -233,12 +254,11 @@ class Movie:
     # letterboxd.com/film/?
     def movie_runtime(self, dom) -> int:
         elem = dom.find("p", {"class": ["text-footer"]})
-        elem = elem.find_all(string=True, recursive=False)
-        for i in elem:
-            if 'min' in i.text:
-                self.runtime = int(i.split('min')[0].replace(',','').strip())
-                return
-        self.runtime = None
+        elem = elem.text if elem else None
+        #future: extract_numeric_text(elem.split('min')[0])        
+        self.runtime = int(
+            elem.split('min')[0].replace(',', '').strip()
+            ) if elem and 'min' in elem else None
 
     # letterboxd.com/film/?
     def movie_tmdb_link(self, dom) -> str:
@@ -250,23 +270,10 @@ class Movie:
         a = dom.find("a", {"data-track-action": ["IMDb"]})
         self.imdb_link = a['href'] if a else None
 
-class Encoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
-
-# -- DECORATORS --
-
-def assert_movie_instance(func):
-    @wraps(func)
-    def wrapper(movie):
-        assert isinstance(movie, Movie), f"movie parameter must be a {Movie.__name__} instance"
-        return func(movie)
-    return wrapper
-
 # -- FUNCTIONS --
 
 # letterboxd.com/film/?/details
-@assert_movie_instance
+@assert_instance(Movie)
 def movie_details(movie: Movie) -> dict:
     dom = movie.scraper.get_parsed_page("/".join([movie.url, "details"]))
     dom = dom.find("div", {"id": ["tab-details"]})
@@ -288,7 +295,7 @@ def movie_details(movie: Movie) -> dict:
     return data
 
 # letterboxd.com/film/?/members
-@assert_movie_instance
+@assert_instance(Movie)
 def movie_watchers(movie: Movie) -> dict:
     dom = movie.scraper.get_parsed_page("/".join([movie.url, "members"]))
     dom = dom.find("div", {"id": ["content-nav"]})
@@ -320,7 +327,10 @@ if __name__ == "__main__":
     import sys
     sys.stdout.reconfigure(encoding='utf-8')
 
-    movie_instance = Movie("v-for-vendetta")
+    movie_instance = Movie("v-for-vendetta") # 132 mins
+    # movie_instance_2 = Movie("honk-2013") # 1 min
+    # movie_instance_3 = Movie("logistics-2011") # 51420 mins
+
     print(movie_instance)
     print(movie_details(movie_instance))
     print(movie_watchers(movie_instance))

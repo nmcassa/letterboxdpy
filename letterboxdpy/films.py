@@ -4,6 +4,8 @@ if __loader__.name == '__main__':
 
 from letterboxdpy.scraper import Scraper
 
+# -- FUNCTIONS --
+
 def mini_films_parser(url: str, max = 100):
     domain = "https://letterboxd.com"
     scraper = Scraper(domain)

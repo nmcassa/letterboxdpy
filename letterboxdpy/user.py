@@ -1,11 +1,15 @@
+if __loader__.name == '__main__':
+    import sys
+    sys.path.append(sys.path[0] + '/..')
+
+from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
+from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
 from datetime import datetime
-from functools import wraps
 import re
 
 from json import (
-  JSONEncoder,
   dumps as json_dumps,
   loads as json_loads
 )
@@ -33,11 +37,11 @@ class User:
         self.user_avatar(dom)
         self.user_recent(dom)
 
-    def __str__(self):
-      return json_dumps(self, indent=2, cls=Encoder)
+    def __str__(self) -> str:
+        return json_dumps(self, indent=2, cls=Encoder)
 
-    def jsonify(self):
-        return str(self)
+    def jsonify(self) -> dict:
+        return json_loads(self.__str__())
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
@@ -169,33 +173,45 @@ class User:
                 'name': movie_name
             }
 
-class Encoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
-
-# -- DECORATORS --
-
-def assert_user_instance(func):
-    @wraps(func)
-    def wrapper(arg, *args, **kwargs):
-        assert isinstance(arg, User), f"function parameter must be a {User.__name__} instance"
-        return func(arg, *args, **kwargs)
-    return wrapper
-
 # -- FUNCTIONS --
 
 # letterboxd.com/?/films/
-@assert_user_instance
+@assert_instance(User)
 def user_films(user: User) -> dict:
+    url = f"{user.url}/films"
+    return extract_user_films(user, url)
+
+# letterboxd.com/?/likes/films
+assert_instance(User)
+def user_films_liked(user: User) -> dict:
+    url = f"{user.url}/likes/films/"
+    return extract_user_films(user, url)
+
+# letterboxd.com/?/films/rated/?
+@assert_instance(User)
+def user_films_rated(user: User, rating: float | int) -> dict:
+    assert rating in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5], "Invalid rating"
+    url = "{user.url}/films/rated/{rating}/by/date"
+    return extract_user_films(user, url)
+
+# user:films
+@assert_instance(User)
+def extract_user_films(user: User, url=None) -> dict:
+    
+    if not url:
+        """If the url is not specified, all the movies that the user has watched
+        will be checked, you can use the user_films function to do this"""
+        return user_films(user)
+    
     FILMS_PER_PAGE = 12*6
+    movie_list = {'movies': {}}
     count = 0
     rating_count = 0
     liked_count = 0
-    movie_list = {'movies': {}}
 
     while True:
         count += 1
-        dom = user.scraper.get_parsed_page(f"{user.url}/films/page/{count}/")
+        dom = user.scraper.get_parsed_page(f"{url}/page/{count}/")
 
         poster_containers = dom.find_all("li", {"class": ["poster-container"], })
 
@@ -204,23 +220,22 @@ def user_films(user: User) -> dict:
             poster_viewingdata = poster_container.p
             rating = None
             liked = False
+
             if poster_viewingdata.span:
                 for span in poster_viewingdata.find_all("span"):
                     if 'rating' in span['class']:
-                        # ['rating', '-tiny', '-darker', 'rated-9']
                         rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
                         rating_count += 1
                     elif 'like' in span['class']:
-                        # ['like', 'has-icon', 'icon-liked', 'icon-16']
                         liked = True
                         liked_count += 1
 
             movie_list["movies"][poster["data-film-slug"]] = {
-                    'name': poster.img["alt"],
-                    "id": poster["data-film-id"],
-                    "rating": rating,
-                    "liked": liked
-                }
+                'name': poster.img["alt"],
+                "id": poster["data-film-id"],
+                "rating": rating,
+                "liked": liked
+            }
 
         if len(poster_containers) < FILMS_PER_PAGE:
             movie_list['count'] = len(movie_list['movies'])
@@ -243,7 +258,7 @@ def user_films(user: User) -> dict:
     return movie_list
 
 # letterboxd.com/?/following/
-@assert_user_instance
+@assert_instance(User)
 def user_following(user: User) -> dict:
     # returns the first page of following
     dom = user.scraper.get_parsed_page(f"{user.url}/following/")
@@ -259,7 +274,7 @@ def user_following(user: User) -> dict:
     return ret
 
 # letterboxd.com/?/followers/
-@assert_user_instance
+@assert_instance(User)
 def user_followers(user: User) -> dict:
     #returns the first page of followers
     dom = user.scraper.get_parsed_page(f"{user.url}/followers/")
@@ -275,7 +290,7 @@ def user_followers(user: User) -> dict:
     return ret
 
 # letterboxd.com/?/films/genre/*/
-@assert_user_instance
+@assert_instance(User)
 def user_genre_info(user: User) -> dict:
     genres = ["action", "adventure", "animation", "comedy", "crime",
               "documentary","drama", "family", "fantasy", "history",
@@ -294,7 +309,7 @@ def user_genre_info(user: User) -> dict:
     return ret
 
 # letterboxd.com/?/films/reviews/
-@assert_user_instance
+@assert_instance(User)
 def user_reviews(user: User) -> dict:
     '''
     Returns a dictionary containing user reviews. The keys are unique log IDs,
@@ -393,7 +408,7 @@ def user_reviews(user: User) -> dict:
     return data
 
 # letterboxd.com/?/films/diary/
-@assert_user_instance
+@assert_instance(User)
 def user_diary(user: User, year: int=None, page: int=None) -> dict:
     '''
     Returns:
@@ -493,7 +508,7 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
     return ret
 
 # dependency: user_diary()
-@assert_user_instance
+@assert_instance(User)
 def user_wrapped(user: User, year: int=2024) -> dict:
     diary = user_diary(user, year)
 
@@ -552,7 +567,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 
 # letterboxd.com/?/activity
 # letterboxd.com/ajax/activity-pagination/?/
-@assert_user_instance
+@assert_instance(User)
 def user_activity(user: User) -> dict:
     BASE_URL = f"{user.DOMAIN}/ajax/activity-pagination/{user.username}"
     data = {'user': user.username, 'logs': {}}
@@ -645,7 +660,7 @@ def user_activity(user: User) -> dict:
     return data
 
 # https://letterboxd.com/?/lists/
-@assert_user_instance
+@assert_instance(User)
 def user_lists(user: User) -> dict:
     BASE_URL = f"{user.url}/lists/"
     LISTS_PER_PAGE = 12
@@ -719,7 +734,7 @@ def user_lists(user: User) -> dict:
     return data
 
 # https://letterboxd.com/?/watchlist/
-@assert_user_instance
+@assert_instance(User)
 def user_watchlist(user: User, filters: dict=None) -> dict:
     """
     filter examples:
@@ -811,7 +826,7 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
     return data
 
 # https://letterboxd.com/?/tags/*
-@assert_user_instance
+@assert_instance(User)
 def user_tags(user: User) -> dict:
     BASE_URL = f"{user.url}/tags/"
 

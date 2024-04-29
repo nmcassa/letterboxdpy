@@ -1,9 +1,9 @@
+from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
-from functools import wraps
+from letterboxdpy.encoder import Encoder
 import re
 
 from json import (
-  JSONEncoder,
   dumps as json_dumps,
   loads as json_loads
 )
@@ -94,30 +94,9 @@ class List:
 
         return movie_list
 
-class Encoder(JSONEncoder):
-    """
-    Encoder class provides a way to serialize custom class
-    .. instances to JSON by overriding the default serialization
-    .. logic to return the object's namespace dictionary.
-    """
-    def default(self, o):
-        return o.__dict__
-
-# -- DECORATORS --
-
-def assert_list_instance(func):
-    @wraps(func)
-    def wrapper(arg):
-        assert isinstance(arg, List), f"function parameter must be a {List.__name__} instance"
-        #:optional
-        # if not arg.slug:
-        #    print(f"WARNING: {func.__name__} function is for regular lists not watchlists.")
-        return func(arg)
-    return wrapper
-
 # -- FUNCTIONS --
 
-@assert_list_instance
+@assert_instance(List)
 def date_created(instance: List) -> list:
     """
     Scrapes the list page to find and return the creation
@@ -137,7 +116,7 @@ def date_created(instance: List) -> list:
 
     return data
 
-@assert_list_instance
+@assert_instance(List)
 def date_updated(instance: List) -> list:
     """
     Scrapes the list page to find and return either
@@ -156,7 +135,7 @@ def date_updated(instance: List) -> list:
 
     return data
 
-@assert_list_instance
+@assert_instance(List)
 def list_tags(instance: List) -> list:
     """
     Scraping the tag links from a Letterboxd list page and

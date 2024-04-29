@@ -1,12 +1,12 @@
-from letterboxdpy.scraper import Scraper
+from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
+from json import dumps as json_dumps
 from typing import List
 
-from json import (
-  JSONEncoder,
-  dumps as json_dumps
+from letterboxdpy.scraper import (
+  Scraper,
+  url_encode
 )
-
 
 class Search:
     DOMAIN = "https://letterboxd.com"
@@ -28,29 +28,14 @@ class Search:
              ", ".join(self.FILTERS)
              ])
       
-      # Mirroring Letterboxd search string subs - may be incomplete
-      query = query.replace('%','%25')
-      query = query.replace('+','%2B')
-      query = query.replace('"','%22')
-      query = query.replace('#','%23')
-      query = query.replace('$','%24')
-      query = query.replace('&','%26')
-      query = query.replace(',','%2C')
-      query = query.replace(':','%3A')
-      query = query.replace(';','%3B')
-      query = query.replace('=','%3D')
-      query = query.replace('?','%3F')
-      query = query.replace('@','%40')
-      query = query.replace('/','+')
-      query = query.replace(' ','+')
-      self.query = query
+      self.query = url_encode(query)
       self.search_filter = search_filter
       self.scraper = Scraper(self.DOMAIN)
       self._results = None # .results
       self.url = "/".join(filter(None, [
           self.SEARCH_URL,
           search_filter,
-          query
+          self.query
           ]))
 
     @property
@@ -83,14 +68,12 @@ class Search:
           break
 
         for result in results:
-          key, value = next(iter(result.items()))
 
           data['results'].append({
-             key: {
-                'no': result_count,
-                'page': current_page,
-                **value
-                }})
+             'no': result_count,
+             'page': current_page,
+             **result
+             })
 
           if result_count >= max:
             break
@@ -151,14 +134,13 @@ class Search:
                 break
 
         # result content
-        result_content = self.parse_result(item, item_type)
-        result_content[item_type] = result_content[item_type]
-        data.append(result_content)
+        result = self.parse_result(item, item_type)
+        data.append(result)
 
       return data
 
     def parse_result(self, result, result_type):
-      data = {result_type: {}}
+      data = {'type': result_type}
       match result_type:
         case "film":
           film_poster = result.div
@@ -173,26 +155,27 @@ class Search:
           movie_year = int(movie_year.text) if movie_year else None
           # directors
           film_metadata = film_metadata if film_metadata else None
-          directors = {}
+          directors = []
           if film_metadata:
             for a in film_metadata.find_all("a"):
               director_slug = a['href'].split('/')[-2]
               director_name = a.text
               director_url = self.DOMAIN + a['href']
       
-              directors[director_slug] = {
-                'name':director_name,
+              directors.append({
+                'name': director_name,
+                'slug': director_slug,
                 'url': director_url
-                }             
+                })
 
-          data[result_type] = {
-              "slug": slug,
-              "name": name,
-              "year": movie_year,
-              "url": url,
-              "poster": poster,
-              "directors": directors
-              }
+          data |= {
+             'slug': slug,
+             'name': name,
+             'year': movie_year,
+             'url': url,
+             'poster': poster,
+             'directors': directors
+             }
         case "member":
           member_username = result.h3.a['href'].split('/')[-2]
           member_name = result.h3.a
@@ -209,13 +192,13 @@ class Search:
           followers = int(followers) if followers.isdigit() else None
           following = int(following) if following.isdigit() else None
 
-          data[result_type] = {
+          data |= {
              'username': member_username,
              'name': member_name,
              'badge': member_badge,
              'avatar': member_avatar,
              'followers': followers,
-             'following': following,
+             'following': following
              }
         case "list":
           list_id = result.section['data-film-list-id']
@@ -256,8 +239,7 @@ class Search:
           owner_slug = owner_url.split('/')[-2]
           owner_url = self.DOMAIN + owner_url
 
-          data[result_type] = {
-             'type': result_type,
+          data |= {
              'id': list_id,
              'slug': list_slug,
              'url': list_url,
@@ -274,8 +256,7 @@ class Search:
         case "tag":
             tag_url = self.DOMAIN + result.h2.a['href']
             tag_name = result.h2.a.text.strip()
-            data[result_type] = {
-               'type': result_type,
+            data |= {
                'name': tag_name,
                'url': tag_url
             }
@@ -284,8 +265,7 @@ class Search:
             actor_slug = result.a['href']
             actor_url = self.DOMAIN + actor_slug
             actor_slug = actor_slug.split('/')[-2]
-            data[result_type] = {
-               'type': result_type,
+            data |= {
                'name': actor_name,
                'slug': actor_slug,
                'url': actor_url
@@ -293,8 +273,7 @@ class Search:
         case "studio":
             studio_name = result.a.text.strip()
             studio_url = self.DOMAIN + result.a['href']
-            data[result_type] = {
-               'type': result_type,
+            data |= {
                'name': studio_name,
                'url': studio_url
             }
@@ -304,8 +283,7 @@ class Search:
             story_writer_url = self.DOMAIN + story_writer.a['href'] if story_writer else None
             story_writer = story_writer.text.strip() if story_writer else None
             story_url = self.DOMAIN + result.figure.a['href']
-            data[result_type] = {
-               'type': result_type,
+            data |= {
                'title': story_title,
                'url': story_url,
                'writer': {
@@ -322,8 +300,7 @@ class Search:
             writer = result.find("p", {"class": "attribution"})
             writer_url = self.DOMAIN + writer.a['href'] if writer else None
             writer_name = writer.text.strip() if writer else None
-            data[result_type] = {
-               'type': result_type,
+            data |= {
                'title': journal_title,
                'url': journal_url,
                'time': journal_time,
@@ -338,17 +315,13 @@ class Search:
 
       return data
 
-class Encoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
-
 # -- FUNCTIONS --
 
 def get_film_slug_from_title(title: str) -> str:
     try:
       query = Search(title, 'films')
       # return first page first result
-      return query.get_results(1)['results'][0]['film']['slug']
+      return query.get_results(max=1)['results'][0]['slug']
     except IndexError:
       return None
 
@@ -377,6 +350,12 @@ if __name__ == "__main__":
 
   q3 = Search("The") # general search
   q4 = Search("V for Vendetta", 'films')
+  
+  # test: instance printing
+  print(q3)
+  print(q4)
+
+  # test: results
   # print(json.dumps(q3.results, indent=2))
   # print(json.dumps(q4.get_results(), indent=2))
   print(json_dumps(q3.get_results(2), indent=2)) # max 2 page result

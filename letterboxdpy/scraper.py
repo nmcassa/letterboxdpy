@@ -1,6 +1,7 @@
+from json import dumps as json_dumps
 from bs4 import BeautifulSoup
 import requests
-import json
+
 
 class Scraper:
 
@@ -26,7 +27,7 @@ class Scraper:
     if response.status_code != 200:
       message = dom.find("section", {"class": "message"})
       message = message.strong.text if message else None
-      messages = json.dumps({
+      messages = json_dumps({
           'code': response.status_code,
           'reason': str(response.reason),
           'url': url,
@@ -35,6 +36,11 @@ class Scraper:
       raise Exception(messages)
 
     return dom
+
+# -- FUNCTIONS --
+
+def url_encode(query: str, safe='') -> str:
+      return requests.utils.quote(query, safe=safe)
 
 if __name__ == "__main__":
     import sys
