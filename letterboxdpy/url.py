@@ -17,7 +17,7 @@ def get_recent_reviews_url(film_slug: str) -> str:
 
 def get_rating_histogram_url(film_slug: str) -> str:
   # fan count and ratings
-  return "https://letterboxd.com/csi/film/{film_slug}/rating-histogram/"
+  return f"https://letterboxd.com/csi/film/{film_slug}/rating-histogram/"
 
 def get_user_actions_url(film_slug: str) -> str:
   return f"https://letterboxd.com/csi/film/{film_slug}/sidebar-user-actions/"

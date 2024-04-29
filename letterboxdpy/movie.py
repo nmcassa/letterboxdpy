@@ -6,6 +6,8 @@ from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
+from url import get_rating_histogram_url
+from ratings import get_classic_histogram_rating
 from utils import extract_numeric_text
 
 class Movie:
@@ -29,6 +31,7 @@ class Movie:
         self.movie_original_title(dom)
         self.movie_runtime(dom)
         self.movie_rating(dom, script)
+        self.movie_histogram_rating(slug)
         self.movie_year(dom, script)
         self.movie_tmdb_link(dom)
         self.movie_imdb_link(dom)
@@ -54,7 +57,7 @@ class Movie:
     # letterboxd.com/film/?
     def movie_banner(self, dom) -> str:
         elem = dom.find("div", {"id": ["backdrop"]})
-        self.banner = elem['data-backdrop2x'].split('?')[0] if elem else None
+        self.banner = elem.get('data-backdrop2x', elem.get('data-backdrop', None)) if elem else None
 
     # letterboxd.com/film/?
     def movie_trailer(self, dom) -> dict:
@@ -176,6 +179,14 @@ class Movie:
             self.rating = float(rating)
         except KeyError:
             self.rating = None
+
+    # letterboxd.com/csi/film/?/rating-histogram/
+    def movie_histogram_rating(self, slug) -> float:
+        hist_url = get_rating_histogram_url(slug)
+        hist_dom = self.scraper.get_parsed_page(hist_url)
+        histogram_rating = get_classic_histogram_rating(hist_dom)
+        
+        self.classic_rating = histogram_rating
 
     # letterboxd.com/film/?
     def movie_year(self, dom, script: dict=None) -> int:
