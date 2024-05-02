@@ -57,11 +57,10 @@ def get_movies_from_horizontal_list(dom: BeautifulSoup, max=12*6) -> dict:
     """
     items = dom.find_all("li")
 
+    rating_key = "data-average-rating"
     movies = {}
     for item in items:
-        rating_key = "data-average-rating"
-        movie_rating = float(
-            item['data-average-rating']) if rating_key in item.attrs else None
+        movie_rating = float(item[rating_key]) if rating_key in item.attrs else None
         movie_id = item.div['data-film-id']
         movie_slug = item.div['data-film-slug'] 
         movie_name = item.img['alt']
