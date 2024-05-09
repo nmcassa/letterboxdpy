@@ -1,5 +1,5 @@
 import unicodedata
-from utils import extract_numeric_text
+from letterboxdpy.utils import extract_numeric_text
 
 rating_conversion = {
   'half-★': 0.5,

@@ -6,6 +6,14 @@ from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
+from letterboxdpy.url import get_rating_histogram_url
+from letterboxdpy.ratings import get_classic_histogram_rating
+from letterboxdpy.utils import extract_numeric_text
+
+from json import (
+  dumps as json_dumps,
+  loads as json_loads,
+)
 from url import get_rating_histogram_url
 from ratings import get_classic_histogram_rating
 from utils import extract_numeric_text
@@ -31,7 +39,6 @@ class Movie:
         self.movie_original_title(dom)
         self.movie_runtime(dom)
         self.movie_rating(dom, script)
-        self.movie_histogram_rating(slug)
         self.movie_year(dom, script)
         self.movie_tmdb_link(dom)
         self.movie_imdb_link(dom)
@@ -180,21 +187,13 @@ class Movie:
         except KeyError:
             self.rating = None
 
-    # letterboxd.com/csi/film/?/rating-histogram/
-    def movie_histogram_rating(self, slug) -> float:
-        hist_url = get_rating_histogram_url(slug)
-        hist_dom = self.scraper.get_parsed_page(hist_url)
-        histogram_rating = get_classic_histogram_rating(hist_dom)
-        
-        self.classic_rating = histogram_rating
-
     # letterboxd.com/film/?
     def movie_year(self, dom, script: dict=None) -> int:
-        elem = dom.find('small', attrs={'class': 'number'})
+        elem = dom.find('div', attrs={'class': 'releaseyear'})
         year = int(elem.text) if elem else None
         try:
             year = year if year else (
-                script['releasedEvent']['startDate'] if script else None
+                script['releasedEvent'][0]['startDate'] if script else None
                 )
             self.year = int(year)
         except KeyError:
@@ -250,7 +249,8 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_title(self, dom) -> str:
-        elem = dom.find("section", {"id": ["featured-film-header"]})
+        elem = dom.find("section", {"id": ["featured-film-header"]}) 
+        elem = dom.find('section', ['film-header-group']) if not elem else elem
         elem = elem.find("h1")
         elem = elem.text if elem else None
         self.title = elem.strip()
@@ -258,6 +258,7 @@ class Movie:
     # letterboxd.com/film/?
     def movie_original_title(self, dom) -> str:
         elem = dom.find("section", {"id": ["featured-film-header"]})
+        elem = dom.find('section', ['film-header-group']) if not elem else elem
         elem = elem.find("em")
         elem = elem.text.strip("'’‘ ") if elem else None
         self.original_title = elem
@@ -311,12 +312,17 @@ def movie_watchers(movie: Movie) -> dict:
     dom = movie.scraper.get_parsed_page("/".join([movie.url, "members"]))
     dom = dom.find("div", {"id": ["content-nav"]})
 
+    hist_url = get_rating_histogram_url(movie.slug)
+    hist_dom = movie.scraper.get_parsed_page(hist_url)
+    histogram_rating = get_classic_histogram_rating(hist_dom)
+
     data = {
         'watch_count': 0,
         'fan_count': 0,
         'like_count': 0,
         'review_count': 0,
-        'list_count': 0
+        'list_count': 0,
+        'histogram_rating': histogram_rating if histogram_rating else 0,
     }
 
     if dom:
