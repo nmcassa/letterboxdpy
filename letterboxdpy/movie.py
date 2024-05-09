@@ -322,7 +322,7 @@ def movie_watchers(movie: Movie) -> dict:
         'like_count': 0,
         'review_count': 0,
         'list_count': 0,
-        'histogram_rating': histogram_rating if histogram_rating else 0,
+        'histogram_rating': histogram_rating
     }
 
     if dom:
