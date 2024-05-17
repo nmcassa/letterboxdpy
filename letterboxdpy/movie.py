@@ -10,14 +10,6 @@ from letterboxdpy.url import get_rating_histogram_url
 from letterboxdpy.ratings import get_classic_histogram_rating
 from letterboxdpy.utils import extract_numeric_text
 
-from json import (
-  dumps as json_dumps,
-  loads as json_loads,
-)
-from url import get_rating_histogram_url
-from ratings import get_classic_histogram_rating
-from utils import extract_numeric_text
-
 class Movie:
     DOMAIN = 'https://letterboxd.com'
 
@@ -250,7 +242,7 @@ class Movie:
     # letterboxd.com/film/?
     def movie_title(self, dom) -> str:
         elem = dom.find("section", {"id": ["featured-film-header"]}) 
-        elem = dom.find('section', ['film-header-group']) if not elem else elem
+        elem = dom.find('section', ['film-header-group']) if elem is None else elem
         elem = elem.find("h1")
         elem = elem.text if elem else None
         self.title = elem.strip()
@@ -258,7 +250,7 @@ class Movie:
     # letterboxd.com/film/?
     def movie_original_title(self, dom) -> str:
         elem = dom.find("section", {"id": ["featured-film-header"]})
-        elem = dom.find('section', ['film-header-group']) if not elem else elem
+        elem = dom.find('section', ['film-header-group']) if elem is None else elem
         elem = elem.find("em")
         elem = elem.text.strip("'’‘ ") if elem else None
         self.original_title = elem

@@ -1,4 +1,5 @@
 import unicodedata
+from bs4 import BeautifulSoup
 from letterboxdpy.utils import extract_numeric_text
 
 rating_conversion = {
@@ -14,10 +15,12 @@ rating_conversion = {
   '★★★★★': 5,
 }
 
-def get_classic_histogram_rating(hist_dom) -> int:
-  # NOTE: the rating algorithm is estimated based
-  # on prior handling of films before the algorithm update of June 2023
-  # was incorporated
+def get_classic_histogram_rating(hist_dom: BeautifulSoup) -> int:
+  '''
+    Calculate movie's average rating using the classic histogram rating.\n
+    This algorithm is an estimation of the old algorithm.
+  '''
+  # NOTE: algorithm change occurred in June 2023
 
   all_rating_el = hist_dom.find_all('li', 'rating-histogram-bar')
   RATING_COUNT_THRESHOLD = 40
