@@ -239,10 +239,9 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_title(self, dom) -> str:
-        elem = dom.find("section", {"id": ["featured-film-header"]})
-        elem = elem.find("h1")
+        elem = dom.find("h1", {"class": ["filmtitle"]})
         elem = elem.text if elem else None
-        self.title = elem.strip()
+        self.title = elem
 
     # letterboxd.com/film/?
     def movie_original_title(self, dom) -> str:
@@ -250,7 +249,7 @@ class Movie:
         elem = elem.find("em")
         elem = elem.text.strip("'’‘ ") if elem else None
         self.original_title = elem
-      
+
     # letterboxd.com/film/?
     def movie_runtime(self, dom) -> int:
         elem = dom.find("p", {"class": ["text-footer"]})
