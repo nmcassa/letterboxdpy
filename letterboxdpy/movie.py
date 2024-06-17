@@ -179,14 +179,14 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_year(self, dom, script: dict=None) -> int:
-        elem = dom.find('small', attrs={'class': 'number'})
-        year = int(elem.text) if elem else None
+        elem = dom.find('div', {'class': 'releaseyear'})
+        year = elem.text if elem else None
         try:
             year = year if year else (
-                script['releasedEvent']['startDate'] if script else None
+                script['releasedEvent'][0]['startDate'] if script else None
                 )
             self.year = int(year)
-        except KeyError:
+        except (KeyError, ValueError):
             self.year = None
 
     # letterboxd.com/film/?
