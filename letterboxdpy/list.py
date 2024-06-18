@@ -1,4 +1,4 @@
-from letterboxdpy.decorators import assert_instance
+from letterboxdpy.parser import get_movies_from_vertical_list
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
 import re
@@ -12,9 +12,6 @@ from json import (
 class List:
     DOMAIN = "https://letterboxd.com"
 
-    LIST_CONTAINER = ("ul", {"class": ["poster-list"]})
-    WATCHLIST_CONTAINER = ("ul", {"class": ["poster-list"]})
-
     LIST_PATTERN = f'{DOMAIN}/%s/list/%s'
     WATCHLIST_PATTERN = f'{DOMAIN}/%s/watchlist'
 
@@ -24,17 +21,15 @@ class List:
     def __init__(self, username: str, slug: str=None) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid author"
 
-        # Determine the URL and container based on if a slug was passed
+        # Determine the URL based on if a slug was passed
         if slug:
-            # If a slug was passed, use the list URL and container
+            # If a slug was passed, use the list URL
             url = self.LIST_PATTERN % (username, slug) 
-            container = self.LIST_CONTAINER
             list_type = "list"
             items_per_page = self.LIST_ITEMS_PER_PAGE
         else:
-            # Otherwise use the watchlist URL and container  
+            # Otherwise use the watchlist URL
             url = self.WATCHLIST_PATTERN % (username)
-            container = self.WATCHLIST_CONTAINER
             list_type = "watchlist"
             items_per_page = self.WATCHLIST_ITEMS_PER_PAGE
 
@@ -48,9 +43,15 @@ class List:
         self.username = username
         self.list_type = list_type
         self.items_per_page = items_per_page
+
+        # supports: list
         self.title = self.get_title(dom) 
-        self.description = self.get_description(dom)
-        self.movies = self.get_movies(url, container)
+        self.author = self.get_author(dom)
+        self.date_created = self.get_date_created(dom)
+        self.date_updated = self.get_date_updated(dom)
+        self.tags = self.get_tags(dom)
+
+        self.movies = self.get_movies(url)
         self.count = len(self.movies)
 
     def __str__(self):
@@ -59,100 +60,94 @@ class List:
     def jsonify(self):
       return json_loads(self.__str__())
 
-    def get_title(self, dom) -> str:
-        data = dom.find("meta", attrs={'property': 'og:title'})
-        data = data['content'] if 'content' in data.attrs else None
-        return data
-
-    def get_author(self, dom) -> str:
-        data = dom.find("span", attrs={'itemprop': 'name'})
-        data = data.text if data else None
-        return data
-
-    def get_description(self, dom) -> str:
-        data = dom.find("meta", attrs={'property': 'og:description'})
-        data = data['content'] if data else None
-        return data
-
-    def get_movies(self, url: str, container: tuple) -> list:
-        movie_list = []
+    def get_movies(self, url: str) -> dict:
+        data = {}
 
         page = 1
         while True:
             dom = self.scraper.get_parsed_page(f'{url}/page/{page}/')
-            posters = dom.find(*container)
-            posters = posters.find_all("img", {"class": ["image"]}) if posters else []
+            movies = get_movies_from_vertical_list(dom)
+            data |= movies
 
-            for poster in posters:
-                movie_url = poster.parent['data-film-slug']
-                movie_list.append((poster['alt'], movie_url))
-
-            if len(posters) < self.items_per_page:
+            if len(movies) < self.items_per_page:
                 break
 
             page += 1
 
-        return movie_list
+        return data
 
-# -- FUNCTIONS --
+    @staticmethod
+    def get_title(dom) -> str:
+        data = dom.find("meta", attrs={'property': 'og:title'})
+        data = data['content'] if 'content' in data.attrs else None
+        return data
 
-@assert_instance(List)
-def date_created(instance: List) -> list:
-    """
-    Scrapes the list page to find and return the creation
-    .. date as a string, defaulting to the last updated
-    .. date if creation is not available.
-    The decorator ensures a valid List is passed.
-    """
-    dom = instance.scraper.get_parsed_page(instance.url)
-    data = dom.find("span", {"class": "published is-updated"})
+    @staticmethod
+    def get_author(dom) -> str:
+        data = dom.find("span", attrs={'itemprop': 'name'})
+        data = data.text if data else None
+        return data
 
-    if data:
-        data = data.findChild("time").text
-    else:
-        data = dom.find("span", {"class": "published"})
-        if data: # Watchlists won't have a date created
-            data = data.text
+    @staticmethod
+    def get_description(dom) -> str:
+        data = dom.find("meta", attrs={'property': 'og:description'})
+        data = data['content'] if data else None
+        return data
 
-    return data
+    @staticmethod
+    def get_date_created(dom) -> list:
+        """
+        Scrapes the list page to find and return the creation
+        .. date as a string, defaulting to the last updated
+        .. date if creation is not available.
+        The decorator ensures a valid List is passed.
+        """
+        data = dom.find("span", {"class": "published is-updated"})
 
-@assert_instance(List)
-def date_updated(instance: List) -> list:
-    """
-    Scrapes the list page to find and return either
-    .. the last updated or published date as a string.
-    The decorator ensures a valid List is passed.
-    """
-    dom = instance.scraper.get_parsed_page(instance.url)
-    data = dom.find("span", {"class": "updated"})
+        if data:
+            data = data.findChild("time").text
+        else:
+            data = dom.find("span", {"class": "published"})
+            if data: # Watchlists won't have a date created
+                data = data.text
 
-    if data:
-        data = data.findChild("time").text
-    else:
-        data = dom.find("span", {"class": "published"})
-        if data: # Watchlists won't have a date updated
-            data = data.text
+        return data
 
-    return data
+    @staticmethod
+    def get_date_updated(dom) -> list:
+        """
+        Scrapes the list page to find and return either
+        .. the last updated or published date as a string.
+        The decorator ensures a valid List is passed.
+        """
+        data = dom.find("span", {"class": "updated"})
 
-@assert_instance(List)
-def list_tags(instance: List) -> list:
-    """
-    Scraping the tag links from a Letterboxd list page and
-    .. extracting just the tag names into a clean list.
-    The decorator ensures a valid List instance is passed.
-    """
-    dom = instance.scraper.get_parsed_page(instance.url)
-    dom = dom.find("ul", {"class": ["tags"]})
+        if data:
+            data = data.findChild("time").text
+        else:
+            data = dom.find("span", {"class": "published"})
+            if data: # Watchlists won't have a date updated
+                data = data.text
 
-    data = []
+        return data
 
-    if dom:
-        dom = dom.findChildren("a")
-        for item in dom:
-            data.append(item.text)
+    @staticmethod
+    def get_tags(dom) -> list:
+        """
+        Scraping the tag links from a Letterboxd list page and
+        .. extracting just the tag names into a clean list.
+        The decorator ensures a valid List instance is passed.
+        """
+        dom = dom.find("ul", {"class": ["tags"]})
 
-    return data
+        data = []
+
+        if dom:
+            dom = dom.findChildren("a")
+            for item in dom:
+                data.append(item.text)
+
+        return data
 
 if __name__ == "__main__":
 
@@ -162,9 +157,9 @@ if __name__ == "__main__":
     print('type:', list_instance.list_type)
     print('url:', list_instance.url)
     print('count:', list_instance.count)
-    print('created:', date_created(list_instance))
-    print('updated:', date_updated(list_instance))
-    print('tags:', list_tags(list_instance), end="\n"*2)
+    print('created:', list_instance.date_created)
+    print('updated:', list_instance.date_updated)
+    print('tags:', list_instance.tags, end="\n"*2)
 
     # user watchlist usage:
     watchlist_instance = List("mrbs")
@@ -172,6 +167,6 @@ if __name__ == "__main__":
     print('type:', watchlist_instance.list_type)
     print('url:', watchlist_instance.url)
     print('count:', watchlist_instance.count)
-    print('created:', date_created(watchlist_instance))
-    print('updated:', date_updated(watchlist_instance))
-    print('tags:', list_tags(watchlist_instance))
+    print('created:', watchlist_instance.date_created)
+    print('updated:', watchlist_instance.date_updated)
+    print('tags:', watchlist_instance.tags, end="\n"*2)

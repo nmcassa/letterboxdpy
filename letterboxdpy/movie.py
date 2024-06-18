@@ -1,3 +1,4 @@
+from letterboxdpy.utils import extract_numeric_text
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
@@ -6,7 +7,6 @@ from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
-from utils import extract_numeric_text
 
 class Movie:
     DOMAIN = 'https://letterboxd.com'
@@ -54,7 +54,8 @@ class Movie:
     # letterboxd.com/film/?
     def movie_banner(self, dom) -> str:
         elem = dom.find("div", {"id": ["backdrop"]})
-        self.banner = elem['data-backdrop2x'].split('?')[0] if elem else None
+        exists = elem and "data-backdrop2x" in elem.attrs
+        self.banner = elem['data-backdrop2x'].split('?')[0] if exists else None
 
     # letterboxd.com/film/?
     def movie_trailer(self, dom) -> dict:
@@ -179,14 +180,14 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_year(self, dom, script: dict=None) -> int:
-        elem = dom.find('small', attrs={'class': 'number'})
-        year = int(elem.text) if elem else None
+        elem = dom.find('div', {'class': 'releaseyear'})
+        year = elem.text if elem else None
         try:
             year = year if year else (
-                script['releasedEvent']['startDate'] if script else None
+                script['releasedEvent'][0]['startDate'] if script else None
                 )
             self.year = int(year)
-        except KeyError:
+        except (KeyError, ValueError):
             self.year = None
 
     # letterboxd.com/film/?
@@ -239,18 +240,16 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_title(self, dom) -> str:
-        elem = dom.find("section", {"id": ["featured-film-header"]})
-        elem = elem.find("h1")
+        elem = dom.find("h1", {"class": ["filmtitle"]})
         elem = elem.text if elem else None
-        self.title = elem.strip()
+        self.title = elem
 
     # letterboxd.com/film/?
     def movie_original_title(self, dom) -> str:
-        elem = dom.find("section", {"id": ["featured-film-header"]})
-        elem = elem.find("em")
-        elem = elem.text.strip("'’‘ ") if elem else None
+        elem = dom.find("h2", {"class": ["originalname"]})
+        elem = elem.text if elem else None
         self.original_title = elem
-      
+
     # letterboxd.com/film/?
     def movie_runtime(self, dom) -> int:
         elem = dom.find("p", {"class": ["text-footer"]})

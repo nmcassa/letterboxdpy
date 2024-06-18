@@ -32,9 +32,8 @@ pip install git+https://github.com/nmcassa/letterboxdpy.git
     - **props**: scraper, url, slug, banner, trailer, cast, crew, details, alternative_titles, genres, rating, year, poster, tagline, description, popular_reviews, letterboxd_id, title, original_title, runtime, tmdb_link, imdb_link
     - **funcs**: [movie_details](/docs/movie/funcs/movie_details.md), [movie_watchers](/docs/movie/funcs/movie_watchers.md)
   - [List Object](#List)
-    - **props**: scraper, url, slug, username, list_type, items_per_page, title, description, movies, count
-    - **funcs**: date_created, date_updated, list_tags
-  - [Search Object](#Search)
+    - **props**: scraper, url, slug, username, list_type, items_per_page, title, author, date_created, date_updated, description, tags, movies, count
+  - [Search Object](#Search):
   - [Members Object](#Members)
 
 

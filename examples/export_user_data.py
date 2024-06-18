@@ -55,7 +55,8 @@ methods = [
     user.user_wrapped,
     user.user_activity,
     user.user_lists,
-    [user.user_watchlist, {'filters': {'genre': ['action', '-drama']}}],
+    # [user.user_watchlist, {'filters': {'genre': ['action', '-drama']}}],
+    user.user_watchlist,
     user.user_tags
 ]
 
