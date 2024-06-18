@@ -1,3 +1,4 @@
+from letterboxdpy.utils import extract_numeric_text
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
@@ -6,7 +7,6 @@ from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
-from utils import extract_numeric_text
 
 class Movie:
     DOMAIN = 'https://letterboxd.com'
