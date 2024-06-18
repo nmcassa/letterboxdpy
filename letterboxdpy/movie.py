@@ -54,7 +54,8 @@ class Movie:
     # letterboxd.com/film/?
     def movie_banner(self, dom) -> str:
         elem = dom.find("div", {"id": ["backdrop"]})
-        self.banner = elem['data-backdrop2x'].split('?')[0] if elem else None
+        exists = elem and "data-backdrop2x" in elem.attrs
+        self.banner = elem['data-backdrop2x'].split('?')[0] if exists else None
 
     # letterboxd.com/film/?
     def movie_trailer(self, dom) -> dict:
