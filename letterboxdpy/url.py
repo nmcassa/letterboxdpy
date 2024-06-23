@@ -9,15 +9,15 @@ def get_metadata_url() -> str:
 
 def get_popular_lists_url(film_slug: str) -> str:
   # top lists
-  return "https://letterboxd.com/csi/film/{film_slug}/popular-lists/"
+  return f"https://letterboxd.com/csi/film/{film_slug}/popular-lists/"
 
 def get_recent_reviews_url(film_slug: str) -> str:
   # last reviews
-  return "https://letterboxd.com/csi/film/{film_slug}/recent-reviews/"
+  return f"https://letterboxd.com/csi/film/{film_slug}/recent-reviews/"
 
 def get_rating_histogram_url(film_slug: str) -> str:
   # fan count and ratings
-  return "https://letterboxd.com/csi/film/{film_slug}/rating-histogram/"
+  return f"https://letterboxd.com/csi/film/{film_slug}/rating-histogram/"
 
 def get_user_actions_url(film_slug: str) -> str:
   return f"https://letterboxd.com/csi/film/{film_slug}/sidebar-user-actions/"

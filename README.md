@@ -295,5 +295,18 @@ print(search_instance.get_results(max=5))
 
 [To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+Members)
 
+<h1 id="Testing">Testing</h1>
+
+You may test the plugin by using the built-in `unittest` package through the CLI:
+
+```zsh
+python -m unittest <TEST_FILE_LINK>
+```
+
+**Example**
+```zsh
+python -m unittest tests/test_movie.py
+```
+
 ## Stargazers over time
 [![Stargazers over time](https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636)](https://starchart.cc/nmcassa/letterboxdpy)
