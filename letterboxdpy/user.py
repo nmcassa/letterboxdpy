@@ -257,51 +257,44 @@ def extract_user_films(user: User, url=None) -> dict:
 
     return movie_list
 
+
+# letterboxd.com/?/?/
+def user_network(user: User, section: str) -> dict:
+    """
+    Fetches followers or following based on the section and returns them as a dictionary
+    - The section to scrape, must be either 'followers' or 'following'.
+    """
+    PERSONS_PER_PAGE = 25
+    BASE_URL = f"{user.url}/{section}"
+
+    ret = {}
+    page = 1
+    while True:
+        dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+        persons = dom.find_all("img", attrs={'height': '40'})
+
+        for person in persons:
+            ret[person.parent['href'].replace('/', '')] = {
+                'display_name': person['alt'],
+            }
+
+        if len(persons) < PERSONS_PER_PAGE:
+            break
+        page += 1
+
+    return ret
+
 # letterboxd.com/?/following/
 @assert_instance(User)
 def user_following(user: User) -> dict:
-    ret = {}
-    next_page = f"{user.url}/following/"
-    while (True):
-        dom = user.scraper.get_parsed_page(next_page)
-        data = dom.findAll("div", {"class": ["person-summary"], })
-        next_page = dom.find("a", {"class": ["next"], })
-        if next_page is not None:
-            next_page = f"https://letterboxd.com/{next_page.get('href')}"
-
-        for i in data:
-            following = i.find("a", {"class": ["name"], })
-            name = following.contents[0].strip()
-            userid = following.get('href').strip('/')
-            ret[userid]= {'display_name':name}
-
-        if next_page is None:
-            break
-
-    return ret
+    """Fetches following and returns them as a dictionary"""
+    return user_network(user, 'following')
 
 # letterboxd.com/?/followers/
 @assert_instance(User)
 def user_followers(user: User) -> dict:
-    ret = {}
-    next_page = f"{user.url}/followers/"
-    while (True):
-        dom = user.scraper.get_parsed_page(next_page)
-        data = dom.findAll("div", {"class": ["person-summary"], })
-        next_page = dom.find("a", {"class": ["next"], })
-        if next_page is not None:
-            next_page = f"https://letterboxd.com/{next_page.get('href')}"
-
-        for i in data:
-            followers = i.find("a", {"class": ["name"], })
-            name = followers.contents[0].strip()
-            userid = followers.get('href').strip('/')
-            ret[userid]= {'display_name':name}
-
-        if next_page is None:
-            break
-
-    return ret
+    """Fetches followers and returns them as a dictionary"""
+    return user_network(user, 'followers')
 
 # letterboxd.com/?/films/genre/*/
 @assert_instance(User)
