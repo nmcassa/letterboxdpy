@@ -260,32 +260,46 @@ def extract_user_films(user: User, url=None) -> dict:
 # letterboxd.com/?/following/
 @assert_instance(User)
 def user_following(user: User) -> dict:
-    # returns the first page of following
-    dom = user.scraper.get_parsed_page(f"{user.url}/following/")
-    data = dom.find_all("img", attrs={'height': '40'})
-
     ret = {}
+    next_page = f"{user.url}/following/"
+    while (True):
+        dom = user.scraper.get_parsed_page(next_page)
+        data = dom.findAll("div", {"class": ["person-summary"], })
+        next_page = dom.find("a", {"class": ["next"], })
+        if next_page is not None:
+            next_page = f"https://letterboxd.com/{next_page.get('href')}"
 
-    for person in data:
-        ret[person.parent['href'].replace('/', '')] = {
-            'display_name': person['alt'],
-        }
+        for i in data:
+            following = i.find("a", {"class": ["name"], })
+            name = following.contents[0].strip()
+            userid = following.get('href').strip('/')
+            ret[userid]= {'display_name':name}
+
+        if next_page is None:
+            break
 
     return ret
 
 # letterboxd.com/?/followers/
 @assert_instance(User)
 def user_followers(user: User) -> dict:
-    #returns the first page of followers
-    dom = user.scraper.get_parsed_page(f"{user.url}/followers/")
-    data = dom.find_all("img", attrs={'height': '40'})
-
     ret = {}
+    next_page = f"{user.url}/followers/"
+    while (True):
+        dom = user.scraper.get_parsed_page(next_page)
+        data = dom.findAll("div", {"class": ["person-summary"], })
+        next_page = dom.find("a", {"class": ["next"], })
+        if next_page is not None:
+            next_page = f"https://letterboxd.com/{next_page.get('href')}"
 
-    for person in data:
-        ret[person.parent['href'].replace('/', '')] = {
-            'display_name': person['alt'],
-        }
+        for i in data:
+            followers = i.find("a", {"class": ["name"], })
+            name = followers.contents[0].strip()
+            userid = followers.get('href').strip('/')
+            ret[userid]= {'display_name':name}
+
+        if next_page is None:
+            break
 
     return ret
 
@@ -867,6 +881,40 @@ def user_tags(user: User) -> dict:
     data['count'] = sum([data[page]['count'] for page in pages])
 
     return data
+
+# letterboxd.com/?/likes/reviews/
+@assert_instance(User)
+def user_liked_reviews(user: User) -> dict:
+    '''Returns a dict of the other users whose reviews were liked'''
+
+    ret = {}
+    next_page = "https://letterboxd.com/" + user.username + "/likes/reviews/"
+    while (True):
+        dom = user.scraper.get_parsed_page(next_page)
+        data = dom.findAll("a", {"class": ["context"], })
+        next_page = dom.find("a", {"class": ["next"], })
+
+        if next_page is not None:
+            next_page = f"https://letterboxd.com/{next_page.get('href')}"
+
+        for i in data:
+            i = i.get('href').split('/')
+            liked_user = i[1]
+            liked_film = i[3]
+            liked_entry = 0 if len(i) != 6 else int(i[4])
+            # Link to liked review in form of letterboxd.com/{liked_user}/film/{liked_film}/{liked_entry}/
+            if liked_user not in ret:
+                ret[liked_user]=dict()
+                ret[liked_user]['likes']=0
+                ret[liked_user]['films']=dict()
+            if liked_film not in ret[liked_user]['films']:
+                ret[liked_user]['films'][liked_film] = set()
+            ret[liked_user]['likes'] = ret[liked_user]['likes']+1
+            ret[liked_user]['films'][liked_film].add(liked_entry)
+        if next_page is None:
+            break
+
+    return ret
 
 if __name__ == "__main__":
     import argparse
