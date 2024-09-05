@@ -10,8 +10,8 @@ from letterboxdpy.scraper import (
 
 class Search:
     DOMAIN = "https://letterboxd.com"
-    SEARCH_URL = f"{DOMAIN}/search"
-    MAX_RESULTS = 250
+    SEARCH_URL = f"{DOMAIN}/s/search"
+    MAX_RESULTS = 20 # 250
     MAX_RESULTS_PER_PAGE = 20
     MAX_RESULTS_PAGE = MAX_RESULTS // MAX_RESULTS_PER_PAGE + 1
     FILTERS = ['films', 'reviews', 'lists', 'original-lists',
