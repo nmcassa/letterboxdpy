@@ -3,6 +3,7 @@ if __loader__.name == '__main__':
     sys.path.append(sys.path[0] + '/..')
 
 from letterboxdpy.utils.utils_parser import parse_review_date
+from letterboxdpy.parser import get_movies_from_user_watched
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
@@ -198,67 +199,47 @@ def user_films_rated(user: User, rating: float | int) -> dict:
 
 # user:films
 @assert_instance(User)
-def extract_user_films(user: User, url=None) -> dict:
-    
+def extract_user_films(user: User, url: str = None) -> dict:
     if not url:
         """If the url is not specified, all the movies that the user has watched
         will be checked, you can use the user_films function to do this"""
         return user_films(user)
-    
+
     FILMS_PER_PAGE = 12*6
     movie_list = {'movies': {}}
-    count = 0
-    rating_count = 0
-    liked_count = 0
-
+    page = 0
     while True:
-        count += 1
-        dom = user.scraper.get_parsed_page(f"{url}/page/{count}/")
+        page += 1
+        dom = user.scraper.get_parsed_page(f"{url}/page/{page}/")
+        movies = get_movies_from_user_watched(dom)
+        movie_list['movies'] |= movies
 
-        poster_containers = dom.find_all("li", {"class": ["poster-container"], })
+        if len(movies) < FILMS_PER_PAGE:
+            liked_count = sum(
+                [movie['liked'] for movie in movie_list['movies'].values()])
+            rating_count = len(
+                [movie['rating'] for movie in movie_list['movies'].values() if movie['rating'] is not None])
 
-        for poster_container in poster_containers:
-            poster = poster_container.div
-            poster_viewingdata = poster_container.p
-            rating = None
-            liked = False
-
-            if poster_viewingdata.span:
-                for span in poster_viewingdata.find_all("span"):
-                    if 'rating' in span['class']:
-                        rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
-                        rating_count += 1
-                    elif 'like' in span['class']:
-                        liked = True
-                        liked_count += 1
-
-            movie_list["movies"][poster["data-film-slug"]] = {
-                'name': poster.img["alt"],
-                "id": poster["data-film-id"],
-                "rating": rating,
-                "liked": liked
-            }
-
-        if len(poster_containers) < FILMS_PER_PAGE:
             movie_list['count'] = len(movie_list['movies'])
             movie_list['liked_count'] = liked_count
             movie_list['rating_count'] = rating_count
+
             if liked_count:
                 movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
             else:
                 movie_list['liked_percentage'] = 0.0
+
             movie_list['rating_percentage'] = 0.0
             movie_list['rating_average'] = 0.0
 
             if rating_count:
-                ratings = [movie['rating'] for movie in movie_list['movies'].values() if movie['rating'] is not None]
+                ratings = [movie['rating'] for movie in movie_list['movies'].values() if movie['rating']]
                 movie_list['rating_percentage'] = round(rating_count / movie_list['count'] * 100, 2)
                 movie_list['rating_average'] = round(sum(ratings) / rating_count, 2)
 
             break
 
     return movie_list
-
 
 # letterboxd.com/?/?/
 def user_network(user: User, section: str) -> dict:
