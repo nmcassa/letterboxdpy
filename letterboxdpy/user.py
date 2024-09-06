@@ -484,13 +484,12 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
 
     return ret
 
-
 # dependency: user_diary()
 @assert_instance(User)
 def user_wrapped(user: User, year: int=2024) -> dict:
     """Wraps user diary data for the specified year and calculates statistics."""
 
-    def retrieve_diary(user: User, year: int) -> dict:
+    def retrieve_diary() -> dict:
         """Retrieves the diary for the given user and year."""
         try:
             diary = user_diary(user, year)
@@ -530,7 +529,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
             first_watched = {log_id: data}
         return first_watched, last_watched
 
-    diary = retrieve_diary(user, year)
+    diary = retrieve_diary()
 
     movies = {}
     milestones = {}
