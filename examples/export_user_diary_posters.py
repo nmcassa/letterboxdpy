@@ -63,7 +63,7 @@ class App:
     def run(self):
         
         count = self.data['count']
-        entrys = self.data['entrys']
+        entries = self.data['entries']
         already_start = 0
 
         if not count:
@@ -84,7 +84,7 @@ class App:
             Path.check_path(years_dir)
             previous_year = None
 
-        for v in entrys.values():
+        for v in entries.values():
             date = v["date"]
 
             file_date = "-".join(map(str, date.values()))

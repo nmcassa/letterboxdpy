@@ -11,7 +11,7 @@ print(user.user_diary(user_instance))
 
 ```json
 {
-    "entrys": {
+    "entries": {
         "513520182": {
             "name": "Black Swan",
             "slug": "black-swan",
