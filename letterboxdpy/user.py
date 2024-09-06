@@ -696,46 +696,49 @@ def user_activity(user: User) -> dict:
 def user_lists(user: User) -> dict:
     BASE_URL = f"{user.url}/lists/"
     LISTS_PER_PAGE = 12
-
-    selectors = {
-        'list_set': ('section', {'class': 'list-set', }),
-        'lists': ('section', {'class': 'list', }),
-        'title': ('h2', {'class': 'title', }),
-        'description': ('div', {'class': 'body-text', }),
-        'value': ('small', {'class': 'value', }),
-        'likes': ('a', {'class': 'icon-like', }),
-        'comments': ('a', {'class': 'icon-comment', }),
+    SELECTORS = {
+        'list_set': ('section', {'class': 'list-set'}),
+        'lists': ('section', {'class': 'list'}),
+        'title': ('h2', {'class': 'title'}),
+        'description': ('div', {'class': 'body-text'}),
+        'value': ('small', {'class': 'value'}),
+        'likes': ('a', {'class': 'icon-like'}),
+        'comments': ('a', {'class': 'icon-comment'}),
     }
 
-    page = 0
-    data = {'lists': {}}
-    while True:
-        page += 1
+    def fetch_page_data(page: int) -> dict:
+        """Fetch and parse page data."""
         dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+        list_set = dom.find(*SELECTORS['list_set'])
+        return list_set
 
-        list_set = dom.find(*selectors['list_set'])
-        if not list_set:
-            break
-        lists = list_set.find_all(*selectors['lists'])
+    def extract_list_data(item) -> dict:
+        """Extract data from a list item."""
 
-        for item in lists:
-            # id
-            list_id = item['data-film-list-id']
-            # title
-            list_title = item.find(*selectors['title']).text.strip()
-            # description
-            description = item.find(*selectors['description'])
+        def get_id() -> str:
+            return item['data-film-list-id']
+
+        def get_title() -> str:
+            return item.find(*SELECTORS['title']).text.strip()
+
+        def get_description() -> str:
+            description = item.find(*SELECTORS['description'])
             if description:
-                description = description.find_all('p')
-                description = '\n'.join([p.text for p in description])
-            # url
-            list_url = item.find(*selectors['title']).a['href']
-            # slug
-            list_slug = list_url.split('/')[-2]
-            # count
-            count = int(item.find(*selectors['value']).text.split()[0].replace(',',''))
-            # likes
-            likes = item.find(*selectors['likes'])
+                paragraphs = description.find_all('p')
+                return '\n'.join([p.text for p in paragraphs])
+            return description
+
+        def get_url() -> str:
+            return user.DOMAIN + item.find(*SELECTORS['title']).a['href']
+
+        def get_slug() -> str:
+            return get_url().split('/')[-2]
+
+        def get_count() -> int:
+            return int(item.find(*SELECTORS['value']).text.split()[0].replace(',', ''))
+
+        def get_likes() -> int:
+            likes = item.find(*SELECTORS['likes'])
             likes = likes if likes else 0
             if likes:
                 likes = likes.text.split()[0].replace(',','')
@@ -743,26 +746,44 @@ def user_lists(user: User) -> dict:
                     likes = likes.replace('K', '')
                     likes = float(likes) * 1000
                 likes = int(likes)
-            # comments
-            # feature: https://letterboxd.com/ajax/filmlist:<list-id>/comments/
-            comments = item.find(*selectors['comments'])
-            comments = int(comments.text.split()[0].replace(',','')) if comments else 0
+            return likes
 
-            data['lists'][list_id] = {
-                'title': list_title,
-                'slug': list_slug,
-                'description': description,
-                'url': user.DOMAIN + list_url,
-                'count': count,
-                'likes': likes,
-                'comments': comments
+        def get_comments() -> int:
+            comments = item.find(*SELECTORS['comments'])
+            comments = int(comments.text.split()[0].replace(',','')) if comments else 0
+            return comments
+
+        return {
+             get_id(): {
+                'title': get_title(),
+                'slug': get_slug(),
+                'description': get_description(),
+                'url': get_url(),
+                'count': get_count(),
+                'likes': get_likes(),
+                'comments': get_comments()
                 }
+            }
+
+    data = {'lists': {}}
+    page = 1
+    while True:
+        list_set = fetch_page_data(page)
+        if not list_set:
+            break
+
+        lists = list_set.find_all(*SELECTORS['lists'])
+        for item in lists:
+            list_data = extract_list_data(item)
+            data['lists'] |= list_data
 
         if len(lists) < LISTS_PER_PAGE:
             break
+        page += 1
 
     data['count'] = len(data['lists'])
     data['last_page'] = page
+
     return data
 
 # https://letterboxd.com/?/watchlist/
