@@ -152,8 +152,9 @@ class User:
                 self.watchlist_length = None
 
         # stats
-        stats = dom.find_all("h4", {"class": ["profile-statistic"], })
+        stats = dom.find_all("h4", {"class": ["profile-statistic"]})
         self.stats = {} if stats else None
+        # e.g: "films", "this_year", "lists", "following", "followers"
         for stat in stats:
             value = stat.span.text
             key = stat.text.lower().replace(value,'').replace(' ','_')
@@ -879,33 +880,100 @@ def user_tags(user: User) -> dict:
 @assert_instance(User)
 def user_liked_reviews(user: User) -> dict:
     '''Returns a dict of the other users whose reviews were liked'''
+    REVIEWS_PER_PAGE = 12
 
-    ret = {}
-    next_page = "https://letterboxd.com/" + user.username + "/likes/reviews/"
-    while (True):
-        dom = user.scraper.get_parsed_page(next_page)
-        data = dom.findAll("a", {"class": ["context"], })
-        next_page = dom.find("a", {"class": ["next"], })
+    BASE_URL = "https://letterboxd.com/" + user.username + "/likes/reviews"
 
-        if next_page is not None:
-            next_page = f"https://letterboxd.com/{next_page.get('href')}"
+    page = 1
+    ret = {'reviews':{}}
+    while True:
+        dom = user.scraper.get_parsed_page(BASE_URL + f'/page/{page}')
 
-        for i in data:
-            i = i.get('href').split('/')
-            liked_user = i[1]
-            liked_film = i[3]
-            liked_entry = 0 if len(i) != 6 else int(i[4])
-            # Link to liked review in form of letterboxd.com/{liked_user}/film/{liked_film}/{liked_entry}/
-            if liked_user not in ret:
-                ret[liked_user]=dict()
-                ret[liked_user]['likes']=0
-                ret[liked_user]['films']=dict()
-            if liked_film not in ret[liked_user]['films']:
-                ret[liked_user]['films'][liked_film] = set()
-            ret[liked_user]['likes'] = ret[liked_user]['likes']+1
-            ret[liked_user]['films'][liked_film].add(liked_entry)
-        if next_page is None:
+        container = dom.find("ul", {"class": ["film-list"]})
+        items = container.find_all("li", {"class": ["film-detail"]})
+
+        for item in items:
+            elem_review_detail = item.find("div", {"class": ["film-detail-content"]})
+
+            user_url = user.DOMAIN + elem_review_detail.find('a', {"class": ["avatar"]})['href']
+            username = item['data-owner']
+            elem_display_name = elem_review_detail.find('strong', {'class': ['name']})
+            review_log_type = elem_display_name.previous_sibling.text.strip()
+            review_log_type = review_log_type.split()[0]
+            display_name = elem_display_name.text
+            
+            # movie
+            movie_name = elem_review_detail.a.text
+            movie_slug = elem_review_detail.parent.div['data-film-slug']
+            movie_id = elem_review_detail.parent.div['data-film-id']
+            movie_release = int(elem_review_detail.small.text) if elem_review_detail.small else None
+            movie_url = f"{user.DOMAIN}/film/{movie_slug}/"
+
+            # review
+            review_id = item['data-object-id'].split(':')[-1]
+            review_url = user.DOMAIN + elem_review_detail.a['href']
+            review_date = elem_review_detail.find("span", {"class": ["_nobr"]})
+            review_no = review_url.split(movie_slug)[-1]
+            review_no = int(review_no.replace('/', '')) if review_no.count('/') == 2 else 0
+            
+            # script req
+            # review_likes = int(elem_review_detail.find('a', {"class": ["count"]}).text.replace('.', ''))
+            
+            # rating
+            review_rating = elem_review_detail.find("span", {"class": ["rating"]})
+            review_rating = int(review_rating['class'][-1].split('-')[-1]) if review_rating else None
+
+            review_content = elem_review_detail.find("div", {"class": ["body-text"]})
+            spoiler = bool(review_content.find("p", {"class": ["contains-spoilers"]}))
+
+            review_content = review_content.find_all('p')[1 if spoiler else 0:]
+            review_content = '\n'.join([p.text for p in review_content])
+
+            if review_log_type == 'Added':
+                # 2024-01-01T05:45:00.268Z
+                review_date = dict(zip(
+                    ['year', 'month', 'day'],
+                    map(int, review_date.time['datetime'][:10].split('-')
+                    )))
+            else:
+                # 01 Jan 2024
+                review_date = review_date.text.split()
+                review_date = {
+                    'year': int(review_date[2]),
+                    'month': user.MONTH_ABBREVIATIONS.index(review_date[1]) + 1,
+                    'day': int(review_date[0])
+                }
+
+            ret['reviews'][review_id] = {
+                # 'likes': review_likes, script req
+                'type': review_log_type,
+                'no': review_no,
+                'url': review_url,
+                'rating': review_rating,
+                'review': {
+                    'content': review_content,
+                    'spoiler': spoiler,
+                    'date': review_date,
+                },
+                'user': {
+                    'username': username,
+                    'display_name': display_name,
+                    'url': user_url
+                },
+                'movie': {
+                    'name': movie_name,
+                    'slug': movie_slug,
+                    'id': movie_id,
+                    'release': movie_release,
+                    'url': movie_url,
+                },
+                'page': page,
+            }
+
+        if len(items) < REVIEWS_PER_PAGE:
             break
+
+        page += 1
 
     return ret
 
