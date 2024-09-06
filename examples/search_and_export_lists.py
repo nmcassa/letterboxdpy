@@ -46,7 +46,6 @@ def main() -> None:
 
     if search_data['available']:
         results = search_data['results']
-        print(search_data)
         search_count = search_data['count']
         max_lists = int(input(f"Found {search_count} lists. How many to export? (0 for all): "))
 
