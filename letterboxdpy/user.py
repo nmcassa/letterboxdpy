@@ -2,6 +2,7 @@ if __loader__.name == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
+from letterboxdpy.utils.utils_parser import parse_review_date
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
@@ -369,20 +370,7 @@ def user_reviews(user: User) -> dict:
             #              'Rewatched': (in diary) review, watched and rewatched 
             #              'Watched':   (in diary) review and watched
             #              'Added': (not in diary) review 
-            if log_type == 'Added':
-                # 2024-01-01T05:45:00.268Z
-                date = dict(zip(
-                    ['year', 'month', 'day'],
-                    map(int, date.time['datetime'][:10].split('-')
-                    )))
-            else:
-                # 01 Jan 2024
-                date = date.text.split()
-                date = {
-                    'year': int(date[2]),
-                    'month': user.MONTH_ABBREVIATIONS.index(date[1]) + 1,
-                    'day': int(date[0])
-                }
+            date = parse_review_date(log_type, date)
             # dict ^^^--- date: the date of the review.
             #             example: {'year': 2024, 'month': 1, 'day': 1}
 
@@ -929,20 +917,7 @@ def user_liked_reviews(user: User) -> dict:
             review_content = review_content.find_all('p')[1 if spoiler else 0:]
             review_content = '\n'.join([p.text for p in review_content])
 
-            if review_log_type == 'Added':
-                # 2024-01-01T05:45:00.268Z
-                review_date = dict(zip(
-                    ['year', 'month', 'day'],
-                    map(int, review_date.time['datetime'][:10].split('-')
-                    )))
-            else:
-                # 01 Jan 2024
-                review_date = review_date.text.split()
-                review_date = {
-                    'year': int(review_date[2]),
-                    'month': user.MONTH_ABBREVIATIONS.index(review_date[1]) + 1,
-                    'day': int(review_date[0])
-                }
+            review_date = parse_review_date(review_log_type, review_date)
 
             ret['reviews'][review_id] = {
                 # 'likes': review_likes, script req

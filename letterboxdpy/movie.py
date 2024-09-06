@@ -1,4 +1,4 @@
-from letterboxdpy.utils import extract_numeric_text
+from letterboxdpy.utils.utils_parser import extract_numeric_text
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
