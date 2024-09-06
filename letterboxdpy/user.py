@@ -200,43 +200,54 @@ def user_films_rated(user: User, rating: float | int) -> dict:
 # user:films
 @assert_instance(User)
 def extract_user_films(user: User, url: str = None) -> dict:
+    """Extracts user films and their details from the given URL or returns all watched films."""
     if not url:
         """If the url is not specified, all the movies that the user has watched
         will be checked, you can use the user_films function to do this"""
         return user_films(user)
 
-    FILMS_PER_PAGE = 12*6
+    FILMS_PER_PAGE = 12 * 6
+
+    def process_page(page_number: int) -> dict:
+        """Fetches and processes a page of user films."""
+        dom = user.scraper.get_parsed_page(f"{url}/page/{page_number}/")
+        return get_movies_from_user_watched(dom)
+
+    def calculate_statistics(movies: dict) -> dict:
+        """Calculates film statistics including liked and rating percentages."""
+        liked_count = sum(movie['liked'] for movie in movies.values())
+        rating_count = len([movie['rating'] for movie in movies.values() if movie['rating'] is not None])
+
+        count = len(movies)
+        liked_percentage = round(liked_count / count * 100, 2) if liked_count else 0.0
+        rating_percentage = 0.0
+        rating_average = 0.0
+
+        if rating_count:
+            ratings = [movie['rating'] for movie in movies.values() if movie['rating']]
+            rating_percentage = round(rating_count / count * 100, 2)
+            rating_average = round(sum(ratings) / rating_count, 2)
+
+        return {
+            'count': count,
+            'liked_count': liked_count,
+            'rating_count': rating_count,
+            'liked_percentage': liked_percentage,
+            'rating_percentage': rating_percentage,
+            'rating_average': rating_average
+        }
+
     movie_list = {'movies': {}}
     page = 0
+
     while True:
         page += 1
-        dom = user.scraper.get_parsed_page(f"{url}/page/{page}/")
-        movies = get_movies_from_user_watched(dom)
+        movies = process_page(page)
         movie_list['movies'] |= movies
 
         if len(movies) < FILMS_PER_PAGE:
-            liked_count = sum(
-                [movie['liked'] for movie in movie_list['movies'].values()])
-            rating_count = len(
-                [movie['rating'] for movie in movie_list['movies'].values() if movie['rating'] is not None])
-
-            movie_list['count'] = len(movie_list['movies'])
-            movie_list['liked_count'] = liked_count
-            movie_list['rating_count'] = rating_count
-
-            if liked_count:
-                movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
-            else:
-                movie_list['liked_percentage'] = 0.0
-
-            movie_list['rating_percentage'] = 0.0
-            movie_list['rating_average'] = 0.0
-
-            if rating_count:
-                ratings = [movie['rating'] for movie in movie_list['movies'].values() if movie['rating']]
-                movie_list['rating_percentage'] = round(rating_count / movie_list['count'] * 100, 2)
-                movie_list['rating_average'] = round(sum(ratings) / rating_count, 2)
-
+            stats = calculate_statistics(movie_list['movies'])
+            movie_list.update(stats)
             break
 
     return movie_list
