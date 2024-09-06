@@ -415,7 +415,7 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
     '''
     BASE_URL = f"{user.url}/films/diary/{f'for/{year}/'*bool(year)}"
     pagination = page if page else 1
-    ret = {'entrys': {}}
+    ret = {'entries': {}}
 
     while True:
         url = BASE_URL + f"page/{pagination}/"
@@ -472,7 +472,7 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
                 runtime = int(runtime) if runtime else None
 
                 # create entry
-                ret["entrys"][log_id] = {
+                ret["entries"][log_id] = {
                     "name": name,
                     "slug": slug,
                     "id":  id,
@@ -498,15 +498,58 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
         else: # no table
             break
 
-    ret['count'] = len(ret['entrys'])
+    ret['count'] = len(ret['entries'])
     ret['last_page'] = pagination
 
     return ret
 
+
 # dependency: user_diary()
 @assert_instance(User)
 def user_wrapped(user: User, year: int=2024) -> dict:
-    diary = user_diary(user, year)
+    """Wraps user diary data for the specified year and calculates statistics."""
+
+    def retrieve_diary(user: User, year: int) -> dict:
+        """Retrieves the diary for the given user and year."""
+        try:
+            diary = user_diary(user, year)
+        except Exception as e:
+            raise ValueError(f"Failed to retrieve diary for user {user}: {e}") from e
+        
+        if 'entries' not in diary:
+            raise KeyError("Diary data does not contain 'entries' key.")
+        return diary
+
+    def update_counters(date_info: dict, day_counter: dict, month_counter: dict) -> tuple:
+        """Updates the day and month counters based on the watched date."""
+        weekday = datetime(**date_info).weekday() + 1
+        day_counter[weekday] += 1
+        month_counter[date_info['month']] += 1
+        return day_counter, month_counter
+
+    def process_entry(data: dict, total_runtime: int, total_review: int) -> tuple:
+        """Processes a diary entry and returns updated runtime and review counts."""
+        reviewed = data["actions"]['reviewed']
+        total_review += 1 if reviewed else 0
+        runtime = data['runtime']
+        total_runtime += runtime if runtime else 0
+        return total_runtime, total_review
+
+    def update_milestones(entry_no: int, log_id: str, data: dict, milestones: dict) -> dict:
+        """Updates milestones every 50 entries."""
+        if entry_no % 50 == 0:
+            milestones[entry_no] = {log_id: data}
+        return milestones
+
+    def update_watched_entries(log_id: str, data: dict, first_watched: dict, last_watched: dict) -> tuple:
+        """Tracks the first and last watched entries."""
+        if not last_watched:
+            last_watched = {log_id: data}
+        else:
+            first_watched = {log_id: data}
+        return first_watched, last_watched
+
+    diary = retrieve_diary(user, year)
 
     movies = {}
     milestones = {}
@@ -518,7 +561,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
     last_watched = None
 
     no = 0
-    for log_id, data in diary['entrys'].items():
+    for log_id, data in diary['entries'].items():
         watched_date = data['date']
 
         if watched_date['year'] == year:
@@ -526,24 +569,10 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 
             movies[log_id] = data
 
-            days[datetime(**watched_date).weekday()+1] += 1
-            months[watched_date['month']] += 1
-
-            reviewed = data["actions"]['reviewed']
-            total_review += 1 if reviewed else 0
-
-            runtime = data['runtime']
-            total_runtime += runtime if runtime else 0
-
-            if not no % 50:
-                milestones[no] = {log_id:data}
-
-            if not last_watched:
-                # first item is last watched
-                last_watched = {log_id:data}
-            else:
-                # last item is first watched
-                first_watched = {log_id:data}
+            days, months = update_counters(watched_date, days, months)
+            total_runtime, total_review = process_entry(data, total_runtime, total_review)
+            milestones = update_milestones(no, log_id, data, milestones)
+            first_watched, last_watched = update_watched_entries(log_id, data, first_watched, last_watched)
     
     wrapped = {
         'year': year,
