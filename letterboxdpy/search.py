@@ -13,7 +13,7 @@ class Search:
     SEARCH_URL = f"{DOMAIN}/s/search"
     MAX_RESULTS = 20 # 250
     MAX_RESULTS_PER_PAGE = 20
-    MAX_RESULTS_PAGE = MAX_RESULTS // MAX_RESULTS_PER_PAGE + 1
+    MAX_RESULTS_PAGE = MAX_RESULTS // MAX_RESULTS_PER_PAGE
     FILTERS = ['films', 'reviews', 'lists', 'original-lists',
                'stories', 'cast-crew', 'members', 'tags',
                'articles', 'episodes', 'full-text']
@@ -57,7 +57,7 @@ class Search:
          'results': []
          }
   
-      result_count = 1
+      result_count = 0
       for current_page in range(1, end_page+1):
         url = f'{self.url}/page/{current_page}/?adult'
         dom = self.scraper.get_parsed_page(url)
