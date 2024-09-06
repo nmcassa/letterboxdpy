@@ -247,25 +247,41 @@ def user_network(user: User, section: str) -> dict:
     Fetches followers or following based on the section and returns them as a dictionary
     - The section to scrape, must be either 'followers' or 'following'.
     """
-    PERSONS_PER_PAGE = 25
     BASE_URL = f"{user.url}/{section}"
+    PERSONS_PER_PAGE = 25
 
-    ret = {}
-    page = 1
-    while True:
-        dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+    def fetch_page(page_num: int):
+        """Fetches a single page of the user's network section."""
+        try:
+            return user.scraper.get_parsed_page(f"{BASE_URL}/page/{page_num}")
+        except Exception as e:
+            raise RuntimeError(f"Failed to fetch page {page_num}: {e}")
+
+    def extract_persons(dom) -> dict:
+        """Extracts persons from a DOM object and returns them as a dictionary."""
         persons = dom.find_all("img", attrs={'height': '40'})
+        persons_dict = {}
 
         for person in persons:
-            ret[person.parent['href'].replace('/', '')] = {
-                'display_name': person['alt'],
-            }
+            profile_url = person.parent['href'].replace('/', '')
+            persons_dict[profile_url] = {'display_name': person['alt']}
 
-        if len(persons) < PERSONS_PER_PAGE:
+        return persons_dict
+
+    users_list = {}
+    page_num = 1
+
+    while True:
+        dom = fetch_page(page_num)
+        persons = extract_persons(dom)
+        users_list.update(persons)
+
+        if len(persons) < PERSONS_PER_PAGE :
             break
-        page += 1
 
-    return ret
+        page_num += 1
+
+    return users_list
 
 # letterboxd.com/?/following/
 @assert_instance(User)
