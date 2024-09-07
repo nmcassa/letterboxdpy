@@ -200,43 +200,54 @@ def user_films_rated(user: User, rating: float | int) -> dict:
 # user:films
 @assert_instance(User)
 def extract_user_films(user: User, url: str = None) -> dict:
+    """Extracts user films and their details from the given URL or returns all watched films."""
     if not url:
         """If the url is not specified, all the movies that the user has watched
         will be checked, you can use the user_films function to do this"""
         return user_films(user)
 
-    FILMS_PER_PAGE = 12*6
+    FILMS_PER_PAGE = 12 * 6
+
+    def process_page(page_number: int) -> dict:
+        """Fetches and processes a page of user films."""
+        dom = user.scraper.get_parsed_page(f"{url}/page/{page_number}/")
+        return get_movies_from_user_watched(dom)
+
+    def calculate_statistics(movies: dict) -> dict:
+        """Calculates film statistics including liked and rating percentages."""
+        liked_count = sum(movie['liked'] for movie in movies.values())
+        rating_count = len([movie['rating'] for movie in movies.values() if movie['rating'] is not None])
+
+        count = len(movies)
+        liked_percentage = round(liked_count / count * 100, 2) if liked_count else 0.0
+        rating_percentage = 0.0
+        rating_average = 0.0
+
+        if rating_count:
+            ratings = [movie['rating'] for movie in movies.values() if movie['rating']]
+            rating_percentage = round(rating_count / count * 100, 2)
+            rating_average = round(sum(ratings) / rating_count, 2)
+
+        return {
+            'count': count,
+            'liked_count': liked_count,
+            'rating_count': rating_count,
+            'liked_percentage': liked_percentage,
+            'rating_percentage': rating_percentage,
+            'rating_average': rating_average
+        }
+
     movie_list = {'movies': {}}
     page = 0
+
     while True:
         page += 1
-        dom = user.scraper.get_parsed_page(f"{url}/page/{page}/")
-        movies = get_movies_from_user_watched(dom)
+        movies = process_page(page)
         movie_list['movies'] |= movies
 
         if len(movies) < FILMS_PER_PAGE:
-            liked_count = sum(
-                [movie['liked'] for movie in movie_list['movies'].values()])
-            rating_count = len(
-                [movie['rating'] for movie in movie_list['movies'].values() if movie['rating'] is not None])
-
-            movie_list['count'] = len(movie_list['movies'])
-            movie_list['liked_count'] = liked_count
-            movie_list['rating_count'] = rating_count
-
-            if liked_count:
-                movie_list['liked_percentage'] = round(liked_count / movie_list['count'] * 100, 2)
-            else:
-                movie_list['liked_percentage'] = 0.0
-
-            movie_list['rating_percentage'] = 0.0
-            movie_list['rating_average'] = 0.0
-
-            if rating_count:
-                ratings = [movie['rating'] for movie in movie_list['movies'].values() if movie['rating']]
-                movie_list['rating_percentage'] = round(rating_count / movie_list['count'] * 100, 2)
-                movie_list['rating_average'] = round(sum(ratings) / rating_count, 2)
-
+            stats = calculate_statistics(movie_list['movies'])
+            movie_list.update(stats)
             break
 
     return movie_list
@@ -247,25 +258,41 @@ def user_network(user: User, section: str) -> dict:
     Fetches followers or following based on the section and returns them as a dictionary
     - The section to scrape, must be either 'followers' or 'following'.
     """
-    PERSONS_PER_PAGE = 25
     BASE_URL = f"{user.url}/{section}"
+    PERSONS_PER_PAGE = 25
 
-    ret = {}
-    page = 1
-    while True:
-        dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+    def fetch_page(page_num: int):
+        """Fetches a single page of the user's network section."""
+        try:
+            return user.scraper.get_parsed_page(f"{BASE_URL}/page/{page_num}")
+        except Exception as e:
+            raise RuntimeError(f"Failed to fetch page {page_num}: {e}")
+
+    def extract_persons(dom) -> dict:
+        """Extracts persons from a DOM object and returns them as a dictionary."""
         persons = dom.find_all("img", attrs={'height': '40'})
+        persons_dict = {}
 
         for person in persons:
-            ret[person.parent['href'].replace('/', '')] = {
-                'display_name': person['alt'],
-            }
+            profile_url = person.parent['href'].replace('/', '')
+            persons_dict[profile_url] = {'display_name': person['alt']}
 
-        if len(persons) < PERSONS_PER_PAGE:
+        return persons_dict
+
+    users_list = {}
+    page_num = 1
+
+    while True:
+        dom = fetch_page(page_num)
+        persons = extract_persons(dom)
+        users_list.update(persons)
+
+        if len(persons) < PERSONS_PER_PAGE :
             break
-        page += 1
 
-    return ret
+        page_num += 1
+
+    return users_list
 
 # letterboxd.com/?/following/
 @assert_instance(User)
@@ -484,13 +511,12 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
 
     return ret
 
-
 # dependency: user_diary()
 @assert_instance(User)
 def user_wrapped(user: User, year: int=2024) -> dict:
     """Wraps user diary data for the specified year and calculates statistics."""
 
-    def retrieve_diary(user: User, year: int) -> dict:
+    def retrieve_diary() -> dict:
         """Retrieves the diary for the given user and year."""
         try:
             diary = user_diary(user, year)
@@ -530,7 +556,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
             first_watched = {log_id: data}
         return first_watched, last_watched
 
-    diary = retrieve_diary(user, year)
+    diary = retrieve_diary()
 
     movies = {}
     milestones = {}
@@ -670,46 +696,49 @@ def user_activity(user: User) -> dict:
 def user_lists(user: User) -> dict:
     BASE_URL = f"{user.url}/lists/"
     LISTS_PER_PAGE = 12
-
-    selectors = {
-        'list_set': ('section', {'class': 'list-set', }),
-        'lists': ('section', {'class': 'list', }),
-        'title': ('h2', {'class': 'title', }),
-        'description': ('div', {'class': 'body-text', }),
-        'value': ('small', {'class': 'value', }),
-        'likes': ('a', {'class': 'icon-like', }),
-        'comments': ('a', {'class': 'icon-comment', }),
+    SELECTORS = {
+        'list_set': ('section', {'class': 'list-set'}),
+        'lists': ('section', {'class': 'list'}),
+        'title': ('h2', {'class': 'title'}),
+        'description': ('div', {'class': 'body-text'}),
+        'value': ('small', {'class': 'value'}),
+        'likes': ('a', {'class': 'icon-like'}),
+        'comments': ('a', {'class': 'icon-comment'}),
     }
 
-    page = 0
-    data = {'lists': {}}
-    while True:
-        page += 1
+    def fetch_page_data(page: int) -> dict:
+        """Fetch and parse page data."""
         dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+        list_set = dom.find(*SELECTORS['list_set'])
+        return list_set
 
-        list_set = dom.find(*selectors['list_set'])
-        if not list_set:
-            break
-        lists = list_set.find_all(*selectors['lists'])
+    def extract_list_data(item) -> dict:
+        """Extract data from a list item."""
 
-        for item in lists:
-            # id
-            list_id = item['data-film-list-id']
-            # title
-            list_title = item.find(*selectors['title']).text.strip()
-            # description
-            description = item.find(*selectors['description'])
+        def get_id() -> str:
+            return item['data-film-list-id']
+
+        def get_title() -> str:
+            return item.find(*SELECTORS['title']).text.strip()
+
+        def get_description() -> str:
+            description = item.find(*SELECTORS['description'])
             if description:
-                description = description.find_all('p')
-                description = '\n'.join([p.text for p in description])
-            # url
-            list_url = item.find(*selectors['title']).a['href']
-            # slug
-            list_slug = list_url.split('/')[-2]
-            # count
-            count = int(item.find(*selectors['value']).text.split()[0].replace(',',''))
-            # likes
-            likes = item.find(*selectors['likes'])
+                paragraphs = description.find_all('p')
+                return '\n'.join([p.text for p in paragraphs])
+            return description
+
+        def get_url() -> str:
+            return user.DOMAIN + item.find(*SELECTORS['title']).a['href']
+
+        def get_slug() -> str:
+            return get_url().split('/')[-2]
+
+        def get_count() -> int:
+            return int(item.find(*SELECTORS['value']).text.split()[0].replace(',', ''))
+
+        def get_likes() -> int:
+            likes = item.find(*SELECTORS['likes'])
             likes = likes if likes else 0
             if likes:
                 likes = likes.text.split()[0].replace(',','')
@@ -717,26 +746,44 @@ def user_lists(user: User) -> dict:
                     likes = likes.replace('K', '')
                     likes = float(likes) * 1000
                 likes = int(likes)
-            # comments
-            # feature: https://letterboxd.com/ajax/filmlist:<list-id>/comments/
-            comments = item.find(*selectors['comments'])
-            comments = int(comments.text.split()[0].replace(',','')) if comments else 0
+            return likes
 
-            data['lists'][list_id] = {
-                'title': list_title,
-                'slug': list_slug,
-                'description': description,
-                'url': user.DOMAIN + list_url,
-                'count': count,
-                'likes': likes,
-                'comments': comments
+        def get_comments() -> int:
+            comments = item.find(*SELECTORS['comments'])
+            comments = int(comments.text.split()[0].replace(',','')) if comments else 0
+            return comments
+
+        return {
+             get_id(): {
+                'title': get_title(),
+                'slug': get_slug(),
+                'description': get_description(),
+                'url': get_url(),
+                'count': get_count(),
+                'likes': get_likes(),
+                'comments': get_comments()
                 }
+            }
+
+    data = {'lists': {}}
+    page = 1
+    while True:
+        list_set = fetch_page_data(page)
+        if not list_set:
+            break
+
+        lists = list_set.find_all(*SELECTORS['lists'])
+        for item in lists:
+            list_data = extract_list_data(item)
+            data['lists'] |= list_data
 
         if len(lists) < LISTS_PER_PAGE:
             break
+        page += 1
 
     data['count'] = len(data['lists'])
     data['last_page'] = page
+
     return data
 
 # https://letterboxd.com/?/watchlist/
@@ -834,43 +881,58 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
 # https://letterboxd.com/?/tags/*
 @assert_instance(User)
 def user_tags(user: User) -> dict:
-    BASE_URL = f"{user.url}/tags/"
+    BASE_URL = f"{user.url}/tags"
+    PAGES = ['films', 'diary', 'reviews', 'lists']
 
-    pages = ['films', 'diary', 'reviews', 'lists']
-    data = {page: {'tags': {}, 'count': 0} for page in pages}
+    def extract_tags(page: str) -> dict:
+        """Extract tags from the page."""
+        
+        def fetch_dom() -> any:
+            """Fetch and return the DOM for the page."""
+            return user.scraper.get_parsed_page(f"{BASE_URL}/{page}")
 
-    for page in pages:
-        dom = user.scraper.get_parsed_page(BASE_URL + page)
-        tags_columns = dom.find("ul", {"class": ["tags-columns"]})
+        def parse_tag(tag) -> dict:
+            """Extract tag information from a single tag element."""
+            name = tag.a.text.strip()
+            title = tag.a['title']
+            link = tag.a['href']
+            slug = link.split('/')[-3]
+            count = int(tag.span.text.strip() or 1)
+            return {
+                'name': name,
+                'title': title,
+                'slug': slug,
+                'link': user.DOMAIN + link,
+                'count': count,
+            }
 
-        if not tags_columns:
-            continue
+        dom = fetch_dom()
+        tags_ul = dom.find("ul", {"class": "tags-columns"})
+        data = {}
 
-        tags = tags_columns.find_all("li")
+        if not tags_ul:
+            return data
 
-        no = 0
+        tags = tags_ul.find_all("li")
+        index = 1
         for tag in tags:
             if 'href' in tag.a.attrs:
-                no += 1
-                name = tag.a.text.strip()
-                title = tag.a['title']
-                link = tag.a['href']
-                slug = link.split('/')[-3]
-                count = tag.span.text.strip()
-                count = int(count) if count else 1
+                tag_info = parse_tag(tag)
+                tag_info['no'] = index
+                data[tag_info['slug']] = tag_info
+                index += 1
 
-                data[page]['tags'][slug] = {
-                    'name': name,
-                    'title': title,
-                    'link': link,
-                    'count': count,
-                    'no': no
-                    }
-            else:
-                pass # not a tag
+        return data
 
-        data[page]['count'] = no
-    data['count'] = sum([data[page]['count'] for page in pages])
+    data = {}
+    for page in PAGES:
+        tags = extract_tags(page)
+        data[page] = {
+            'tags': tags,
+            'count': len(tags)
+        }
+
+    data['total_count'] = sum(data[page]['count'] for page in PAGES)
 
     return data
 
