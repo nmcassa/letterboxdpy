@@ -4,7 +4,8 @@
       "lol": {
         "name": "lol",
         "title": "lol",
-        "link": "/nmcassa/tag/lol/films/",
+        "slug": "lol",
+        "link": "https://letterboxd.com/nmcassa/tag/lol/films/",
         "count": 1,
         "no": 1
       }
@@ -16,7 +17,8 @@
       "lol": {
         "name": "lol",
         "title": "lol",
-        "link": "/nmcassa/tag/lol/diary/",
+        "slug": "lol",
+        "link": "https://letterboxd.com/nmcassa/tag/lol/diary/",
         "count": 1,
         "no": 1
       }
@@ -28,7 +30,8 @@
       "lol": {
         "name": "lol",
         "title": "lol",
-        "link": "/nmcassa/tag/lol/reviews/",
+        "slug": "lol",
+        "link": "https://letterboxd.com/nmcassa/tag/lol/reviews/",
         "count": 1,
         "no": 1
       }
@@ -40,12 +43,13 @@
       "hacking": {
         "name": "hacking",
         "title": "hacking",
-        "link": "/nmcassa/tag/hacking/lists/",
+        "slug": "hacking",
+        "link": "https://letterboxd.com/nmcassa/tag/hacking/lists/",
         "count": 1,
         "no": 1
       }
     },
     "count": 1
   },
-  "count": 4
+  "total_count": 4
 }

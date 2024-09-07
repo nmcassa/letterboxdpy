@@ -881,43 +881,58 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
 # https://letterboxd.com/?/tags/*
 @assert_instance(User)
 def user_tags(user: User) -> dict:
-    BASE_URL = f"{user.url}/tags/"
+    BASE_URL = f"{user.url}/tags"
+    PAGES = ['films', 'diary', 'reviews', 'lists']
 
-    pages = ['films', 'diary', 'reviews', 'lists']
-    data = {page: {'tags': {}, 'count': 0} for page in pages}
+    def extract_tags(page: str) -> dict:
+        """Extract tags from the page."""
+        
+        def fetch_dom() -> any:
+            """Fetch and return the DOM for the page."""
+            return user.scraper.get_parsed_page(f"{BASE_URL}/{page}")
 
-    for page in pages:
-        dom = user.scraper.get_parsed_page(BASE_URL + page)
-        tags_columns = dom.find("ul", {"class": ["tags-columns"]})
+        def parse_tag(tag) -> dict:
+            """Extract tag information from a single tag element."""
+            name = tag.a.text.strip()
+            title = tag.a['title']
+            link = tag.a['href']
+            slug = link.split('/')[-3]
+            count = int(tag.span.text.strip() or 1)
+            return {
+                'name': name,
+                'title': title,
+                'slug': slug,
+                'link': user.DOMAIN + link,
+                'count': count,
+            }
 
-        if not tags_columns:
-            continue
+        dom = fetch_dom()
+        tags_ul = dom.find("ul", {"class": "tags-columns"})
+        data = {}
 
-        tags = tags_columns.find_all("li")
+        if not tags_ul:
+            return data
 
-        no = 0
+        tags = tags_ul.find_all("li")
+        index = 1
         for tag in tags:
             if 'href' in tag.a.attrs:
-                no += 1
-                name = tag.a.text.strip()
-                title = tag.a['title']
-                link = tag.a['href']
-                slug = link.split('/')[-3]
-                count = tag.span.text.strip()
-                count = int(count) if count else 1
+                tag_info = parse_tag(tag)
+                tag_info['no'] = index
+                data[tag_info['slug']] = tag_info
+                index += 1
 
-                data[page]['tags'][slug] = {
-                    'name': name,
-                    'title': title,
-                    'link': link,
-                    'count': count,
-                    'no': no
-                    }
-            else:
-                pass # not a tag
+        return data
 
-        data[page]['count'] = no
-    data['count'] = sum([data[page]['count'] for page in pages])
+    data = {}
+    for page in PAGES:
+        tags = extract_tags(page)
+        data[page] = {
+            'tags': tags,
+            'count': len(tags)
+        }
+
+    data['total_count'] = sum(data[page]['count'] for page in PAGES)
 
     return data
 
