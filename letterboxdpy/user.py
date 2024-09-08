@@ -185,7 +185,7 @@ def user_films(user: User) -> dict:
     return extract_user_films(user, url)
 
 # letterboxd.com/?/likes/films
-assert_instance(User)
+@assert_instance(User)
 def user_films_liked(user: User) -> dict:
     url = f"{user.url}/likes/films/"
     return extract_user_films(user, url)
@@ -253,6 +253,7 @@ def extract_user_films(user: User, url: str = None) -> dict:
     return movie_list
 
 # letterboxd.com/?/?/
+@assert_instance(User)
 def user_network(user: User, section: str) -> dict:
     """
     Fetches followers or following based on the section and returns them as a dictionary
