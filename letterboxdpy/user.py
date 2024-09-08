@@ -529,7 +529,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 
     def update_counters(date_info: dict, day_counter: dict, month_counter: dict) -> tuple:
         """Updates the day and month counters based on the watched date."""
-        weekday = datetime(**date_info).weekday() + 1
+        weekday = datetime(**date_info).isoweekday()
         day_counter[weekday] += 1
         month_counter[date_info['month']] += 1
         return day_counter, month_counter
