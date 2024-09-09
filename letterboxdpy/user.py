@@ -63,7 +63,7 @@ class User:
             for item in watchlist_items:
                 watchlist_recent[item['data-film-id']] = {
                     'name': item.img['alt'],
-                    'slug': item['data-film-slug'],
+                    'slug': item['data-film-slug']
                 }
         
         # diary
@@ -76,13 +76,26 @@ class User:
                 entry_list = section.find_all("li", {"class": ["listitem"]})
 
                 for entry in entry_list:
-                    month = entry.h3.text
-                    month_index = self.MONTH_ABBREVIATIONS.index(month) + 1
-                    diary_recent['months'] |= {month_index: []}
+                    month_text = entry.h3.text # Jan, Feb, Mar
+                    month_index = self.MONTH_ABBREVIATIONS.index(month_text) + 1
+
+                    diary_recent['months'] |= {month_index: {}}
+
                     days = entry.find_all("dt")
                     items = entry.find_all("dd")
+
                     for day, item in zip(days, items):
-                        diary_recent['months'][month_index].append([day.text, item.text])
+                        movie_index = day.text
+                        movie_slug = item.a['href'].split('/')[-2]
+                        movie_name = item.text 
+
+                        if movie_index not in diary_recent['months'][month_index]:
+                            diary_recent['months'][month_index][movie_index] = []
+
+                        diary_recent['months'][month_index][movie_index].append({
+                            'name': movie_name,
+                            'slug': movie_slug
+                        })
                 else:
                     break
 

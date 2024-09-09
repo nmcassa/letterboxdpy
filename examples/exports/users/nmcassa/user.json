@@ -14,13 +14,13 @@
   "bio": null,
   "location": null,
   "website": null,
-  "watchlist_length": 64,
+  "watchlist_length": 71,
   "stats": {
-    "films": 560,
-    "this_year": 37,
-    "list": 1,
-    "following": 10,
-    "followers": 8
+    "films": 590,
+    "this_year": 69,
+    "lists": 2,
+    "following": 7,
+    "followers": 7
   },
   "favorites": {
     "95113": {
@@ -47,73 +47,95 @@
   },
   "recent": {
     "watchlist": {
-      "7023": {
-        "name": "The Man Who Stole the Sun",
-        "slug": "the-man-who-stole-the-sun"
+      "43952": {
+        "name": "The Man from Earth",
+        "slug": "the-man-from-earth"
       },
-      "429628": {
-        "name": "An Elephant Sitting Still",
-        "slug": "an-elephant-sitting-still"
+      "46433": {
+        "name": "Swingers",
+        "slug": "swingers"
       },
-      "51075": {
-        "name": "The Fountain",
-        "slug": "the-fountain"
+      "23772": {
+        "name": "Peppermint Candy",
+        "slug": "peppermint-candy"
       },
-      "51481": {
-        "name": "Battleship Potemkin",
-        "slug": "battleship-potemkin"
+      "353485": {
+        "name": "Ad Astra",
+        "slug": "ad-astra-2019"
       },
-      "49955": {
-        "name": "The Trial",
-        "slug": "the-trial"
+      "51370": {
+        "name": "Gattaca",
+        "slug": "gattaca"
       }
     },
     "diary": {
       "months": {
-        "4": [
-          [
-            "16",
-            "Civil War"
+        "9": {
+          "6": [
+            {
+              "name": "Clerks",
+              "slug": "clerks"
+            }
           ],
-          [
-            "13",
-            "We Need to Talk About Kevin"
-          ],
-          [
-            "9",
-            "Waking Life"
-          ],
-          [
-            "7",
-            "Monkey Man"
-          ],
-          [
-            "7",
-            "Dune: Part Two"
-          ],
-          [
-            "3",
-            "In Bruges"
-          ],
-          [
-            "2",
-            "Burn After Reading"
+          "2": [
+            {
+              "name": "Blink Twice",
+              "slug": "blink-twice"
+            }
           ]
-        ],
-        "3": [
-          [
-            "30",
-            "Dune"
+        },
+        "8": {
+          "30": [
+            {
+              "name": "Shaun of the Dead",
+              "slug": "shaun-of-the-dead"
+            }
           ],
-          [
-            "26",
-            "Late Night with the Devil"
+          "23": [
+            {
+              "name": "The Devil Wears Prada",
+              "slug": "the-devil-wears-prada"
+            }
           ],
-          [
-            "4",
-            "Superbad"
+          "20": [
+            {
+              "name": "Alien",
+              "slug": "1"
+            }
+          ],
+          "18": [
+            {
+              "name": "Alien: Romulus",
+              "slug": "alien-romulus"
+            }
+          ],
+          "16": [
+            {
+              "name": "Alien",
+              "slug": "alien"
+            }
+          ],
+          "13": [
+            {
+              "name": "Upgrade",
+              "slug": "upgrade"
+            }
+          ],
+          "2": [
+            {
+              "name": "Trap",
+              "slug": "trap-2024"
+            }
           ]
-        ]
+        },
+        "7": {
+          "28": [
+            {
+              "name": "The World's End",
+              "slug": "1"
+            }
+          ]
+        }
       }
     }
   }
