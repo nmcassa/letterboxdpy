@@ -7,6 +7,16 @@ MONTH_ABBREVIATIONS = [
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
 
+def extract_and_convert_shorthand(tag) -> int:
+    """Extracts text from a tag and converts shorthand notation (e.g., '6.3K') to an integer."""
+    if tag and tag.text:
+        count_str = tag.text.strip().replace(',', '')
+        if 'K' in count_str:
+            count_str = float(count_str.replace('K', ''))
+            count_str *= 1000
+        return int(count_str)
+    return 0
+
 def extract_numeric_text(text: str) -> Optional[int]:
     """
     Extracts numeric characters from a string and returns them as an integer.

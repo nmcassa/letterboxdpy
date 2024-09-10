@@ -1,8 +1,8 @@
+from json import dumps as json_dumps
+
+from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
 from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
-from json import dumps as json_dumps
-from typing import List
-
 from letterboxdpy.scraper import (
   Scraper,
   url_encode
@@ -88,7 +88,7 @@ class Search:
 
       return data
 
-    def get_page_results(self, dom) -> List:
+    def get_page_results(self, dom) -> list:
       result_types = {
         'film': [None, ["film-poster"]],
         'review': ["film-detail"],
@@ -213,24 +213,11 @@ class Search:
 
           # likes
           like_count = result.find('a', {'class': 'icon-like'})
-          like_count = like_count if like_count else 0
-          if like_count:
-            like_count = like_count.text.strip().replace(',', '')
-            if 'K' in like_count:
-                # example: 6.3K -> 6300
-                like_count = float(like_count.replace('K', ''))
-                like_count *= 1000
-            like_count = int(like_count)
+          like_count = extract_and_convert_shorthand(like_count)
 
           # comments
           comment_count = result.find('a', {'class': 'icon-comment'})
-          comment_count = comment_count if comment_count else 0
-          if comment_count:
-            comment_count = comment_count.text.strip().replace(',', '')
-            if 'K' in comment_count:
-                comment_count = float(comment_count.replace('K', ''))
-                comment_count *= 1000
-            comment_count = int(comment_count)
+          comment_count = extract_and_convert_shorthand(comment_count)
 
           # owner
           owner = result.find('strong', {'class': 'name'}).a

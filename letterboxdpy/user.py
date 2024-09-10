@@ -2,19 +2,19 @@ if __loader__.name == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
-from letterboxdpy.utils.utils_parser import parse_review_date
+from datetime import datetime
+import re
+from json import (
+  dumps as json_dumps,
+  loads as json_loads
+)
+
+from letterboxdpy.utils.utils_parser import parse_review_date, extract_and_convert_shorthand
 from letterboxdpy.parser import get_movies_from_user_watched
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
-from datetime import datetime
-import re
-
-from json import (
-  dumps as json_dumps,
-  loads as json_loads
-)
 
 
 class User:
@@ -783,13 +783,7 @@ def user_lists(user: User) -> dict:
 
         def get_likes() -> int:
             likes = item.find(*SELECTORS['likes'])
-            likes = likes if likes else 0
-            if likes:
-                likes = likes.text.split()[0].replace(',','')
-                if 'K' in likes:
-                    likes = likes.replace('K', '')
-                    likes = float(likes) * 1000
-                likes = int(likes)
+            likes = extract_and_convert_shorthand(likes)
             return likes
 
         def get_comments() -> int:
