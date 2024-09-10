@@ -331,5 +331,5 @@ if __name__ == "__main__":
     # movie_instance_3 = Movie("logistics-2011") # 51420 mins
 
     print(movie_instance)
-    print(movie_details(movie_instance))
-    print(movie_watchers(movie_instance))
+    print(json_dumps(movie_details(movie_instance), indent=2))
+    print(json_dumps(movie_watchers(movie_instance), indent=2))
