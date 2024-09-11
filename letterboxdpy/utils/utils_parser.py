@@ -2,10 +2,8 @@ import re
 from bs4 import Tag
 from typing import Dict, Literal, Optional
 
-MONTH_ABBREVIATIONS = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-]
+from letterboxdpy.utils.utils_transform import month_to_index
+
 
 def extract_and_convert_shorthand(tag) -> int:
     """Extracts text from a tag and converts shorthand notation (e.g., '6.3K') to an integer."""
@@ -43,7 +41,7 @@ def parse_written_date(written_date_str: str) -> Dict[str, int]:
         date_parts = written_date_str.split()
         return {
             'year': int(date_parts[2]),
-            'month': MONTH_ABBREVIATIONS.index(date_parts[1]) + 1,
+            'month': month_to_index(date_parts[1]),
             'day': int(date_parts[0])
         }
     except (IndexError, ValueError) as e:
