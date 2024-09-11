@@ -1,12 +1,16 @@
-from letterboxdpy.utils.utils_parser import extract_numeric_text
-from letterboxdpy.decorators import assert_instance
-from letterboxdpy.scraper import Scraper
-from letterboxdpy.encoder import Encoder
+if __loader__.name == '__main__':
+    import sys
+    sys.path.append(sys.path[0] + '/..')
 
 from json import (
   dumps as json_dumps,
   loads as json_loads,
 )
+
+from letterboxdpy.utils.utils_parser import extract_numeric_text
+from letterboxdpy.decorators import assert_instance
+from letterboxdpy.scraper import Scraper
+from letterboxdpy.encoder import Encoder
 
 class Movie:
     DOMAIN = 'https://letterboxd.com'
@@ -294,33 +298,31 @@ def movie_details(movie: Movie) -> dict:
     return data
 
 # letterboxd.com/film/?/members
-@assert_instance(Movie)
 def movie_watchers(movie: Movie) -> dict:
-    dom = movie.scraper.get_parsed_page("/".join([movie.url, "members"]))
-    dom = dom.find("div", {"id": ["content-nav"]})
+    """
+    Retrieves movie watchers' statistics from the movie's members page.
+    """
+    BASE_URL = f"{movie.url}/members"
 
-    data = {
-        'watch_count': 0,
-        'fan_count': 0,
-        'like_count': 0,
-        'review_count': 0,
-        'list_count': 0
-    }
+    def extract_watchers_data(dom) -> dict:
+        """
+        Extracts watchers data from DOM and returns as a dictionary.
+        """
+        stats = {}
+        content_nav = dom.find("div", {"id": "content-nav"})
+        if content_nav:
+            for a in content_nav.find_all("a", title=True):
+                a_text = a.text.strip().lower()
+                a_title = a['title']
+                count = extract_numeric_text(a_title)
+                stats[a_text] = count
+        return stats
 
-    if dom:
-        for a in dom.find_all("a"):
-            if a.get('title'):
-                if a['title'].find('people',-6) != -1:
-                    data['watch_count'] = extract_numeric_text(a['title'][:-7])
-                elif a['title'].find('fans',-4) != -1:
-                    data['fan_count'] = extract_numeric_text(a['title'][:-5])
-                elif a['title'].find('likes',-5) != -1:
-                    data['like_count'] = extract_numeric_text(a['title'][:-6])
-                elif a['title'].find('reviews',-7) != -1:
-                    data['review_count'] = extract_numeric_text(a['title'][:-8])
-                elif a['title'].find('lists',-5) != -1:
-                    data['list_count'] = extract_numeric_text(a['title'][:-6])
-    return data
+    try:
+        dom = movie.scraper.get_parsed_page(BASE_URL)
+        return extract_watchers_data(dom)
+    except Exception as e:
+        raise RuntimeError("Failed to retrieve movie watchers' statistics") from e
 
 if __name__ == "__main__":
     import sys

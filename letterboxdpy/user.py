@@ -9,6 +9,7 @@ from json import (
   loads as json_loads
 )
 
+from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.utils.utils_parser import parse_review_date, extract_and_convert_shorthand
 from letterboxdpy.parser import get_movies_from_user_watched
 from letterboxdpy.decorators import assert_instance
@@ -19,12 +20,6 @@ from letterboxdpy.avatar import Avatar
 
 class User:
     DOMAIN = "https://letterboxd.com"
-    MONTH_ABBREVIATIONS = [
-        "Jan", "Feb", "Mar",
-        "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep",
-        "Oct", "Nov", "Dec"
-        ]
 
     def __init__(self, username: str) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
@@ -76,8 +71,7 @@ class User:
                 entry_list = section.find_all("li", {"class": ["listitem"]})
 
                 for entry in entry_list:
-                    month_text = entry.h3.text # Jan, Feb, Mar
-                    month_index = self.MONTH_ABBREVIATIONS.index(month_text) + 1
+                    month_index = month_to_index(entry.h3.text)
 
                     diary_recent['months'] |= {month_index: {}}
 

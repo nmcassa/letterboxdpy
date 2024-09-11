@@ -8,10 +8,10 @@ print(movie.movie_watchers(movie_instance))
 
 ```json
 {
-    "watch_count": "981721",
-    "fan_count": "8389",
-    "like_count": "248662",
-    "review_count": "35360",
-    "list_count": "86666"
+    "members": 1090230,
+    "fans": 9923,
+    "likes": 278496,
+    "reviews": 42180,
+    "lists": 98866
 }
 ```
