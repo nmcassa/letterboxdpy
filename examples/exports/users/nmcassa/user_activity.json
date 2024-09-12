@@ -1,6 +1,69 @@
 {
   "user": "nmcassa",
   "logs": {
+    "7392160022": {
+      "event_type": "review",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 12,
+        "hour": 16,
+        "minute": 50,
+        "second": 4
+      },
+      "type": "watched",
+      "title": "nmcassa watched",
+      "film": "Kindergarten Cop",
+      "film_year": 1990,
+      "rating": 6,
+      "spoiler": false,
+      "review": "Beautiful movie"
+    },
+    "7389311373": {
+      "event_type": "review",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 11,
+        "hour": 22,
+        "minute": 53,
+        "second": 54
+      },
+      "type": "watched",
+      "title": "nmcassa watched",
+      "film": "Doom",
+      "film_year": 2005,
+      "rating": 2,
+      "spoiler": false,
+      "review": "The TV in the tennis room lost its cable so I put this in while I strung racquetsIt\u2019s like a free LG Channels movie\nThis movie sucks ass"
+    },
+    "7384080380": {
+      "event_type": "basic",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 10,
+        "hour": 19,
+        "minute": 27,
+        "second": 59
+      },
+      "log_type": "liked",
+      "title": "nmcassa liked ppark\u2019s  \u2605\u2605\u2605\u2605  review of Mean Girls",
+      "username": "ppark"
+    },
+    "7384079475": {
+      "event_type": "basic",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 10,
+        "hour": 19,
+        "minute": 27,
+        "second": 47
+      },
+      "log_type": "added",
+      "title": "nmcassa added Atlantis: The Lost Empire to his watchlist"
+    },
     "7363740974": {
       "event_type": "review",
       "time": {
@@ -223,5 +286,5 @@
       "film": "Upgrade"
     }
   },
-  "logs_count": 14
+  "total_logs": 18
 }

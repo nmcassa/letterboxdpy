@@ -1,0 +1,514 @@
+{
+  "movies": {
+    "monkey-man": {
+      "name": "Monkey Man",
+      "id": "488751",
+      "rating": 9,
+      "liked": true
+    },
+    "godzilla-minus-one": {
+      "name": "Godzilla Minus One",
+      "id": "845706",
+      "rating": 10,
+      "liked": true
+    },
+    "society-of-the-snow": {
+      "name": "Society of the Snow",
+      "id": "813840",
+      "rating": 10,
+      "liked": true
+    },
+    "perfect-days-2023": {
+      "name": "Perfect Days",
+      "id": "879229",
+      "rating": 9,
+      "liked": true
+    },
+    "fallen-leaves-2023": {
+      "name": "Fallen Leaves",
+      "id": "888054",
+      "rating": 8,
+      "liked": true
+    },
+    "anatomy-of-a-fall": {
+      "name": "Anatomy of a Fall",
+      "id": "822093",
+      "rating": 9,
+      "liked": true
+    },
+    "see-how-they-run-2022": {
+      "name": "See How They Run",
+      "id": "686510",
+      "rating": 8,
+      "liked": true
+    },
+    "nope": {
+      "name": "Nope",
+      "id": "682547",
+      "rating": 10,
+      "liked": true
+    },
+    "triangle-of-sadness": {
+      "name": "Triangle of Sadness",
+      "id": "427970",
+      "rating": 9,
+      "liked": true
+    },
+    "everything-everywhere-all-at-once": {
+      "name": "Everything Everywhere All at Once",
+      "id": "474474",
+      "rating": 10,
+      "liked": true
+    },
+    "the-batman": {
+      "name": "The Batman",
+      "id": "348914",
+      "rating": 9,
+      "liked": true
+    },
+    "squid-game": {
+      "name": "Squid Game",
+      "id": "787181",
+      "rating": 9,
+      "liked": true
+    },
+    "the-french-dispatch": {
+      "name": "The French Dispatch",
+      "id": "471207",
+      "rating": 9,
+      "liked": true
+    },
+    "the-alpinist": {
+      "name": "The Alpinist",
+      "id": "606836",
+      "rating": 8,
+      "liked": true
+    },
+    "taming-the-garden": {
+      "name": "Taming the Garden",
+      "id": "695509",
+      "rating": 8,
+      "liked": true
+    },
+    "luzzu": {
+      "name": "Luzzu",
+      "id": "695499",
+      "rating": 9,
+      "liked": true
+    },
+    "soul-2020": {
+      "name": "Soul",
+      "id": "438511",
+      "rating": 9,
+      "liked": true
+    },
+    "another-round": {
+      "name": "Another Round",
+      "id": "508246",
+      "rating": 9,
+      "liked": true
+    },
+    "the-last-dance-2020": {
+      "name": "The Last Dance",
+      "id": "617825",
+      "rating": 9,
+      "liked": true
+    },
+    "jojo-rabbit": {
+      "name": "Jojo Rabbit",
+      "id": "444600",
+      "rating": 9,
+      "liked": true
+    },
+    "knives-out-2019": {
+      "name": "Knives Out",
+      "id": "475370",
+      "rating": 9,
+      "liked": true
+    },
+    "uncut-gems": {
+      "name": "Uncut Gems",
+      "id": "404266",
+      "rating": 10,
+      "liked": true
+    },
+    "parasite-2019": {
+      "name": "Parasite",
+      "id": "426406",
+      "rating": 10,
+      "liked": true
+    },
+    "honey-boy": {
+      "name": "Honey Boy",
+      "id": "441870",
+      "rating": 9,
+      "liked": true
+    },
+    "spider-man-into-the-spider-verse": {
+      "name": "Spider-Man: Into the Spider-Verse",
+      "id": "251943",
+      "rating": 10,
+      "liked": true
+    },
+    "james-acaster-repertoire": {
+      "name": "James Acaster: Repertoire",
+      "id": "445120",
+      "rating": 10,
+      "liked": true
+    },
+    "wild-wild-country": {
+      "name": "Wild Wild Country",
+      "id": "453524",
+      "rating": 8,
+      "liked": true
+    },
+    "isle-of-dogs-2018": {
+      "name": "Isle of Dogs",
+      "id": "333448",
+      "rating": 10,
+      "liked": true
+    },
+    "sorry-to-bother-you": {
+      "name": "Sorry to Bother You",
+      "id": "358271",
+      "rating": 8,
+      "liked": true
+    },
+    "eighth-grade": {
+      "name": "Eighth Grade",
+      "id": "420451",
+      "rating": 8,
+      "liked": true
+    },
+    "good-time": {
+      "name": "Good Time",
+      "id": "362362",
+      "rating": 9,
+      "liked": true
+    },
+    "alphago": {
+      "name": "AlphaGo",
+      "id": "387051",
+      "rating": 9,
+      "liked": true
+    },
+    "baby-driver": {
+      "name": "Baby Driver",
+      "id": "268950",
+      "rating": 10,
+      "liked": true
+    },
+    "get-out-2017": {
+      "name": "Get Out",
+      "id": "353117",
+      "rating": 9,
+      "liked": true
+    },
+    "bo-burnham-make-happy": {
+      "name": "Bo Burnham: Make Happy",
+      "id": "335216",
+      "rating": 10,
+      "liked": true
+    },
+    "the-boy-and-the-beast": {
+      "name": "The Boy and the Beast",
+      "id": "242502",
+      "rating": 8,
+      "liked": true
+    },
+    "the-stanford-prison-experiment": {
+      "name": "The Stanford Prison Experiment",
+      "id": "234811",
+      "rating": 8,
+      "liked": true
+    },
+    "world-of-tomorrow": {
+      "name": "World of Tomorrow",
+      "id": "230808",
+      "rating": 10,
+      "liked": true
+    },
+    "over-the-garden-wall-2014": {
+      "name": "Over the Garden Wall",
+      "id": "343911",
+      "rating": 9,
+      "liked": true
+    },
+    "the-grand-budapest-hotel": {
+      "name": "The Grand Budapest Hotel",
+      "id": "95113",
+      "rating": 10,
+      "liked": true
+    },
+    "whiplash-2014": {
+      "name": "Whiplash",
+      "id": "171384",
+      "rating": 9,
+      "liked": true
+    },
+    "the-wolf-of-wall-street": {
+      "name": "The Wolf of Wall Street",
+      "id": "86114",
+      "rating": 9,
+      "liked": true
+    },
+    "moonrise-kingdom": {
+      "name": "Moonrise Kingdom",
+      "id": "70105",
+      "rating": 10,
+      "liked": true
+    },
+    "black-swan": {
+      "name": "Black Swan",
+      "id": "20956",
+      "rating": 9,
+      "liked": true
+    },
+    "scott-pilgrim-vs-the-world": {
+      "name": "Scott Pilgrim vs. the World",
+      "id": "37833",
+      "rating": 10,
+      "liked": true
+    },
+    "inglourious-basterds": {
+      "name": "Inglourious Basterds",
+      "id": "41352",
+      "rating": 10,
+      "liked": true
+    },
+    "500-days-of-summer": {
+      "name": "(500) Days of Summer",
+      "id": "39350",
+      "rating": 9,
+      "liked": true
+    },
+    "ponyo": {
+      "name": "Ponyo",
+      "id": "44594",
+      "rating": 10,
+      "liked": true
+    },
+    "speed-racer": {
+      "name": "Speed Racer",
+      "id": "48018",
+      "rating": 9,
+      "liked": true
+    },
+    "ratatouille": {
+      "name": "Ratatouille",
+      "id": "50558",
+      "rating": 10,
+      "liked": true
+    },
+    "superbad": {
+      "name": "Superbad",
+      "id": "47776",
+      "rating": 10,
+      "liked": true
+    },
+    "hot-fuzz": {
+      "name": "Hot Fuzz",
+      "id": "49210",
+      "rating": 9,
+      "liked": true
+    },
+    "the-departed": {
+      "name": "The Departed",
+      "id": "51042",
+      "rating": 9,
+      "liked": true
+    },
+    "borat-cultural-learnings-of-america-for-make-benefit-glorious-nation-of-kazakhstan": {
+      "name": "Borat: Cultural Learnings of America for Make Benefit Glorious Nation of Kazakhstan",
+      "id": "51614",
+      "rating": 8,
+      "liked": true
+    },
+    "shaun-of-the-dead": {
+      "name": "Shaun of the Dead",
+      "id": "51405",
+      "rating": 9,
+      "liked": true
+    },
+    "monsters-inc": {
+      "name": "Monsters, Inc.",
+      "id": "51535",
+      "rating": 8,
+      "liked": true
+    },
+    "spirited-away": {
+      "name": "Spirited Away",
+      "id": "51921",
+      "rating": 9,
+      "liked": true
+    },
+    "best-in-show": {
+      "name": "Best in Show",
+      "id": "43601",
+      "rating": 8,
+      "liked": true
+    },
+    "flcl": {
+      "name": "FLCL",
+      "id": "284640",
+      "rating": null,
+      "liked": true
+    },
+    "galaxy-quest": {
+      "name": "Galaxy Quest",
+      "id": "51227",
+      "rating": 8,
+      "liked": true
+    },
+    "the-iron-giant": {
+      "name": "The Iron Giant",
+      "id": "46280",
+      "rating": 9,
+      "liked": true
+    },
+    "the-truman-show": {
+      "name": "The Truman Show",
+      "id": "27256",
+      "rating": 10,
+      "liked": true
+    },
+    "the-big-lebowski": {
+      "name": "The Big Lebowski",
+      "id": "51935",
+      "rating": 10,
+      "liked": true
+    },
+    "cure": {
+      "name": "Cure",
+      "id": "28195",
+      "rating": 10,
+      "liked": true
+    },
+    "starship-troopers": {
+      "name": "Starship Troopers",
+      "id": "51555",
+      "rating": 8,
+      "liked": true
+    },
+    "perfect-blue": {
+      "name": "Perfect Blue",
+      "id": "46175",
+      "rating": 9,
+      "liked": true
+    },
+    "forrest-gump": {
+      "name": "Forrest Gump",
+      "id": "2704",
+      "rating": 8,
+      "liked": true
+    },
+    "kikis-delivery-service": {
+      "name": "Kiki's Delivery Service",
+      "id": "41360",
+      "rating": 10,
+      "liked": true
+    },
+    "do-the-right-thing": {
+      "name": "Do the Right Thing",
+      "id": "51228",
+      "rating": 9,
+      "liked": true
+    },
+    "die-hard": {
+      "name": "Die Hard",
+      "id": "51556",
+      "rating": 9,
+      "liked": true
+    },
+    "ferris-buellers-day-off": {
+      "name": "Ferris Bueller's Day Off",
+      "id": "47219",
+      "rating": 9,
+      "liked": true
+    },
+    "police-story": {
+      "name": "Police Story",
+      "id": "47388",
+      "rating": 9,
+      "liked": true
+    },
+    "clue": {
+      "name": "Clue",
+      "id": "42531",
+      "rating": 9,
+      "liked": true
+    },
+    "nausicaa-of-the-valley-of-the-wind": {
+      "name": "Nausica\u00e4 of the Valley of the Wind",
+      "id": "51969",
+      "rating": 10,
+      "liked": true
+    },
+    "the-king-of-comedy": {
+      "name": "The King of Comedy",
+      "id": "51794",
+      "rating": 10,
+      "liked": true
+    },
+    "airplane": {
+      "name": "Airplane!",
+      "id": "51339",
+      "rating": 8,
+      "liked": true
+    },
+    "the-shining": {
+      "name": "The Shining",
+      "id": "51432",
+      "rating": 9,
+      "liked": true
+    },
+    "alien": {
+      "name": "Alien",
+      "id": "51714",
+      "rating": 8,
+      "liked": true
+    },
+    "pumping-iron": {
+      "name": "Pumping Iron",
+      "id": "48903",
+      "rating": 7,
+      "liked": true
+    },
+    "rocky": {
+      "name": "Rocky",
+      "id": "51090",
+      "rating": 10,
+      "liked": true
+    },
+    "monty-python-and-the-holy-grail": {
+      "name": "Monty Python and the Holy Grail",
+      "id": "51390",
+      "rating": 8,
+      "liked": true
+    },
+    "the-conversation": {
+      "name": "The Conversation",
+      "id": "51529",
+      "rating": 10,
+      "liked": true
+    },
+    "the-graduate": {
+      "name": "The Graduate",
+      "id": "27183",
+      "rating": 9,
+      "liked": true
+    },
+    "dr-strangelove-or-how-i-learned-to-stop-worrying-and-love-the-bomb": {
+      "name": "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+      "id": "51218",
+      "rating": 9,
+      "liked": true
+    }
+  },
+  "count": 84,
+  "liked_count": 84,
+  "rating_count": 83,
+  "liked_percentage": 100.0,
+  "rating_percentage": 98.81,
+  "rating_average": 9.08
+}

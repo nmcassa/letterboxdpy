@@ -1,0 +1,676 @@
+{
+  "reviews": {
+    "666730921": {
+      "type": "Rewatched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/mean-girls/",
+      "rating": 8,
+      "review": {
+        "content": "Refreshing",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 9,
+          "day": 7
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Mean Girls",
+        "slug": "mean-girls",
+        "id": "46049",
+        "release": 2004,
+        "url": "https://letterboxd.com/film/mean-girls/"
+      },
+      "page": 1
+    },
+    "663957142": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/blink-twice/",
+      "rating": 5,
+      "review": {
+        "content": "Lol idk it aight",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 9,
+          "day": 2
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Blink Twice",
+        "slug": "blink-twice",
+        "id": "756042",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/blink-twice/"
+      },
+      "page": 1
+    },
+    "661724149": {
+      "type": "Rewatched",
+      "no": 1,
+      "url": "https://letterboxd.com/ppark/film/shaun-of-the-dead/1/",
+      "rating": 8,
+      "review": {
+        "content": "Not me getting food coma during 20th anniversary reshowing\u2026",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 8,
+          "day": 30
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Shaun of the Dead",
+        "slug": "shaun-of-the-dead",
+        "id": "51405",
+        "release": 2004,
+        "url": "https://letterboxd.com/film/shaun-of-the-dead/"
+      },
+      "page": 1
+    },
+    "654345517": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/alien-romulus/",
+      "rating": 9,
+      "review": {
+        "content": "I friggin knew that her baby was gonna be a friggin human alien morph thing I knew it",
+        "spoiler": true,
+        "date": {
+          "year": 2024,
+          "month": 8,
+          "day": 19
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Alien: Romulus",
+        "slug": "alien-romulus",
+        "id": "850459",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/alien-romulus/"
+      },
+      "page": 1
+    },
+    "640510983": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/deadpool-wolverine/",
+      "rating": 4,
+      "review": {
+        "content": "Guys I fell asleep because it was boring",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 7,
+          "day": 29
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Deadpool & Wolverine",
+        "slug": "deadpool-wolverine",
+        "id": "462870",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/deadpool-wolverine/"
+      },
+      "page": 1
+    },
+    "640176257": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/the-worlds-end/",
+      "rating": 7,
+      "review": {
+        "content": "This was a fun movie but the black hair on Simon pegg was a little disturbing",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 7,
+          "day": 29
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "The World's End",
+        "slug": "the-worlds-end",
+        "id": "86991",
+        "release": 2013,
+        "url": "https://letterboxd.com/film/the-worlds-end/"
+      },
+      "page": 1
+    },
+    "637379646": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/longlegs/",
+      "rating": 10,
+      "review": {
+        "content": "Nicholas Cage is my favorite Nepo baby \u2764\ufe0f loved the movie so fun \u2764\ufe0f and spooky \u2764\ufe0f",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 7,
+          "day": 25
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Longlegs",
+        "slug": "longlegs",
+        "id": "1110059",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/longlegs/"
+      },
+      "page": 1
+    },
+    "633007266": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/twisters/",
+      "rating": 6,
+      "review": {
+        "content": "WTF THEY DIDNT KISS UGHHH",
+        "spoiler": true,
+        "date": {
+          "year": 2024,
+          "month": 7,
+          "day": 18
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Twisters",
+        "slug": "twisters",
+        "id": "641608",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/twisters/"
+      },
+      "page": 1
+    },
+    "624952910": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/anomalisa/",
+      "rating": 8,
+      "review": {
+        "content": "Claymation at its finest?",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 7,
+          "day": 6
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Anomalisa",
+        "slug": "anomalisa",
+        "id": "217531",
+        "release": 2015,
+        "url": "https://letterboxd.com/film/anomalisa/"
+      },
+      "page": 1
+    },
+    "623148146": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/la-haine/",
+      "rating": 9,
+      "review": {
+        "content": "Bought this on dvd blind and it was good so happy with my purchase",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 7,
+          "day": 3
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "La Haine",
+        "slug": "la-haine",
+        "id": "51684",
+        "release": 1995,
+        "url": "https://letterboxd.com/film/la-haine/"
+      },
+      "page": 1
+    },
+    "621209443": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/speed-racer/",
+      "rating": 7,
+      "review": {
+        "content": "Hmm lemme guess\u2026 he won the race?",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 6,
+          "day": 30
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Speed Racer",
+        "slug": "speed-racer",
+        "id": "48018",
+        "release": 2008,
+        "url": "https://letterboxd.com/film/speed-racer/"
+      },
+      "page": 1
+    },
+    "618988102": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/kinds-of-kindness/",
+      "rating": 5,
+      "review": {
+        "content": "Dare I say.. bland? #earlyaccessayeeee",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 6,
+          "day": 26
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Kinds of Kindness",
+        "slug": "kinds-of-kindness",
+        "id": "928261",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/kinds-of-kindness/"
+      },
+      "page": 1
+    },
+    "618442625": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/omnipotence/film/kinds-of-kindness/",
+      "rating": null,
+      "review": {
+        "content": "Not rating because, to be honest, I just struggle\u00a0with Lanthimos\u2019 style of filmmaking. It just does not vibe with me and makes me very uncomfortable. Yeah, yeah, \u201cthat\u2019s the point.\u201d\u00a0whatever, I\u2019m not talking about the obvious stuff. I\u2019m talking about his portrayal of sex and sexual assault, okay? Anyway, not a bad film. Though it just feels like three new Black Mirror episodes. Just more explicit ones (sexually and gore-wise). Except, less about \u201cwhat if technology got to this point?\u201d\u2026",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 6,
+          "day": 25
+        }
+      },
+      "user": {
+        "username": "omnipotence",
+        "display_name": "phlegmatically",
+        "url": "https://letterboxd.com/omnipotence/"
+      },
+      "movie": {
+        "name": "Kinds of Kindness",
+        "slug": "kinds-of-kindness",
+        "id": "928261",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/kinds-of-kindness/"
+      },
+      "page": 2
+    },
+    "617150484": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/avalynwu/film/kinds-of-kindness/",
+      "rating": 1,
+      "review": {
+        "content": "I hate how Lanthimos edits his movies, I hate where he places his camera, I hate how he moves his camera, I hate how he directs his actors, I hate how he uses his score, I hate his sense of humor, I hate his use of dissolves, his use of black-and-white, I hate every single decision he makes. Provocation for prudes, mannered garbage posing as weirdness. Truly worthless.\nSeen at AMC Lincoln Square 13 in New York City",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 6,
+          "day": 23
+        }
+      },
+      "user": {
+        "username": "AvalynWu",
+        "display_name": "Avalyn Wu",
+        "url": "https://letterboxd.com/avalynwu/"
+      },
+      "movie": {
+        "name": "Kinds of Kindness",
+        "slug": "kinds-of-kindness",
+        "id": "928261",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/kinds-of-kindness/"
+      },
+      "page": 2
+    },
+    "612450650": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/inside-out-2-2024/",
+      "rating": 8,
+      "review": {
+        "content": "This was me but when I had to take the SAT\u2019s \ud83d\ude14",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 6,
+          "day": 15
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Inside Out 2",
+        "slug": "inside-out-2-2024",
+        "id": "921578",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/inside-out-2-2024/"
+      },
+      "page": 2
+    },
+    "599603286": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/furiosa-a-mad-max-saga/",
+      "rating": 8,
+      "review": {
+        "content": "fun movie i liked the movie way more fun than mad max fury road also that nose on chris hemsworth was a great artistic choice :)",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 5,
+          "day": 24
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Furiosa: A Mad Max Saga",
+        "slug": "furiosa-a-mad-max-saga",
+        "id": "705221",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/furiosa-a-mad-max-saga/"
+      },
+      "page": 2
+    },
+    "598675915": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/mad-max-fury-road/",
+      "rating": 6,
+      "review": {
+        "content": "Mmmmmmm mehhhhh ehhh (too many expectations \ud83e\udd37\ud83c\udffb\u200d\u2640\ufe0f)",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 5,
+          "day": 23
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "Mad Max: Fury Road",
+        "slug": "mad-max-fury-road",
+        "id": "62780",
+        "release": 2015,
+        "url": "https://letterboxd.com/film/mad-max-fury-road/"
+      },
+      "page": 2
+    },
+    "596949544": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ppark/film/i-saw-the-tv-glow/",
+      "rating": 5,
+      "review": {
+        "content": "Bro\u2026 like like like after the monologue the movie felt very very slow and boring. #iwishitwasratedR",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 5,
+          "day": 20
+        }
+      },
+      "user": {
+        "username": "ppark",
+        "display_name": "ppark",
+        "url": "https://letterboxd.com/ppark/"
+      },
+      "movie": {
+        "name": "I Saw the TV Glow",
+        "slug": "i-saw-the-tv-glow",
+        "id": "772230",
+        "release": 2024,
+        "url": "https://letterboxd.com/film/i-saw-the-tv-glow/"
+      },
+      "page": 2
+    },
+    "503050391": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/joacogarcia2023/film/midsommar/",
+      "rating": 5,
+      "review": {
+        "content": "Not a big horror fan. It was hella wierd. Attractive main actor tho so extra point.",
+        "spoiler": false,
+        "date": {
+          "year": 2024,
+          "month": 1,
+          "day": 4
+        }
+      },
+      "user": {
+        "username": "joacogarcia2023",
+        "display_name": "joacogarcia2023",
+        "url": "https://letterboxd.com/joacogarcia2023/"
+      },
+      "movie": {
+        "name": "Midsommar",
+        "slug": "midsommar",
+        "id": "459564",
+        "release": 2019,
+        "url": "https://letterboxd.com/film/midsommar/"
+      },
+      "page": 2
+    },
+    "120473913": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/ejlersendk/film/solaris/",
+      "rating": 6,
+      "review": {
+        "content": "This is my second Andrei Tarkovsky movie and I am beginning to think his movies just aren\u2019t for me.\u00a0This movie was beautiful with a good story and interesting philosophical questions but it was just too boring.\u00a0The movie doesn\u2019t have much going on at least not really enough to justify the almost three hour runtime. It also annoyed me how they spent around 40 minutes on earth at the beginning without much happening and then they don\u2019t even bother to\u2026",
+        "spoiler": false,
+        "date": {
+          "year": 2020,
+          "month": 8,
+          "day": 22
+        }
+      },
+      "user": {
+        "username": "EjlersenDK",
+        "display_name": "Mads Ej",
+        "url": "https://letterboxd.com/ejlersendk/"
+      },
+      "movie": {
+        "name": "Solaris",
+        "slug": "solaris",
+        "id": "51528",
+        "release": 1972,
+        "url": "https://letterboxd.com/film/solaris/"
+      },
+      "page": 2
+    },
+    "96116503": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/jjbjr/film/vivarium/",
+      "rating": 4,
+      "review": {
+        "content": "the worst part of this movie is that the second you see the kid, you know exactly how the story is going to end.\nand it takes another hour and twenty minutes to get there.",
+        "spoiler": false,
+        "date": {
+          "year": 2020,
+          "month": 3,
+          "day": 27
+        }
+      },
+      "user": {
+        "username": "JJBJR",
+        "display_name": "john",
+        "url": "https://letterboxd.com/jjbjr/"
+      },
+      "movie": {
+        "name": "Vivarium",
+        "slug": "vivarium",
+        "id": "390139",
+        "release": 2019,
+        "url": "https://letterboxd.com/film/vivarium/"
+      },
+      "page": 2
+    },
+    "64750565": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/slipandfell/film/perfect-bid-the-contestant-who-knew-too-much/",
+      "rating": null,
+      "review": {
+        "content": "they showed a room in the guys house full of snoopy memorabilia and didn\u2019t say anything about it and didn\u2019t bring it up again",
+        "spoiler": false,
+        "date": {
+          "year": 2019,
+          "month": 5,
+          "day": 5
+        }
+      },
+      "user": {
+        "username": "slipandfell",
+        "display_name": "shaney",
+        "url": "https://letterboxd.com/slipandfell/"
+      },
+      "movie": {
+        "name": "Perfect Bid: The Contestant Who Knew Too Much",
+        "slug": "perfect-bid-the-contestant-who-knew-too-much",
+        "id": "422385",
+        "release": 2017,
+        "url": "https://letterboxd.com/film/perfect-bid-the-contestant-who-knew-too-much/"
+      },
+      "page": 2
+    },
+    "41248378": {
+      "type": "Watched",
+      "no": 0,
+      "url": "https://letterboxd.com/maxwellwinton/film/the-florida-project/",
+      "rating": 6,
+      "review": {
+        "content": "I somehow simultaneously hate and enjoy this film. I appreciate what it\u2019s doing but that doesn\u2019t mean I always liked it.",
+        "spoiler": false,
+        "date": {
+          "year": 2018,
+          "month": 5,
+          "day": 10
+        }
+      },
+      "user": {
+        "username": "MaxwellWinton",
+        "display_name": "Maxwell Dunn",
+        "url": "https://letterboxd.com/maxwellwinton/"
+      },
+      "movie": {
+        "name": "The Florida Project",
+        "slug": "the-florida-project",
+        "id": "328538",
+        "release": 2017,
+        "url": "https://letterboxd.com/film/the-florida-project/"
+      },
+      "page": 2
+    },
+    "80658991": {
+      "type": "Added",
+      "no": 0,
+      "url": "https://letterboxd.com/kurstboy/film/the-departed/",
+      "rating": 9,
+      "review": {
+        "content": "Great way to end my Scorsese binge!That final shot is perfect and the whole third act feels tight as hell. The entire film is rich with interesting approaches to the subject matter which is fitting for a plot that grabs your attention within the first 5 minutes. Scorsese is just spitballing here and throwing every idea at the wall, his love for filmmaking shines brighter here than in something like Hugo. Don't know what to add to the table\u2026",
+        "spoiler": false,
+        "date": {
+          "year": 2019,
+          "month": 11,
+          "day": 24
+        }
+      },
+      "user": {
+        "username": "Kurstboy",
+        "display_name": "Karsten",
+        "url": "https://letterboxd.com/kurstboy/"
+      },
+      "movie": {
+        "name": "The Departed",
+        "slug": "the-departed",
+        "id": "51042",
+        "release": 2006,
+        "url": "https://letterboxd.com/film/the-departed/"
+      },
+      "page": 2
+    }
+  }
+}
