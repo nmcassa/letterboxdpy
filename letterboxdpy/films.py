@@ -2,147 +2,152 @@ if __loader__.name == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
+from letterboxdpy.utils.utils_transform import get_ajax_url
+from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
+from letterboxdpy.parser import (
+    get_movies_from_horizontal_list,
+    get_movies_from_vertical_list
+)
 
-# -- FUNCTIONS --
+class Films:
+    """Fetch movies from Letterboxd based on different URLs."""
+    DOMAIN = "https://letterboxd.com"
+    VERTICAL_MAX = 20*5
+    HORIZONTAL_MAX = 12*6
 
-def mini_films_parser(url: str, max = 100):
-    domain = "https://letterboxd.com"
-    scraper = Scraper(domain)
-    page = 1
-    movies = {}
-    while True:
-        page_url = url + f"/page/{page}"
-        dom = scraper.get_parsed_page(page_url) 
+    def __init__(self, url: str):
+        """Initialize Films class with a URL and scrape movies."""
+        self.url = url
+        self.scraper = Scraper(self.DOMAIN)
+        self.ajax_url = get_ajax_url(url)
+        self.movies = self.get_movies()
+        self.count = len(self.movies)
 
-        new_data = dom.find_all("div", {"class": "film-poster"})
-        for item in new_data:
-            movie_id = item['data-film-id']
-            movie_slug = item['data-film-slug'] 
-            movie_name = item.img['alt']
+    def get_movies(self) -> dict:
+        """Scrape and return a dictionary of movies from Letterboxd."""
+        page = 1
+        movies = {}
 
-            movies[movie_id] = {
-                "slug": movie_slug,
-                "name": movie_name,
-                'url': f'https://letterboxd.com/film/{movie_slug}/'
-            }
+        while True:
+            page_url = self.ajax_url + f"/page/{page}"
+            dom = self.scraper.get_parsed_page(page_url)
 
-        if len(new_data) < max:
+            if '.com/films/' in self.url:
+                new_movies = get_movies_from_horizontal_list(dom)
+                movies |= new_movies
+                if len(new_movies) < self.HORIZONTAL_MAX:
+                    break
+            elif '.com/film/' in self.url:
+                new_movies = get_movies_from_vertical_list(dom)
+                movies |= new_movies
+                if len(new_movies) < self.VERTICAL_MAX:
+                    break
+
+            page += 1
+
+        return movies
+
+class Future:
+    ARGS = ['name', 'release', 'release-earliest', 'rating',
+          'rating-lowest', 'shortest', 'longest']
+
+    def get_movies_with_args(args: list) -> dict:
+        # by 
+        pass
+
+    def get_with_language(language: str):
+        pass
+
+    def get_with_country(country: str):
+        pass
+
+    def get_with_year(year: int):
+        pass
+
+    def get_with_actor(actor: str):
+        pass
+
+    def get_with_director(director: str):
+        pass
+
+    def get_with_writer(writer: str):
+        pass
+
+def get_upcoming_movies() -> dict:
+    BASE_URL = "https://letterboxd.com/films/popular/this/week/upcoming/"
+    return Films(BASE_URL).movies
+
+@assert_instance(int)
+def get_movies_by_decade(decade: int) -> dict:
+    BASE_URL = f"https://letterboxd.com/films/ajax/popular/this/week/decade/{decade}s/"
+    return Films(BASE_URL).movies
+
+@assert_instance(int)
+def get_movies_by_year(year: int) -> dict:
+    BASE_URL = f"https://letterboxd.com/films/ajax/popular/this/week/year/{year}/"
+    return Films(BASE_URL).movies
+
+@assert_instance(str)
+def get_movies_by_genre(genre: str) -> dict:
+    """
+    action, adventure, animation, comedy, crime, documentary,
+    drama, family, fantasy, history, horror, music, mystery,
+    romance, science-fiction, thriller, tv-movie, war, western
+    """
+    BASE_URL = f"https://letterboxd.com/films/ajax/genre/{genre}"
+    return Films(BASE_URL).movies
+
+@assert_instance(str)
+def get_movies_by_service(service: str) -> dict:
+    """
+    netflix, hulu, prime-video, disney-plus, itv-play, apple-tv, 
+    youtube-premium, amazon-prime-video, hbo-max, peacock, ...
+    """
+    BASE_URL = f"https://letterboxd.com/films/popular/this/week/on/{service}/"
+    return Films(BASE_URL).movies
+
+@assert_instance(str)
+def get_movies_by_theme(theme: str) -> dict:
+    BASE_URL = f"https://letterboxd.com/films/ajax/theme/{theme}"
+    return Films(BASE_URL).movies
+
+@assert_instance(str)
+def get_movies_by_nanogenre(nanogenre: str) -> dict:
+    BASE_URL = f"https://letterboxd.com/films/ajax/nanogenre/{nanogenre}/"
+    return Films(BASE_URL).movies
+
+@assert_instance(str)
+def get_movies_by_mini_theme(theme: str) -> dict:
+    BASE_URL = f"https://letterboxd.com/films/ajax/mini-theme/{theme}"
+    return Films(BASE_URL).movies
+
+@assert_instance(str)
+def get_movies_by_similar(movie_slug: str) -> dict:
+    BASE_URL = f"https://letterboxd.com/films/ajax/like/{movie_slug}"
+    return Films(BASE_URL).movies
+
+def print_movies(movies, title=None, max_count=None):
+    """Print movies in a formatted list."""
+    if title:
+        print(f"\n{title} -- ({len(movies)} movies)", end=f"\n{'*'*8*2*2}\n")
+    for movie_no, (movie_id, movie) in enumerate(movies.items(), start=1):
+        if max_count and movie_no > max_count:
             break
-        page += 1
-    
-    return movies
-
-def films_parser(url: str, max=12*6):
-    domain = "https://letterboxd.com"
-    scraper = Scraper(domain)
-    page = 1
-    movies = {}
-    while True:
-        page_url = url + f"/page/{page}"
-        dom = scraper.get_parsed_page(page_url) 
-
-        new_data = dom.find_all("li")
-        for item in new_data:
-            rating_key = "data-average-rating"
-            movie_rating = float(
-                item['data-average-rating']) if rating_key in item.attrs else None
-            movie_id = item.div['data-film-id']
-            movie_slug = item.div['data-film-slug'] 
-            movie_name = item.img['alt']
-
-            movies[movie_id] = {
-                "slug": movie_slug,
-                "name": movie_name,
-                "rating": movie_rating,
-                'url': f'https://letterboxd.com/film/{movie_slug}/'
-            }
-
-        if len(new_data) < max:
-            break
-        page += 1
-    
-    return movies
-
-def get_with_genre(genre: str) -> dict:
-    # letterboxd.com/films/genre/<genre>
-    # > letterboxd.com/films/ajax/genre/<genre>
-    url = f"https://letterboxd.com/films/ajax/genre/{genre}"
-    return films_parser(url)
-
-def get_with_theme(theme: str) -> dict:
-    # letterboxd.com/films/theme/<theme>
-    # > letterboxd.com/films/ajax/theme/<theme>
-    url = f"https://letterboxd.com/films/ajax/theme/{theme}"
-    return films_parser(url)
-
-def get_with_nanogenre(nanogenre: str):
-    # letterboxd.com/films/nanogenre/<nanogenre>
-    # > letterboxd.com/films/ajax/nanogenre/<nanogenre>
-    url = f"https://letterboxd.com/films/ajax/nanogenre/{nanogenre}/"
-    return films_parser(url)
-
-def get_with_mini_theme(theme: str):
-    # letterboxd.com/films/theme/<theme>
-    # > letterboxd.com/films/ajax/theme/<theme>
-    url = f"https://letterboxd.com/films/ajax/mini-theme/{theme}"
-    return films_parser(url)
-
-def get_with_language(language: str):
-    pass
-
-def get_with_country(country: str):
-    pass
-
-def get_with_year(year: int):
-    pass
-
-def get_with_actor(actor: str):
-    pass
-
-def get_with_director(director: str):
-    pass
-
-def get_with_writer(writer: str):
-    pass
-
-def movie_similar(slug: str) -> dict:
-    # letterboxd.com/film/<slug>/similar
-    # letterboxd.com/films/like/<slug>
-    # letterboxd.com/films/like/<slug>
-    # > letterboxd.com/films/ajax/like/<slug>
-    list_url = f"https://letterboxd.com/films/ajax/like/{slug}"
-    return films_parser(list_url)
+        print(f"{movie_no:<8} {movie_id:<8} {movie['name']}")
+    print(f"{'*'*8*2*2}\n")
 
 if __name__ == "__main__":
-    from letterboxdpy.movie import Movie
     sys.stdout.reconfigure(encoding='utf-8')
 
-    # naoogenre using:
-    # print(json.dumps(get_with_nanogenre("chilling-fear-extreme"), indent=2))
-
-    # genre, theme, mini-theme using (with Movie instance):
+    # Movies similar to "V for Vendetta" are retrieved and printed.
+    # https://letterboxd.com/films/like/v-for-vendetta/
     movie_slug = "v-for-vendetta"
-    movie_instance = Movie(movie_slug)
+    movies = get_movies_by_similar(movie_slug)
+    print_movies(movies, title=f"Similar to {movie_slug}")
 
-    print(movie_slug)
-    for genre in movie_instance.genres:
-        genre_type = genre['type']
-        genre_name = genre['slug']
-        genre_url = genre['url']
-
-        if genre_type == 'genre':
-            continue # long process
-
-        print(len(films_parser(
-            genre_url.replace(".com/films/", ".com/films/ajax/"))), genre_name)
-        
-        """
-        :alternative
-        if genre_type == "genre":
-            print(genre_name, len(get_with_genre(genre_name)))
-        elif genre_type == "theme":
-            print(genre_name, len(get_with_theme(genre_name)))
-        elif genre_type == "mini-theme":
-            print(genre_name, len(get_with_mini_theme(genre_name)))
-        """
+    # Popular movies from the year 2027 are retrieved and displayed.
+    # https://letterboxd.com/films/popular/this/week/year/2027/
+    year = 2027
+    movies = get_movies_by_year(year)
+    print_movies(movies, title=f"Movies from {year}")
