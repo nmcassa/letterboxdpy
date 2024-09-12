@@ -1,0 +1,190 @@
+{
+  "movies": {
+    "dune-part-two": {
+      "name": "Dune: Part Two",
+      "id": "617443",
+      "rating": 10,
+      "liked": false
+    },
+    "cure": {
+      "name": "Cure",
+      "id": "28195",
+      "rating": 10,
+      "liked": true
+    },
+    "society-of-the-snow": {
+      "name": "Society of the Snow",
+      "id": "813840",
+      "rating": 10,
+      "liked": true
+    },
+    "the-conversation": {
+      "name": "The Conversation",
+      "id": "51529",
+      "rating": 10,
+      "liked": true
+    },
+    "godzilla-minus-one": {
+      "name": "Godzilla Minus One",
+      "id": "845706",
+      "rating": 10,
+      "liked": true
+    },
+    "nausicaa-of-the-valley-of-the-wind": {
+      "name": "Nausica\u00e4 of the Valley of the Wind",
+      "id": "51969",
+      "rating": 10,
+      "liked": true
+    },
+    "inglourious-basterds": {
+      "name": "Inglourious Basterds",
+      "id": "41352",
+      "rating": 10,
+      "liked": true
+    },
+    "house": {
+      "name": "House",
+      "id": "35925",
+      "rating": 10,
+      "liked": false
+    },
+    "the-big-lebowski": {
+      "name": "The Big Lebowski",
+      "id": "51935",
+      "rating": 10,
+      "liked": true
+    },
+    "ponyo": {
+      "name": "Ponyo",
+      "id": "44594",
+      "rating": 10,
+      "liked": true
+    },
+    "rocky": {
+      "name": "Rocky",
+      "id": "51090",
+      "rating": 10,
+      "liked": true
+    },
+    "world-of-tomorrow": {
+      "name": "World of Tomorrow",
+      "id": "230808",
+      "rating": 10,
+      "liked": true
+    },
+    "the-thing": {
+      "name": "The Thing",
+      "id": "51155",
+      "rating": 10,
+      "liked": false
+    },
+    "kikis-delivery-service": {
+      "name": "Kiki's Delivery Service",
+      "id": "41360",
+      "rating": 10,
+      "liked": true
+    },
+    "nope": {
+      "name": "Nope",
+      "id": "682547",
+      "rating": 10,
+      "liked": true
+    },
+    "ratatouille": {
+      "name": "Ratatouille",
+      "id": "50558",
+      "rating": 10,
+      "liked": true
+    },
+    "parasite-2019": {
+      "name": "Parasite",
+      "id": "426406",
+      "rating": 10,
+      "liked": true
+    },
+    "everything-everywhere-all-at-once": {
+      "name": "Everything Everywhere All at Once",
+      "id": "474474",
+      "rating": 10,
+      "liked": true
+    },
+    "the-king-of-comedy": {
+      "name": "The King of Comedy",
+      "id": "51794",
+      "rating": 10,
+      "liked": true
+    },
+    "james-acaster-repertoire": {
+      "name": "James Acaster: Repertoire",
+      "id": "445120",
+      "rating": 10,
+      "liked": true
+    },
+    "bo-burnham-make-happy": {
+      "name": "Bo Burnham: Make Happy",
+      "id": "335216",
+      "rating": 10,
+      "liked": true
+    },
+    "the-truman-show": {
+      "name": "The Truman Show",
+      "id": "27256",
+      "rating": 10,
+      "liked": true
+    },
+    "uncut-gems": {
+      "name": "Uncut Gems",
+      "id": "404266",
+      "rating": 10,
+      "liked": true
+    },
+    "superbad": {
+      "name": "Superbad",
+      "id": "47776",
+      "rating": 10,
+      "liked": true
+    },
+    "scott-pilgrim-vs-the-world": {
+      "name": "Scott Pilgrim vs. the World",
+      "id": "37833",
+      "rating": 10,
+      "liked": true
+    },
+    "spider-man-into-the-spider-verse": {
+      "name": "Spider-Man: Into the Spider-Verse",
+      "id": "251943",
+      "rating": 10,
+      "liked": true
+    },
+    "baby-driver": {
+      "name": "Baby Driver",
+      "id": "268950",
+      "rating": 10,
+      "liked": true
+    },
+    "the-grand-budapest-hotel": {
+      "name": "The Grand Budapest Hotel",
+      "id": "95113",
+      "rating": 10,
+      "liked": true
+    },
+    "moonrise-kingdom": {
+      "name": "Moonrise Kingdom",
+      "id": "70105",
+      "rating": 10,
+      "liked": true
+    },
+    "isle-of-dogs-2018": {
+      "name": "Isle of Dogs",
+      "id": "333448",
+      "rating": 10,
+      "liked": true
+    }
+  },
+  "count": 30,
+  "liked_count": 27,
+  "rating_count": 30,
+  "liked_percentage": 90.0,
+  "rating_percentage": 100.0,
+  "rating_average": 10.0
+}

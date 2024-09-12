@@ -45,19 +45,22 @@ USER_FOLDER = os.path.join(USERS_FOLDER, user_instance.username)
 
 # Export methods
 # If you want to add a new method, add it here
+# With arg: [user.user_watchlist, {'filters': {'genre': ['action', '-drama']}}],
 methods = [
-    user.user_films,
-    user.user_following,
-    user.user_followers,
-    user.user_genre_info,
-    user.user_reviews,
-    user.user_diary,
-    user.user_wrapped,
     user.user_activity,
+    user.user_diary,
+    user.user_films, # user.extract_user_films
+    user.user_films_liked, # user.extract_user_films
+    [user.user_films_rated, {'rating':5}], # user.extract_user_films
+    user.user_followers, # user.user_network
+    user.user_following, # user.user_network
+    user.user_genre_info,
+    user.user_liked_reviews,
     user.user_lists,
-    # [user.user_watchlist, {'filters': {'genre': ['action', '-drama']}}],
+    user.user_reviews,
+    user.user_tags,
     user.user_watchlist,
-    user.user_tags
+    user.user_wrapped
 ]
 
 print('\nChecking directories...')
@@ -98,7 +101,7 @@ for no, method in enumerate(methods, 1):
 
     # Clickable path
     click_url = f"file:///{os.path.join(os.getcwd(), file_path)}".replace("\\", "/")
-    print(f'{time.time() - method_start_time:<7.2f} seconds - {method_name:<16} - {click_url}')
+    print(f'{time.time() - method_start_time:<7.2f} seconds - {method_name:<18} - {click_url}')
 
 # Finish
 os.system('title Completed!')

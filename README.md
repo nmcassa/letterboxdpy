@@ -24,20 +24,9 @@ pip install git+https://github.com/nmcassa/letterboxdpy.git
 
 **Note:** Please be aware that installing directly from the GitHub repository might give you access to the most recent features and bug fixes, but it could also include changes that haven't been thoroughly tested and may not be stable for production use.
 
-# Directory
-  - [User Object](#User)
-     - **props**: scraper, username, url, avatar, recent, id, is_hq, display_name, bio, location, website, watchlist_length, stats, favorites
-    - **funcs**: [user_films](/docs/user/funcs/user_films.md), [user_following](/docs/user/funcs/user_following.md), [user_followers](/docs/user/funcs/user_followers.md), [user_genre_info](/docs/user/funcs/user_genre_info.md), [user_reviews](/docs/user/funcs/user_reviews.md), [user_diary](/docs/user/funcs/user_diary.md), [user_wrapped](/docs/user/funcs/user_wrapped.md), [user_activity](/docs/user/funcs/user_activity.md), [user_lists](/docs/user/funcs/user_lists.md), [user_watchlist](/docs/user/funcs/user_watchlist.md), [user_tags](/docs/user/funcs/user_tags.md)
-  - [Movie Object](#Movie)
-    - **props**: scraper, url, slug, banner, trailer, cast, crew, details, alternative_titles, genres, rating, year, poster, tagline, description, popular_reviews, letterboxd_id, title, original_title, runtime, tmdb_link, imdb_link
-    - **funcs**: [movie_details](/docs/movie/funcs/movie_details.md), [movie_watchers](/docs/movie/funcs/movie_watchers.md)
-  - [List Object](#List)
-    - **props**: scraper, url, slug, username, list_type, items_per_page, title, author, date_created, date_updated, description, tags, movies, count
-  - [Search Object](#Search):
-  - [Members Object](#Members)
-
-
 <h1 id="User">User Object</h1>
+
+[Explore the file](letterboxdpy/user.py) | [Functions Documentation](/docs/user/funcs/)
 
 ```python
 from letterboxdpy.user import User
@@ -107,6 +96,8 @@ print(user_instance)
 </details>
 
 <h1 id="Movie">Movie Object</h1>
+
+[Explore the file](letterboxdpy/movie.py) | [Functions Documentation](/docs/movie/funcs/)
 
 ```python
 from letterboxdpy.movie import Movie
@@ -195,44 +186,9 @@ print(movie_instance)
 ```
 </details>
 
-
-<h1 id="List">List Object</h1>
-
-```python
-from letterboxdpy.list import List
-list_instance = List("hepburnluv", "classic-movies-for-beginners")
-print(list_instance)
-```
-
-<details>
-  <summary>Click to expand <code>List</code> object response</summary>
-
-```json
-{
-  "scraper": {...},
-  "url": "https://letterboxd.com/hepburnluv/list/classic-movies-for-beginners",
-  "slug": "classic-movies-for-beginners",
-  "username": "hepburnluv",
-  "list_type": "list",
-  "items_per_page": 60,
-  "title": "classic movies for beginners.",
-  "description": "old hollywood classic movies for you who wanna start watching. \u02d6\u207a\u2027\u208a\u02da \u2661 \u02da\u208a\u2027\u207a\u02d6. \u0741\u208a \u22b9 . \u0741(from easiest to hardest to watch) (these are my personal recommendations only) thank you guys for all the comments and likes <3",
-  "movies": [
-    [
-      "The Wizard of Oz",
-      "the-wizard-of-oz-1939"
-    ],
-    [
-      "Roman Holiday",
-      "roman-holiday"
-    ],...
-  ],
-  "count": 66
-}
-```
-</details>
-
 <h1 id="Search">Search Object</h1>
+
+[Explore the file](letterboxdpy/search.py) | [Functions Documentation](/docs/search/funcs/)
 
 ```python
 from letterboxdpy.search import Search
@@ -290,10 +246,59 @@ print(search_instance.get_results(max=5))
 ```
 </details>
 
+<h1 id="List">List Object</h1>
 
-<h1 id="Search">Members Object</h1>
+[Explore the file](letterboxdpy/list.py)
 
-[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+Members)
+```python
+from letterboxdpy.list import List
+list_instance = List("hepburnluv", "classic-movies-for-beginners")
+print(list_instance)
+```
+
+<details>
+  <summary>Click to expand <code>List</code> object response</summary>
+
+```json
+{
+  "scraper": {...},
+  "url": "https://letterboxd.com/hepburnluv/list/classic-movies-for-beginners",
+  "slug": "classic-movies-for-beginners",
+  "username": "hepburnluv",
+  "list_type": "list",
+  "items_per_page": 60,
+  "title": "classic movies for beginners.",
+  "description": "old hollywood classic movies for you who wanna start watching. \u02d6\u207a\u2027\u208a\u02da \u2661 \u02da\u208a\u2027\u207a\u02d6. \u0741\u208a \u22b9 . \u0741(from easiest to hardest to watch) (these are my personal recommendations only) thank you guys for all the comments and likes <3",
+  "movies": [
+    [
+      "The Wizard of Oz",
+      "the-wizard-of-oz-1939"
+    ],
+    [
+      "Roman Holiday",
+      "roman-holiday"
+    ],...
+  ],
+  "count": 66
+}
+```
+</details>
+
+<h1 id="Films">Films Object</h1>
+
+[Explore the file](letterboxdpy/films.py) | [Functions Documentation](/docs/films/funcs/)
+
+```python
+from letterboxdpy.films import Films
+```
+
+<h1 id="Members">Members Object</h1>
+
+[Explore the file](letterboxdpy/members.py) | [Functions Documentation](/docs/members/funcs/)
+
+```python
+from letterboxdpy.members import Members
+```
 
 <h1 id="Testing">Testing</h1>
 
