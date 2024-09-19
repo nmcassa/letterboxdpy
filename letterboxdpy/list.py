@@ -1,17 +1,16 @@
+import re
+from json import (
+    dumps as json_dumps,
+    loads as json_loads
+)
+
 from letterboxdpy.parser import get_movies_from_vertical_list
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
-import re
-
-from json import (
-  dumps as json_dumps,
-  loads as json_loads
-)
+from letterboxdpy.constants.project import DOMAIN
 
 
 class List:
-    DOMAIN = "https://letterboxd.com"
-
     LIST_PATTERN = f'{DOMAIN}/%s/list/%s'
     WATCHLIST_PATTERN = f'{DOMAIN}/%s/watchlist'
 
@@ -33,9 +32,8 @@ class List:
             list_type = "watchlist"
             items_per_page = self.WATCHLIST_ITEMS_PER_PAGE
 
-        # Initialize and get the parsed DOM from the URL
-        self.scraper = Scraper(self.DOMAIN)
-        dom = self.scraper.get_parsed_page(url) 
+        # Fetch the parsed DOM from the specified URL.
+        dom = Scraper.get_parsed_page(url) 
 
         # Set the instance attributes
         self.url = url
@@ -65,7 +63,7 @@ class List:
 
         page = 1
         while True:
-            dom = self.scraper.get_parsed_page(f'{url}/page/{page}/')
+            dom = Scraper.get_parsed_page(f'{url}/page/{page}/')
             movies = get_movies_from_vertical_list(dom)
             data |= movies
 

@@ -3,13 +3,13 @@ from json import dumps as json_dumps
 from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
 from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
+from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.scraper import (
   Scraper,
   url_encode
 )
 
 class Search:
-    DOMAIN = "https://letterboxd.com"
     SEARCH_URL = f"{DOMAIN}/s/search"
     MAX_RESULTS = 20 # 250
     MAX_RESULTS_PER_PAGE = 20
@@ -27,10 +27,9 @@ class Search:
              "search_filter must be one of the following:",
              ", ".join(self.FILTERS)
              ])
-      
+
       self.query = url_encode(query)
       self.search_filter = search_filter
-      self.scraper = Scraper(self.DOMAIN)
       self._results = None # .results
       self.url = "/".join(filter(None, [
           self.SEARCH_URL,
@@ -56,11 +55,11 @@ class Search:
          'count': 0,
          'results': []
          }
-  
+
       result_count = 0
       for current_page in range(1, end_page+1):
         url = f'{self.url}/page/{current_page}/?adult'
-        dom = self.scraper.get_parsed_page(url)
+        dom = Scraper.get_parsed_page(url)
         results = self.get_page_results(dom)
 
         if not results:
@@ -82,7 +81,7 @@ class Search:
 
         if result_count >= max:
           break
-  
+
       data['count'] = result_count
       data['available'] = result_count > 0
 
@@ -148,7 +147,7 @@ class Search:
           # slug, name, url, poster
           slug = film_poster['data-film-slug']
           name = film_poster.img['alt']
-          url = self.DOMAIN + film_poster['data-target-link']
+          url = DOMAIN + film_poster['data-target-link']
           poster = None # film_poster.img['src']
           # movie year
           movie_year = result.h2.small
@@ -160,8 +159,8 @@ class Search:
             for a in film_metadata.find_all("a"):
               director_slug = a['href'].split('/')[-2]
               director_name = a.text
-              director_url = self.DOMAIN + a['href']
-      
+              director_url = DOMAIN + a['href']
+
               directors.append({
                 'name': director_name,
                 'slug': director_slug,
@@ -204,7 +203,7 @@ class Search:
           list_id = result.section['data-film-list-id']
           list_url = result.a['href']
           list_slug = list_url.split('/')[-2]
-          list_url = self.DOMAIN + list_url
+          list_url = DOMAIN + list_url
           list_title = result.h2.text.strip()
           item_count = result.find('small', {'class': 'value'})
           item_count = int(
@@ -224,7 +223,7 @@ class Search:
           owner_name = owner.text
           owner_url = owner['href']
           owner_slug = owner_url.split('/')[-2]
-          owner_url = self.DOMAIN + owner_url
+          owner_url = DOMAIN + owner_url
 
           data |= {
              'id': list_id,
@@ -241,7 +240,7 @@ class Search:
              }
           }
         case "tag":
-            tag_url = self.DOMAIN + result.h2.a['href']
+            tag_url = DOMAIN + result.h2.a['href']
             tag_name = result.h2.a.text.strip()
             data |= {
                'name': tag_name,
@@ -250,7 +249,7 @@ class Search:
         case "actor":
             actor_name = result.a.text.strip()
             actor_slug = result.a['href']
-            actor_url = self.DOMAIN + actor_slug
+            actor_url = DOMAIN + actor_slug
             actor_slug = actor_slug.split('/')[-2]
             data |= {
                'name': actor_name,
@@ -259,7 +258,7 @@ class Search:
             }
         case "studio":
             studio_name = result.a.text.strip()
-            studio_url = self.DOMAIN + result.a['href']
+            studio_url = DOMAIN + result.a['href']
             data |= {
                'name': studio_name,
                'url': studio_url
@@ -267,9 +266,9 @@ class Search:
         case "story":
             story_title = result.h3.span.text
             story_writer = result.find("p", {"class": "attribution"})
-            story_writer_url = self.DOMAIN + story_writer.a['href'] if story_writer else None
+            story_writer_url = DOMAIN + story_writer.a['href'] if story_writer else None
             story_writer = story_writer.text.strip() if story_writer else None
-            story_url = self.DOMAIN + result.figure.a['href']
+            story_url = DOMAIN + result.figure.a['href']
             data |= {
                'title': story_title,
                'url': story_url,
@@ -285,7 +284,7 @@ class Search:
             journal_teaser = result.find("div", {"class": "teaser"})
             journal_teaser = journal_teaser.text.strip() if journal_teaser else None
             writer = result.find("p", {"class": "attribution"})
-            writer_url = self.DOMAIN + writer.a['href'] if writer else None
+            writer_url = DOMAIN + writer.a['href'] if writer else None
             writer_name = writer.text.strip() if writer else None
             data |= {
                'title': journal_title,
@@ -337,7 +336,7 @@ if __name__ == "__main__":
 
   q3 = Search("The") # general search
   q4 = Search("V for Vendetta", 'films')
-  
+
   # test: instance printing
   print(q3)
   print(q4)

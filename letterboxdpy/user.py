@@ -16,19 +16,18 @@ from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
+from letterboxdpy.constants.project import DOMAIN
 
 
 class User:
-    DOMAIN = "https://letterboxd.com"
 
     def __init__(self, username: str) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
 
-        self.scraper = Scraper(self.DOMAIN)
         self.username = username.lower()
-        self.url = f"{self.DOMAIN}/{self.username}"
+        self.url = f"{DOMAIN}/{self.username}"
 
-        dom = self.scraper.get_parsed_page(self.url)
+        dom = Scraper.get_parsed_page(self.url)
 
         self.user_details(dom)
         self.user_avatar(dom)
@@ -217,7 +216,7 @@ def extract_user_films(user: User, url: str = None) -> dict:
 
     def process_page(page_number: int) -> dict:
         """Fetches and processes a page of user films."""
-        dom = user.scraper.get_parsed_page(f"{url}/page/{page_number}/")
+        dom = Scraper.get_parsed_page(f"{url}/page/{page_number}/")
         return get_movies_from_user_watched(dom)
 
     def calculate_statistics(movies: dict) -> dict:
@@ -272,7 +271,7 @@ def user_network(user: User, section: str) -> dict:
     def fetch_page(page_num: int):
         """Fetches a single page of the user's network section."""
         try:
-            return user.scraper.get_parsed_page(f"{BASE_URL}/page/{page_num}")
+            return Scraper.get_parsed_page(f"{BASE_URL}/page/{page_num}")
         except Exception as e:
             raise RuntimeError(f"Failed to fetch page {page_num}: {e}")
 
@@ -323,7 +322,7 @@ def user_genre_info(user: User) -> dict:
               "thriller", "tv-movie", "war", "western"]
     ret = {}
     for genre in genres:
-        dom = user.scraper.get_parsed_page(f"{user.url}/films/genre/{genre}/")
+        dom = Scraper.get_parsed_page(f"{user.url}/films/genre/{genre}/")
         data = dom.find("span", {"class": ["replace-if-you"], })
         data = data.next_sibling.replace(',', '')
         try:
@@ -347,7 +346,7 @@ def user_reviews(user: User) -> dict:
     data = {'reviews': {}}
     while True:
         page += 1
-        dom = user.scraper.get_parsed_page(f"{user.url}/films/reviews/page/{page}/")
+        dom = Scraper.get_parsed_page(f"{user.url}/films/reviews/page/{page}/")
         logs = dom.find_all("li", {"class": ["film-detail"], })
 
         for log in logs:
@@ -358,10 +357,10 @@ def user_reviews(user: User) -> dict:
             movie_id = details.parent.div['data-film-id']
             # str   ^^^--- movie_id: unique id of the movie.
             release = int(details.small.text) if details.small else None
-            movie_link = f"{user.DOMAIN}/film/{slug}/"
+            movie_link = f"{DOMAIN}/film/{slug}/"
             log_id = log['data-object-id'].split(':')[-1]
             # str ^^^--- log_id: unique id of the review.
-            log_link = user.DOMAIN + details.a['href']
+            log_link = DOMAIN + details.a['href']
             log_no = log_link.split(slug)[-1]
             log_no = int(log_no.replace('/', '')) if log_no.count('/') == 2 else 0
             # int ^^^--- log_no: there can be multiple reviews for a movie.
@@ -436,7 +435,7 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
     while True:
         url = BASE_URL + f"page/{pagination}/"
 
-        dom = user.scraper.get_parsed_page(url)
+        dom = Scraper.get_parsed_page(url)
         table = dom.find("table", {"id": ["diary-table"], })
 
         if table:
@@ -609,7 +608,7 @@ def user_wrapped(user: User, year: int=2024) -> dict:
 # letterboxd.com/ajax/activity-pagination/?/
 @assert_instance(User)
 def user_activity(user: User) -> dict:
-    BASE_URL = f"{user.DOMAIN}/ajax/activity-pagination/{user.username}"
+    BASE_URL = f"{DOMAIN}/ajax/activity-pagination/{user.username}"
 
     def get_event_type(section) -> tuple:
         """
@@ -711,7 +710,7 @@ def user_activity(user: User) -> dict:
         'total_logs': 0
     }
 
-    dom = user.scraper.get_parsed_page(BASE_URL)
+    dom = Scraper.get_parsed_page(BASE_URL)
     sections = dom.find_all("section")
 
     if not sections:
@@ -746,7 +745,7 @@ def user_lists(user: User) -> dict:
 
     def fetch_page_data(page: int) -> dict:
         """Fetch and parse page data."""
-        dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+        dom = Scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
         list_set = dom.find(*SELECTORS['list_set'])
         return list_set
 
@@ -767,7 +766,7 @@ def user_lists(user: User) -> dict:
             return description
 
         def get_url() -> str:
-            return user.DOMAIN + item.find(*SELECTORS['title']).a['href']
+            return DOMAIN + item.find(*SELECTORS['title']).a['href']
 
         def get_slug() -> str:
             return get_url().split('/')[-2]
@@ -867,7 +866,7 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
     page = 1
     no = user.watchlist_length
     while True:
-        dom = user.scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+        dom = Scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
 
         poster_containers = dom.find_all("li", {"class": ["poster-container"], })
         for poster_container in poster_containers:
@@ -883,7 +882,7 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
                 'slug': slug,
                 'no': no,
                 'page': page,
-                'url': f"{user.DOMAIN}/films/{slug}/",
+                'url': f"{DOMAIN}/films/{slug}/",
             }
 
             no -= 1
@@ -921,7 +920,7 @@ def user_tags(user: User) -> dict:
         
         def fetch_dom() -> any:
             """Fetch and return the DOM for the page."""
-            return user.scraper.get_parsed_page(f"{BASE_URL}/{page}")
+            return Scraper.get_parsed_page(f"{BASE_URL}/{page}")
 
         def parse_tag(tag) -> dict:
             """Extract tag information from a single tag element."""
@@ -934,7 +933,7 @@ def user_tags(user: User) -> dict:
                 'name': name,
                 'title': title,
                 'slug': slug,
-                'link': user.DOMAIN + link,
+                'link': DOMAIN + link,
                 'count': count,
             }
 
@@ -979,7 +978,7 @@ def user_liked_reviews(user: User) -> dict:
     page = 1
     ret = {'reviews':{}}
     while True:
-        dom = user.scraper.get_parsed_page(BASE_URL + f'/page/{page}')
+        dom = Scraper.get_parsed_page(BASE_URL + f'/page/{page}')
 
         container = dom.find("ul", {"class": ["film-list"]})
         items = container.find_all("li", {"class": ["film-detail"]})
@@ -987,7 +986,7 @@ def user_liked_reviews(user: User) -> dict:
         for item in items:
             elem_review_detail = item.find("div", {"class": ["film-detail-content"]})
 
-            user_url = user.DOMAIN + elem_review_detail.find('a', {"class": ["avatar"]})['href']
+            user_url = DOMAIN + elem_review_detail.find('a', {"class": ["avatar"]})['href']
             username = item['data-owner']
             elem_display_name = elem_review_detail.find('strong', {'class': ['name']})
             review_log_type = elem_display_name.previous_sibling.text.strip()
@@ -999,11 +998,11 @@ def user_liked_reviews(user: User) -> dict:
             movie_slug = elem_review_detail.parent.div['data-film-slug']
             movie_id = elem_review_detail.parent.div['data-film-id']
             movie_release = int(elem_review_detail.small.text) if elem_review_detail.small else None
-            movie_url = f"{user.DOMAIN}/film/{movie_slug}/"
+            movie_url = f"{DOMAIN}/film/{movie_slug}/"
 
             # review
             review_id = item['data-object-id'].split(':')[-1]
-            review_url = user.DOMAIN + elem_review_detail.a['href']
+            review_url = DOMAIN + elem_review_detail.a['href']
             review_date = elem_review_detail.find("span", {"class": ["_nobr"]})
             review_no = review_url.split(movie_slug)[-1]
             review_no = int(review_no.replace('/', '')) if review_no.count('/') == 2 else 0

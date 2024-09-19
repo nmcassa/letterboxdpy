@@ -11,18 +11,17 @@ from letterboxdpy.utils.utils_parser import extract_numeric_text
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
+from letterboxdpy.constants.project import DOMAIN
 
 class Movie:
-    DOMAIN = 'https://letterboxd.com'
 
     def __init__(self, slug: str) -> None:
         assert isinstance(slug, str), f"Movie slug must be a string, not {type(slug)}"
 
-        self.scraper = Scraper(self.DOMAIN)
-        self.url = f'{self.DOMAIN}/film/{slug}'
+        self.url = f'{DOMAIN}/film/{slug}'
         self.slug = slug
 
-        dom = self.scraper.get_parsed_page(self.url)
+        dom = Scraper.get_parsed_page(self.url)
 
         script = dom.find("script", type="application/ld+json")
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
@@ -92,7 +91,7 @@ class Movie:
                 'name': name,
                 'role_name': role_name,
                 'slug': slug,
-                'url': self.DOMAIN + url}
+                'url': DOMAIN + url}
                 )
 
         self.cast = cast
@@ -116,7 +115,7 @@ class Movie:
             crew[job].append({
                 'name': name,
                 'slug': slug,
-                'url': self.DOMAIN + url}
+                'url': DOMAIN + url}
                 )
 
         self.crew = crew
@@ -137,7 +136,7 @@ class Movie:
                 'type': item_type,
                 'name': item.text,
                 'slug': slug,
-                'url': self.DOMAIN + "/".join(url_parts)
+                'url': DOMAIN + "/".join(url_parts)
             })
 
         self.details = details
@@ -162,7 +161,7 @@ class Movie:
                 'type': url_parts[2],
                 'name': item.text,
                 'slug': url_parts[3],
-                'url': self.DOMAIN + "/".join(url_parts)
+                'url': DOMAIN + "/".join(url_parts)
             })
 
         if genres and self.slug == genres[-1]['type']:
@@ -278,7 +277,7 @@ class Movie:
 # letterboxd.com/film/?/details
 @assert_instance(Movie)
 def movie_details(movie: Movie) -> dict:
-    dom = movie.scraper.get_parsed_page("/".join([movie.url, "details"]))
+    dom = Scraper.get_parsed_page("/".join([movie.url, "details"]))
     dom = dom.find("div", {"id": ["tab-details"]})
 
     data = {
@@ -319,7 +318,7 @@ def movie_watchers(movie: Movie) -> dict:
         return stats
 
     try:
-        dom = movie.scraper.get_parsed_page(BASE_URL)
+        dom = Scraper.get_parsed_page(BASE_URL)
         return extract_watchers_data(dom)
     except Exception as e:
         raise RuntimeError("Failed to retrieve movie watchers' statistics") from e
