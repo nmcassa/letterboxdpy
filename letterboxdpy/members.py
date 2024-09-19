@@ -1,3 +1,7 @@
+if __loader__.name == '__main__':
+    import sys
+    sys.path.append(sys.path[0] + '/..')
+
 from json import (
     dump as json_dump,
     dumps as json_dumps,
@@ -9,55 +13,61 @@ from letterboxdpy.encoder import Encoder
 from letterboxdpy.scraper import Scraper
 
 
-MEMBERS_YEAR_TOP = "https://letterboxd.com/members/popular/this/year/"
-
 class Members:
+    """Class for handling member data from Letterboxd."""
 
-    def __init__(self, url=""):
-        self.listing_base = url
+    MEMBERS_YEAR_TOP = "https://letterboxd.com/members/popular/this/year/"
+    MEMBERS_PER_PAGE = 30
 
-    def self_check_value(self, value):
+    def __init__(self, url: str = ""):
+        """Initialize Members with the base URL."""
+        self.url = url
+
+    def self_check_value(self, value: str) -> None:
+        """Check if the value contains only valid characters."""
         if not re.match("^[A-Za-z0-9_]*$", value):
-            raise Exception(f"Invalid {self.__class__.__name__}")
+            raise ValueError(f"Invalid {self.__class__.__name__}")
 
-    def __str__(self):
-      return json_dumps(self, indent=2, cls=Encoder)
+    def __str__(self) -> str:
+        """Return a JSON string representation of the instance."""
+        return json_dumps(self, indent=2, cls=Encoder)
 
-    def jsonify(self):
-      return json_loads(self.__str__())
+    def jsonify(self) -> dict:
+        """Convert the instance to a JSON dictionary."""
+        return json_loads(self.__str__())
 
 # -- FUNCTIONS --
 
-def top_users(n: int) -> List:
-    ml = Members(url=MEMBERS_YEAR_TOP)
-    page = Scraper.get_parsed_page(ml.listing_base)
+def top_users(max:int = 100) -> List:
+    """Fetch the top n members from the Letterboxd popular members page."""
+    # max 256 page?
+    members_instance = Members()
 
-    # returns all movies
-    prev = -1
-    count = 1
-    curr = 0
-    member_list = []
+    data = []
+    page = 1
+    while True:
+        url = f"{members_instance.MEMBERS_YEAR_TOP}page/{page}/"
+        dom = Scraper.get_parsed_page(url)
 
-    while prev != curr and curr < n:
-        count += 1
-        prev = len(member_list)
-        popular_members_table = page.find_all('table', {"class": ["person-table"], })[0]
-        avatars = popular_members_table.find_all("a", {"class": ["avatar -a40"], })
+        table = dom.find_all('table', {"class": ["person-table"]})[0]
+        avatars = table.find_all("a", {"class": ["avatar -a40"]})
 
         for avatar in avatars:
-            acct_path = avatar['href']
-            acct = acct_path.replace('/', '')
-            member_list.append(acct)
+            user_url = avatar['href']
+            user_name = user_url.replace('/', '')
+            data.append(user_name)
 
-        curr = len(member_list)
-        page = Scraper.get_parsed_page(ml.listing_base + '/page/' + str(count) + "/")
+            if len(data) >= max:
+                return data
 
-    return member_list[:n]
+        if len(avatars) < members_instance.MEMBERS_PER_PAGE:
+            break
 
+        page += 1
+
+    return data
 
 if __name__=="__main__":
-    N = 100
-    member_list = top_users(N)
-
-    with open(f'top_2023_members_{len(member_list)}.json', 'w') as f:
-        json_dump(member_list, f, indent=2)
+    data = top_users(max=200)
+    with open(f'top_members_{len(data)}.json', 'w') as f:
+        json_dump(data, f, indent=2)
