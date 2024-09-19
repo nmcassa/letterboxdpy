@@ -4,7 +4,7 @@ if __loader__.name == '__main__':
 
 import os
 import inspect
-from letterboxdpy import user, movie, films, members, search
+from letterboxdpy import user, movie, films, members, search, list
 
 def get_defined_functions(module):
     """Returns a list of function names defined in the given module."""
@@ -70,6 +70,7 @@ if __name__ == "__main__":
         'movie': movie,
         'films': films,
         'members': members,
-        'search': search
+        'search': search,
+        'list': list
     }
     check_modules_for_missing_md(modules)
