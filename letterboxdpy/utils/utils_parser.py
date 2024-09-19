@@ -5,6 +5,16 @@ from typing import Dict, Literal, Optional
 from letterboxdpy.utils.utils_transform import month_to_index
 
 
+def try_parse(value, target_type):
+    """Attempt to convert the given value to the specified target type."""
+    if isinstance(value, target_type):
+        return value
+    
+    try:
+        return target_type(value)
+    except (ValueError, TypeError):
+        return False
+
 def extract_and_convert_shorthand(tag) -> int:
     """Extracts text from a tag and converts shorthand notation (e.g., '6.3K') to an integer."""
     if tag and tag.text:
