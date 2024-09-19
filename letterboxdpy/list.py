@@ -1,6 +1,7 @@
 from letterboxdpy.parser import get_movies_from_vertical_list
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
+from letterboxdpy.constants.project import DOMAIN
 import re
 
 from json import (
@@ -10,8 +11,6 @@ from json import (
 
 
 class List:
-    DOMAIN = "https://letterboxd.com"
-
     LIST_PATTERN = f'{DOMAIN}/%s/list/%s'
     WATCHLIST_PATTERN = f'{DOMAIN}/%s/watchlist'
 
