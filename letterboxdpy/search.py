@@ -27,10 +27,9 @@ class Search:
              "search_filter must be one of the following:",
              ", ".join(self.FILTERS)
              ])
-      
+
       self.query = url_encode(query)
       self.search_filter = search_filter
-      self.scraper = Scraper(DOMAIN)
       self._results = None # .results
       self.url = "/".join(filter(None, [
           self.SEARCH_URL,
@@ -56,11 +55,11 @@ class Search:
          'count': 0,
          'results': []
          }
-  
+
       result_count = 0
       for current_page in range(1, end_page+1):
         url = f'{self.url}/page/{current_page}/?adult'
-        dom = self.scraper.get_parsed_page(url)
+        dom = Scraper.get_parsed_page(url)
         results = self.get_page_results(dom)
 
         if not results:
@@ -82,7 +81,7 @@ class Search:
 
         if result_count >= max:
           break
-  
+
       data['count'] = result_count
       data['available'] = result_count > 0
 
@@ -161,7 +160,7 @@ class Search:
               director_slug = a['href'].split('/')[-2]
               director_name = a.text
               director_url = DOMAIN + a['href']
-      
+
               directors.append({
                 'name': director_name,
                 'slug': director_slug,
@@ -337,7 +336,7 @@ if __name__ == "__main__":
 
   q3 = Search("The") # general search
   q4 = Search("V for Vendetta", 'films')
-  
+
   # test: instance printing
   print(q3)
   print(q4)
