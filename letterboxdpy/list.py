@@ -33,9 +33,8 @@ class List:
             list_type = "watchlist"
             items_per_page = self.WATCHLIST_ITEMS_PER_PAGE
 
-        # Initialize and get the parsed DOM from the URL
-        self.scraper = Scraper(self.DOMAIN)
-        dom = self.scraper.get_parsed_page(url) 
+        # Fetch the parsed DOM from the specified URL.
+        dom = Scraper.get_parsed_page(url) 
 
         # Set the instance attributes
         self.url = url
@@ -65,7 +64,7 @@ class List:
 
         page = 1
         while True:
-            dom = self.scraper.get_parsed_page(f'{url}/page/{page}/')
+            dom = Scraper.get_parsed_page(f'{url}/page/{page}/')
             movies = get_movies_from_vertical_list(dom)
             data |= movies
 
