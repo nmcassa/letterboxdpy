@@ -12,7 +12,6 @@ from letterboxdpy.parser import (
 
 class Films:
     """Fetch movies from Letterboxd based on different URLs."""
-    DOMAIN = "https://letterboxd.com"
     VERTICAL_MAX = 20*5
     HORIZONTAL_MAX = 12*6
 
