@@ -3,11 +3,10 @@ from json import (
     dumps as json_dumps,
     loads as json_loads
 )
-from bs4 import BeautifulSoup
-import requests
 import re
 from typing import List
 from letterboxdpy.encoder import Encoder
+from letterboxdpy.scraper import Scraper
 
 
 MEMBERS_YEAR_TOP = "https://letterboxd.com/members/popular/this/year/"
@@ -27,20 +26,11 @@ class Members:
     def jsonify(self):
       return json_loads(self.__str__())
 
-    def get_parsed_page(self, url: str) -> BeautifulSoup:
-        # This fixes a blocked by cloudflare error i've encountered
-        headers = {
-            "referer": "https://letterboxd.com",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-        }
-
-        return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
-
 # -- FUNCTIONS --
 
 def top_users(n: int) -> List:
     ml = Members(url=MEMBERS_YEAR_TOP)
-    page = ml.get_parsed_page(ml.listing_base)
+    page = Scraper.get_parsed_page(ml.listing_base)
 
     # returns all movies
     prev = -1
@@ -60,7 +50,7 @@ def top_users(n: int) -> List:
             member_list.append(acct)
 
         curr = len(member_list)
-        page = ml.get_parsed_page(ml.listing_base + '/page/' + str(count) + "/")
+        page = Scraper.get_parsed_page(ml.listing_base + '/page/' + str(count) + "/")
 
     return member_list[:n]
 
