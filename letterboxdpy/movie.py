@@ -18,11 +18,10 @@ class Movie:
     def __init__(self, slug: str) -> None:
         assert isinstance(slug, str), f"Movie slug must be a string, not {type(slug)}"
 
-        self.scraper = Scraper(self.DOMAIN)
         self.url = f'{self.DOMAIN}/film/{slug}'
         self.slug = slug
 
-        dom = self.scraper.get_parsed_page(self.url)
+        dom = Scraper.get_parsed_page(self.url)
 
         script = dom.find("script", type="application/ld+json")
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
@@ -278,7 +277,7 @@ class Movie:
 # letterboxd.com/film/?/details
 @assert_instance(Movie)
 def movie_details(movie: Movie) -> dict:
-    dom = movie.scraper.get_parsed_page("/".join([movie.url, "details"]))
+    dom = Scraper.get_parsed_page("/".join([movie.url, "details"]))
     dom = dom.find("div", {"id": ["tab-details"]})
 
     data = {
@@ -319,7 +318,7 @@ def movie_watchers(movie: Movie) -> dict:
         return stats
 
     try:
-        dom = movie.scraper.get_parsed_page(BASE_URL)
+        dom = Scraper.get_parsed_page(BASE_URL)
         return extract_watchers_data(dom)
     except Exception as e:
         raise RuntimeError("Failed to retrieve movie watchers' statistics") from e
