@@ -1,14 +1,13 @@
-from letterboxdpy.encoder import Encoder
-from bs4 import BeautifulSoup
-from typing import List
-import requests
-import re
-
 from json import (
-    dumps as json_dumps,
     dump as json_dump,
+    dumps as json_dumps,
     loads as json_loads
 )
+from bs4 import BeautifulSoup
+import requests
+import re
+from typing import List
+from letterboxdpy.encoder import Encoder
 
 
 MEMBERS_YEAR_TOP = "https://letterboxd.com/members/popular/this/year/"
