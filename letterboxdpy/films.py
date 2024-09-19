@@ -19,7 +19,6 @@ class Films:
     def __init__(self, url: str):
         """Initialize Films class with a URL and scrape movies."""
         self.url = url
-        self.scraper = Scraper(self.DOMAIN)
         self.ajax_url = get_ajax_url(url)
         self.movies = self.get_movies()
         self.count = len(self.movies)
@@ -31,7 +30,7 @@ class Films:
 
         while True:
             page_url = self.ajax_url + f"/page/{page}"
-            dom = self.scraper.get_parsed_page(page_url)
+            dom = Scraper.get_parsed_page(page_url)
 
             if '.com/films/' in self.url:
                 new_movies = get_movies_from_horizontal_list(dom)
