@@ -1,13 +1,13 @@
+import re
+from json import (
+    dumps as json_dumps,
+    loads as json_loads
+)
+
 from letterboxdpy.parser import get_movies_from_vertical_list
 from letterboxdpy.scraper import Scraper
 from letterboxdpy.encoder import Encoder
 from letterboxdpy.constants.project import DOMAIN
-import re
-
-from json import (
-  dumps as json_dumps,
-  loads as json_loads
-)
 
 
 class List:
