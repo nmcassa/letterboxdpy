@@ -56,7 +56,7 @@ class Search:
          'results': []
          }
 
-      result_count = 0
+      result_count = 1
       for current_page in range(1, end_page+1):
         url = f'{self.url}/page/{current_page}/?adult'
         dom = Scraper.get_parsed_page(url)
