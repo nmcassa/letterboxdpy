@@ -1,4 +1,4 @@
-from letterboxdpy.scraper import Scraper
+from letterboxdpy.scraper import Scraper, url_encode
 from bs4 import BeautifulSoup
 import unittest
 
@@ -23,6 +23,10 @@ class TestScraper(unittest.TestCase):
         except Exception:
             self.assertTrue(True)
 
+    def test_url_encode(self):
+        query = "Dune: Part Two"
+        encoded_query = url_encode(query)
+        self.assertEqual(encoded_query, "Dune%3A%20Part%20Two")
 
 if __name__ == '__main__':
     unittest.main()
