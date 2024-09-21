@@ -17,11 +17,8 @@ class TestScraper(unittest.TestCase):
         )
     
     def test_invalid_film_url(self):
-        try:
+        with self.assertRaises(Exception):
             self.scraper.get_parsed_page(self.invalid_film_url)
-            self.fail()
-        except Exception:
-            self.assertTrue(True)
 
     def test_url_encode(self):
         query = "Dune: Part Two"
