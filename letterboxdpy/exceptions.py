@@ -1,3 +1,7 @@
+class PageFetchError(Exception):
+    """Custom exception for errors related to fetching pages."""
+    pass
+
 class PageLoadError(Exception):
     """Raised when loading a page from a given URL fails."""
     def __init__(self, url, message="Failed to load the page"):
