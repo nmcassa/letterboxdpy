@@ -18,15 +18,19 @@ class Encoder(JSONEncoder):
             raise CustomEncoderError("An error occurred during encoding") from e
     
 class SecretsEncoder(JSONEncoder):
-    """JSON encoder that excludes the 'secrets' attribute from the output."""
+    """JSON encoder that excludes specified attributes from the output."""
     
+    def __init__(self, excl_attrs: list=['secrets'], **kwargs):
+        assert isinstance(excl_attrs, list), "excl_attrs must be a list"
+        assert len(excl_attrs) > 0, "excl_attrs must not be empty"
+        assert all(isinstance(attr, str) for attr in excl_attrs), "All elements in excl_attrs must be strings"
+        self.excl_attrs = set(excl_attrs)
+        super().__init__(**kwargs)
+
     def default(self, o):
+        """Encodes the object to JSON format excluding specified attributes."""
         try:
-            if hasattr(o, 'secrets'):
-                o_copy = o.__dict__.copy()
-                o_copy.pop('secrets', None)
-                return o_copy
-            else:
-                raise TypeError(f"'{self.__class__.__name__}' can only encode objects with a 'secrets' attribute.")
-        except Exception as e:
-            raise CustomEncoderError("An error occurred while encoding") from e
+            obj_copy = {k: v for k, v in o.__dict__.items() if k not in self.excl_attrs}
+        except AttributeError as e:
+            raise CustomEncoderError(f"Object of type {type(o).__name__} has no __dict__ attribute") from e
+        return obj_copy
