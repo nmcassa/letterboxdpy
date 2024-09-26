@@ -13,7 +13,7 @@ from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.utils.utils_parser import parse_review_date, extract_and_convert_shorthand
 from letterboxdpy.parser import get_movies_from_user_watched
 from letterboxdpy.decorators import assert_instance
-from letterboxdpy.scraper import Scraper
+from letterboxdpy.scraper import parse_url
 from letterboxdpy.encoder import Encoder
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
@@ -27,7 +27,7 @@ class User:
         self.username = username.lower()
         self.url = f"{DOMAIN}/{self.username}"
 
-        dom = Scraper.get_parsed_page(self.url)
+        dom = parse_url(self.url)
 
         self.user_details(dom)
         self.user_avatar(dom)
@@ -216,7 +216,7 @@ def extract_user_films(user: User, url: str = None) -> dict:
 
     def process_page(page_number: int) -> dict:
         """Fetches and processes a page of user films."""
-        dom = Scraper.get_parsed_page(f"{url}/page/{page_number}/")
+        dom = parse_url(f"{url}/page/{page_number}/")
         return get_movies_from_user_watched(dom)
 
     def calculate_statistics(movies: dict) -> dict:
@@ -271,7 +271,7 @@ def user_network(user: User, section: str) -> dict:
     def fetch_page(page_num: int):
         """Fetches a single page of the user's network section."""
         try:
-            return Scraper.get_parsed_page(f"{BASE_URL}/page/{page_num}")
+            return parse_url(f"{BASE_URL}/page/{page_num}")
         except Exception as e:
             raise RuntimeError(f"Failed to fetch page {page_num}: {e}")
 
@@ -322,7 +322,7 @@ def user_genre_info(user: User) -> dict:
               "thriller", "tv-movie", "war", "western"]
     ret = {}
     for genre in genres:
-        dom = Scraper.get_parsed_page(f"{user.url}/films/genre/{genre}/")
+        dom = parse_url(f"{user.url}/films/genre/{genre}/")
         data = dom.find("span", {"class": ["replace-if-you"], })
         data = data.next_sibling.replace(',', '')
         try:
@@ -346,7 +346,7 @@ def user_reviews(user: User) -> dict:
     data = {'reviews': {}}
     while True:
         page += 1
-        dom = Scraper.get_parsed_page(f"{user.url}/films/reviews/page/{page}/")
+        dom = parse_url(f"{user.url}/films/reviews/page/{page}/")
         logs = dom.find_all("li", {"class": ["film-detail"], })
 
         for log in logs:
@@ -435,7 +435,7 @@ def user_diary(user: User, year: int=None, page: int=None) -> dict:
     while True:
         url = BASE_URL + f"page/{pagination}/"
 
-        dom = Scraper.get_parsed_page(url)
+        dom = parse_url(url)
         table = dom.find("table", {"id": ["diary-table"], })
 
         if table:
@@ -710,7 +710,7 @@ def user_activity(user: User) -> dict:
         'total_logs': 0
     }
 
-    dom = Scraper.get_parsed_page(BASE_URL)
+    dom = parse_url(BASE_URL)
     sections = dom.find_all("section")
 
     if not sections:
@@ -745,7 +745,7 @@ def user_lists(user: User) -> dict:
 
     def fetch_page_data(page: int) -> dict:
         """Fetch and parse page data."""
-        dom = Scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+        dom = parse_url(f'{BASE_URL}/page/{page}')
         list_set = dom.find(*SELECTORS['list_set'])
         return list_set
 
@@ -866,7 +866,7 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
     page = 1
     no = user.watchlist_length
     while True:
-        dom = Scraper.get_parsed_page(f'{BASE_URL}/page/{page}')
+        dom = parse_url(f'{BASE_URL}/page/{page}')
 
         poster_containers = dom.find_all("li", {"class": ["poster-container"], })
         for poster_container in poster_containers:
@@ -920,7 +920,7 @@ def user_tags(user: User) -> dict:
         
         def fetch_dom() -> any:
             """Fetch and return the DOM for the page."""
-            return Scraper.get_parsed_page(f"{BASE_URL}/{page}")
+            return parse_url(f"{BASE_URL}/{page}")
 
         def parse_tag(tag) -> dict:
             """Extract tag information from a single tag element."""
@@ -978,7 +978,7 @@ def user_liked_reviews(user: User) -> dict:
     page = 1
     ret = {'reviews':{}}
     while True:
-        dom = Scraper.get_parsed_page(BASE_URL + f'/page/{page}')
+        dom = parse_url(BASE_URL + f'/page/{page}')
 
         container = dom.find("ul", {"class": ["film-list"]})
         items = container.find_all("li", {"class": ["film-detail"]})
