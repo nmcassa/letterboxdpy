@@ -8,12 +8,10 @@ from json import (
   loads as json_loads
 )
 
-from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.utils.utils_parser import parse_review_date
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import parse_url
 from letterboxdpy.encoder import Encoder
-from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN, CURRENT_YEAR
 from letterboxdpy.pages import (
     user_activity,
@@ -21,7 +19,8 @@ from letterboxdpy.pages import (
     user_films,
     user_likes,
     user_lists,
-    user_network
+    user_network,
+    user_profile
 )
 
 
@@ -36,19 +35,29 @@ class User:
             self.likes = user_likes.UserLikes(username)
             self.lists = user_lists.UserLists(username)
             self.network = user_network.UserNetwork(username)
+            self.profile = user_profile.UserProfile(username)
 
     def __init__(self, username: str) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
 
         self.username = username.lower()
-        self.url = f"{DOMAIN}/{self.username}"
         self.pages = self.UserPages(self.username)
 
-        dom = parse_url(self.url)
-
-        self.user_details(dom)
-        self.user_avatar(dom)
-        self.user_recent(dom)
+        self.url = self.get_url()
+        self.id = self.get_id()
+        self.is_hq = self.get_hq_status()
+        self.display_name = self.get_display_name()
+        self.bio = self.get_bio()
+        self.location = self.get_location()
+        self.website = self.get_website()
+        self.watchlist_length = self.get_watchlist_length()
+        self.stats = self.get_stats()
+        self.favorites = self.get_favorites()
+        self.avatar = self.get_avatar()
+        self.recent = {
+            'watchlist': self.get_watchlist_recent(),
+            'diary': self.get_diary_recent()
+        }
 
     def __str__(self) -> str:
         return json_dumps(self, indent=2, cls=Encoder)
@@ -88,148 +97,32 @@ class User:
     def get_followers(self) -> dict:
         return self.pages.network.get_followers()
 
-    # letterboxd.com/?
-    def user_avatar(self, dom) -> str:
-        elem_avatar = dom.find("div", {"class": ["profile-avatar"]})
-        avatar_url = elem_avatar.img['src']
-        self.avatar = Avatar(avatar_url).upscaled_data
-
-    # letterboxd.com/?
-    def user_recent(self, dom) -> list:
-        watchlist_recent = {}
-        diary_recent = {'months':{}}
-
-        # watchlist
-        if self.watchlist_length:
-            section_watchlist = dom.find("section", {"class": ["watchlist-aside"]})
-            watchlist_items = section_watchlist.find_all("li", {"class": ["film-poster"]})
-            for item in watchlist_items:
-                watchlist_recent[item['data-film-id']] = {
-                    'name': item.img['alt'],
-                    'slug': item['data-film-slug']
-                }
-        
-        # diary
-        sections = dom.find_all("section", {"class": ["section"]})
-        for section in sections:
-            if section.h2 is None:
-                continue
-    
-            if section.h2.text == "Diary":
-                entry_list = section.find_all("li", {"class": ["listitem"]})
-
-                for entry in entry_list:
-                    month_index = month_to_index(entry.h3.text)
-
-                    diary_recent['months'] |= {month_index: {}}
-
-                    days = entry.find_all("dt")
-                    items = entry.find_all("dd")
-
-                    for day, item in zip(days, items):
-                        movie_index = day.text
-                        movie_slug = item.a['href'].split('/')[-2]
-                        movie_name = item.text 
-
-                        if movie_index not in diary_recent['months'][month_index]:
-                            diary_recent['months'][month_index][movie_index] = []
-
-                        diary_recent['months'][month_index][movie_index].append({
-                            'name': movie_name,
-                            'slug': movie_slug
-                        })
-                else:
-                    break
-
-        data = {
-            'watchlist': watchlist_recent,
-            'diary': diary_recent
-        }
-        
-        self.recent = data
-
-    # letterboxd.com/?/
-    def user_details(self, dom) -> dict:
-        """
-        methods:
-        .id, .display_name, .bio, .location,
-        .website, .watchlist_length, .stats, .favorites
-        """
-
-        # id
-        """ alternative:
-        button_report = page.find("button", {"data-js-trigger": ["report"]})
-        self.id = int(button_report['data-report-url'].split(':')[-1].split('/')[0])
-        """
-        pattern = r"/ajax/person:(\d+)/report-for"
-        self.id  = re.search(
-            pattern,
-            dom.prettify()
-        ).group(1)
-
-        # hq check
-        self.is_hq = bool(dom.find("body", {'class': 'profile-hq'}))
-        #:alternative
-        # data = dom.find("div", {'class': 'profile-summary'})
-        # data = data['data-profile-summary-options'] if 'data-profile-summary-options'in data.attrs else None
-        # self.is_hq = json_loads(data)['isHQ']
-
-        # display name
-        data = dom.find("meta", attrs={'property': 'og:title'})
-        self.display_name = data['content'][:-10]
-
-        # bio
-        data = dom.find("meta", attrs={'property': 'og:description'})
-        self.bio = data['content'].split('Bio: ')[-1] if data['content'].find('Bio: ') != -1 else None
-
-        # location and website
-        data = dom.find("div", {"class": ["profile-metadata"], })
-        location = data.find("div", {"class": ["metadatum"], }) if data else None
-        website = data.find("a") if data else None
-        self.location = location.find("span").text if location else None
-        self.website = website['href'] if website else None         
-
-        # watchlist_length
-        nav_links = dom.find_all("a", {"class": ["navlink"]})
-        for link in nav_links:
-            if "Watchlist" in link.text:
-               if "rel" in link.attrs:
-                    # 'User watchlist is not visible'
-                    self.watchlist_length = None # feature: PrivateData(Exception)
-                    break
-               else:
-                    # 'User watchlist is visible'
-                    widget = dom.find("section", {"class": ["watchlist-aside"]})
-                    self.watchlist_length = int(
-                        widget.find("a", {"class": ["all-link"]}).text.replace(',','')
-                        ) if widget else 0
-                    break
-            else:
-                # hq members
-                self.watchlist_length = None
-
-        # stats
-        stats = dom.find_all("h4", {"class": ["profile-statistic"]})
-        self.stats = {} if stats else None
-        # e.g: "films", "this_year", "lists", "following", "followers"
-        for stat in stats:
-            value = stat.span.text
-            key = stat.text.lower().replace(value,'').replace(' ','_')
-            self.stats[key]= int(value.replace(',',''))
-
-        # favorites
-        data = dom.find("section", {"id": ["favourites"], })
-        data = data.findChildren("div") if data else []
-        self.favorites = {}
-        for div in data:
-            poster = div.find("img")
-            movie_slug = poster.parent['data-film-slug']
-            movie_id = poster.parent['data-film-id']
-            movie_name = poster['alt']
-            self.favorites[movie_id] = {
-                'slug': movie_slug,
-                'name': movie_name
-            }
+    def get_url(self) -> str:
+        return self.pages.profile.url
+    def get_id(self) -> str:
+        return self.pages.profile.get_id()
+    def get_hq_status(self) -> bool:
+        return self.pages.profile.get_hq_status()
+    def get_display_name(self) -> str:
+        return self.pages.profile.get_display_name()
+    def get_bio(self) -> str:
+        return self.pages.profile.get_bio()
+    def get_location(self) -> str:
+        return self.pages.profile.get_location()
+    def get_website(self) -> str:
+        return self.pages.profile.get_website()
+    def get_watchlist_length(self) -> int:
+        return self.pages.profile.get_watchlist_length()
+    def get_stats(self) -> dict:
+        return self.pages.profile.get_stats()
+    def get_favorites(self) -> dict:
+        return self.pages.profile.get_favorites()
+    def get_avatar(self) -> str:
+        return self.pages.profile.get_avatar()
+    def get_watchlist_recent(self) -> dict:
+        return self.pages.profile.get_watchlist_recent()
+    def get_diary_recent(self) -> dict:
+        return self.pages.profile.get_diary_recent()
 
 # -- FUNCTIONS --
 
