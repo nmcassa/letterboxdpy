@@ -9,7 +9,7 @@ from json import (
 )
 
 from letterboxdpy.utils.utils_transform import month_to_index
-from letterboxdpy.utils.utils_parser import parse_review_date, extract_and_convert_shorthand
+from letterboxdpy.utils.utils_parser import parse_review_date
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import parse_url
 from letterboxdpy.encoder import Encoder
@@ -20,7 +20,8 @@ from letterboxdpy.pages import (
     user_diary,
     user_films,
     user_likes,
-    user_lists
+    user_lists,
+    user_network
 )
 
 
@@ -34,6 +35,7 @@ class User:
             self.films = user_films.UserFilms(username)
             self.likes = user_likes.UserLikes(username)
             self.lists = user_lists.UserLists(username)
+            self.network = user_network.UserNetwork(username)
 
     def __init__(self, username: str) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
@@ -80,6 +82,11 @@ class User:
     
     def get_lists(self) -> dict:
         return self.pages.lists.get_lists()
+    
+    def get_following(self) -> dict:
+        return self.pages.network.get_following()
+    def get_followers(self) -> dict:
+        return self.pages.network.get_followers()
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
@@ -225,61 +232,6 @@ class User:
             }
 
 # -- FUNCTIONS --
-
-# letterboxd.com/?/?/
-@assert_instance(User)
-def user_network(user: User, section: str) -> dict:
-    """
-    Fetches followers or following based on the section and returns them as a dictionary
-    - The section to scrape, must be either 'followers' or 'following'.
-    """
-    BASE_URL = f"{user.url}/{section}"
-    PERSONS_PER_PAGE = 25
-
-    def fetch_page(page_num: int):
-        """Fetches a single page of the user's network section."""
-        try:
-            return parse_url(f"{BASE_URL}/page/{page_num}")
-        except Exception as e:
-            raise RuntimeError(f"Failed to fetch page {page_num}: {e}")
-
-    def extract_persons(dom) -> dict:
-        """Extracts persons from a DOM object and returns them as a dictionary."""
-        persons = dom.find_all("img", attrs={'height': '40'})
-        persons_dict = {}
-
-        for person in persons:
-            profile_url = person.parent['href'].replace('/', '')
-            persons_dict[profile_url] = {'display_name': person['alt']}
-
-        return persons_dict
-
-    users_list = {}
-    page_num = 1
-
-    while True:
-        dom = fetch_page(page_num)
-        persons = extract_persons(dom)
-        users_list.update(persons)
-
-        if len(persons) < PERSONS_PER_PAGE :
-            break
-
-        page_num += 1
-
-    return users_list
-
-# letterboxd.com/?/following/
-@assert_instance(User)
-def user_following(user: User) -> dict:
-    """Fetches following and returns them as a dictionary"""
-    return user_network(user, 'following')
-
-# letterboxd.com/?/followers/
-@assert_instance(User)
-def user_followers(user: User) -> dict:
-    """Fetches followers and returns them as a dictionary"""
-    return user_network(user, 'followers')
 
 # letterboxd.com/?/films/reviews/
 @assert_instance(User)
