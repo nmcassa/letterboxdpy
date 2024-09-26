@@ -27,13 +27,14 @@ class Scraper:
         }
 
     @classmethod
-    def get_parsed_page(cls, url: str) -> BeautifulSoup:
-        """Get and parse the HTML content from the specified URL."""
-        response = cls.fetch_page(url)
-        return cls.handle_response(url, response)
+    def get_page(cls, url: str) -> BeautifulSoup:
+        """Fetch, check, and parse the HTML content from the specified URL."""
+        response = cls._fetch(url)
+        cls._check_for_errors(url, response)
+        return cls._parse_html(response)
 
     @classmethod
-    def fetch_page(cls, url: str) -> requests.Response:
+    def _fetch(cls, url: str) -> requests.Response:
         """Fetch the HTML content from the specified URL."""
         try:
             return requests.get(url, headers=cls.headers)
@@ -41,23 +42,22 @@ class Scraper:
             raise PageLoadError(url, str(e))
 
     @classmethod
-    def handle_response(cls, url: str, response: requests.Response) -> BeautifulSoup:
-        """Handle the response and check for errors."""
+    def _check_for_errors(cls, url: str, response: requests.Response) -> None:
+        """Check the response for errors and raise an exception if found."""
         if response.status_code != 200:
-            message = cls.extract_error_message(response)
-            raise Exception(cls.format_error_message(url, response, message))
-        return cls.parse_html(response)
+            error_message = cls._get_error_message(response)
+            raise Exception(cls._format_error(url, response, error_message))
 
     @classmethod
-    def extract_error_message(cls, response: requests.Response) -> str:
-        """Extract the error message from the response."""
+    def _get_error_message(cls, response: requests.Response) -> str:
+        """Extract the error message from the response, if available."""
         dom = BeautifulSoup(response.text, cls.builder)
         message_section = dom.find("section", {"class": "message"})
         return message_section.strong.text if message_section else "Unknown error occurred"
 
     @classmethod
-    def format_error_message(cls, url: str, response: requests.Response, message: str) -> str:
-        """Format the error message for failed responses."""
+    def _format_error(cls, url: str, response: requests.Response, message: str) -> str:
+        """Format the error message for logging or raising exceptions."""
         return json_dumps({
             'code': response.status_code,
             'reason': str(response.reason),
@@ -66,7 +66,7 @@ class Scraper:
         }, indent=2)
 
     @classmethod
-    def parse_html(cls, response: requests.Response) -> BeautifulSoup:
+    def _parse_html(cls, response: requests.Response) -> BeautifulSoup:
         """Parse the HTML content from the response."""
         try:
             return BeautifulSoup(response.text, cls.builder)
