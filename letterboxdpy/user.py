@@ -18,7 +18,8 @@ from letterboxdpy.constants.project import DOMAIN, CURRENT_YEAR
 from letterboxdpy.pages import (
     user_activity,
     user_diary,
-    user_films
+    user_films,
+    user_likes
 )
 
 
@@ -30,6 +31,7 @@ class User:
             self.activity = user_activity.UserActivity(username)
             self.diary = user_diary.UserDiary(username)
             self.films = user_films.UserFilms(username)
+            self.likes = user_likes.UserLikes(username)
 
     def __init__(self, username: str) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
@@ -68,6 +70,11 @@ class User:
         return self.pages.films.get_films_not_rated()
     def get_genre_info(self) -> dict:
         return self.pages.films.get_genre_info()
+    
+    def get_liked_films(self) -> dict:
+        return self.pages.likes.get_liked_films()
+    def get_liked_reviews(self) -> dict:
+        return self.pages.likes.get_liked_reviews()
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
@@ -213,12 +220,6 @@ class User:
             }
 
 # -- FUNCTIONS --
-
-# letterboxd.com/?/likes/films
-@assert_instance(User)
-def user_films_liked(user: User) -> dict:
-    url = f"{user.url}/likes/films/"
-    return extract_user_films(user, url)
 
 # letterboxd.com/?/?/
 @assert_instance(User)
@@ -599,94 +600,6 @@ def user_tags(user: User) -> dict:
     data['total_count'] = sum(data[page]['count'] for page in PAGES)
 
     return data
-
-# letterboxd.com/?/likes/reviews/
-@assert_instance(User)
-def user_liked_reviews(user: User) -> dict:
-    '''Returns a dict of the other users whose reviews were liked'''
-    REVIEWS_PER_PAGE = 12
-
-    BASE_URL = "https://letterboxd.com/" + user.username + "/likes/reviews"
-
-    page = 1
-    ret = {'reviews':{}}
-    while True:
-        dom = parse_url(BASE_URL + f'/page/{page}')
-
-        container = dom.find("ul", {"class": ["film-list"]})
-        items = container.find_all("li", {"class": ["film-detail"]})
-
-        for item in items:
-            elem_review_detail = item.find("div", {"class": ["film-detail-content"]})
-
-            user_url = DOMAIN + elem_review_detail.find('a', {"class": ["avatar"]})['href']
-            username = item['data-owner']
-            elem_display_name = elem_review_detail.find('strong', {'class': ['name']})
-            review_log_type = elem_display_name.previous_sibling.text.strip()
-            review_log_type = review_log_type.split()[0]
-            display_name = elem_display_name.text
-            
-            # movie
-            movie_name = elem_review_detail.a.text
-            movie_slug = elem_review_detail.parent.div['data-film-slug']
-            movie_id = elem_review_detail.parent.div['data-film-id']
-            movie_release = int(elem_review_detail.small.text) if elem_review_detail.small else None
-            movie_url = f"{DOMAIN}/film/{movie_slug}/"
-
-            # review
-            review_id = item['data-object-id'].split(':')[-1]
-            review_url = DOMAIN + elem_review_detail.a['href']
-            review_date = elem_review_detail.find("span", {"class": ["_nobr"]})
-            review_no = review_url.split(movie_slug)[-1]
-            review_no = int(review_no.replace('/', '')) if review_no.count('/') == 2 else 0
-            
-            # script req
-            # review_likes = int(elem_review_detail.find('a', {"class": ["count"]}).text.replace('.', ''))
-            
-            # rating
-            review_rating = elem_review_detail.find("span", {"class": ["rating"]})
-            review_rating = int(review_rating['class'][-1].split('-')[-1]) if review_rating else None
-
-            review_content = elem_review_detail.find("div", {"class": ["body-text"]})
-            spoiler = bool(review_content.find("p", {"class": ["contains-spoilers"]}))
-
-            review_content = review_content.find_all('p')[1 if spoiler else 0:]
-            review_content = '\n'.join([p.text for p in review_content])
-
-            review_date = parse_review_date(review_log_type, review_date)
-
-            ret['reviews'][review_id] = {
-                # 'likes': review_likes, script req
-                'type': review_log_type,
-                'no': review_no,
-                'url': review_url,
-                'rating': review_rating,
-                'review': {
-                    'content': review_content,
-                    'spoiler': spoiler,
-                    'date': review_date,
-                },
-                'user': {
-                    'username': username,
-                    'display_name': display_name,
-                    'url': user_url
-                },
-                'movie': {
-                    'name': movie_name,
-                    'slug': movie_slug,
-                    'id': movie_id,
-                    'release': movie_release,
-                    'url': movie_url,
-                },
-                'page': page,
-            }
-
-        if len(items) < REVIEWS_PER_PAGE:
-            break
-
-        page += 1
-
-    return ret
 
 if __name__ == "__main__":
     import argparse
