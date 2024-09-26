@@ -2,7 +2,6 @@ if __loader__.name == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
-from datetime import datetime
 import re
 from json import (
   dumps as json_dumps,
@@ -11,7 +10,6 @@ from json import (
 
 from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.utils.utils_parser import parse_review_date, extract_and_convert_shorthand
-from letterboxdpy.parser import get_movies_from_user_watched
 from letterboxdpy.decorators import assert_instance
 from letterboxdpy.scraper import parse_url
 from letterboxdpy.encoder import Encoder
@@ -19,7 +17,8 @@ from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN, CURRENT_YEAR
 from letterboxdpy.pages import (
     user_activity,
-    user_diary
+    user_diary,
+    user_films
 )
 
 
@@ -30,6 +29,7 @@ class User:
         def __init__(self, username: str) -> None:
             self.activity = user_activity.UserActivity(username)
             self.diary = user_diary.UserDiary(username)
+            self.films = user_films.UserFilms(username)
 
     def __init__(self, username: str) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
@@ -59,6 +59,13 @@ class User:
         return self.pages.diary.get_diary(year, page)
     def get_wrapped(self, year: int = CURRENT_YEAR) -> dict:
         return self.pages.diary.get_wrapped(year)
+    
+    def get_films(self) -> dict:
+        return self.pages.films.get_films()
+    def get_films_by_rating(self, rating: float | int) -> dict:
+        return self.pages.films.get_films_rated(rating)
+    def get_genre_info(self) -> dict:
+        return self.pages.films.get_genre_info()
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
@@ -205,79 +212,11 @@ class User:
 
 # -- FUNCTIONS --
 
-# letterboxd.com/?/films/
-@assert_instance(User)
-def user_films(user: User) -> dict:
-    url = f"{user.url}/films"
-    return extract_user_films(user, url)
-
 # letterboxd.com/?/likes/films
 @assert_instance(User)
 def user_films_liked(user: User) -> dict:
     url = f"{user.url}/likes/films/"
     return extract_user_films(user, url)
-
-# letterboxd.com/?/films/rated/?
-@assert_instance(User)
-def user_films_rated(user: User, rating: float | int) -> dict:
-    assert rating in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5], "Invalid rating"
-    url = f"{user.url}/films/rated/{rating}/by/date"
-    return extract_user_films(user, url)
-
-# user:films
-@assert_instance(User)
-def extract_user_films(user: User, url: str = None) -> dict:
-    """Extracts user films and their details from the given URL or returns all watched films."""
-    if not url:
-        """If the url is not specified, all the movies that the user has watched
-        will be checked, you can use the user_films function to do this"""
-        return user_films(user)
-
-    FILMS_PER_PAGE = 12 * 6
-
-    def process_page(page_number: int) -> dict:
-        """Fetches and processes a page of user films."""
-        dom = parse_url(f"{url}/page/{page_number}/")
-        return get_movies_from_user_watched(dom)
-
-    def calculate_statistics(movies: dict) -> dict:
-        """Calculates film statistics including liked and rating percentages."""
-        liked_count = sum(movie['liked'] for movie in movies.values())
-        rating_count = len([movie['rating'] for movie in movies.values() if movie['rating'] is not None])
-
-        count = len(movies)
-        liked_percentage = round(liked_count / count * 100, 2) if liked_count else 0.0
-        rating_percentage = 0.0
-        rating_average = 0.0
-
-        if rating_count:
-            ratings = [movie['rating'] for movie in movies.values() if movie['rating']]
-            rating_percentage = round(rating_count / count * 100, 2)
-            rating_average = round(sum(ratings) / rating_count, 2)
-
-        return {
-            'count': count,
-            'liked_count': liked_count,
-            'rating_count': rating_count,
-            'liked_percentage': liked_percentage,
-            'rating_percentage': rating_percentage,
-            'rating_average': rating_average
-        }
-
-    movie_list = {'movies': {}}
-    page = 0
-
-    while True:
-        page += 1
-        movies = process_page(page)
-        movie_list['movies'] |= movies
-
-        if len(movies) < FILMS_PER_PAGE:
-            stats = calculate_statistics(movie_list['movies'])
-            movie_list.update(stats)
-            break
-
-    return movie_list
 
 # letterboxd.com/?/?/
 @assert_instance(User)
@@ -333,25 +272,6 @@ def user_following(user: User) -> dict:
 def user_followers(user: User) -> dict:
     """Fetches followers and returns them as a dictionary"""
     return user_network(user, 'followers')
-
-# letterboxd.com/?/films/genre/*/
-@assert_instance(User)
-def user_genre_info(user: User) -> dict:
-    genres = ["action", "adventure", "animation", "comedy", "crime",
-              "documentary","drama", "family", "fantasy", "history",
-              "horror", "music", "mystery", "romance", "science-fiction",
-              "thriller", "tv-movie", "war", "western"]
-    ret = {}
-    for genre in genres:
-        dom = parse_url(f"{user.url}/films/genre/{genre}/")
-        data = dom.find("span", {"class": ["replace-if-you"], })
-        data = data.next_sibling.replace(',', '')
-        try:
-            ret[genre] = [int(s) for s in data.split() if s.isdigit()][0]
-        except IndexError:
-            ret[genre] = 0
-
-    return ret
 
 # letterboxd.com/?/films/reviews/
 @assert_instance(User)
