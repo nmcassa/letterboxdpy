@@ -39,11 +39,17 @@ class Scraper:
             raise Exception(f"Error parsing response from {url}: {e}")
 
         if response.status_code != 200:
-            message = dom.find("section", {"class": "message"})
-            message = message.strong.text if message else None
+            message = cls.extract_error_message(response)
             raise Exception(cls.format_error_message(url, response, message))
         return dom
-    
+
+    @classmethod
+    def extract_error_message(cls, response: requests.Response) -> str:
+        """Extract the error message from the response."""
+        dom = BeautifulSoup(response.text, cls.builder)
+        message_section = dom.find("section", {"class": "message"})
+        return message_section.strong.text if message_section else "Unknown error occurred"
+
     @classmethod
     def format_error_message(cls, url: str, response: requests.Response, message: str) -> str:
         """Format the error message for failed responses."""
