@@ -6,6 +6,7 @@ from json import dumps as json_dumps
 from bs4 import BeautifulSoup
 import requests
 
+from letterboxdpy.exceptions import PageLoadError
 from letterboxdpy.constants.project import DOMAIN
 
 
@@ -28,12 +29,16 @@ class Scraper:
     @classmethod
     def get_parsed_page(cls, url: str) -> BeautifulSoup:
         """Get and parse the HTML content from the specified URL."""
+        response = cls.fetch_page(url)
+        return cls.handle_response(url, response)
+
+    @classmethod
+    def fetch_page(cls, url: str) -> requests.Response:
+        """Fetch the HTML content from the specified URL."""
         try:
-            response = requests.get(url, headers=cls.headers)
+            return requests.get(url, headers=cls.headers)
         except requests.RequestException as e:
-            raise Exception(f"Error connecting to {url}: {e}")
-        dom = cls.handle_response(url, response)
-        return dom
+            raise PageLoadError(url, str(e))
 
     @classmethod
     def handle_response(cls, url: str, response: requests.Response) -> BeautifulSoup:
@@ -41,11 +46,7 @@ class Scraper:
         if response.status_code != 200:
             message = cls.extract_error_message(response)
             raise Exception(cls.format_error_message(url, response, message))
-        try:
-            dom = BeautifulSoup(response.text, cls.builder)
-        except Exception as e:
-            raise Exception(f"Error parsing response from {url}: {e}")
-        return dom
+        return cls.parse_html(response)
 
     @classmethod
     def extract_error_message(cls, response: requests.Response) -> str:
@@ -63,6 +64,14 @@ class Scraper:
             'url': url,
             'message': message
         }, indent=2)
+
+    @classmethod
+    def parse_html(cls, response: requests.Response) -> BeautifulSoup:
+        """Parse the HTML content from the response."""
+        try:
+            return BeautifulSoup(response.text, cls.builder)
+        except Exception as e:
+            raise Exception(f"Error parsing response: {e}")
 
 
 def parse_url(url: str) -> BeautifulSoup:
@@ -82,15 +91,9 @@ if __name__ == "__main__":
 
     print(f"Parsing {input_domain}...")
 
-    # Using the class method to get the parsed page
-    parsed_dom_class_method = Scraper.get_parsed_page(input_domain)
+    parsed_dom_class_method = parse_url(input_domain)
     print(f"Title (using class method): {parsed_dom_class_method.title.string}")
 
-    # Creating an instance of Scraper and using it to get the parsed page
-    scraper_instance = Scraper(input_domain)
-    parsed_dom_instance_method = scraper_instance.get_parsed_page(input_domain)
-    print(f"Title (using instance method): {parsed_dom_instance_method.title.string}")
-
     input("Click Enter to see the DOM...")
-    print(f"HTML: {parsed_dom_instance_method.prettify()}")
+    print(f"HTML: {parsed_dom_class_method.prettify()}")
     print("*" * 20 + "\nDone!")
