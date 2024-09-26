@@ -10,7 +10,7 @@ from json import (
 import re
 from typing import List
 from letterboxdpy.encoder import Encoder
-from letterboxdpy.scraper import Scraper
+from letterboxdpy.scraper import parse_url
 
 
 class Members:
@@ -47,7 +47,7 @@ def top_users(max:int = 100) -> List:
     page = 1
     while True:
         url = f"{members_instance.MEMBERS_YEAR_TOP}page/{page}/"
-        dom = Scraper.get_parsed_page(url)
+        dom = parse_url(url)
 
         table = dom.find_all('table', {"class": ["person-table"]})[0]
         avatars = table.find_all("a", {"class": ["avatar -a40"]})
