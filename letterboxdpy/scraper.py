@@ -41,15 +41,19 @@ class Scraper:
         if response.status_code != 200:
             message = dom.find("section", {"class": "message"})
             message = message.strong.text if message else None
-            messages = json_dumps({
-                'code': response.status_code,
-                'reason': str(response.reason),
-                'url': url,
-                'message': message
-            }, indent=2)
-            raise Exception(messages)
-
+            raise Exception(cls.format_error_message(url, response, message))
         return dom
+    
+    @classmethod
+    def format_error_message(cls, url: str, response: requests.Response, message: str) -> str:
+        """Format the error message for failed responses."""
+        return json_dumps({
+            'code': response.status_code,
+            'reason': str(response.reason),
+            'url': url,
+            'message': message
+        }, indent=2)
+
 
 def parse_url(url: str) -> BeautifulSoup:
     """Fetch and parse the HTML content from the specified URL using the Scraper class."""
