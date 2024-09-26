@@ -76,7 +76,7 @@ class Scraper:
 
 def parse_url(url: str) -> BeautifulSoup:
     """Fetch and parse the HTML content from the specified URL using the Scraper class."""
-    return Scraper.get_parsed_page(url)
+    return Scraper.get_page(url)
 
 def url_encode(query: str, safe: str = '') -> str:
     """URL encode the given query."""
