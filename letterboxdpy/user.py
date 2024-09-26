@@ -169,5 +169,5 @@ if __name__ == "__main__":
     print(user_instance)
 
     # Iterate over user's film data and print each movie
-    for item in user_films(user_instance)['movies'].items():
+    for item in user_instance.get_films()['movies'].items():
         print(item)
