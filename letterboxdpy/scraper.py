@@ -32,7 +32,12 @@ class Scraper:
             response = requests.get(url, headers=cls.headers)
         except requests.RequestException as e:
             raise Exception(f"Error connecting to {url}: {e}")
+        dom = cls.handle_response(url, response)
+        return dom
 
+    @classmethod
+    def handle_response(cls, url: str, response: requests.Response) -> BeautifulSoup:
+        """Handle the response and check for errors."""
         if response.status_code != 200:
             message = cls.extract_error_message(response)
             raise Exception(cls.format_error_message(url, response, message))
@@ -40,7 +45,6 @@ class Scraper:
             dom = BeautifulSoup(response.text, cls.builder)
         except Exception as e:
             raise Exception(f"Error parsing response from {url}: {e}")
-
         return dom
 
     @classmethod
