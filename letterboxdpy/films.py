@@ -4,7 +4,7 @@ if __loader__.name == '__main__':
 
 from letterboxdpy.utils.utils_transform import get_ajax_url
 from letterboxdpy.decorators import assert_instance
-from letterboxdpy.scraper import Scraper
+from letterboxdpy.scraper import parse_url
 from letterboxdpy.parser import (
     get_movies_from_horizontal_list,
     get_movies_from_vertical_list
@@ -29,7 +29,7 @@ class Films:
 
         while True:
             page_url = self.ajax_url + f"/page/{page}"
-            dom = Scraper.get_parsed_page(page_url)
+            dom = parse_url(page_url)
 
             if '.com/films/' in self.url:
                 new_movies = get_movies_from_horizontal_list(dom)
