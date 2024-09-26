@@ -8,7 +8,7 @@ from json import (
   loads as json_loads
 )
 
-from letterboxdpy.encoder import Encoder
+from letterboxdpy.encoder import SecretsEncoder
 from letterboxdpy.constants.project import CURRENT_YEAR
 from letterboxdpy.pages import (
     user_activity,
@@ -63,7 +63,7 @@ class User:
         }
 
     def __str__(self) -> str:
-        return json_dumps(self, indent=2, cls=Encoder)
+        return json_dumps(self, indent=2, cls=SecretsEncoder, secrets=['pages'])
 
     def jsonify(self) -> dict:
         return json_loads(self.__str__())
