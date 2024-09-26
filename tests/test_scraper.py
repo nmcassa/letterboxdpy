@@ -13,12 +13,12 @@ class TestScraper(unittest.TestCase):
 
     def test_valid_film_url(self):
         self.assertIsInstance(
-            self.scraper.get_parsed_page(self.valid_film_url), BeautifulSoup
+            self.scraper.get_page(self.valid_film_url), BeautifulSoup
         )
     
     def test_invalid_film_url(self):
         with self.assertRaises(Exception):
-            self.scraper.get_parsed_page(self.invalid_film_url)
+            self.scraper.get_page(self.invalid_film_url)
 
     def test_url_encode(self):
         query = "Dune: Part Two"
