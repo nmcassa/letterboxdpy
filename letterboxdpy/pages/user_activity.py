@@ -9,6 +9,8 @@ class UserActivity:
         self.username = username
         # https://letterboxd.com/<username>/activity/
         self.activity_url = f"{DOMAIN}/ajax/activity-pagination/{self.username}"
+        # https://letterboxd.com/<username>/activity/following/
+        self.activity_following_url = f"{DOMAIN}/ajax/activity-pagination/{self.username}/following"
         
     def get_activity(self): return extract_user_activity(self.username, self.activity_url)
 

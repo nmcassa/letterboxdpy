@@ -50,6 +50,8 @@ class User:
 
     def get_activity(self) -> dict:
         return self.pages.activity.get_activity()
+    def get_activity_following(self) -> dict:
+        return self.pages.activity.get_activity_following()
 
     # letterboxd.com/?
     def user_avatar(self, dom) -> str:
