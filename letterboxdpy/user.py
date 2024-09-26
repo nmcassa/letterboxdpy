@@ -20,7 +20,8 @@ from letterboxdpy.pages import (
     user_lists,
     user_network,
     user_profile,
-    user_reviews
+    user_reviews,
+    user_tags
 )
 
 
@@ -37,6 +38,7 @@ class User:
             self.network = user_network.UserNetwork(username)
             self.profile = user_profile.UserProfile(username)
             self.reviews = user_reviews.UserReviews(username)
+            self.tags = user_tags.UserTags(username)
 
     def __init__(self, username: str) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
@@ -127,6 +129,9 @@ class User:
     
     def get_reviews(self) -> dict:
         return self.pages.reviews.get_reviews()
+    
+    def get_user_tags(self) -> dict:
+        return self.pages.tags.get_user_tags()
 
 # -- FUNCTIONS --
 
@@ -219,64 +224,6 @@ def user_watchlist(user: User, filters: dict=None) -> dict:
         'data_count': data_count,
         'last_page': page,
         }
-
-    return data
-
-# https://letterboxd.com/?/tags/*
-@assert_instance(User)
-def user_tags(user: User) -> dict:
-    BASE_URL = f"{user.url}/tags"
-    PAGES = ['films', 'diary', 'reviews', 'lists']
-
-    def extract_tags(page: str) -> dict:
-        """Extract tags from the page."""
-        
-        def fetch_dom() -> any:
-            """Fetch and return the DOM for the page."""
-            return parse_url(f"{BASE_URL}/{page}")
-
-        def parse_tag(tag) -> dict:
-            """Extract tag information from a single tag element."""
-            name = tag.a.text.strip()
-            title = tag.a['title']
-            link = tag.a['href']
-            slug = link.split('/')[-3]
-            count = int(tag.span.text.strip() or 1)
-            return {
-                'name': name,
-                'title': title,
-                'slug': slug,
-                'link': DOMAIN + link,
-                'count': count,
-            }
-
-        dom = fetch_dom()
-        tags_ul = dom.find("ul", {"class": "tags-columns"})
-        data = {}
-
-        if not tags_ul:
-            return data
-
-        tags = tags_ul.find_all("li")
-        index = 1
-        for tag in tags:
-            if 'href' in tag.a.attrs:
-                tag_info = parse_tag(tag)
-                tag_info['no'] = index
-                data[tag_info['slug']] = tag_info
-                index += 1
-
-        return data
-
-    data = {}
-    for page in PAGES:
-        tags = extract_tags(page)
-        data[page] = {
-            'tags': tags,
-            'count': len(tags)
-        }
-
-    data['total_count'] = sum(data[page]['count'] for page in PAGES)
 
     return data
 
