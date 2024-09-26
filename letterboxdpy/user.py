@@ -8,10 +8,8 @@ from json import (
   loads as json_loads
 )
 
-from letterboxdpy.decorators import assert_instance
-from letterboxdpy.scraper import parse_url
 from letterboxdpy.encoder import Encoder
-from letterboxdpy.constants.project import DOMAIN, CURRENT_YEAR
+from letterboxdpy.constants.project import CURRENT_YEAR
 from letterboxdpy.pages import (
     user_activity,
     user_diary,
@@ -21,7 +19,8 @@ from letterboxdpy.pages import (
     user_network,
     user_profile,
     user_reviews,
-    user_tags
+    user_tags,
+    user_watchlist
 )
 
 
@@ -39,6 +38,7 @@ class User:
             self.profile = user_profile.UserProfile(username)
             self.reviews = user_reviews.UserReviews(username)
             self.tags = user_tags.UserTags(username)
+            self.watchlist = user_watchlist.UserWatchlist(username)
 
     def __init__(self, username: str) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid username"
@@ -132,100 +132,13 @@ class User:
     
     def get_user_tags(self) -> dict:
         return self.pages.tags.get_user_tags()
-
-# -- FUNCTIONS --
-
-# https://letterboxd.com/?/watchlist/
-@assert_instance(User)
-def user_watchlist(user: User, filters: dict=None) -> dict:
-    """
-    filter examples:
-        - keys: decade, year, genre
-
-        # positive genre & negative genre (start with '-')
-        - {genre: ['mystery']}  <- same -> {genre: 'mystery'}
-        - {genre: ['-mystery']} <- same -> {genre: '-mystery'}
-
-        # multiple genres
-        - {genre: ['mystery', 'comedy'], decade: '1990s'}
-        - {genre: ['mystery', '-comedy'], year: '2019'}
-        - /decade/1990s/genre/action+-drama/
-          ^^---> {'decade':'1990s','genre':['action','-drama']}
-    """
-    data = {
-        'available': None,
-        'count': user.watchlist_length,
-        'data_count': None,
-        'last_page': None,
-        'filters': filters,
-        'data': {}
-        }
-
-    if user.watchlist_length is None:
-        # user watchlist is private
-        return data | {'available': False}
-    elif user.watchlist_length == 0:
-        # user watchlist is empty
-        return data | {'available': True}
-
-    FILMS_PER_PAGE = 7*4
-    BASE_URL = f"{user.url}/watchlist/"
-
-    if filters and isinstance(filters, dict):
-        f = ""
-        for key, values in filters.items():
-            if not isinstance(values, list):
-                values = [values]
-            f += f"{key}/"
-            f += "+".join([str(v) for v in values]) + "/"
-
-        BASE_URL += f
-
-    page = 1
-    no = user.watchlist_length
-    while True:
-        dom = parse_url(f'{BASE_URL}/page/{page}')
-
-        poster_containers = dom.find_all("li", {"class": ["poster-container"], })
-        for poster_container in poster_containers:
-            poster = poster_container.div
-            img = poster_container.div.img
-
-            film_id = poster['data-film-id']
-            slug = poster['data-film-slug']
-            name = img['alt']
-
-            data['data'][film_id] = {
-                'name': name,
-                'slug': slug,
-                'no': no,
-                'page': page,
-                'url': f"{DOMAIN}/films/{slug}/",
-            }
-
-            no -= 1
-
-        if len(poster_containers) < FILMS_PER_PAGE:
-            # last page
-            break
-        page += 1
-
-    data_count = len(data['data'])
-
-    if filters:
-        if data_count != data['count']:
-            no = data_count
-            for item in data['data'].keys():
-                data['data'][item]['no'] = no
-                no -= 1
-
-    data = data | {
-        'available': True,
-        'data_count': data_count,
-        'last_page': page,
-        }
-
-    return data
+    
+    def get_watchlist_count(self) -> int:
+        return self.pages.watchlist.get_count()
+    def get_watchlist_movies(self) -> dict:
+        return self.pages.watchlist.get_movies()
+    def get_watchlist(self, filters:dict=None) -> dict:
+        return self.pages.watchlist.get_watchlist(filters)
 
 if __name__ == "__main__":
     import argparse
