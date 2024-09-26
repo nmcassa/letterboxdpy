@@ -9,7 +9,7 @@ from json import (
 
 from letterboxdpy.utils.utils_parser import extract_numeric_text
 from letterboxdpy.decorators import assert_instance
-from letterboxdpy.scraper import Scraper
+from letterboxdpy.scraper import parse_url
 from letterboxdpy.encoder import Encoder
 from letterboxdpy.constants.project import DOMAIN
 
@@ -21,7 +21,7 @@ class Movie:
         self.url = f'{DOMAIN}/film/{slug}'
         self.slug = slug
 
-        dom = Scraper.get_parsed_page(self.url)
+        dom = parse_url(self.url)
 
         script = dom.find("script", type="application/ld+json")
         script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
@@ -234,7 +234,7 @@ class Movie:
             curr['review'] = review.text if review else None
 
             self.popular_reviews.append(curr)
-    
+
     def movie_id(self, dom) -> str:
         elem = dom.find('span', 'block-flag-wrapper')
         elem = elem.find('a')
@@ -277,7 +277,7 @@ class Movie:
 # letterboxd.com/film/?/details
 @assert_instance(Movie)
 def movie_details(movie: Movie) -> dict:
-    dom = Scraper.get_parsed_page("/".join([movie.url, "details"]))
+    dom = parse_url("/".join([movie.url, "details"]))
     dom = dom.find("div", {"id": ["tab-details"]})
 
     data = {
@@ -318,7 +318,7 @@ def movie_watchers(movie: Movie) -> dict:
         return stats
 
     try:
-        dom = Scraper.get_parsed_page(BASE_URL)
+        dom = parse_url(BASE_URL)
         return extract_watchers_data(dom)
     except Exception as e:
         raise RuntimeError("Failed to retrieve movie watchers' statistics") from e
