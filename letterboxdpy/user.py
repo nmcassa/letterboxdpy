@@ -64,6 +64,8 @@ class User:
         return self.pages.films.get_films()
     def get_films_by_rating(self, rating: float | int) -> dict:
         return self.pages.films.get_films_rated(rating)
+    def get_films_not_rated(self) -> dict:
+        return self.pages.films.get_films_not_rated()
     def get_genre_info(self) -> dict:
         return self.pages.films.get_genre_info()
 

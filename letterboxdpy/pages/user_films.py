@@ -16,6 +16,10 @@ class UserFilms:
         assert rating in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5], "Invalid rating"
         url = f"{self.url}/rated/{rating}/by/date"
         return extract_user_films(url)
+    
+    def get_films_not_rated(self) -> dict:
+        url = f"{self.url}/rated/none/by/date"
+        return extract_user_films(url)
 
     def get_genre_info(self):
         return extract_user_genre_info(self.username)
