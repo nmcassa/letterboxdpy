@@ -33,14 +33,14 @@ class Scraper:
         except requests.RequestException as e:
             raise Exception(f"Error connecting to {url}: {e}")
 
+        if response.status_code != 200:
+            message = cls.extract_error_message(response)
+            raise Exception(cls.format_error_message(url, response, message))
         try:
             dom = BeautifulSoup(response.text, cls.builder)
         except Exception as e:
             raise Exception(f"Error parsing response from {url}: {e}")
 
-        if response.status_code != 200:
-            message = cls.extract_error_message(response)
-            raise Exception(cls.format_error_message(url, response, message))
         return dom
 
     @classmethod
