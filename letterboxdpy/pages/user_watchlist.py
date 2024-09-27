@@ -1,6 +1,5 @@
 
 from letterboxdpy.scraper import parse_url
-from letterboxdpy.exceptions import PageLoadError
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.pages.user_list import extract_movies
 
@@ -11,11 +10,7 @@ class UserWatchlist:
     def __init__(self, username: str) -> None:
         self.username = username
         self.url = f"{DOMAIN}/{self.username}/watchlist"
-
-        try:
-            self.dom = parse_url(self.url)
-        except Exception as e:
-            raise PageLoadError(self.url) from e
+        self.dom = parse_url(self.url)
     
     def __str__(self) -> str:
         return f"Not printable object of type: {self.__class__.__name__}"
