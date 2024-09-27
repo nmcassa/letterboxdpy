@@ -39,22 +39,21 @@ print(user_instance)
   
 ```json
 {
-  "scraper": {...},
   "username": "nmcassa",
   "url": "https://letterboxd.com/nmcassa",
-  "id": "1500306",
+  "id": 1500306,
   "is_hq": false,
   "display_name": "nmcassa",
   "bio": null,
   "location": null,
   "website": null,
-  "watchlist_length": 64,
+  "watchlist_length": 74,
   "stats": {
-    "films": 560,
-    "this_year": 37,
-    "list": 1,
-    "following": 10,
-    "followers": 8
+    "films": 594,
+    "this_year": 74,
+    "lists": 2,
+    "following": 7,
+    "followers": 7
   },
   "favorites": {
     "95113": {
@@ -69,25 +68,40 @@ print(user_instance)
   },
   "recent": {
     "watchlist": {
-      "7023": {
-        "name": "The Man Who Stole the Sun",
-        "slug": "the-man-who-stole-the-sun"
+      "1042841": {
+        "id": "1042841",
+        "slug": "the-contestant-2023",
+        "name": "The Contestant"
       },...
     },
     "diary": {
       "months": {
-        "4": [
-          [
-            "16",
-            "Civil War"
+        "9": {
+          "22": [
+            {
+              "name": "The Substance",
+              "slug": "the-substance"
+            },
+            {
+              "name": "Whiplash",
+              "slug": "1"
+            }
+          ],
+          "13": [
+            {
+              "name": "Speak No Evil",
+              "slug": "speak-no-evil-2024"
+            }
           ],...
-        ],
-        "3": [
-          [
-            "30",
-            "Dune"
+        },
+        "8": {
+          "30": [
+            {
+              "name": "Shaun of the Dead",
+              "slug": "shaun-of-the-dead"
+            }
           ],...
-        ]
+        }
       }
     }
   }
