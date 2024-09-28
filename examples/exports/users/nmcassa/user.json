@@ -1,16 +1,16 @@
 {
   "username": "nmcassa",
   "url": "https://letterboxd.com/nmcassa",
-  "id": "1500306",
+  "id": 1500306,
   "is_hq": false,
   "display_name": "nmcassa",
   "bio": null,
   "location": null,
   "website": null,
-  "watchlist_length": 71,
+  "watchlist_length": 74,
   "stats": {
-    "films": 590,
-    "this_year": 69,
+    "films": 594,
+    "this_year": 74,
     "lists": 2,
     "following": 7,
     "followers": 7
@@ -40,30 +40,63 @@
   },
   "recent": {
     "watchlist": {
+      "1042841": {
+        "id": "1042841",
+        "slug": "the-contestant-2023",
+        "name": "The Contestant"
+      },
+      "51946": {
+        "id": "51946",
+        "slug": "run-lola-run",
+        "name": "Run Lola Run"
+      },
+      "45820": {
+        "id": "45820",
+        "slug": "atlantis-the-lost-empire",
+        "name": "Atlantis: The Lost Empire"
+      },
       "43952": {
-        "name": "The Man from Earth",
-        "slug": "the-man-from-earth"
+        "id": "43952",
+        "slug": "the-man-from-earth",
+        "name": "The Man from Earth"
       },
       "46433": {
-        "name": "Swingers",
-        "slug": "swingers"
-      },
-      "23772": {
-        "name": "Peppermint Candy",
-        "slug": "peppermint-candy"
-      },
-      "353485": {
-        "name": "Ad Astra",
-        "slug": "ad-astra-2019"
-      },
-      "51370": {
-        "name": "Gattaca",
-        "slug": "gattaca"
+        "id": "46433",
+        "slug": "swingers",
+        "name": "Swingers"
       }
     },
     "diary": {
       "months": {
         "9": {
+          "22": [
+            {
+              "name": "The Substance",
+              "slug": "the-substance"
+            },
+            {
+              "name": "Whiplash",
+              "slug": "1"
+            }
+          ],
+          "13": [
+            {
+              "name": "Speak No Evil",
+              "slug": "speak-no-evil-2024"
+            }
+          ],
+          "12": [
+            {
+              "name": "Kindergarten Cop",
+              "slug": "kindergarten-cop"
+            }
+          ],
+          "11": [
+            {
+              "name": "Doom",
+              "slug": "doom"
+            }
+          ],
           "6": [
             {
               "name": "Clerks",
@@ -93,38 +126,6 @@
           "20": [
             {
               "name": "Alien",
-              "slug": "1"
-            }
-          ],
-          "18": [
-            {
-              "name": "Alien: Romulus",
-              "slug": "alien-romulus"
-            }
-          ],
-          "16": [
-            {
-              "name": "Alien",
-              "slug": "alien"
-            }
-          ],
-          "13": [
-            {
-              "name": "Upgrade",
-              "slug": "upgrade"
-            }
-          ],
-          "2": [
-            {
-              "name": "Trap",
-              "slug": "trap-2024"
-            }
-          ]
-        },
-        "7": {
-          "28": [
-            {
-              "name": "The World's End",
               "slug": "1"
             }
           ]

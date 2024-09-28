@@ -1,5 +1,11 @@
 {
   "movies": {
+    "whiplash-2014": {
+      "name": "Whiplash",
+      "id": "171384",
+      "rating": 10,
+      "liked": true
+    },
     "dune-part-two": {
       "name": "Dune: Part Two",
       "id": "617443",
@@ -181,10 +187,10 @@
       "liked": true
     }
   },
-  "count": 30,
-  "liked_count": 27,
-  "rating_count": 30,
-  "liked_percentage": 90.0,
+  "count": 31,
+  "liked_count": 28,
+  "rating_count": 31,
+  "liked_percentage": 90.32,
   "rating_percentage": 100.0,
   "rating_average": 10.0
 }
