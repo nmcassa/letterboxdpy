@@ -28,7 +28,7 @@ def extract_liked_reviews(url: str) -> dict:
     while True:
         dom = parse_url(url + f'/page/{page}')
         container = dom.find("ul", {"class": ["film-list"]})
-        items = container.find_all("li", {"class": ["film-detail"]})
+        items = container.find_all("li", {"class": ["film-detail"]}) if container else []
 
         for item in items:
             elem_review_detail = item.find("div", {"class": ["film-detail-content"]})
