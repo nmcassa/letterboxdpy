@@ -2,39 +2,32 @@ from functools import wraps
 
 # -- DECORATORS --
 
-def assert_instance(cls):
-    """
-    A decorator that ensures the argument passed to the decorated function is an instance of a specified class.
-
-    Args:
-        cls: The class type to check against.
-
-    Returns:
-        function: A decorator function that performs the instance check.
-
-    Raises:
-        AssertionError: If the argument is not an instance of the specified class.
-    """
+def assert_instance(expected_class):
+    """Ensures the argument passed is an instance of a specified class."""
+    
     def decorator(func):
         @wraps(func)
-        def wrapper(arg, *args, **kwargs):
+        def wrapper(instance, *args, **kwargs):
             """
-            Wrapper function that performs the instance check before calling the decorated function.
+            Verifies if the argument is an instance of the expected class.
 
             Args:
-                arg: The argument to check.
-                *args: Additional positional arguments to pass to the decorated function.
-                **kwargs: Additional keyword arguments to pass to the decorated function.
+                instance: Object to check if it's an instance of the expected class.
+                *args: Additional positional arguments.
+                **kwargs: Additional keyword arguments.
 
             Returns:
-                Any: The result of calling the decorated function.
+                The result of the decorated function.
 
             Raises:
-                AssertionError: If the argument is not an instance of the specified class.
+                AssertionError: If the instance is not of the expected class.
             """
-            assert isinstance(arg, cls), f"Argument {arg} is not an instance of {cls.__name__}"
-            return func(arg, *args, **kwargs)
+            if not isinstance(instance, expected_class):
+                raise AssertionError(f"Argument {instance} is not an instance of {expected_class.__name__}")
+            return func(instance, *args, **kwargs)
+
         return wrapper
+
     return decorator
 
 
