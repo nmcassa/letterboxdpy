@@ -1,5 +1,5 @@
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.scraper import parse_url
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.user_films import extract_user_films
 from letterboxdpy.utils.utils_parser import parse_review_date
 

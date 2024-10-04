@@ -8,9 +8,9 @@ from json import (
 )
 
 from letterboxdpy.utils.utils_parser import extract_numeric_text
-from letterboxdpy.decorators import assert_instance
-from letterboxdpy.scraper import parse_url
-from letterboxdpy.encoder import Encoder
+from letterboxdpy.core.decorators import assert_instance
+from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.constants.project import DOMAIN
 
 class Movie:

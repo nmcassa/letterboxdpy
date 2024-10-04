@@ -1,4 +1,4 @@
-from letterboxdpy.scraper import parse_url
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_parser import parse_review_date
 from letterboxdpy.constants.project import DOMAIN
 

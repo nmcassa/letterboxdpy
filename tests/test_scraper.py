@@ -1,4 +1,4 @@
-from letterboxdpy.scraper import Scraper, url_encode
+from letterboxdpy.core.scraper import Scraper, url_encode
 from bs4 import BeautifulSoup
 import unittest
 

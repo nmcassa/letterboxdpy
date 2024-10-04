@@ -1,10 +1,10 @@
 from json import dumps as json_dumps
 
 from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
-from letterboxdpy.encoder import Encoder
+from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.scraper import (
+from letterboxdpy.core.scraper import (
   parse_url,
   url_encode
 )

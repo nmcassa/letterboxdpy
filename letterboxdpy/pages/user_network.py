@@ -1,6 +1,6 @@
-from letterboxdpy.scraper import parse_url
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.exceptions import PageFetchError
+from letterboxdpy.core.exceptions import PageFetchError
 
 
 class UserNetwork:

@@ -3,8 +3,8 @@ if __loader__.name == '__main__':
     sys.path.append(sys.path[0] + '/..')
 
 from letterboxdpy.utils.utils_transform import get_ajax_url
-from letterboxdpy.decorators import assert_instance
-from letterboxdpy.scraper import parse_url
+from letterboxdpy.core.decorators import assert_instance
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.parser import (
     get_movies_from_horizontal_list,
     get_movies_from_vertical_list
@@ -41,7 +41,6 @@ class Films:
                 movies |= new_movies
                 if len(new_movies) < self.VERTICAL_MAX:
                     break
-
             page += 1
 
         return movies

@@ -9,8 +9,8 @@ from json import (
 )
 import re
 from typing import List
-from letterboxdpy.encoder import Encoder
-from letterboxdpy.scraper import parse_url
+from letterboxdpy.core.encoder import Encoder
+from letterboxdpy.core.scraper import parse_url
 
 
 class Members:

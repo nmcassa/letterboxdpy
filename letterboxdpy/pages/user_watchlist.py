@@ -1,5 +1,4 @@
-
-from letterboxdpy.scraper import parse_url
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.pages.user_list import extract_movies
 

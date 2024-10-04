@@ -1,5 +1,5 @@
 from datetime import datetime
-from letterboxdpy.scraper import parse_url
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 
 
