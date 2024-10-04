@@ -1,5 +1,5 @@
 from json import JSONEncoder
-from letterboxdpy.exceptions import CustomEncoderError
+from letterboxdpy.core.exceptions import CustomEncoderError
 
 
 class Encoder(JSONEncoder):

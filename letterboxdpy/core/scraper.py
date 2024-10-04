@@ -6,7 +6,7 @@ from json import dumps as json_dumps
 from bs4 import BeautifulSoup
 import requests
 
-from letterboxdpy.exceptions import PageLoadError
+from letterboxdpy.core.exceptions import PageLoadError
 from letterboxdpy.constants.project import DOMAIN
 
 
