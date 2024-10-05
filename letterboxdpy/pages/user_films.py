@@ -1,5 +1,4 @@
-from letterboxdpy.parser import get_movies_from_user_watched
-from letterboxdpy.scraper import parse_url
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN, GENRES
 
 
@@ -31,7 +30,7 @@ def extract_user_films(url: str) -> dict:
     def process_page(page_number: int) -> dict:
         """Fetches and processes a page of user films."""
         dom = parse_url(f"{url}/page/{page_number}/")
-        return get_movies_from_user_watched(dom)
+        return extract_movies_from_user_watched(dom)
 
     def calculate_statistics(movies: dict) -> dict:
         """Calculates film statistics including liked and rating percentages."""
@@ -71,6 +70,35 @@ def extract_user_films(url: str) -> dict:
             break
 
     return movie_list
+
+def extract_movies_from_user_watched(dom, max=12*6) -> dict:
+    """
+    supports user watched films section
+    """
+    poster_containers = dom.find_all("li", {"class": ["poster-container"]})
+
+    movies = {}
+    for poster_container in poster_containers:
+        poster = poster_container.div
+        poster_viewingdata = poster_container.p
+        rating = None
+        liked = False
+
+        if poster_viewingdata.span:
+            for span in poster_viewingdata.find_all("span"):
+                if 'rating' in span['class']:
+                    rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
+                elif 'like' in span['class']:
+                    liked = True
+
+        movies[poster["data-film-slug"]] = {
+            'name': poster.img["alt"],
+            "id": poster["data-film-id"],
+            "rating": rating,
+            "liked": liked
+        }
+
+    return movies
 
 def extract_user_genre_info(username: str) -> dict:
     ret = {}
