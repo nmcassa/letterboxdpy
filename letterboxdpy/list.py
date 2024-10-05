@@ -1,3 +1,7 @@
+if __loader__.name == '__main__':
+    import sys
+    sys.path.append(sys.path[0] + '/..')
+
 import re
 from json import (
     dumps as json_dumps,
@@ -15,7 +19,7 @@ class List:
         def __init__(self, username: str, slug: str) -> None:
             self.list = user_list.UserList(username, slug)
 
-    def __init__(self, username: str, slug: str=None) -> None:
+    def __init__(self, username: str, slug: str = None) -> None:
         assert re.match("^[A-Za-z0-9_]*$", username), "Invalid author"
 
         self.username = username.lower()
@@ -31,6 +35,7 @@ class List:
         self.tags = self.get_tags()
         self.count = self.get_count()
 
+    # Magic Methods
     def __len__(self) -> int:
         return self.count
 
@@ -56,8 +61,9 @@ class List:
     def jsonify(self) -> dict:
         return json_loads(self.__str__())
 
+    # Data Retrieval Methods
     def get_url(self) -> str: return self.pages.list.url
-    def get_title(self) -> list: return self.pages.list.get_tags()
+    def get_title(self) -> str: return self.pages.list.get_title()
     def get_author(self) -> str: return self.pages.list.get_author()
     def get_description(self) -> str: return self.pages.list.get_description()
     def get_date_created(self) -> list: return self.pages.list.get_date_created()
@@ -69,13 +75,13 @@ class List:
 if __name__ == "__main__":
     # user list usage:
     list_instance = List("mrbs", "the-suspense-is-killing-us-siku-main-feed-6")
+
     print(list_instance)
     print('url:', list_instance.url)
-    print('title:' , list_instance.title)
-    print('authır:', list_instance.author)
+    print('title:', list_instance.title)
+    print('author:', list_instance.author)
     print('description:', list_instance.description)
     print('created:', list_instance.date_created)
     print('updated:', list_instance.date_updated)
     print('tags:', list_instance.tags)
-    # print('movies:', list_instance.get_movies())
     print('count:', list_instance.count)
