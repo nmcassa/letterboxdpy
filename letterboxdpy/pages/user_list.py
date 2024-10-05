@@ -25,6 +25,25 @@ class UserList:
     def get_date_updated(self) -> list: return extract_date_updated(self.dom)
     def get_tags(self) -> list: return extract_tags(self.dom)
     def get_movies(self) -> dict: return extract_movies(self.url, self.LIST_ITEMS_PER_PAGE)
+    def get_count(self) -> int: return extract_count(self.dom)
+
+def extract_count(dom) -> int:
+    """Extracts the number of films from the list DOM."""
+    try:
+        data = dom.find("meta", attrs={'name': 'description'})
+        
+        if not data or 'content' not in data.attrs:
+            raise ValueError("Meta description not found or missing 'content' attribute.")
+        
+        content = data['content']
+        film_count_str = content.split('A list of ')[1].split(' films')[0]
+        return int(film_count_str.replace(',', ''))
+
+    except IndexError:
+        raise RuntimeError("Failed to extract film count: Invalid structure in the description meta tag.")
+    except ValueError as e:
+        raise RuntimeError("Failed to extract film count: " + str(e)) from e
+
 
 def extract_movies(list_url: str, items_per_page) -> dict:
     data = {}
