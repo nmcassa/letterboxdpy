@@ -29,9 +29,10 @@ class List:
         self.date_created = self.get_date_created()
         self.date_updated = self.get_date_updated()
         self.tags = self.get_tags()
+        self.count = self.get_count()
 
     def __len__(self) -> int:
-        ...
+        return self.count
 
     def __getattr__(self, name):
         if not object.__getattribute__(self, name):
@@ -63,8 +64,7 @@ class List:
     def get_date_updated(self) -> list: return self.pages.list.get_date_updated()
     def get_tags(self) -> list: return self.pages.list.get_tags()
     def get_movies(self) -> dict: return self.pages.list.get_movies()
-    def get_count(self) -> int: ...
-
+    def get_count(self) -> int: return self.pages.list.get_count()
 
 if __name__ == "__main__":
     # user list usage:
