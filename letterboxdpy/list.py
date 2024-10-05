@@ -26,6 +26,8 @@ class List:
         self.slug = slug
         self.pages = self.ListPages(self.username, self.slug)
 
+        self._movies = None
+
         self.url = self.get_url()
         self.title = self.get_title()
         self.author = self.get_author()
@@ -34,6 +36,13 @@ class List:
         self.date_updated = self.get_date_updated()
         self.tags = self.get_tags()
         self.count = self.get_count()
+
+    # Properties
+    @property
+    def movies(self) -> dict:
+        if self._movies is None:
+            self._movies = self.get_movies()
+        return self._movies
 
     # Magic Methods
     def __len__(self) -> int:
@@ -75,6 +84,8 @@ class List:
 if __name__ == "__main__":
     # user list usage:
     list_instance = List("mrbs", "the-suspense-is-killing-us-siku-main-feed-6")
+    movies = list_instance.movies
+    assert len(movies) == list_instance.count, "Count mismatch"
 
     print(list_instance)
     print('url:', list_instance.url)
@@ -85,3 +96,4 @@ if __name__ == "__main__":
     print('updated:', list_instance.date_updated)
     print('tags:', list_instance.tags)
     print('count:', list_instance.count)
+    print('movies:', movies)
