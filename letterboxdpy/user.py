@@ -8,8 +8,9 @@ from json import (
   loads as json_loads
 )
 
-from letterboxdpy.encoder import SecretsEncoder
+from letterboxdpy.core.encoder import SecretsEncoder
 from letterboxdpy.constants.project import CURRENT_YEAR
+from letterboxdpy.list import List as LetterboxdList
 from letterboxdpy.pages import (
     user_activity,
     user_diary,
@@ -92,6 +93,9 @@ class User:
     def get_liked_reviews(self) -> dict:
         return self.pages.likes.get_liked_reviews()
     
+    def get_list(self, slug: str) -> LetterboxdList: 
+        return LetterboxdList(self.username, slug)
+    
     def get_lists(self) -> dict:
         return self.pages.lists.get_lists()
     
@@ -165,7 +169,7 @@ if __name__ == "__main__":
     # Initialize a User instance with the provided username
     user_instance = User(username.lower())
 
-    # Print user statistics
+    # Print user instance(profile) data
     print(user_instance)
 
     # Iterate over user's film data and print each movie
