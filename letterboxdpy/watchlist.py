@@ -28,6 +28,15 @@ class Watchlist:
         self.url = self.get_url()
         self.count = self.get_count()
 
+        self._movies = None
+
+    # Properties
+    @property
+    def movies(self) -> dict:
+        if self._movies is None:
+            self._movies = self.get_movies()
+        return self._movies
+
     # Magic Methods
     def __len__(self) -> int:
         return self.count
@@ -67,4 +76,4 @@ if __name__ == "__main__":
     print(watchlist_instance)
     print('URL:', watchlist_instance.url)
     print('Count:', watchlist_instance.count)
-    print('Movies:', watchlist_instance.get_movies())
+    print('Movies:', watchlist_instance.movies)
