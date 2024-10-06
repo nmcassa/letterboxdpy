@@ -28,6 +28,7 @@ class Watchlist:
         self.url = self.get_url()
         self.count = self.get_count()
 
+    # Magic Methods
     def __len__(self) -> int:
         return self.count
 
@@ -36,7 +37,8 @@ class Watchlist:
 
     def jsonify(self) -> dict:
         return json_loads(self.__str__())
-    
+
+    # Data Retrieval Methods
     def get_owner(self): ...
     def get_url(self) -> str: return self.pages.watchlist.url
     def get_count(self) -> int:  return self.pages.watchlist.get_count()
@@ -44,9 +46,25 @@ class Watchlist:
 
 
 if __name__ == "__main__":
-    # user watchlist usage:
-    watchlist_instance = Watchlist("nmcassa")
+    import argparse
+    import sys
+
+    sys.stdout.reconfigure(encoding='utf-8')
+
+    parser = argparse.ArgumentParser(description="Fetch a user's watchlist.")
+    parser.add_argument('--user', '-u', help="Username to fetch watchlist for", required=False)
+    args = parser.parse_args()
+
+    username = args.user or input('Enter username: ').strip()
+
+    while not username:
+        username = input('Please enter a valid username: ').strip()
+
+    print(f"Fetching watchlist for username: {username}")
+
+    # Watchlist usage:
+    watchlist_instance = Watchlist(username)
     print(watchlist_instance)
-    print('url:', watchlist_instance.url)
-    print('count:', watchlist_instance.count)
-    print('movies:', watchlist_instance.get_movies())
+    print('URL:', watchlist_instance.url)
+    print('Count:', watchlist_instance.count)
+    print('Movies:', watchlist_instance.get_movies())
