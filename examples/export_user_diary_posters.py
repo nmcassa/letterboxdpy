@@ -6,6 +6,7 @@ try:
     # package is installed
     from letterboxdpy import user
     from letterboxdpy.core.scraper import parse_url
+    from letterboxdpy.utils.utils_terminal import get_input, args_exists
 except ImportError:
     # not installed
     try:
@@ -13,6 +14,7 @@ except ImportError:
         sys.path.append(sys.path[0] + '/..')
         from letterboxdpy import user
         from letterboxdpy.core.scraper import parse_url
+        from letterboxdpy.utils.utils_terminal import get_input, args_exists
     except (ImportError, ValueError):
         print("letterboxdpy not installed, would you like to install it?")
         response = input("y/n: ").lower()
@@ -49,7 +51,7 @@ class App:
     EXPORTS_USERS_DIR = os.path.join(EXPORTS_DIR, "users")
 
     def __init__(self, username):
-        self.username = username
+        self.username = username.lower()
         self.USER_FOLDER = os.path.join(self.EXPORTS_USERS_DIR, self.username)
         self.USER_POSTERS_DIR = os.path.join(self.USER_FOLDER, "posters")
 
@@ -137,14 +139,9 @@ class App:
 
 
 if __name__ == '__main__':
-    username = ''
+    if not args_exists():
+        print(f'Quick usage: python {sys.argv[0]} <username>')
 
-    if not len(username):   
-        try:
-            username = sys.argv[1]
-        except IndexError:
-            print(f'Quick usage: python {sys.argv[0]} <username>')
-            username = input('Enter username: ')
-
-        app = App(username.lower())
-        app.run()
+    username = get_input('Enter username: ', index=1)
+    app = App(username)
+    app.run()
