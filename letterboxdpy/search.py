@@ -56,7 +56,6 @@ class Search:
          'results': []
          }
 
-      result_count = 1
       for current_page in range(1, end_page+1):
         url = f'{self.url}/page/{current_page}/?adult'
         dom = parse_url(url)
@@ -67,23 +66,21 @@ class Search:
           break
 
         for result in results:
-
+          data['count'] += 1
+      
           data['results'].append({
-             'no': result_count,
+             'no':  data['count'],
              'page': current_page,
              **result
              })
 
-          if result_count >= max:
+          if  data['count'] >= max:
             break
 
-          result_count += 1
-
-        if result_count >= max:
+        if  data['count'] >= max:
           break
 
-      data['count'] = result_count
-      data['available'] = result_count > 0
+      data['available'] = data['count'] > 0
 
       return data
 
