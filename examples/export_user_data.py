@@ -1,14 +1,22 @@
-from json import dump as json_dump
 import time
 import sys
 import os
 
 try:
-    from letterboxdpy import user # package is installed
-except ImportError: # not installed
+    # package is installed
+    from letterboxdpy import user
+    from letterboxdpy.utils.utils_string import strip_prefix
+    from letterboxdpy.utils.utils_terminal import get_input
+    from letterboxdpy.utils.utils_file import build_path, check_and_create_dirs, save_json, build_click_url
+except ImportError:
+    # not installed
     try:
+        # use local copy
         sys.path.append(sys.path[0] + '/..')
-        from letterboxdpy import user # use local copy
+        from letterboxdpy import user
+        from letterboxdpy.utils.utils_string import strip_prefix
+        from letterboxdpy.utils.utils_terminal import get_input
+        from letterboxdpy.utils.utils_file import build_path, check_and_create_dirs, save_json, build_click_url
     except (ImportError, ValueError):
         print("letterboxdpy not installed, would you like to install it?")
         response = input("y/n: ").lower()
@@ -19,48 +27,11 @@ except ImportError: # not installed
         print("Exiting...")
         sys.exit(1)
 
-def get_username(username: str = '') -> str:
-    """Get the username from command line or input."""
-    if not len(username):
-        try:
-            username = sys.argv[1]
-        except IndexError:
-            print(f'Quick usage: python {sys.argv[0]} <username>')
-            username = input('Enter username: ')
-    return username
-
-def save_data(path: str, data: dict) -> None:
-    """Save data to a file as JSON."""
-    with open(f'{path}.json', 'w') as f:
-        json_dump(data, f, indent=2)
-
-def check_and_create_dirs(directories: list) -> None:
-    """Checks if directories exist, creates them if not."""
-    print('\nChecking directories...')
-    for directory in directories:
-        if not os.path.exists(directory):
-            print(f'\tCreating {directory}')
-            os.mkdir(directory)
-        else:
-            print(f'\tFound {directory}')
-    print('\tAll directories checked, continuing...', end='\n\n')
-
-def strip_prefix(method_name: str, prefix: str = 'get_') -> str:
-    """Removes a specific prefix from a method name if it exists."""
-    return method_name[len(prefix):] if method_name.startswith(prefix) else method_name
-
-def build_path(*segments: str) -> str:
-    """Dynamically build and format file paths from given segments."""
-    path = os.path.join(*segments)
-    return path.replace("\\", "/") # Ensure correct slashes
-
-def build_click_url(file_path: str) -> str:
-    """Dynamically build clickable file URL."""
-    return f"file:///{build_path(os.getcwd(), file_path)}"
-
 # -- MAIN --
 
-user_instance = user.User(get_username().lower())
+username = get_input('Enter username: ', index=1)
+user_instance = user.User(username)
+
 current_directory = os.getcwd()
 
 # Export directories
@@ -74,7 +45,7 @@ start_time = time.time()
 
 # Save user instance data
 user_data_path = build_path(USER_FOLDER, 'user')
-save_data(user_data_path, user_instance.jsonify())
+save_json(user_data_path, user_instance.jsonify())
 
 # Export data for each method
 # If you want to add a new method, add it here
@@ -118,7 +89,7 @@ for no, method in enumerate(methods, 1):
     data = method(user_instance, **args) if args else method(user_instance)
 
     file_path = build_path(USER_FOLDER, method_name_without_prefix)
-    save_data(file_path, data)
+    save_json(file_path, data)
 
     print(f'{time.time() - method_start_time:<7.2f} seconds - {method_name:<22} - {build_click_url(file_path)}.json')
 
