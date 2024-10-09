@@ -24,6 +24,10 @@ def get_input(prompt: str, *, index: int = None, expected_type: type = str) -> a
             print("\nKeyboard interrupt detected. Exiting...")
             sys.exit(0)
 
+def args_exists() -> bool:
+    """Check if command-line arguments exist."""
+    return len(sys.argv) > 1
+
 # CORE
 
 def get_arg(index: int, default: str = None) -> str:
