@@ -27,7 +27,6 @@ def analyze_follow_stats(username: str) -> dict:
             'fans': list(followers_set - following_set)
         }
 
-    username = username.lower()
     user_instance = user.User(username)
     followers = user_instance.get_followers()
     following = user_instance.get_following()
