@@ -3,12 +3,10 @@ if __loader__.name == '__main__':
     sys.path.append(sys.path[0] + '/..')
 
 from letterboxdpy.utils.utils_transform import get_ajax_url
-from letterboxdpy.decorators import assert_instance
-from letterboxdpy.scraper import Scraper
-from letterboxdpy.parser import (
-    get_movies_from_horizontal_list,
-    get_movies_from_vertical_list
-)
+from letterboxdpy.core.decorators import assert_instance
+from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.pages.films import extract_movies_from_horizontal_list
+from letterboxdpy.pages.user_list import extract_movies_from_vertical_list
 
 class Films:
     """Fetch movies from Letterboxd based on different URLs."""
@@ -29,15 +27,15 @@ class Films:
 
         while True:
             page_url = self.ajax_url + f"/page/{page}"
-            dom = Scraper.get_parsed_page(page_url)
+            dom = parse_url(page_url)
 
             if '.com/films/' in self.url:
-                new_movies = get_movies_from_horizontal_list(dom)
+                new_movies = extract_movies_from_horizontal_list(dom)
                 movies |= new_movies
                 if len(new_movies) < self.HORIZONTAL_MAX:
                     break
             elif '.com/film/' in self.url:
-                new_movies = get_movies_from_vertical_list(dom)
+                new_movies = extract_movies_from_vertical_list(dom)
                 movies |= new_movies
                 if len(new_movies) < self.VERTICAL_MAX:
                     break

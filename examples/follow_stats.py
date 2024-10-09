@@ -26,12 +26,12 @@ def analyze_follow_stats(username: str) -> dict:
             'followback': list(following_set & followers_set),
             'fans': list(followers_set - following_set)
         }
-    
+
     username = username.lower()
     user_instance = user.User(username)
-    followers = user.user_followers(user_instance)
-    following = user.user_following(user_instance)
-    
+    followers = user_instance.get_followers()
+    following = user_instance.get_following()
+
     return calculate_stats(following, followers)
 
 if __name__ == "__main__":

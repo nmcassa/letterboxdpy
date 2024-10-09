@@ -1,6 +1,86 @@
 {
   "user": "nmcassa",
   "logs": {
+    "7444337552": {
+      "event_type": "basic",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 23,
+        "hour": 13,
+        "minute": 42,
+        "second": 35
+      },
+      "log_type": "added",
+      "title": "nmcassa added The Contestant to his watchlist"
+    },
+    "7442399036": {
+      "event_type": "review",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 23,
+        "hour": 2,
+        "minute": 3,
+        "second": 45
+      },
+      "type": "watched",
+      "title": "nmcassa watched",
+      "film": "The Substance",
+      "film_year": 2024,
+      "rating": null,
+      "spoiler": false,
+      "review": "That end part reminds me of this call of duty edit: www.youtube.com/watch?v=Te8lubv-I_U&ab_channel=jacoldoer"
+    },
+    "7441414218": {
+      "event_type": "basic",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 22,
+        "hour": 22,
+        "minute": 23,
+        "second": 49
+      },
+      "log_type": "added",
+      "title": "nmcassa added Run Lola Run to his watchlist"
+    },
+    "7440320067": {
+      "event_type": "review",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 22,
+        "hour": 19,
+        "minute": 10,
+        "second": 12
+      },
+      "type": "rewatched",
+      "title": "nmcassa rewatched",
+      "film": "Whiplash",
+      "film_year": 2014,
+      "rating": 10,
+      "spoiler": false,
+      "review": "I like this movie. I think it\u2019s real good"
+    },
+    "7398736695": {
+      "event_type": "review",
+      "time": {
+        "year": 2024,
+        "month": 9,
+        "day": 14,
+        "hour": 2,
+        "minute": 37,
+        "second": 34
+      },
+      "type": "watched",
+      "title": "nmcassa watched",
+      "film": "Speak No Evil",
+      "film_year": 2024,
+      "rating": 6,
+      "spoiler": false,
+      "review": "Ummmm \ud83e\udd28 some parts were boring. Fun when they were yelling really loud."
+    },
     "7392160022": {
       "event_type": "review",
       "time": {
@@ -158,133 +238,7 @@
       "rating": 9,
       "spoiler": false,
       "review": "AMC showed this for 20th anniversary and I got a freaking cool poster!"
-    },
-    "7295491540": {
-      "event_type": "review",
-      "time": {
-        "year": 2024,
-        "month": 8,
-        "day": 24,
-        "hour": 3,
-        "minute": 42,
-        "second": 48
-      },
-      "type": "watched",
-      "title": "nmcassa watched",
-      "film": "The Devil Wears Prada",
-      "film_year": 2006,
-      "rating": null,
-      "spoiler": false,
-      "review": "Nate!!!!!"
-    },
-    "7280368621": {
-      "event_type": "review",
-      "time": {
-        "year": 2024,
-        "month": 8,
-        "day": 20,
-        "hour": 22,
-        "minute": 35,
-        "second": 59
-      },
-      "type": "rewatched",
-      "title": "nmcassa rewatched",
-      "film": "Alien",
-      "film_year": 1979,
-      "rating": 8,
-      "spoiler": false,
-      "review": "Pretty darn cool movie man"
-    },
-    "7278046657": {
-      "event_type": "basic",
-      "time": {
-        "year": 2024,
-        "month": 8,
-        "day": 20,
-        "hour": 12,
-        "minute": 38,
-        "second": 47
-      },
-      "log_type": "added",
-      "title": "nmcassa added The Man from Earth to his watchlist"
-    },
-    "7276514213": {
-      "event_type": "basic",
-      "time": {
-        "year": 2024,
-        "month": 8,
-        "day": 20,
-        "hour": 2,
-        "minute": 31,
-        "second": 1
-      },
-      "log_type": "commented",
-      "title": "nmcassa commented on ppark\u2019s review of Alien: Romulus"
-    },
-    "7276512859": {
-      "event_type": "basic",
-      "time": {
-        "year": 2024,
-        "month": 8,
-        "day": 20,
-        "hour": 2,
-        "minute": 30,
-        "second": 41
-      },
-      "log_type": "liked",
-      "title": "nmcassa liked ppark\u2019s  \u2605\u2605\u2605\u2605\u00bd  review of Alien: Romulus",
-      "username": "ppark"
-    },
-    "7271398604": {
-      "event_type": "review",
-      "time": {
-        "year": 2024,
-        "month": 8,
-        "day": 19,
-        "hour": 2,
-        "minute": 41,
-        "second": 5
-      },
-      "type": "watched",
-      "title": "nmcassa watched",
-      "film": "Alien: Romulus",
-      "film_year": 2024,
-      "rating": 8,
-      "spoiler": false,
-      "review": "I thought this was pretty fun in the theaters. And it was pretty lookin too"
-    },
-    "7259867888": {
-      "event_type": "review",
-      "time": {
-        "year": 2024,
-        "month": 8,
-        "day": 17,
-        "hour": 0,
-        "minute": 15,
-        "second": 14
-      },
-      "type": "watched",
-      "title": "nmcassa watched",
-      "film": "Alien",
-      "film_year": 1979,
-      "rating": null,
-      "spoiler": false,
-      "review": "Going to watch again"
-    },
-    "7245993624": {
-      "event_type": "basic",
-      "time": {
-        "year": 2024,
-        "month": 8,
-        "day": 14,
-        "hour": 0,
-        "minute": 13,
-        "second": 9
-      },
-      "log_type": "watched",
-      "title": "nmcassa   watched  Upgrade  on Tuesday Aug 13, 2024",
-      "film": "Upgrade"
     }
   },
-  "total_logs": 18
+  "total_logs": 15
 }

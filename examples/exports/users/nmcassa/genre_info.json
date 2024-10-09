@@ -1,0 +1,21 @@
+{
+  "action": 114,
+  "adventure": 149,
+  "animation": 123,
+  "comedy": 291,
+  "crime": 60,
+  "documentary": 28,
+  "drama": 197,
+  "family": 127,
+  "fantasy": 81,
+  "history": 11,
+  "horror": 64,
+  "music": 18,
+  "mystery": 55,
+  "romance": 49,
+  "science-fiction": 101,
+  "thriller": 106,
+  "tv-movie": 20,
+  "war": 11,
+  "western": 5
+}

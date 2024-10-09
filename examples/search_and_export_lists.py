@@ -5,11 +5,13 @@ import csv
 try:
     from letterboxdpy.search import Search
     from letterboxdpy.list import List
+    from letterboxdpy.utils.utils_terminal import get_input, args_exists
 except ImportError:
     try:
         sys.path.append(os.path.join(sys.path[0], '..'))
         from letterboxdpy.search import Search
         from letterboxdpy.list import List
+        from letterboxdpy.utils.utils_terminal import get_input, args_exists
     except (ImportError, ValueError) as e:
         print("The 'letterboxdpy' module is not installed.")
         print(f"Error details: {e}")
@@ -37,9 +39,11 @@ def save_results_to_csv(list_instance: List, csv_file: str) -> None:
             writer.writerow([movie_data['url'], movie_data['name']])
     print(f"Data successfully saved to {csv_file}. Movies: {len(movies)}")
 
-def main() -> None:
-    """Main function to search for lists and save movie data to CSV files."""
-    search_query = input("Search list: ")
+if __name__ == "__main__":
+    if not args_exists():
+        print(f'Quick usage: python {sys.argv[0]} <search_query> <max_lists>')
+
+    search_query = get_input("Enter your search query for lists: ", index=1)
 
     search_instance = Search(search_query, "lists")
     search_data = search_instance.results
@@ -47,12 +51,14 @@ def main() -> None:
     if search_data['available']:
         results = search_data['results']
         search_count = search_data['count']
-        max_lists = int(input(f"Found {search_count} lists. How many to export? (0 for all): "))
+
+        print(f'Found {search_count} lists. ')
+        max_lists = get_input('How many to export? (0 for all): ', index=2, expected_type=int)
 
         if max_lists == 0:
             max_lists = search_count
 
-        print(f"Exporting first {max_lists} lists...")
+        print(f'Exporting first {max_lists} lists...')
         results = results[:max_lists]
 
         for result in results:
@@ -63,7 +69,4 @@ def main() -> None:
             csv_filename = f"{list_owner_username}_{list_slug}.csv"
             save_results_to_csv(list_instance, csv_filename)
     else:
-        print("No results found")
-
-if __name__ == "__main__":
-    main()
+        print(f'No lists found for "{search_query}".')

@@ -1,0 +1,857 @@
+{
+  "reviews": {
+    "677133605": {
+      "movie": {
+        "name": "The Substance",
+        "slug": "the-substance",
+        "id": "838140",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/the-substance/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/the-substance/",
+      "rating": null,
+      "review": {
+        "content": "That end part reminds me of this call of duty edit: www.youtube.com/watch?v=Te8lubv-I_U&ab_channel=jacoldoer",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 9,
+        "day": 22
+      },
+      "page": 1
+    },
+    "676822055": {
+      "movie": {
+        "name": "Whiplash",
+        "slug": "whiplash-2014",
+        "id": "171384",
+        "release": 2014,
+        "link": "https://letterboxd.com/film/whiplash-2014/"
+      },
+      "type": "Rewatched",
+      "no": 1,
+      "link": "https://letterboxd.com/nmcassa/film/whiplash-2014/1/",
+      "rating": 10,
+      "review": {
+        "content": "I like this movie. I think it\u2019s real good",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 9,
+        "day": 22
+      },
+      "page": 1
+    },
+    "671009152": {
+      "movie": {
+        "name": "Speak No Evil",
+        "slug": "speak-no-evil-2024",
+        "id": "1004531",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/speak-no-evil-2024/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/speak-no-evil-2024/",
+      "rating": 6,
+      "review": {
+        "content": "Ummmm \ud83e\udd28 some parts were boring. Fun when they were yelling really loud.",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 9,
+        "day": 13
+      },
+      "page": 1
+    },
+    "670124692": {
+      "movie": {
+        "name": "Kindergarten Cop",
+        "slug": "kindergarten-cop",
+        "id": "51208",
+        "release": 1990,
+        "link": "https://letterboxd.com/film/kindergarten-cop/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/kindergarten-cop/",
+      "rating": 6,
+      "review": {
+        "content": "Beautiful movie",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 9,
+        "day": 12
+      },
+      "page": 1
+    },
+    "669751864": {
+      "movie": {
+        "name": "Doom",
+        "slug": "doom",
+        "id": "47597",
+        "release": 2005,
+        "link": "https://letterboxd.com/film/doom/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/doom/",
+      "rating": 2,
+      "review": {
+        "content": "The TV in the tennis room lost its cable so I put this in while I strung racquetsIt\u2019s like a free LG Channels movie\nThis movie sucks ass",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 9,
+        "day": 11
+      },
+      "page": 1
+    },
+    "666283987": {
+      "movie": {
+        "name": "Clerks",
+        "slug": "clerks",
+        "id": "50357",
+        "release": 1994,
+        "link": "https://letterboxd.com/film/clerks/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/clerks/",
+      "rating": 7,
+      "review": {
+        "content": "I like the part where they dance with the beatbox",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 9,
+        "day": 6
+      },
+      "page": 1
+    },
+    "663901961": {
+      "movie": {
+        "name": "Blink Twice",
+        "slug": "blink-twice",
+        "id": "756042",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/blink-twice/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/blink-twice/",
+      "rating": 7,
+      "review": {
+        "content": "I liked the movie. I did not like the part where Channing Tatum was saying I\u2019m sorry. Why does Zoe make Channing Tatum the worst person ever in this movie.",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 9,
+        "day": 2
+      },
+      "page": 1
+    },
+    "661698850": {
+      "movie": {
+        "name": "Shaun of the Dead",
+        "slug": "shaun-of-the-dead",
+        "id": "51405",
+        "release": 2004,
+        "link": "https://letterboxd.com/film/shaun-of-the-dead/"
+      },
+      "type": "Rewatched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/shaun-of-the-dead/",
+      "rating": 9,
+      "review": {
+        "content": "AMC showed this for 20th anniversary and I got a freaking cool poster!",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 8,
+        "day": 30
+      },
+      "page": 1
+    },
+    "656950844": {
+      "movie": {
+        "name": "The Devil Wears Prada",
+        "slug": "the-devil-wears-prada",
+        "id": "51712",
+        "release": 2006,
+        "link": "https://letterboxd.com/film/the-devil-wears-prada/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/the-devil-wears-prada/",
+      "rating": null,
+      "review": {
+        "content": "Nate!!!!!",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 8,
+        "day": 23
+      },
+      "page": 1
+    },
+    "654923452": {
+      "movie": {
+        "name": "Alien",
+        "slug": "alien",
+        "id": "51714",
+        "release": 1979,
+        "link": "https://letterboxd.com/film/alien/"
+      },
+      "type": "Rewatched",
+      "no": 1,
+      "link": "https://letterboxd.com/nmcassa/film/alien/1/",
+      "rating": 8,
+      "review": {
+        "content": "Pretty darn cool movie man",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 8,
+        "day": 20
+      },
+      "page": 1
+    },
+    "653727093": {
+      "movie": {
+        "name": "Alien: Romulus",
+        "slug": "alien-romulus",
+        "id": "850459",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/alien-romulus/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/alien-romulus/",
+      "rating": 8,
+      "review": {
+        "content": "I thought this was pretty fun in the theaters. And it was pretty lookin too",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 8,
+        "day": 18
+      },
+      "page": 1
+    },
+    "652010967": {
+      "movie": {
+        "name": "Alien",
+        "slug": "alien",
+        "id": "51714",
+        "release": 1979,
+        "link": "https://letterboxd.com/film/alien/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/alien/",
+      "rating": null,
+      "review": {
+        "content": "Going to watch again",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 8,
+        "day": 16
+      },
+      "page": 1
+    },
+    "642931522": {
+      "movie": {
+        "name": "Trap",
+        "slug": "trap-2024",
+        "id": "931164",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/trap-2024/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/trap-2024/",
+      "rating": 7,
+      "review": {
+        "content": "Hey, I thought it was fun. Cool movie idea and it was good.",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 8,
+        "day": 2
+      },
+      "page": 2
+    },
+    "637839598": {
+      "movie": {
+        "name": "Starship Troopers",
+        "slug": "starship-troopers",
+        "id": "51555",
+        "release": 1997,
+        "link": "https://letterboxd.com/film/starship-troopers/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/starship-troopers/",
+      "rating": 8,
+      "review": {
+        "content": "Super cool and charming movie. I had a bunch of fun watching this",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 7,
+        "day": 25
+      },
+      "page": 2
+    },
+    "633030376": {
+      "movie": {
+        "name": "Twisters",
+        "slug": "twisters",
+        "id": "641608",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/twisters/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/twisters/",
+      "rating": 5,
+      "review": {
+        "content": "Tornado",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 7,
+        "day": 18
+      },
+      "page": 2
+    },
+    "630450484": {
+      "movie": {
+        "name": "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+        "slug": "dr-strangelove-or-how-i-learned-to-stop-worrying-and-love-the-bomb",
+        "id": "51218",
+        "release": 1964,
+        "link": "https://letterboxd.com/film/dr-strangelove-or-how-i-learned-to-stop-worrying-and-love-the-bomb/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/dr-strangelove-or-how-i-learned-to-stop-worrying-and-love-the-bomb/",
+      "rating": 9,
+      "review": {
+        "content": "I liked this movie. I thought it was fun and cool. The calls with Dimitri were funny and I liked those. The filming on the plane was cool.",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 7,
+        "day": 14
+      },
+      "page": 2
+    },
+    "623147894": {
+      "movie": {
+        "name": "La Haine",
+        "slug": "la-haine",
+        "id": "51684",
+        "release": 1995,
+        "link": "https://letterboxd.com/film/la-haine/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/la-haine/",
+      "rating": 8,
+      "review": {
+        "content": "Definitely good bro! I will have to watch it again",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 7,
+        "day": 3
+      },
+      "page": 2
+    },
+    "621893199": {
+      "movie": {
+        "name": "Blade Runner 2049",
+        "slug": "blade-runner-2049",
+        "id": "265439",
+        "release": 2017,
+        "link": "https://letterboxd.com/film/blade-runner-2049/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/blade-runner-2049/",
+      "rating": 8,
+      "review": {
+        "content": "Cool movie",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 7,
+        "day": 1
+      },
+      "page": 2
+    },
+    "620684283": {
+      "movie": {
+        "name": "Speed Racer",
+        "slug": "speed-racer",
+        "id": "48018",
+        "release": 2008,
+        "link": "https://letterboxd.com/film/speed-racer/"
+      },
+      "type": "Rewatched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/speed-racer/",
+      "rating": 9,
+      "review": {
+        "content": "Wow man what a fun movie man",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 6,
+        "day": 29
+      },
+      "page": 2
+    },
+    "618965070": {
+      "movie": {
+        "name": "Kinds of Kindness",
+        "slug": "kinds-of-kindness",
+        "id": "928261",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/kinds-of-kindness/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/kinds-of-kindness/",
+      "rating": 4,
+      "review": {
+        "content": "This was a bummer, when I go to the movies it should be fun and exciting! This movie is unreasonably slow and it just couldn\u2019t keep my attention. Every time the piano sound shit was going on it sucked. It didn\u2019t create an atmosphere or draw me into the moment, it didn\u2019t do anything for me. It just felt like I was waiting for a sitcom laugh track to stop playing so we could get to the next part.\u00a0\nMaybe\u2026",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 6,
+        "day": 26
+      },
+      "page": 2
+    },
+    "618315514": {
+      "movie": {
+        "name": "They Cloned Tyrone",
+        "slug": "they-cloned-tyrone",
+        "id": "658906",
+        "release": 2023,
+        "link": "https://letterboxd.com/film/they-cloned-tyrone/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/they-cloned-tyrone/",
+      "rating": 9,
+      "review": {
+        "content": "Super fun and cool movie. I don\u2019t really know what Old Fontaine was trying to get at but whatever bro",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 6,
+        "day": 25
+      },
+      "page": 2
+    },
+    "612416628": {
+      "movie": {
+        "name": "L\u00e9on: The Professional",
+        "slug": "leon-the-professional",
+        "id": "51949",
+        "release": 1994,
+        "link": "https://letterboxd.com/film/leon-the-professional/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/leon-the-professional/",
+      "rating": 7,
+      "review": {
+        "content": "Leon and Mathilda is weird and uncomfy. Man says bomboclatt",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 6,
+        "day": 15
+      },
+      "page": 2
+    },
+    "612245929": {
+      "movie": {
+        "name": "Looper",
+        "slug": "looper",
+        "id": "6599",
+        "release": 2012,
+        "link": "https://letterboxd.com/film/looper/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/looper/",
+      "rating": 6,
+      "review": {
+        "content": "What\u2019s wrong with that kid Cid man like just relax ya know. The first hour was good and I liked it and then they lost me man. Rain Joshnon",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 6,
+        "day": 15
+      },
+      "page": 2
+    },
+    "611327083": {
+      "movie": {
+        "name": "Burning",
+        "slug": "burning-2018",
+        "id": "422035",
+        "release": 2018,
+        "link": "https://letterboxd.com/film/burning-2018/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/burning-2018/",
+      "rating": 7,
+      "review": {
+        "content": "I though it was fun and pretty, it was a little bit of a slow BURN(ing). Too much masterbations from main character. #dodatoffscreen alright thanks for reading guys.\u00a0\nSincerely,\u00a0 \u00a0 nmcassa",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 6,
+        "day": 13
+      },
+      "page": 2
+    },
+    "604283899": {
+      "movie": {
+        "name": "Carrie",
+        "slug": "carrie-1976",
+        "id": "48049",
+        "release": 1976,
+        "link": "https://letterboxd.com/film/carrie-1976/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/carrie-1976/",
+      "rating": 9,
+      "review": {
+        "content": "Wow fire movie so fun like with the lighting like so lit that was so much fun!",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 6,
+        "day": 1
+      },
+      "page": 3
+    },
+    "599460129": {
+      "movie": {
+        "name": "Furiosa: A Mad Max Saga",
+        "slug": "furiosa-a-mad-max-saga",
+        "id": "705221",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/furiosa-a-mad-max-saga/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/furiosa-a-mad-max-saga/",
+      "rating": 8,
+      "review": {
+        "content": "Was waiting for her to lose that arm the whole time",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 5,
+        "day": 25
+      },
+      "page": 3
+    },
+    "598682229": {
+      "movie": {
+        "name": "Mad Max: Fury Road",
+        "slug": "mad-max-fury-road",
+        "id": "62780",
+        "release": 2015,
+        "link": "https://letterboxd.com/film/mad-max-fury-road/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/mad-max-fury-road/",
+      "rating": 7,
+      "review": {
+        "content": "I feel like the editing is weird, would probs like it better in a movie theater",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 5,
+        "day": 23
+      },
+      "page": 3
+    },
+    "596956228": {
+      "movie": {
+        "name": "I Saw the TV Glow",
+        "slug": "i-saw-the-tv-glow",
+        "id": "772230",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/i-saw-the-tv-glow/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/i-saw-the-tv-glow/",
+      "rating": 4,
+      "review": {
+        "content": "Monologue way too long. Could have done so many things with the ending but instead decided to do nothing. Too slow for me. Difficult to enjoy if you don\u2019t share a connection to the subject matter #unsatisfyingsnoorefest",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 5,
+        "day": 20
+      },
+      "page": 3
+    },
+    "576567854": {
+      "movie": {
+        "name": "Civil War",
+        "slug": "civil-war-2024",
+        "id": "834656",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/civil-war-2024/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/civil-war-2024/",
+      "rating": 3,
+      "review": {
+        "content": "Suck ass movie",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 4,
+        "day": 16
+      },
+      "page": 3
+    },
+    "571324344": {
+      "movie": {
+        "name": "Monkey Man",
+        "slug": "monkey-man",
+        "id": "488751",
+        "release": 2024,
+        "link": "https://letterboxd.com/film/monkey-man/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/monkey-man/",
+      "rating": 9,
+      "review": {
+        "content": "Wow! Can\u2019t wait for Money Man 2!",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2024,
+        "month": 4,
+        "day": 7
+      },
+      "page": 3
+    },
+    "495592379": {
+      "movie": {
+        "name": "Poor Things",
+        "slug": "poor-things-2023",
+        "id": "710352",
+        "release": 2023,
+        "link": "https://letterboxd.com/film/poor-things-2023/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/poor-things-2023/",
+      "rating": 6,
+      "review": {
+        "content": "It looks like AI art and weird movie",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2023,
+        "month": 12,
+        "day": 26
+      },
+      "page": 3
+    },
+    "385189455": {
+      "movie": {
+        "name": "Sisu",
+        "slug": "sisu-2022",
+        "id": "755504",
+        "release": 2022,
+        "link": "https://letterboxd.com/film/sisu-2022/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/sisu-2022/",
+      "rating": 5,
+      "review": {
+        "content": "gross",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2023,
+        "month": 5,
+        "day": 3
+      },
+      "page": 3
+    },
+    "289681424": {
+      "movie": {
+        "name": "Beast",
+        "slug": "beast-2022-1",
+        "id": "681132",
+        "release": 2022,
+        "link": "https://letterboxd.com/film/beast-2022-1/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/beast-2022-1/",
+      "rating": 3,
+      "review": {
+        "content": "Did not like it",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2022,
+        "month": 8,
+        "day": 23
+      },
+      "page": 3
+    },
+    "263360976": {
+      "movie": {
+        "name": "Men",
+        "slug": "men-2022",
+        "id": "699298",
+        "release": 2022,
+        "link": "https://letterboxd.com/film/men-2022/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/men-2022/",
+      "rating": 2,
+      "review": {
+        "content": "What could he possibly be trying to say with this",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2022,
+        "month": 5,
+        "day": 25
+      },
+      "page": 3
+    },
+    "257580819": {
+      "movie": {
+        "name": "Nightcrawler",
+        "slug": "nightcrawler",
+        "id": "169907",
+        "release": 2014,
+        "link": "https://letterboxd.com/film/nightcrawler/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/nightcrawler/",
+      "rating": 6,
+      "review": {
+        "content": "Jake is a pussy nerd loser in this",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2022,
+        "month": 5,
+        "day": 4
+      },
+      "page": 3
+    },
+    "232418025": {
+      "movie": {
+        "name": "The Graduate",
+        "slug": "the-graduate",
+        "id": "27183",
+        "release": 1967,
+        "link": "https://letterboxd.com/film/the-graduate/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/the-graduate/",
+      "rating": 8,
+      "review": {
+        "content": "If only they didn\u2019t play the same song like 20 times",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2022,
+        "month": 1,
+        "day": 30
+      },
+      "page": 3
+    },
+    "152420824": {
+      "movie": {
+        "name": "I'm Thinking of Ending Things",
+        "slug": "im-thinking-of-ending-things",
+        "id": "430806",
+        "release": 2020,
+        "link": "https://letterboxd.com/film/im-thinking-of-ending-things/"
+      },
+      "type": "Watched",
+      "no": 0,
+      "link": "https://letterboxd.com/nmcassa/film/im-thinking-of-ending-things/",
+      "rating": 8,
+      "review": {
+        "content": "yeah i dont get it",
+        "spoiler": false
+      },
+      "date": {
+        "year": 2021,
+        "month": 2,
+        "day": 14
+      },
+      "page": 4
+    }
+  },
+  "count": 37,
+  "last_page": 4
+}

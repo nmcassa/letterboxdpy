@@ -1,0 +1,526 @@
+{
+  "available": true,
+  "count": 74,
+  "last_page": 3,
+  "filters": null,
+  "data": {
+    "1042841": {
+      "name": "The Contestant",
+      "slug": "the-contestant-2023",
+      "page": 1,
+      "url": "https://letterboxd.com/films/the-contestant-2023/",
+      "no": 74
+    },
+    "51946": {
+      "name": "Run Lola Run",
+      "slug": "run-lola-run",
+      "page": 1,
+      "url": "https://letterboxd.com/films/run-lola-run/",
+      "no": 73
+    },
+    "45820": {
+      "name": "Atlantis: The Lost Empire",
+      "slug": "atlantis-the-lost-empire",
+      "page": 1,
+      "url": "https://letterboxd.com/films/atlantis-the-lost-empire/",
+      "no": 72
+    },
+    "43952": {
+      "name": "The Man from Earth",
+      "slug": "the-man-from-earth",
+      "page": 1,
+      "url": "https://letterboxd.com/films/the-man-from-earth/",
+      "no": 71
+    },
+    "46433": {
+      "name": "Swingers",
+      "slug": "swingers",
+      "page": 1,
+      "url": "https://letterboxd.com/films/swingers/",
+      "no": 70
+    },
+    "23772": {
+      "name": "Peppermint Candy",
+      "slug": "peppermint-candy",
+      "page": 1,
+      "url": "https://letterboxd.com/films/peppermint-candy/",
+      "no": 69
+    },
+    "353485": {
+      "name": "Ad Astra",
+      "slug": "ad-astra-2019",
+      "page": 1,
+      "url": "https://letterboxd.com/films/ad-astra-2019/",
+      "no": 68
+    },
+    "51370": {
+      "name": "Gattaca",
+      "slug": "gattaca",
+      "page": 1,
+      "url": "https://letterboxd.com/films/gattaca/",
+      "no": 67
+    },
+    "51521": {
+      "name": "Full Metal Jacket",
+      "slug": "full-metal-jacket",
+      "page": 1,
+      "url": "https://letterboxd.com/films/full-metal-jacket/",
+      "no": 66
+    },
+    "51194": {
+      "name": "Paths of Glory",
+      "slug": "paths-of-glory",
+      "page": 1,
+      "url": "https://letterboxd.com/films/paths-of-glory/",
+      "no": 65
+    },
+    "330810": {
+      "name": "Under the Silver Lake",
+      "slug": "under-the-silver-lake",
+      "page": 1,
+      "url": "https://letterboxd.com/films/under-the-silver-lake/",
+      "no": 64
+    },
+    "43318": {
+      "name": "Timecrimes",
+      "slug": "timecrimes",
+      "page": 1,
+      "url": "https://letterboxd.com/films/timecrimes/",
+      "no": 63
+    },
+    "18627": {
+      "name": "Incendies",
+      "slug": "incendies",
+      "page": 1,
+      "url": "https://letterboxd.com/films/incendies/",
+      "no": 62
+    },
+    "197628": {
+      "name": "Sicario",
+      "slug": "sicario-2015",
+      "page": 1,
+      "url": "https://letterboxd.com/films/sicario-2015/",
+      "no": 61
+    },
+    "132034": {
+      "name": "Enemy",
+      "slug": "enemy",
+      "page": 1,
+      "url": "https://letterboxd.com/films/enemy/",
+      "no": 60
+    },
+    "41461": {
+      "name": "Days of Heaven",
+      "slug": "days-of-heaven",
+      "page": 1,
+      "url": "https://letterboxd.com/films/days-of-heaven/",
+      "no": 59
+    },
+    "943472": {
+      "name": "The Pig, the Snake and the Pigeon",
+      "slug": "the-pig-the-snake-and-the-pigeon",
+      "page": 1,
+      "url": "https://letterboxd.com/films/the-pig-the-snake-and-the-pigeon/",
+      "no": 58
+    },
+    "7023": {
+      "name": "The Man Who Stole the Sun",
+      "slug": "the-man-who-stole-the-sun",
+      "page": 1,
+      "url": "https://letterboxd.com/films/the-man-who-stole-the-sun/",
+      "no": 57
+    },
+    "51075": {
+      "name": "The Fountain",
+      "slug": "the-fountain",
+      "page": 1,
+      "url": "https://letterboxd.com/films/the-fountain/",
+      "no": 56
+    },
+    "51481": {
+      "name": "Battleship Potemkin",
+      "slug": "battleship-potemkin",
+      "page": 1,
+      "url": "https://letterboxd.com/films/battleship-potemkin/",
+      "no": 55
+    },
+    "49955": {
+      "name": "The Trial",
+      "slug": "the-trial",
+      "page": 1,
+      "url": "https://letterboxd.com/films/the-trial/",
+      "no": 54
+    },
+    "34618": {
+      "name": "Pulse",
+      "slug": "pulse-2001",
+      "page": 1,
+      "url": "https://letterboxd.com/films/pulse-2001/",
+      "no": 53
+    },
+    "51707": {
+      "name": "Raising Arizona",
+      "slug": "raising-arizona",
+      "page": 1,
+      "url": "https://letterboxd.com/films/raising-arizona/",
+      "no": 52
+    },
+    "19573": {
+      "name": "The Hourglass Sanatorium",
+      "slug": "the-hourglass-sanatorium",
+      "page": 1,
+      "url": "https://letterboxd.com/films/the-hourglass-sanatorium/",
+      "no": 51
+    },
+    "50912": {
+      "name": "La Chinoise",
+      "slug": "la-chinoise",
+      "page": 1,
+      "url": "https://letterboxd.com/films/la-chinoise/",
+      "no": 50
+    },
+    "45909": {
+      "name": "Network",
+      "slug": "network",
+      "page": 1,
+      "url": "https://letterboxd.com/films/network/",
+      "no": 49
+    },
+    "50168": {
+      "name": "The Game",
+      "slug": "the-game",
+      "page": 1,
+      "url": "https://letterboxd.com/films/the-game/",
+      "no": 48
+    },
+    "51483": {
+      "name": "Requiem for a Dream",
+      "slug": "requiem-for-a-dream",
+      "page": 1,
+      "url": "https://letterboxd.com/films/requiem-for-a-dream/",
+      "no": 47
+    },
+    "45206": {
+      "name": "Altered States",
+      "slug": "altered-states",
+      "page": 2,
+      "url": "https://letterboxd.com/films/altered-states/",
+      "no": 46
+    },
+    "363460": {
+      "name": "Night Is Short, Walk On Girl",
+      "slug": "night-is-short-walk-on-girl",
+      "page": 2,
+      "url": "https://letterboxd.com/films/night-is-short-walk-on-girl/",
+      "no": 45
+    },
+    "50725": {
+      "name": "Fear and Loathing in Las Vegas",
+      "slug": "fear-and-loathing-in-las-vegas",
+      "page": 2,
+      "url": "https://letterboxd.com/films/fear-and-loathing-in-las-vegas/",
+      "no": 44
+    },
+    "24284": {
+      "name": "The Heartbreak Kid",
+      "slug": "the-heartbreak-kid-1972",
+      "page": 2,
+      "url": "https://letterboxd.com/films/the-heartbreak-kid-1972/",
+      "no": 43
+    },
+    "41662": {
+      "name": "The Wicker Man",
+      "slug": "the-wicker-man",
+      "page": 2,
+      "url": "https://letterboxd.com/films/the-wicker-man/",
+      "no": 42
+    },
+    "51397": {
+      "name": "From Dusk Till Dawn",
+      "slug": "from-dusk-till-dawn",
+      "page": 2,
+      "url": "https://letterboxd.com/films/from-dusk-till-dawn/",
+      "no": 41
+    },
+    "247121": {
+      "name": "Victoria",
+      "slug": "victoria-2015",
+      "page": 2,
+      "url": "https://letterboxd.com/films/victoria-2015/",
+      "no": 40
+    },
+    "51396": {
+      "name": "Fantasia",
+      "slug": "fantasia",
+      "page": 2,
+      "url": "https://letterboxd.com/films/fantasia/",
+      "no": 39
+    },
+    "46158": {
+      "name": "The Andromeda Strain",
+      "slug": "the-andromeda-strain",
+      "page": 2,
+      "url": "https://letterboxd.com/films/the-andromeda-strain/",
+      "no": 38
+    },
+    "34829": {
+      "name": "Mishima: A Life in Four Chapters",
+      "slug": "mishima-a-life-in-four-chapters",
+      "page": 2,
+      "url": "https://letterboxd.com/films/mishima-a-life-in-four-chapters/",
+      "no": 37
+    },
+    "51315": {
+      "name": "Videodrome",
+      "slug": "videodrome",
+      "page": 2,
+      "url": "https://letterboxd.com/films/videodrome/",
+      "no": 36
+    },
+    "35224": {
+      "name": "Crumb",
+      "slug": "crumb",
+      "page": 2,
+      "url": "https://letterboxd.com/films/crumb/",
+      "no": 35
+    },
+    "55864": {
+      "name": "Good Morning",
+      "slug": "good-morning",
+      "page": 2,
+      "url": "https://letterboxd.com/films/good-morning/",
+      "no": 34
+    },
+    "63180": {
+      "name": "Chronicle",
+      "slug": "chronicle",
+      "page": 2,
+      "url": "https://letterboxd.com/films/chronicle/",
+      "no": 33
+    },
+    "40728": {
+      "name": "Chris Rock: Bigger & Blacker",
+      "slug": "chris-rock-bigger-blacker",
+      "page": 2,
+      "url": "https://letterboxd.com/films/chris-rock-bigger-blacker/",
+      "no": 32
+    },
+    "51291": {
+      "name": "Total Recall",
+      "slug": "total-recall",
+      "page": 2,
+      "url": "https://letterboxd.com/films/total-recall/",
+      "no": 31
+    },
+    "51871": {
+      "name": "Minority Report",
+      "slug": "minority-report",
+      "page": 2,
+      "url": "https://letterboxd.com/films/minority-report/",
+      "no": 30
+    },
+    "29041": {
+      "name": "Enter the Void",
+      "slug": "enter-the-void",
+      "page": 2,
+      "url": "https://letterboxd.com/films/enter-the-void/",
+      "no": 29
+    },
+    "45602": {
+      "name": "Chungking Express",
+      "slug": "chungking-express",
+      "page": 2,
+      "url": "https://letterboxd.com/films/chungking-express/",
+      "no": 28
+    },
+    "51981": {
+      "name": "Brazil",
+      "slug": "brazil",
+      "page": 2,
+      "url": "https://letterboxd.com/films/brazil/",
+      "no": 27
+    },
+    "51308": {
+      "name": "2046",
+      "slug": "2046",
+      "page": 2,
+      "url": "https://letterboxd.com/films/2046/",
+      "no": 26
+    },
+    "51593": {
+      "name": "Casino",
+      "slug": "casino",
+      "page": 2,
+      "url": "https://letterboxd.com/films/casino/",
+      "no": 25
+    },
+    "46908": {
+      "name": "Ichi the Killer",
+      "slug": "ichi-the-killer",
+      "page": 2,
+      "url": "https://letterboxd.com/films/ichi-the-killer/",
+      "no": 24
+    },
+    "51469": {
+      "name": "Paris, Texas",
+      "slug": "paris-texas",
+      "page": 2,
+      "url": "https://letterboxd.com/films/paris-texas/",
+      "no": 23
+    },
+    "39611": {
+      "name": "Nine to Five",
+      "slug": "nine-to-five",
+      "page": 2,
+      "url": "https://letterboxd.com/films/nine-to-five/",
+      "no": 22
+    },
+    "51440": {
+      "name": "Contact",
+      "slug": "contact",
+      "page": 2,
+      "url": "https://letterboxd.com/films/contact/",
+      "no": 21
+    },
+    "50956": {
+      "name": "Raging Bull",
+      "slug": "raging-bull",
+      "page": 2,
+      "url": "https://letterboxd.com/films/raging-bull/",
+      "no": 20
+    },
+    "38374": {
+      "name": "Possession",
+      "slug": "possession",
+      "page": 2,
+      "url": "https://letterboxd.com/films/possession/",
+      "no": 19
+    },
+    "683486": {
+      "name": "James Acaster: Cold Lasagne Hate Myself 1999",
+      "slug": "james-acaster-cold-lasagne-hate-myself-1999",
+      "page": 3,
+      "url": "https://letterboxd.com/films/james-acaster-cold-lasagne-hate-myself-1999/",
+      "no": 18
+    },
+    "49267": {
+      "name": "Hearts of Darkness: A Filmmaker's Apocalypse",
+      "slug": "hearts-of-darkness-a-filmmakers-apocalypse",
+      "page": 3,
+      "url": "https://letterboxd.com/films/hearts-of-darkness-a-filmmakers-apocalypse/",
+      "no": 17
+    },
+    "51383": {
+      "name": "GoodFellas",
+      "slug": "goodfellas",
+      "page": 3,
+      "url": "https://letterboxd.com/films/goodfellas/",
+      "no": 16
+    },
+    "51407": {
+      "name": "The Sixth Sense",
+      "slug": "the-sixth-sense",
+      "page": 3,
+      "url": "https://letterboxd.com/films/the-sixth-sense/",
+      "no": 15
+    },
+    "420137": {
+      "name": "It's Such a Beautiful Day",
+      "slug": "its-such-a-beautiful-day",
+      "page": 3,
+      "url": "https://letterboxd.com/films/its-such-a-beautiful-day/",
+      "no": 14
+    },
+    "263221": {
+      "name": "Manchester by the Sea",
+      "slug": "manchester-by-the-sea",
+      "page": 3,
+      "url": "https://letterboxd.com/films/manchester-by-the-sea/",
+      "no": 13
+    },
+    "426983": {
+      "name": "Aniara",
+      "slug": "aniara-2018",
+      "page": 3,
+      "url": "https://letterboxd.com/films/aniara-2018/",
+      "no": 12
+    },
+    "45479": {
+      "name": "Drunken Master",
+      "slug": "drunken-master",
+      "page": 3,
+      "url": "https://letterboxd.com/films/drunken-master/",
+      "no": 11
+    },
+    "444617": {
+      "name": "Free Solo",
+      "slug": "free-solo",
+      "page": 3,
+      "url": "https://letterboxd.com/films/free-solo/",
+      "no": 10
+    },
+    "436873": {
+      "name": "Climax",
+      "slug": "climax-2018",
+      "page": 3,
+      "url": "https://letterboxd.com/films/climax-2018/",
+      "no": 9
+    },
+    "43209": {
+      "name": "Hoop Dreams",
+      "slug": "hoop-dreams",
+      "page": 3,
+      "url": "https://letterboxd.com/films/hoop-dreams/",
+      "no": 8
+    },
+    "587612": {
+      "name": "Days",
+      "slug": "days-2020",
+      "page": 3,
+      "url": "https://letterboxd.com/films/days-2020/",
+      "no": 7
+    },
+    "30699": {
+      "name": "California Split",
+      "slug": "california-split",
+      "page": 3,
+      "url": "https://letterboxd.com/films/california-split/",
+      "no": 6
+    },
+    "310199": {
+      "name": "Dunkirk",
+      "slug": "dunkirk-2017",
+      "page": 3,
+      "url": "https://letterboxd.com/films/dunkirk-2017/",
+      "no": 5
+    },
+    "41012": {
+      "name": "Moon",
+      "slug": "moon",
+      "page": 3,
+      "url": "https://letterboxd.com/films/moon/",
+      "no": 4
+    },
+    "117621": {
+      "name": "Interstellar",
+      "slug": "interstellar",
+      "page": 3,
+      "url": "https://letterboxd.com/films/interstellar/",
+      "no": 3
+    },
+    "35988": {
+      "name": "Yi Yi",
+      "slug": "yi-yi",
+      "page": 3,
+      "url": "https://letterboxd.com/films/yi-yi/",
+      "no": 2
+    },
+    "460155": {
+      "name": "1917",
+      "slug": "1917",
+      "page": 3,
+      "url": "https://letterboxd.com/films/1917/",
+      "no": 1
+    }
+  }
+}

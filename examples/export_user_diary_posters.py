@@ -3,11 +3,18 @@ import sys
 import os
 
 try:
-    from letterboxdpy import user # package is installed
-except ImportError: # not installed
+    # package is installed
+    from letterboxdpy import user
+    from letterboxdpy.core.scraper import parse_url
+    from letterboxdpy.utils.utils_terminal import get_input, args_exists
+except ImportError:
+    # not installed
     try:
+        # use local copy
         sys.path.append(sys.path[0] + '/..')
-        from letterboxdpy import user # use local copy
+        from letterboxdpy import user
+        from letterboxdpy.core.scraper import parse_url
+        from letterboxdpy.utils.utils_terminal import get_input, args_exists
     except (ImportError, ValueError):
         print("letterboxdpy not installed, would you like to install it?")
         response = input("y/n: ").lower()
@@ -44,24 +51,23 @@ class App:
     EXPORTS_USERS_DIR = os.path.join(EXPORTS_DIR, "users")
 
     def __init__(self, username):
-        self.username = username
+        self.username = username.lower()
         self.USER_FOLDER = os.path.join(self.EXPORTS_USERS_DIR, self.username)
         self.USER_POSTERS_DIR = os.path.join(self.USER_FOLDER, "posters")
 
         self.user = user.User(self.username)
-        self.data = user.user_diary(self.user)
+        self.data = self.user.get_diary()
         self.config = Settings()
-        
+
         self.foldering = self.config.foldering
         self.size_check = self.config.size_check
 
     def get_poster_url(self, slug):
         poster_ajax = f"https://letterboxd.com/ajax/poster/film/{slug}/std/500x750/"
-        poster_page = self.user.scraper.get_parsed_page(poster_ajax)
+        poster_page = parse_url(poster_ajax)
         return poster_page.img['srcset'].split('?')[0]
 
     def run(self):
-        
         count = self.data['count']
         entries = self.data['entries']
         already_start = 0
@@ -78,7 +84,7 @@ class App:
             self.USER_FOLDER,
             self.USER_POSTERS_DIR
             )
-        
+
         if self.foldering:
             years_dir = os.path.join(self.USER_POSTERS_DIR, 'years')
             Path.check_path(years_dir)
@@ -106,9 +112,9 @@ class App:
                         already_start = count
                     count -= 1
                     continue
-                
+
                 print(f'{count} - Poster file already exists, checking size..')
-            
+
             if (already_start - count) > 1:
                 print(f'Have already processed {already_start - count} entries, skipping {count}..')
                 already_start = 0
@@ -130,17 +136,12 @@ class App:
         print('Processing complete!')
         click_url = 'file:///' + os.path.join(os.getcwd(), self.USER_POSTERS_DIR).replace("\\", "/")
         print('At', click_url)
-        
+
 
 if __name__ == '__main__':
-    username = ''
+    if not args_exists():
+        print(f'Quick usage: python {sys.argv[0]} <username>')
 
-    if not len(username):   
-        try:
-            username = sys.argv[1]
-        except IndexError:
-            print(f'Quick usage: python {sys.argv[0]} <username>')
-            username = input('Enter username: ')
-
-        app = App(username.lower())
-        app.run()
+    username = get_input('Enter username: ', index=1)
+    app = App(username)
+    app.run()

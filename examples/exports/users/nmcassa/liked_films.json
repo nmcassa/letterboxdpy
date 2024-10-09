@@ -243,7 +243,7 @@
     "whiplash-2014": {
       "name": "Whiplash",
       "id": "171384",
-      "rating": 9,
+      "rating": 10,
       "liked": true
     },
     "the-wolf-of-wall-street": {
@@ -510,5 +510,5 @@
   "rating_count": 83,
   "liked_percentage": 100.0,
   "rating_percentage": 98.81,
-  "rating_average": 9.08
+  "rating_average": 9.1
 }

@@ -1,11 +1,11 @@
 from json import dumps as json_dumps
 
 from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
-from letterboxdpy.encoder import Encoder
+from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.scraper import (
-  Scraper,
+from letterboxdpy.core.scraper import (
+  parse_url,
   url_encode
 )
 
@@ -56,10 +56,9 @@ class Search:
          'results': []
          }
 
-      result_count = 0
       for current_page in range(1, end_page+1):
         url = f'{self.url}/page/{current_page}/?adult'
-        dom = Scraper.get_parsed_page(url)
+        dom = parse_url(url)
         results = self.get_page_results(dom)
 
         if not results:
@@ -67,23 +66,21 @@ class Search:
           break
 
         for result in results:
-
+          data['count'] += 1
+      
           data['results'].append({
-             'no': result_count,
+             'no':  data['count'],
              'page': current_page,
              **result
              })
 
-          if result_count >= max:
+          if  data['count'] >= max:
             break
 
-          result_count += 1
-
-        if result_count >= max:
+        if  data['count'] >= max:
           break
 
-      data['count'] = result_count
-      data['available'] = result_count > 0
+      data['available'] = data['count'] > 0
 
       return data
 

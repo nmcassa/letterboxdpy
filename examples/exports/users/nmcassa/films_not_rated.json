@@ -1,0 +1,286 @@
+{
+  "movies": {
+    "the-substance": {
+      "name": "The Substance",
+      "id": "838140",
+      "rating": null,
+      "liked": false
+    },
+    "the-devil-wears-prada": {
+      "name": "The Devil Wears Prada",
+      "id": "51712",
+      "rating": null,
+      "liked": false
+    },
+    "upgrade": {
+      "name": "Upgrade",
+      "id": "430633",
+      "rating": null,
+      "liked": false
+    },
+    "the-curse-2023": {
+      "name": "The Curse",
+      "id": "1071313",
+      "rating": null,
+      "liked": false
+    },
+    "waking-life": {
+      "name": "Waking Life",
+      "id": "47363",
+      "rating": null,
+      "liked": false
+    },
+    "top-gear-botswana-special": {
+      "name": "Top Gear: Botswana Special",
+      "id": "358318",
+      "rating": null,
+      "liked": false
+    },
+    "top-gear-winter-olympics": {
+      "name": "Top Gear: Winter Olympics",
+      "id": "212144",
+      "rating": null,
+      "liked": false
+    },
+    "top-gear-polar-special-2007-1": {
+      "name": "Top Gear: Polar Special",
+      "id": "369373",
+      "rating": null,
+      "liked": false
+    },
+    "the-grand-tour-sand-job": {
+      "name": "The Grand Tour: Sand Job",
+      "id": "1123682",
+      "rating": null,
+      "liked": false
+    },
+    "phineas-and-ferb-the-movie-across-the-2nd": {
+      "name": "Phineas and Ferb The Movie: Across the 2nd Dimension",
+      "id": "57791",
+      "rating": null,
+      "liked": false
+    },
+    "teen-beach-movie": {
+      "name": "Teen Beach Movie",
+      "id": "129829",
+      "rating": null,
+      "liked": false
+    },
+    "neon-genesis-evangelion": {
+      "name": "Neon Genesis Evangelion",
+      "id": "607220",
+      "rating": null,
+      "liked": false
+    },
+    "the-sandlot": {
+      "name": "The Sandlot",
+      "id": "45220",
+      "rating": null,
+      "liked": false
+    },
+    "the-nightmare-before-christmas": {
+      "name": "The Nightmare Before Christmas",
+      "id": "47119",
+      "rating": null,
+      "liked": false
+    },
+    "larry-david-curb-your-enthusiasm": {
+      "name": "Larry David: Curb Your Enthusiasm",
+      "id": "184916",
+      "rating": null,
+      "liked": false
+    },
+    "the-death-of-stalin": {
+      "name": "The Death of Stalin",
+      "id": "337565",
+      "rating": null,
+      "liked": false
+    },
+    "mad-max-beyond-thunderdome": {
+      "name": "Mad Max Beyond Thunderdome",
+      "id": "47240",
+      "rating": null,
+      "liked": false
+    },
+    "talk-to-me-2022": {
+      "name": "Talk to Me",
+      "id": "908144",
+      "rating": null,
+      "liked": false
+    },
+    "edge-of-tomorrow": {
+      "name": "Edge of Tomorrow",
+      "id": "105183",
+      "rating": null,
+      "liked": false
+    },
+    "the-life-aquatic-with-steve-zissou": {
+      "name": "The Life Aquatic with Steve Zissou",
+      "id": "51674",
+      "rating": null,
+      "liked": false
+    },
+    "mulan": {
+      "name": "Mulan",
+      "id": "46001",
+      "rating": null,
+      "liked": false
+    },
+    "midsommar": {
+      "name": "Midsommar",
+      "id": "459564",
+      "rating": null,
+      "liked": false
+    },
+    "soul-eater": {
+      "name": "Soul Eater",
+      "id": "654868",
+      "rating": null,
+      "liked": false
+    },
+    "travis-scott-look-mom-i-can-fly": {
+      "name": "Travis Scott: Look Mom I Can Fly",
+      "id": "552055",
+      "rating": null,
+      "liked": false
+    },
+    "untold-breaking-point": {
+      "name": "Untold: Breaking Point",
+      "id": "776727",
+      "rating": null,
+      "liked": false
+    },
+    "grave-of-the-fireflies": {
+      "name": "Grave of the Fireflies",
+      "id": "44558",
+      "rating": null,
+      "liked": false
+    },
+    "the-house-2022-1": {
+      "name": "The House",
+      "id": "832444",
+      "rating": null,
+      "liked": false
+    },
+    "history-of-the-entire-world-i-guess": {
+      "name": "history of the entire world, i guess",
+      "id": "663679",
+      "rating": null,
+      "liked": false
+    },
+    "bridge-to-terabithia": {
+      "name": "Bridge to Terabithia",
+      "id": "51117",
+      "rating": null,
+      "liked": false
+    },
+    "batman-v-superman-dawn-of-justice": {
+      "name": "Batman v Superman: Dawn of Justice",
+      "id": "148998",
+      "rating": null,
+      "liked": false
+    },
+    "thor-ragnarok": {
+      "name": "Thor: Ragnarok",
+      "id": "209382",
+      "rating": null,
+      "liked": false
+    },
+    "iparty-with-victorious": {
+      "name": "iParty with Victorious",
+      "id": "553700",
+      "rating": null,
+      "liked": false
+    },
+    "flcl": {
+      "name": "FLCL",
+      "id": "284640",
+      "rating": null,
+      "liked": true
+    },
+    "demon-slayer-kimetsu-no-yaiba": {
+      "name": "Demon Slayer: Kimetsu no Yaiba",
+      "id": "613680",
+      "rating": null,
+      "liked": false
+    },
+    "phineas-and-ferb-christmas-vacation": {
+      "name": "Phineas and Ferb Christmas Vacation!",
+      "id": "339651",
+      "rating": null,
+      "liked": false
+    },
+    "phineas-and-ferb-summer-belongs-to-you": {
+      "name": "Phineas and Ferb: Summer Belongs to You!",
+      "id": "398456",
+      "rating": null,
+      "liked": false
+    },
+    "paranoia-agent": {
+      "name": "Paranoia Agent",
+      "id": "520304",
+      "rating": null,
+      "liked": false
+    },
+    "fast-times-at-ridgemont-high": {
+      "name": "Fast Times at Ridgemont High",
+      "id": "43969",
+      "rating": null,
+      "liked": false
+    },
+    "i-am-legend": {
+      "name": "I Am Legend",
+      "id": "48296",
+      "rating": null,
+      "liked": false
+    },
+    "stuart-little": {
+      "name": "Stuart Little",
+      "id": "46512",
+      "rating": null,
+      "liked": false
+    },
+    "the-notebook": {
+      "name": "The Notebook",
+      "id": "45667",
+      "rating": null,
+      "liked": false
+    },
+    "a-christmas-carol-2009": {
+      "name": "A Christmas Carol",
+      "id": "40653",
+      "rating": null,
+      "liked": false
+    },
+    "one-piece-the-movie": {
+      "name": "One Piece: The Movie",
+      "id": "39557",
+      "rating": null,
+      "liked": false
+    },
+    "my-hero-academia-two-heroes": {
+      "name": "My Hero Academia: Two Heroes",
+      "id": "435237",
+      "rating": null,
+      "liked": false
+    },
+    "willy-wonka-the-chocolate-factory": {
+      "name": "Willy Wonka & the Chocolate Factory",
+      "id": "51804",
+      "rating": null,
+      "liked": false
+    },
+    "now-you-see-me-2": {
+      "name": "Now You See Me 2",
+      "id": "218051",
+      "rating": null,
+      "liked": false
+    }
+  },
+  "count": 46,
+  "liked_count": 1,
+  "rating_count": 0,
+  "liked_percentage": 2.17,
+  "rating_percentage": 0.0,
+  "rating_average": 0.0
+}
