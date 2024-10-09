@@ -167,7 +167,7 @@ if __name__ == "__main__":
     print(f"Processing username: {username}")
 
     # Initialize a User instance with the provided username
-    user_instance = User(username.lower())
+    user_instance = User(username)
 
     # Print user instance(profile) data
     print(user_instance)
