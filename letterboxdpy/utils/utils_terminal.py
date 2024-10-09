@@ -32,6 +32,8 @@ def args_exists() -> bool:
 
 def get_arg(index: int, default: str = None) -> str:
     """Retrieve command-line argument at a given index."""
+    if index < 0:
+        raise ValueError("Index cannot be negative")
     if len(sys.argv) > index:
         return sys.argv[index]
     return default
