@@ -1,6 +1,6 @@
 from datetime import datetime
 from letterboxdpy.core.scraper import parse_url
-from letterboxdpy.constants.project import DOMAIN, CURRENT_YEAR
+from letterboxdpy.constants.project import DOMAIN, CURRENT_YEAR, CURRENT_MONTH, CURRENT_DAY
 
 
 class UserDiary:
@@ -9,21 +9,45 @@ class UserDiary:
         self.username = username
         self.url = f"{DOMAIN}/{username}/diary"
         
-    def get_diary(self, year: int=None, page: int=None) -> dict:
-        return extract_user_diary(self.username, year, page)
+    def get_diary(self, year: int=None, month: int=None, day: int=None, page: int=None) -> dict:
+        return extract_user_diary(self.username, year, month, day, page)
+
+    def get_year(self, year: int=CURRENT_YEAR) -> dict:
+        return extract_user_diary(self.username, year)
+
+    def get_month(self, year: int=CURRENT_YEAR, month: int=CURRENT_MONTH) -> dict:
+        return extract_user_diary(self.username, year, month)
+
+    def get_day(self, year: int=CURRENT_YEAR, month: int=CURRENT_MONTH, day: int=CURRENT_DAY) -> dict:
+        return extract_user_diary(self.username, year, month, day)
 
     def get_wrapped(self, year: int=CURRENT_YEAR) -> dict:
         return extract_user_wrapped(self.username, year)
 
-def extract_user_diary(username: str, year: int=None, page: int=None) -> dict:
-    '''
+def extract_user_diary(
+        username: str,
+        year: int=None,
+        month: int=None,
+        day: int=None,
+        page: int=None) -> dict:
+    """
+    Extracts the user's diary entries, optionally filtering by year, month, and day.
+
+    Args:
+        username (str): The Letterboxd username.
+        year (int, optional): The year of diary entries.
+        month (int, optional): The month of diary entries.
+        day (int, optional): The day of diary entries.
+        page (int, optional): The page number for pagination.
+
     Returns:
-      Returns a list of dictionaries with the user's diary'
-      Each entry is represented as a dictionary with details such as movie name,
-      release information,rewatch status, rating, like status, review status,
-      and the date of the entry.
-    '''
-    BASE_URL = f"{DOMAIN}/{username}/films/diary/{f'for/{year}/'*bool(year)}"
+        dict: A dictionary with diary entries, each containing movie details, rewatch status, rating, like status, review status, and entry date.
+    """
+    date_filter = f"for/{year}/" if year else ""
+    date_filter += f"{str(month).zfill(2)}/" if month else ""
+    date_filter += f"{str(day).zfill(2)}/" if day else ""
+
+    BASE_URL = f"{DOMAIN}/{username}/films/diary/{date_filter}"
     pagination = page if page else 1
     ret = {'entries': {}}
 
