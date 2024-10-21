@@ -4,12 +4,12 @@ from json import dumps as json_dumps
 
 try:
     from letterboxdpy import user
-    from letterboxdpy.utils.utils_terminal import get_input
+    from letterboxdpy.utils.utils_terminal import get_input, args_exists
 except ImportError:
     try:
         sys.path.append(os.path.join(sys.path[0], '..'))
         from letterboxdpy import user
-        from letterboxdpy.utils.utils_terminal import get_input
+        from letterboxdpy.utils.utils_terminal import get_input, args_exists
     except (ImportError, ValueError) as e:
         raise ImportError(f"Error importing 'letterboxdpy': {e}. Please install the package.") from e
 
@@ -27,7 +27,6 @@ def analyze_follow_stats(username: str) -> dict:
             'fans': list(followers_set - following_set)
         }
 
-    username = username.lower()
     user_instance = user.User(username)
     followers = user_instance.get_followers()
     following = user_instance.get_following()
@@ -35,6 +34,9 @@ def analyze_follow_stats(username: str) -> dict:
     return calculate_stats(following, followers)
 
 if __name__ == "__main__":
+    if not args_exists():
+        print(f'Quick usage: python {sys.argv[0]} <username>')
+
     username = get_input("Enter username: ", index=1)
     stats = analyze_follow_stats(username)
     print(json_dumps(stats, indent=4))

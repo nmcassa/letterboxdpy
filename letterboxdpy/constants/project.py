@@ -1,7 +1,10 @@
 from datetime import datetime
 
 # Date/Time Constants
-CURRENT_YEAR = datetime.now().year
+now = datetime.now()
+CURRENT_YEAR = now.year
+CURRENT_MONTH = now.month
+CURRENT_DAY = now.day
 MONTH_ABBREVIATIONS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
