@@ -9,7 +9,7 @@ from json import (
 )
 
 from letterboxdpy.core.encoder import SecretsEncoder
-from letterboxdpy.constants.project import CURRENT_YEAR
+from letterboxdpy.constants.project import CURRENT_YEAR, CURRENT_MONTH, CURRENT_DAY
 from letterboxdpy.list import List as LetterboxdList
 from letterboxdpy.pages import (
     user_activity,
@@ -73,12 +73,18 @@ class User:
         return self.pages.activity.get_activity()
     def get_activity_following(self) -> dict:
         return self.pages.activity.get_activity_following()
-    
-    def get_diary(self, year: int = None, page: int = None) -> dict:
-        return self.pages.diary.get_diary(year, page)
+
+    def get_diary(self, year: int = None, month: int = None, day: int = None, page: int = None) -> dict:
+        return self.pages.diary.get_diary(year, month, day, page)
+    def get_diary_year(self, year: int = CURRENT_YEAR) -> dict:
+        return self.pages.diary.get_year(year)
+    def get_diary_month(self, year: int = CURRENT_YEAR, month: int = CURRENT_MONTH) -> dict:
+        return self.pages.diary.get_month(year, month)
+    def get_diary_day(self, year: int = CURRENT_YEAR, month: int = CURRENT_MONTH, day: int = CURRENT_DAY) -> dict:
+        return self.pages.diary.get_day(year, month, day)
     def get_wrapped(self, year: int = CURRENT_YEAR) -> dict:
         return self.pages.diary.get_wrapped(year)
-    
+
     def get_films(self) -> dict:
         return self.pages.films.get_films()
     def get_films_by_rating(self, rating: float | int) -> dict:
