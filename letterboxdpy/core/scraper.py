@@ -6,9 +6,12 @@ from json import dumps as json_dumps
 from bs4 import BeautifulSoup
 import requests
 
-from letterboxdpy.core.exceptions import PageLoadError
 from letterboxdpy.constants.project import DOMAIN
-
+from letterboxdpy.core.exceptions import (
+    PageLoadError,
+    InvalidResponseError,
+    PrivateRouteError
+)
 
 class Scraper:
     """A class for scraping and parsing web pages."""
@@ -46,7 +49,10 @@ class Scraper:
         """Check the response for errors and raise an exception if found."""
         if response.status_code != 200:
             error_message = cls._get_error_message(response)
-            raise Exception(cls._format_error(url, response, error_message))
+            formatted_error_messagge = cls._format_error(url, response, error_message)
+            if response.status_code == 403:
+                raise PrivateRouteError(formatted_error_messagge)
+            raise InvalidResponseError(formatted_error_messagge)
 
     @classmethod
     def _get_error_message(cls, response: requests.Response) -> str:
@@ -72,7 +78,6 @@ class Scraper:
             return BeautifulSoup(response.text, cls.builder)
         except Exception as e:
             raise Exception(f"Error parsing response: {e}")
-
 
 def parse_url(url: str) -> BeautifulSoup:
     """Fetch and parse the HTML content from the specified URL using the Scraper class."""

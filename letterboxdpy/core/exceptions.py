@@ -8,6 +8,10 @@ class PageLoadError(Exception):
         super().__init__(f"{message}: {url}")
         self.url = url
 
+class InvalidResponseError(Exception):
+    """Exception raised when an HTTP response is invalid or unexpected."""
+    pass
+
 class CustomEncoderError(Exception):
     """Custom error class to represent errors that occur during encoding."""
     
@@ -17,3 +21,7 @@ class CustomEncoderError(Exception):
 
     def __str__(self):
         return f"CustomEncoderError: {self.message}"
+
+class PrivateRouteError(Exception):
+    """Exception raised when a private route is accessed."""
+    pass

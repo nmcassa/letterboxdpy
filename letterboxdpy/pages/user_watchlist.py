@@ -2,26 +2,26 @@ from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.pages.user_list import extract_movies
 
-
 class UserWatchlist:
     FILMS_PER_PAGE = 7*4
 
     def __init__(self, username: str) -> None:
         self.username = username
         self.url = f"{DOMAIN}/{self.username}/watchlist"
-        self.dom = parse_url(self.url)
-    
+
     def __str__(self) -> str:
         return f"Not printable object of type: {self.__class__.__name__}"
 
     def get_owner(self): ...
-    def get_count(self) -> int: return extract_count(self.dom)
+    def get_count(self) -> int: return extract_count(self.username)
     def get_movies(self) -> dict: return extract_movies(self.url, self.FILMS_PER_PAGE)
     def get_watchlist(self, filters: dict=None) -> dict: return extract_watchlist(self.username, filters)
 
-def extract_count(dom) -> int:
-    """Extracts the number of films from the watchlist DOM."""
-    
+def extract_count(username: str) -> int:
+    """Extracts the number of films from the watchlist page's DOM."""
+    BASE_URL = f"{DOMAIN}/{username}/watchlist/"
+    dom = parse_url(BASE_URL)
+
     watchlist_div = dom.find("div", class_="s-watchlist-content")
     if watchlist_div and "data-num-entries" in watchlist_div.attrs:
         return int(watchlist_div["data-num-entries"])
