@@ -10,6 +10,7 @@ from json import (
 
 from letterboxdpy.core.encoder import SecretsEncoder
 from letterboxdpy.pages import user_watchlist
+from letterboxdpy.core.exceptions import PrivateRouteError
 
 
 class Watchlist:
@@ -74,6 +75,9 @@ if __name__ == "__main__":
     # Watchlist usage:
     watchlist_instance = Watchlist(username)
     print(watchlist_instance)
-    print('URL:', watchlist_instance.url)
-    print('Count:', watchlist_instance.count)
-    print('Movies:', watchlist_instance.movies)
+    try:
+        print('URL:', watchlist_instance.url)
+        print('Count:', watchlist_instance.count)
+        print('Movies:', watchlist_instance.movies)
+    except PrivateRouteError:
+        print(f"Error: User's watchlist is private.")

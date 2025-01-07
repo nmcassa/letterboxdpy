@@ -197,7 +197,8 @@ def extract_watchlist_recent(dom) -> dict:
     section = dom.find("section", {"class": ["watchlist-aside"]})
 
     if not section:
-        raise ValueError("Watchlist section not found in the DOM")
+        # User watchlist is not visible or there are no items in the watchlist
+        return watchlist_recent
 
     watchlist_items = section.find_all("li", {"class": ["film-poster"]})
 

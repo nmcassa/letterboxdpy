@@ -22,7 +22,8 @@ Alternatively, if you wish to access the latest (potentially unstable) version d
 pip install git+https://github.com/nmcassa/letterboxdpy.git
 ```
 
-**Note:** Please be aware that installing directly from the GitHub repository might give you access to the most recent features and bug fixes, but it could also include changes that haven't been thoroughly tested and may not be stable for production use.
+> [!WARNING]
+> Please be aware that installing directly from the GitHub repository might give you access to the most recent features and bug fixes, but it could also include changes that haven't been thoroughly tested and may not be stable for production use.
 
 <h1 id="User">User Object</h1>
 
