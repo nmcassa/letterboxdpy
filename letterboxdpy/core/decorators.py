@@ -2,7 +2,7 @@ from functools import wraps
 
 # -- DECORATORS --
 
-def assert_instance(expected_class):
+def assert_instance(expected_class: type) -> callable:
     """Ensures the argument passed is an instance of a specified class."""
     
     def decorator(func):
