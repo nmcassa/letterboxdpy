@@ -5,26 +5,34 @@ build-backend = "hatchling.build"
 [project]
 name = "letterboxdpy"
 version = "4.5"
-authors = [
-  { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
-]
-description = "A letterboxd webscraper"
-readme = "README.md"
-requires-python = ">=3.7"
 dependencies = [
     "requests==2.31.0",
     "beautifulsoup4==4.12.3",
     "lxml==5.1.0"
 ]
+requires-python = ">=3.7"
+authors = [
+  { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
+]
+maintainers = [
+    { name="FastFingertips", email="fastfingertips@gmail.com" }
+]
+description = "A letterboxd webscraper"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+keywords = ["letterboxd", "webscraper", "movie", "film", "rating", "review", "watchlist", "diary"]
 
 [project.urls]
-"Homepage" = "https://github.com/nmcassa/letterboxdpy"
+Repository = "https://github.com/nmcassa/letterboxdpy"
+Documentation = "https://github.com/nmcassa/letterboxdpy"
 "Bug Tracker" = "https://github.com/nmcassa/letterboxdpy/issues"
+"Source Code" = "https://github.com/nmcassa/letterboxdpy/archive/refs/heads/main.zip"
 
 [tool.hatch.build.targets.wheel]
 packages = ["letterboxdpy"]
