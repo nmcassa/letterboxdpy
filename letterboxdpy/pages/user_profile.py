@@ -235,7 +235,7 @@ def extract_diary_recent(dom) -> dict:
 
                 for day, item in zip(days, items):
                     movie_index = day.text
-                    movie_slug = item.a['href'].split('/')[-2]
+                    movie_slug = item.a['href'].split('/film/')[1].split('/')[0]
                     movie_name = item.text 
 
                     if movie_index not in diary_recent['months'][month_index]:
