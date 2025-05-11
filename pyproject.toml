@@ -11,6 +11,11 @@ authors = [
 description = "A letterboxd webscraper"
 readme = "README.md"
 requires-python = ">=3.7"
+dependencies = [
+    "requests==2.31.0",
+    "beautifulsoup4==4.12.3",
+    "lxml==5.1.0"
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
