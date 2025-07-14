@@ -19,7 +19,7 @@ def extract_user_lists(username: str) -> dict:
         'lists': ('section', {'class': 'list'}),
         'title': ('h2', {'class': 'title'}),
         'description': ('div', {'class': 'body-text'}),
-        'value': ('small', {'class': 'value'}),
+        'value': ('span', {'class': 'value'}),
         'likes': ('a', {'class': 'icon-like'}),
         'comments': ('a', {'class': 'icon-comment'}),
     }
