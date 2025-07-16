@@ -1,8 +1,13 @@
+# Python cache and bytecode
 __pycache__/
-build/
 *.pyc
 *.pyo
 *~
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
 
 # macOS
 .DS_Store
