@@ -88,3 +88,20 @@ def get_meta_content(dom, property: str = None, name: str = None) -> Optional[st
         return elem.get('content') if elem else None
     except (AttributeError, KeyError):
         return None
+
+def get_body_content(dom, attribute: str) -> Optional[str]:
+    """
+    Extract attribute value from body tag.
+
+    Args:
+        dom: BeautifulSoup DOM object
+        attribute: Body tag attribute name (e.g., 'data-owner', 'class')
+
+    Returns:
+        Attribute value from body tag or None if not found
+    """
+    try:
+        body = dom.find('body')
+        return body.get(attribute) if body else None
+    except (AttributeError, KeyError):
+        return None
