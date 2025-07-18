@@ -3,6 +3,7 @@ from bs4 import Tag
 from typing import Dict, Literal, Optional
 
 from letterboxdpy.utils.utils_transform import month_to_index
+from letterboxdpy.constants.project import DOMAIN_SHORT
 
 
 def try_parse(value, target_type):
@@ -149,3 +150,26 @@ def get_list_last_page(dom, default=None) -> int:
     except Exception as e:
         print(f'Error checking page count: {e}')
         return default or 1
+
+
+def get_list_short_url(dom, domain=DOMAIN_SHORT, default=None) -> str:
+    """
+    Get the short URL of the list from input field.
+
+    Args:
+        dom: BeautifulSoup DOM object
+        domain: Short domain to search for (default: DOMAIN_SHORT)
+        default: Default value if short URL cannot be found
+
+    Returns:
+        Short URL as string or default value
+    """
+    try:
+        # Find input field containing short URL
+        input_field = dom.find('input', type='text', value=lambda x: x and domain in x)
+        if input_field:
+            return input_field.get('value')
+        return default
+    except Exception as e:
+        print(f'Error obtaining short URL: {e}')
+        return default
