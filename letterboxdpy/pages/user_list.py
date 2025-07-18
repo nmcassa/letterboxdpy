@@ -1,6 +1,7 @@
 import re
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.utils.utils_parser import get_meta_content
 
 
 class UserList:
@@ -30,12 +31,11 @@ class UserList:
 def extract_count(dom) -> int:
     """Extracts the number of films from the list DOM."""
     try:
-        data = dom.find("meta", attrs={'name': 'description'})
-        
-        if not data or 'content' not in data.attrs:
+        content = get_meta_content(dom, name='description')
+
+        if not content:
             raise ValueError("Meta description not found or missing 'content' attribute.")
-        
-        content = data['content']
+
         film_count_str = content.split('A list of ')[1].split(' films')[0]
         return int(film_count_str.replace(',', ''))
 
@@ -43,7 +43,6 @@ def extract_count(dom) -> int:
         raise RuntimeError("Failed to extract film count: Invalid structure in the description meta tag.")
     except ValueError as e:
         raise RuntimeError("Failed to extract film count: " + str(e)) from e
-
 
 def extract_movies(list_url: str, items_per_page) -> dict:
     data = {}
@@ -83,9 +82,7 @@ def extract_movies_from_vertical_list(dom, max=20*5) -> dict:
     return movies
 
 def extract_title(dom) -> str:
-    data = dom.find("meta", attrs={'property': 'og:title'})
-    data = data['content'] if 'content' in data.attrs else None
-    return data
+    return get_meta_content(dom, property='og:title')
 
 def extract_author(dom) -> str:
     data = dom.find("span", attrs={'itemprop': 'name'})
@@ -93,9 +90,7 @@ def extract_author(dom) -> str:
     return data
 
 def extract_description(dom) -> str:
-    data = dom.find("meta", attrs={'property': 'og:description'})
-    data = data['content'] if data else None
-    return data
+    return get_meta_content(dom, property='og:description')
 
 def extract_date_created(dom) -> list:
     """

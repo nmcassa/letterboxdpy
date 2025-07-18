@@ -64,3 +64,27 @@ def parse_review_date(
     if review_log_type == 'Added':
         return parse_iso_date(review_date.time['datetime'])
     return parse_written_date(review_date.text)
+
+def get_meta_content(dom, property: str = None, name: str = None) -> Optional[str]:
+    """
+    Extract content from meta tag by property or name attribute.
+
+    Args:
+        dom: BeautifulSoup DOM object
+        property: Meta tag property attribute (e.g., 'og:title')
+        name: Meta tag name attribute (e.g., 'description')
+
+    Returns:
+        Content of the meta tag or None if not found
+    """
+    try:
+        if property:
+            elem = dom.find('meta', attrs={'property': property})
+        elif name:
+            elem = dom.find('meta', attrs={'name': name})
+        else:
+            return None
+
+        return elem.get('content') if elem else None
+    except (AttributeError, KeyError):
+        return None

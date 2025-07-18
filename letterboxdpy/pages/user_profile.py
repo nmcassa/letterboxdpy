@@ -2,6 +2,7 @@ import re
 from json import loads as json_loads
 
 from letterboxdpy.utils.utils_transform import month_to_index
+from letterboxdpy.utils.utils_parser import get_meta_content
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
@@ -64,9 +65,9 @@ def extract_hq_status(dom) -> bool:
 def extract_display_name(dom) -> str:
     """Extracts the display name from the DOM using the Open Graph title property."""
     try:
-        data = dom.find("meta", attrs={'property': 'og:title'})
-        if data and 'content' in data.attrs:
-            return data['content'][:-10]  # Remove the last 10 characters (e.g., " | Letterboxd")
+        content = get_meta_content(dom, property='og:title')
+        if content:
+            return content[:-10]  # Remove the last 10 characters (e.g., " | Letterboxd")
         else:
             raise ValueError("Display name not found in the DOM")
     except Exception as e:
@@ -75,9 +76,8 @@ def extract_display_name(dom) -> str:
 def extract_bio(dom) -> str | None:
     """Extracts the bio from the DOM using the Open Graph description property."""
     try:
-        data = dom.find("meta", attrs={'property': 'og:description'})
-        if data and 'content' in data.attrs:
-            content = data['content']
+        content = get_meta_content(dom, property='og:description')
+        if content:
             return content.split('Bio: ')[-1] if 'Bio: ' in content else None
         else:
             raise ValueError("Bio not found in the DOM")
