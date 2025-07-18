@@ -1,7 +1,7 @@
 import re
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.utils.utils_parser import get_meta_content
+from letterboxdpy.utils.utils_parser import get_meta_content, get_movie_count_from_meta
 
 
 class UserList:
@@ -31,16 +31,10 @@ class UserList:
 def extract_count(dom) -> int:
     """Extracts the number of films from the list DOM."""
     try:
-        content = get_meta_content(dom, name='description')
-
-        if not content:
+        count = get_movie_count_from_meta(dom)
+        if count is None:
             raise ValueError("Meta description not found or missing 'content' attribute.")
-
-        film_count_str = content.split('A list of ')[1].split(' films')[0]
-        return int(film_count_str.replace(',', ''))
-
-    except IndexError:
-        raise RuntimeError("Failed to extract film count: Invalid structure in the description meta tag.")
+        return count
     except ValueError as e:
         raise RuntimeError("Failed to extract film count: " + str(e)) from e
 
