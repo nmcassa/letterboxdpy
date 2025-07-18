@@ -2,7 +2,7 @@ import re
 from json import loads as json_loads
 
 from letterboxdpy.utils.utils_transform import month_to_index
-from letterboxdpy.utils.utils_parser import get_meta_content
+from letterboxdpy.utils.utils_parser import get_meta_content, get_body_content
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
@@ -58,7 +58,7 @@ def extract_hq_status(dom) -> bool:
             profile_summary = data['data-profile-summary-options']
             return json_loads(profile_summary)['isHQ']
         else:
-            return bool(dom.find("body", {'class': 'profile-hq'}))
+            return 'profile-hq' in (get_body_content(dom, 'class') or [])
     except Exception as e:
         raise RuntimeError("Failed to check HQ status from DOM") from e
 
