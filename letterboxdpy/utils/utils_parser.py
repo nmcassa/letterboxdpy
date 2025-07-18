@@ -135,3 +135,17 @@ def get_movie_count_from_meta(dom, default=None) -> int:
     except (AttributeError, TypeError) as e:
         print(f"Error while getting movie count from meta: {e}")
         return default
+
+def get_list_last_page(dom, default=None) -> int:
+    """
+    Get the number of pages in the list (last page no).
+    Note: Pagination link not created when 100 or fewer films in list.
+    """
+    try:
+        # Find last page number from pagination container
+        return int(dom.find('div', class_='paginate-pages').find_all("li")[-1].a.text)
+    except AttributeError:  # No pagination (≤100 films)
+        return 1
+    except Exception as e:
+        print(f'Error checking page count: {e}')
+        return default or 1
