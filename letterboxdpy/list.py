@@ -10,6 +10,7 @@ from json import (
 
 from letterboxdpy.core.encoder import SecretsEncoder
 from letterboxdpy.pages import user_list
+from letterboxdpy.pages.user_list import ListMetaData
 
 
 class List:
@@ -80,6 +81,7 @@ class List:
     def get_tags(self) -> list: return self.pages.list.get_tags()
     def get_movies(self) -> dict: return self.pages.list.get_movies()
     def get_count(self) -> int: return self.pages.list.get_count()
+    def get_list_meta(self, url: str) -> ListMetaData: return self.pages.list.get_list_meta(url)
 
 if __name__ == "__main__":
     # user list usage:
