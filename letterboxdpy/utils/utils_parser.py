@@ -173,3 +173,20 @@ def get_list_short_url(dom, domain=DOMAIN_SHORT, default=None) -> str:
     except Exception as e:
         print(f'Error obtaining short URL: {e}')
         return default
+
+def is_list(dom) -> bool:
+    """
+    Checks if the current page is a valid Letterboxd list.
+
+    Args:
+        dom: BeautifulSoup DOM object
+
+    Returns:
+        bool: True if the page is a valid list, False otherwise
+    """
+    try:
+        meta_content = get_meta_content(dom, property='og:type')
+        return meta_content == 'letterboxd:list'
+    except Exception as e:
+        print(f"Error checking list type: {e}")
+        return False
