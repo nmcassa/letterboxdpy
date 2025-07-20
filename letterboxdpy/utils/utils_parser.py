@@ -1,9 +1,10 @@
 import re
 from bs4 import Tag
-from typing import Dict, Literal, Optional
+from typing import Dict, Literal, Optional, Union
 
 from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.constants.project import DOMAIN_SHORT
+from letterboxdpy.constants.selectors import PageSelectors
 
 
 def try_parse(value, target_type):
@@ -190,3 +191,17 @@ def is_list(dom) -> bool:
     except Exception as e:
         print(f"Error checking list type: {e}")
         return False
+
+
+def catch_error_message(dom) -> Union[bool, str]:
+    """
+    Checks if the page contains an error message.
+    Returns the error message as a string if found, False otherwise.
+    """
+    error_body = dom.find(*PageSelectors.ERROR_BODY)
+    if error_body:
+        error_section = dom.find(*PageSelectors.ERROR_MESSAGE)
+        if error_section:
+            err = error_section.p.get_text()
+            return err.split('\n')[0].strip()
+    return False
