@@ -1,5 +1,5 @@
-import validators
-from letterboxdpy.constants.project import DOMAIN_SHORT, URL_PROTOCOLS
+import re
+from letterboxdpy.constants.project import DOMAIN_SHORT, URL_PROTOCOLS, DOMAIN
 
 
 def get_list_slug(url) -> str:
@@ -23,9 +23,16 @@ def is_short_url(url) -> bool:
     """
     return any(prot+DOMAIN_SHORT in url for prot in URL_PROTOCOLS)
 
-def is_url(url) -> bool:
-    """
-    this function checks if the URL is valid or not,
-    and returns a boolean value as the result.
-    """
-    return validators.url(url)
+def parse_list_url(url: str) -> tuple:
+    """Parse list URL to extract username and slug."""
+    # URL format: https://letterboxd.com/username/list/slug/
+    pattern = r'letterboxd\.com/([^/]+)/list/([^/]+)'
+    match = re.search(pattern, url)
+    if match:
+        return match.group(1), match.group(2)
+    raise ValueError(f"Invalid list URL format: {url}")
+
+
+def build_list_url(username: str, slug: str) -> str:
+    """Build list URL from username and slug."""
+    return f"{DOMAIN}/{username}/list/{slug}/"
