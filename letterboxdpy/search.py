@@ -86,20 +86,19 @@ class Search:
 
     def get_page_results(self, dom) -> list:
       result_types = {
-        'film': [None, ["film-poster"]],
-        'review': ["film-detail"],
+        # More specific types first to avoid false matches
         'list': ["list-set"],
-        'story': [None, ['card-summary']],
-        # Cast, Crew or Studios
-        # 'cast': ["search-result", "-contributor",],
+        'review': ["search-result", "-viewing"],
+        'member': ["search-result", "-person"],
+        'tag': ["search-result", "-tag"],
         'actor': ["search-result", "-contributor", "-actor"],
         'director': ["search-result", "-contributor", "-director"],
         'studio': ["search-result", "-contributor", "-studio"],
-        # Members or HQs
-        'member': ["search-result", "-person"],
-        'tag': ["search-result", "-tag"],
+        'story': [None, ['card-summary']],
         'journal': [None, ["card-summary-journal-article"]],
         'podcast': [None, ["card-summary", "-graph"]],
+        # Film last as it's most generic
+        'film': [None, ["film-poster"]],
       }
 
       elem_results = dom.find("ul", {"class": "results"})
@@ -115,20 +114,21 @@ class Search:
 
         # parsing result type
         for r_type in result_types:
-          if 'class' in item.attrs:
-            if result_types[r_type][0]:
-              if result_types[r_type][-1] in item.attrs['class']:
-                  item_type = r_type
-                  #:print(item.attrs['class'])
-                  break
+          if result_types[r_type][0]:
+            # Type detection based on li class
+            if 'class' in item.attrs and result_types[r_type][-1] in item.attrs['class']:
+              item_type = r_type
+              break
           else:
-            if not result_types[r_type][0]:
-              keys = result_types[r_type][1][-1]
-              if keys in item.find_next().attrs['class']:
-                item_type = r_type
-                #:print(item.find_next().attrs['class'])
-                break
-
+            # Type detection based on child element class
+            keys = result_types[r_type][1][-1]
+            child_elem = item.find(attrs={"class": lambda x: x and keys in x})
+            if child_elem:
+              item_type = r_type
+              break
+          
+          if item_type:
+            break
         # result content
         result = self.parse_result(item, item_type)
         data.append(result)
@@ -181,12 +181,8 @@ class Search:
           member_avatar = result.img['src']
           member_avatar = Avatar(member_avatar).upscaled_data
 
-          # followers, following
-          followers, following = [a.text for a in result.small.find_all("a")]
-          followers = followers.split('f')[0].strip().replace(',', '')
-          following = following.split('g')[1].strip().replace(',', '')
-          followers = int(followers) if followers.isdigit() else None
-          following = int(following) if following.isdigit() else None
+          # followers, following - no longer available in search results
+          followers, following = None, None
 
           data |= {
              'username': member_username,
@@ -196,6 +192,26 @@ class Search:
              'followers': followers,
              'following': following
              }
+        case "review":
+          # Review parsing - reviews show the film being reviewed
+          # Get film info from the film-poster
+          film_poster = result.find("div", {"class": lambda x: x and "film-poster" in x})
+          if film_poster:
+            slug = film_poster.get('data-film-slug')
+            name = film_poster.img.get('alt') if film_poster.img else None
+            url = DOMAIN + film_poster.get('data-target-link', '')
+            
+            # Get year from release date if available
+            year = None  # Review search doesn't typically show year
+            
+            data |= {
+               'slug': slug,
+               'name': name,
+               'year': year,
+               'url': url,
+               'poster': None,
+               'directors': []
+            }
         case "list":
           list_id = result.section['data-film-list-id']
           list_url = result.a['href']
@@ -215,12 +231,17 @@ class Search:
           comment_count = result.find('a', {'class': 'icon-comment'})
           comment_count = extract_and_convert_shorthand(comment_count)
 
-          # owner
-          owner = result.find('strong', {'class': 'name'}).a
-          owner_name = owner.text
-          owner_url = owner['href']
-          owner_slug = owner_url.split('/')[-2]
-          owner_url = DOMAIN + owner_url
+          # owner - updated for new HTML structure
+          owner_strong = result.find('strong', {'class': 'displayname'})
+          if owner_strong:
+            owner_name = owner_strong.text.strip()
+          else:
+            owner_name = None
+          
+          # Get username from data-person attribute
+          section = result.find("section")
+          owner_slug = section.get('data-person').lower() if section and section.get('data-person') else None
+          owner_url = f"{DOMAIN}/{owner_slug}/" if owner_slug else None
 
           data |= {
              'id': list_id,
@@ -252,6 +273,16 @@ class Search:
                'name': actor_name,
                'slug': actor_slug,
                'url': actor_url
+            }
+        case "director":
+            director_name = result.a.text.strip()
+            director_slug = result.a['href']
+            director_url = DOMAIN + director_slug
+            director_slug = director_slug.split('/')[-2]
+            data |= {
+               'name': director_name,
+               'slug': director_slug,
+               'url': director_url
             }
         case "studio":
             studio_name = result.a.text.strip()
