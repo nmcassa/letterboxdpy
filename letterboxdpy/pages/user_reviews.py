@@ -1,5 +1,5 @@
 from letterboxdpy.core.scraper import parse_url
-from letterboxdpy.utils.utils_parser import parse_review_date
+from letterboxdpy.utils.utils_parser import parse_review_date, parse_review_text
 from letterboxdpy.constants.project import DOMAIN
 
 
@@ -58,11 +58,7 @@ def extract_user_reviews(username: str) -> dict:
             rating = log.find("span", {"class": ["rating"], })
             rating = int(rating['class'][-1].split('-')[-1]) if rating else None
             # int ^^^--- rating: the numerical value of the rating given in the review (1-10)
-            review = log.find("div", {"class": ["body-text"], })
-            spoiler = bool(review.find("p", {"class": ["contains-spoilers"], }))
-            # bool ^^^--- spoiler: whether the review contains spoiler warnings
-            review = review.find_all('p')[1 if spoiler else 0:]
-            review = '\n'.join([p.text for p in review])
+            review, spoiler = parse_review_text(log)
             # str ^^^--- review: the text content of the review.
             #            spoiler warning is checked to include or exclude the first paragraph.
             date = log.find("span", {"class": ["date"], })

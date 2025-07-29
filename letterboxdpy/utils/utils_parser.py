@@ -205,3 +205,32 @@ def catch_error_message(dom) -> Union[bool, str]:
             err = error_section.p.get_text()
             return err.split('\n')[0].strip()
     return False
+
+def parse_review_text(dom_element):
+    """
+    Parse review text from a DOM element, handling spoiler warnings.
+    
+    Args:
+        dom_element: DOM element containing the review (BeautifulSoup element)
+        
+    Returns:
+        tuple: (review_text, has_spoiler)
+            - review_text (str): Parsed review text with spoiler warnings properly handled.
+                                Returns empty string if no review content found.
+            - has_spoiler (bool): True if spoiler warning is present, False otherwise.
+             
+    Note:
+        If spoiler warning is present, skips the first paragraph.
+        Otherwise includes all paragraphs starting from the first one.
+    """
+    if not dom_element:
+        return "", False
+        
+    review = dom_element.find("div", {"class": ["body-text"]})
+    if not review:
+        return "", False
+        
+    spoiler = bool(review.find("p", {"class": ["contains-spoilers"]}))
+    review_paragraphs = review.find_all('p')[1 if spoiler else 0:]
+    review_text = '\n'.join([p.text for p in review_paragraphs])
+    return review_text, spoiler

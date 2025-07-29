@@ -1,6 +1,7 @@
 from datetime import datetime
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.utils.utils_parser import parse_review_text
 
 
 class UserActivity:
@@ -54,10 +55,7 @@ def extract_activity(username: str, ajax_url: str) -> dict:
             film_year = detail.h2.small.text
             film_year = int(film_year) if film_year else None
 
-            review = detail.find("div", {"class": ["body-text"], })
-            spoiler = bool(review.find("p", {"class": ["contains-spoilers"], }))
-            review = review.find_all('p')[1 if spoiler else 0:]
-            review = '\n'.join([p.text for p in review])
+            review, spoiler = parse_review_text(detail)
 
             return {
                 'type': log_type,
