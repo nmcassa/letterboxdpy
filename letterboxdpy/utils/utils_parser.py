@@ -1,8 +1,10 @@
 import re
 from bs4 import Tag
-from typing import Dict, Literal, Optional
+from typing import Dict, Literal, Optional, Union
 
 from letterboxdpy.utils.utils_transform import month_to_index
+from letterboxdpy.constants.project import DOMAIN_SHORT
+from letterboxdpy.constants.selectors import PageSelectors
 
 
 def try_parse(value, target_type):
@@ -64,3 +66,142 @@ def parse_review_date(
     if review_log_type == 'Added':
         return parse_iso_date(review_date.time['datetime'])
     return parse_written_date(review_date.text)
+
+def get_meta_content(dom, property: str = None, name: str = None) -> Optional[str]:
+    """
+    Extract content from meta tag by property or name attribute.
+
+    Args:
+        dom: BeautifulSoup DOM object
+        property: Meta tag property attribute (e.g., 'og:title')
+        name: Meta tag name attribute (e.g., 'description')
+
+    Returns:
+        Content of the meta tag or None if not found
+    """
+    try:
+        if property:
+            elem = dom.find('meta', attrs={'property': property})
+        elif name:
+            elem = dom.find('meta', attrs={'name': name})
+        else:
+            return None
+
+        return elem.get('content') if elem else None
+    except (AttributeError, KeyError):
+        return None
+
+def get_body_content(dom, attribute: str) -> Optional[str]:
+    """
+    Extract attribute value from body tag.
+
+    Args:
+        dom: BeautifulSoup DOM object
+        attribute: Body tag attribute name (e.g., 'data-owner', 'class')
+
+    Returns:
+        Attribute value from body tag or None if not found
+    """
+    try:
+        body = dom.find('body')
+        return body.get(attribute) if body else None
+    except (AttributeError, KeyError):
+        return None
+
+def get_movie_count_from_meta(dom, default=None) -> int:
+    # Instead of making a GET request to the last page to retrieve the number of movies,
+    # which could slow down the program, an alternative approach is employed.
+    # The meta description of the list page is retrieved to obtain the count of movies.
+
+    movie_count = default
+
+    try:
+        meta_description = get_meta_content(dom, name='description')
+
+        for item in meta_description.split(' '):
+            if item[0].isdigit():
+                movie_count = item
+                for char in item:
+                    if not char.isdigit():
+                        movie_count = movie_count.replace(char, '')
+                break
+
+        movie_count = int(movie_count)
+        if movie_count is not None:
+            # print(f"Found the movie count in the meta description as {movie_count}.")
+            return int(movie_count)
+        else:
+            # handle the case where no digit is found in the meta description
+            print("Error: No digit found in the meta description.")
+            return None
+    except (AttributeError, TypeError) as e:
+        print(f"Error while getting movie count from meta: {e}")
+        return default
+
+def get_list_last_page(dom, default=None) -> int:
+    """
+    Get the number of pages in the list (last page no).
+    Note: Pagination link not created when 100 or fewer films in list.
+    """
+    try:
+        # Find last page number from pagination container
+        return int(dom.find('div', class_='paginate-pages').find_all("li")[-1].a.text)
+    except AttributeError:  # No pagination (≤100 films)
+        return 1
+    except Exception as e:
+        print(f'Error checking page count: {e}')
+        return default or 1
+
+
+def get_list_short_url(dom, domain=DOMAIN_SHORT, default=None) -> str:
+    """
+    Get the short URL of the list from input field.
+
+    Args:
+        dom: BeautifulSoup DOM object
+        domain: Short domain to search for (default: DOMAIN_SHORT)
+        default: Default value if short URL cannot be found
+
+    Returns:
+        Short URL as string or default value
+    """
+    try:
+        # Find input field containing short URL
+        input_field = dom.find('input', type='text', value=lambda x: x and domain in x)
+        if input_field:
+            return input_field.get('value')
+        return default
+    except Exception as e:
+        print(f'Error obtaining short URL: {e}')
+        return default
+
+def is_list(dom) -> bool:
+    """
+    Checks if the current page is a valid Letterboxd list.
+
+    Args:
+        dom: BeautifulSoup DOM object
+
+    Returns:
+        bool: True if the page is a valid list, False otherwise
+    """
+    try:
+        meta_content = get_meta_content(dom, property='og:type')
+        return meta_content == 'letterboxd:list'
+    except Exception as e:
+        print(f"Error checking list type: {e}")
+        return False
+
+
+def catch_error_message(dom) -> Union[bool, str]:
+    """
+    Checks if the page contains an error message.
+    Returns the error message as a string if found, False otherwise.
+    """
+    error_body = dom.find(*PageSelectors.ERROR_BODY)
+    if error_body:
+        error_section = dom.find(*PageSelectors.ERROR_MESSAGE)
+        if error_section:
+            err = error_section.p.get_text()
+            return err.split('\n')[0].strip()
+    return False

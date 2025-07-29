@@ -85,72 +85,118 @@ class Search:
       return data
 
     def get_page_results(self, dom) -> list:
+      """
+      Parse search results from DOM structure.
+      
+      DOM Structure:
+      <ul class="results">
+        <li class="search-result -production"> <!-- Film -->
+        <li class="search-result -person"> <!-- Member -->
+        <li class="search-result -viewing"> <!-- Review -->
+        <li class="list-set"> <!-- List -->
+        <li class="search-result -tag"> <!-- Tag -->
+        <li class="search-result -contributor -actor"> <!-- Actor -->
+        <li class="search-result -contributor -director"> <!-- Director -->
+      </ul>
+      """
       result_types = {
-        'film': [None, ["film-poster"]],
-        'review': ["film-detail"],
-        'list': ["list-set"],
-        'story': [None, ['card-summary']],
-        # Cast, Crew or Studios
-        # 'cast': ["search-result", "-contributor",],
-        'actor': ["search-result", "-contributor", "-actor"],
-        'director': ["search-result", "-contributor", "-director"],
-        'studio': ["search-result", "-contributor", "-studio"],
-        # Members or HQs
-        'member': ["search-result", "-person"],
-        'tag': ["search-result", "-tag"],
-        'journal': [None, ["card-summary-journal-article"]],
-        'podcast': [None, ["card-summary", "-graph"]],
+        # More specific types first to avoid false matches
+        # Format: 'type': [class_to_check_on_li, [class_to_check_on_children]]
+        'list': ["list-set"],  # <li class="list-set">
+        'review': ["search-result", "-viewing"],  # <li class="search-result -viewing">
+        'member': ["search-result", "-person"],  # <li class="search-result -person">
+        'tag': ["search-result", "-tag"],  # <li class="search-result -tag">
+        'actor': ["search-result", "-contributor", "-actor"],  # <li class="search-result -contributor -actor">
+        'director': ["search-result", "-contributor", "-director"],  # <li class="search-result -contributor -director">
+        'studio': ["search-result", "-contributor", "-studio"],  # <li class="search-result -contributor -studio">
+        'story': [None, ['card-summary']],  # <li><div class="card-summary">
+        'journal': [None, ["card-summary-journal-article"]],  # <li><div class="card-summary-journal-article">
+        'podcast': [None, ["card-summary", "-graph"]],  # <li><div class="card-summary -graph">
+        # Film - NOTE: Also has classes! search-result -production
+        'film': ["search-result", "-production"],  # <li class="search-result -production">
       }
 
+      # Find main results container: <ul class="results">
       elem_results = dom.find("ul", {"class": "results"})
       data = []
 
       if not elem_results:
         return data
 
-      # recursive: pass list posters
+      # Get all direct <li> children (recursive=False to avoid nested li elements)
       results = elem_results.find_all("li", recursive=False)
+      
       for item in results:
         item_type = None
 
-        # parsing result type
+        # Determine result type by checking classes on <li> or child elements
         for r_type in result_types:
-          if 'class' in item.attrs:
-            if result_types[r_type][0]:
-              if result_types[r_type][-1] in item.attrs['class']:
-                  item_type = r_type
-                  #:print(item.attrs['class'])
-                  break
+          if result_types[r_type][0]:
+            # Check if <li> has specific class (e.g., "search-result -person")
+            if 'class' in item.attrs and result_types[r_type][-1] in item.attrs['class']:
+              item_type = r_type
+              break
           else:
-            if not result_types[r_type][0]:
-              keys = result_types[r_type][1][-1]
-              if keys in item.find_next().attrs['class']:
-                item_type = r_type
-                #:print(item.find_next().attrs['class'])
-                break
-
-        # result content
+            # Check if <li> contains child with specific class (e.g., div.film-poster)
+            keys = result_types[r_type][1][-1]
+            child_elem = item.find(attrs={"class": lambda x: x and keys in x})
+            if child_elem:
+              item_type = r_type
+              break
+          
+          if item_type:
+            break
+            
+        # Parse the result content based on detected type
         result = self.parse_result(item, item_type)
         data.append(result)
 
       return data
 
     def parse_result(self, result, result_type):
+      """
+      Parse individual search result based on its type.
+      Each type has a different DOM structure that needs specific parsing logic.
+      """
       data = {'type': result_type}
       match result_type:
         case "film":
-          film_poster = result.div
+          """
+          Film DOM Structure:
+          <li class="search-result -production">
+            <article class="production-viewing -film">
+              <div class="film-poster" data-film-slug="..." data-target-link="/film/...">
+                <img alt="Film Title" src="...">
+              </div>
+              <div class="body">
+                <h2><span class="film-title-wrapper">
+                  <a href="/film/...">Film Title 
+                    <small class="metadata"><a href="/films/year/...">Year</a></small>
+                  </a>
+                </span></h2>
+                <p class="film-metadata">Directed by <a href="/director/...">Director</a></p>
+              </div>
+            </article>
+          </li>
+          """
+          # Navigate through the nested structure: li > article > div.film-poster
+          film_poster = result.find("div", {"class": lambda x: x and "film-poster" in x})
           film_metadata = result.find("p", {"class": "film-metadata"})
-          # slug, name, url, poster
+          
+          # Extract basic film info from poster div attributes
           slug = film_poster['data-film-slug']
           name = film_poster.img['alt']
           url = DOMAIN + film_poster['data-target-link']
           poster = None # film_poster.img['src']
-          # movie year
-          movie_year = result.h2.small
-          movie_year = int(movie_year.text) if movie_year else None
-          # directors
-          film_metadata = film_metadata if film_metadata else None
+          
+          # Extract year from nested structure: h2 > span > a > small > a
+          movie_year = result.find("small", {"class": "metadata"})
+          if movie_year and movie_year.a:
+              movie_year = int(movie_year.a.text) if movie_year.a.text.isdigit() else None
+          else:
+              movie_year = None
+          
+          # Extract directors from metadata paragraph
           directors = []
           if film_metadata:
             for a in film_metadata.find_all("a"):
@@ -173,20 +219,36 @@ class Search:
              'directors': directors
              }
         case "member":
-          member_username = result.h3.a['href'].split('/')[-2]
-          member_name = result.h3.a
-          member_badge = member_name.span
-          member_name = member_name.contents[0].text.strip()
+          """
+          Member DOM Structure:
+          <li class="search-result -person">
+            <div class="person-summary -search">
+              <a class="avatar -a40" href="/username/">
+                <img alt="Display Name" src="avatar_url">
+              </a>
+              <h3 class="title-2">
+                <a class="name" href="/username/">Display Name</a>
+              </h3>
+              <small class="metadata">Username</small>
+            </div>
+          </li>
+          Note: followers/following counts no longer available in search results
+          """
+          # Navigate: li > div.person-summary > h3 > a
+          person_link = result.find("h3", {"class": "title-2"}).a
+          member_username = person_link['href'].split('/')[-2]
+          member_name = person_link.text.strip()
+          
+          # Check for badge (might not exist)
+          member_badge = person_link.find("span")
           member_badge = member_badge.text if member_badge else None
-          member_avatar = result.img['src']
+          
+          # Get avatar from img tag
+          member_avatar = result.find("img")['src']
           member_avatar = Avatar(member_avatar).upscaled_data
 
-          # followers, following
-          followers, following = [a.text for a in result.small.find_all("a")]
-          followers = followers.split('f')[0].strip().replace(',', '')
-          following = following.split('g')[1].strip().replace(',', '')
-          followers = int(followers) if followers.isdigit() else None
-          following = int(following) if following.isdigit() else None
+          # followers, following - no longer available in search results
+          followers, following = None, None
 
           data |= {
              'username': member_username,
@@ -196,31 +258,81 @@ class Search:
              'followers': followers,
              'following': following
              }
+        case "review":
+          """
+          Review DOM Structure:
+          <li class="search-result -viewing">
+            <div class="film-poster" data-film-slug="..." data-target-link="/film/...">
+              <img alt="Film Title">
+            </div>
+            <!-- Review content -->
+          </li>
+          """
+          # Review parsing - reviews show the film being reviewed
+          # Get film info from the film-poster
+          film_poster = result.find("div", {"class": lambda x: x and "film-poster" in x})
+          if film_poster:
+            slug = film_poster.get('data-film-slug')
+            name = film_poster.img.get('alt') if film_poster.img else None
+            url = DOMAIN + film_poster.get('data-target-link', '')
+            
+            # Get year from release date if available
+            year = None  # Review search doesn't typically show year
+            
+            data |= {
+               'slug': slug,
+               'name': name,
+               'year': year,
+               'url': url,
+               'poster': None,
+               'directors': []
+            }
         case "list":
+          """
+          List DOM Structure:
+          <li class="list-set">
+            <section data-film-list-id="..." data-person="username">
+              <a href="/user/list/">
+                <h2>List Title</h2>
+                <small class="value">X films</small>
+                <strong class="displayname">Owner Name</strong>
+              </a>
+              <a class="icon-like">X</a>
+              <a class="icon-comment">X</a>
+            </section>
+          </li>
+          """
           list_id = result.section['data-film-list-id']
           list_url = result.a['href']
           list_slug = list_url.split('/')[-2]
           list_url = DOMAIN + list_url
           list_title = result.h2.text.strip()
+          
+          # Extract film count
           item_count = result.find('small', {'class': 'value'})
           item_count = int(
              item_count.text.split('f')[0].strip().replace(',', '')
              ) if item_count else None
 
-          # likes
+          # Extract likes count
           like_count = result.find('a', {'class': 'icon-like'})
           like_count = extract_and_convert_shorthand(like_count)
 
-          # comments
+          # Extract comments count
           comment_count = result.find('a', {'class': 'icon-comment'})
           comment_count = extract_and_convert_shorthand(comment_count)
 
-          # owner
-          owner = result.find('strong', {'class': 'name'}).a
-          owner_name = owner.text
-          owner_url = owner['href']
-          owner_slug = owner_url.split('/')[-2]
-          owner_url = DOMAIN + owner_url
+          # Extract owner info - updated for new HTML structure
+          owner_strong = result.find('strong', {'class': 'displayname'})
+          if owner_strong:
+            owner_name = owner_strong.text.strip()
+          else:
+            owner_name = None
+          
+          # Get username from data-person attribute on section
+          section = result.find("section")
+          owner_slug = section.get('data-person').lower() if section and section.get('data-person') else None
+          owner_url = f"{DOMAIN}/{owner_slug}/" if owner_slug else None
 
           data |= {
              'id': list_id,
@@ -237,63 +349,133 @@ class Search:
              }
           }
         case "tag":
-            tag_url = DOMAIN + result.h2.a['href']
-            tag_name = result.h2.a.text.strip()
-            data |= {
-               'name': tag_name,
-               'url': tag_url
-            }
+          """
+          Tag DOM Structure:
+          <li class="search-result -tag">
+            <h2><a href="/tag/...">Tag Name</a></h2>
+          </li>
+          """
+          tag_url = DOMAIN + result.h2.a['href']
+          tag_name = result.h2.a.text.strip()
+          data |= {
+             'name': tag_name,
+             'url': tag_url
+          }
         case "actor":
-            actor_name = result.a.text.strip()
-            actor_slug = result.a['href']
-            actor_url = DOMAIN + actor_slug
-            actor_slug = actor_slug.split('/')[-2]
-            data |= {
-               'name': actor_name,
-               'slug': actor_slug,
-               'url': actor_url
-            }
+          """
+          Actor DOM Structure:
+          <li class="search-result -contributor -actor">
+            <div class="icon-container"></div>
+            <div class="content">
+              <h2 class="title-2"><a href="/actor/...">Actor Name</a></h2>
+              <p class="film-metadata">Star of X films, including...</p>
+            </div>
+          </li>
+          """
+          # Navigate: li > div.content > h2 > a
+          content_div = result.find("div", {"class": "content"})
+          actor_link = content_div.find("h2").a
+          actor_name = actor_link.text.strip()
+          actor_slug = actor_link['href']
+          actor_url = DOMAIN + actor_slug
+          actor_slug = actor_slug.split('/')[-2]
+          data |= {
+             'name': actor_name,
+             'slug': actor_slug,
+             'url': actor_url
+          }
+        case "director":
+          """
+          Director DOM Structure:
+          <li class="search-result -contributor -director">
+            <div class="icon-container"></div>
+            <div class="content">
+              <h2 class="title-2"><a href="/director/...">Director Name</a></h2>
+              <p class="film-metadata">Director of X films, including...</p>
+            </div>
+          </li>
+          """
+          # Navigate: li > div.content > h2 > a
+          content_div = result.find("div", {"class": "content"})
+          director_link = content_div.find("h2").a
+          director_name = director_link.text.strip()
+          director_slug = director_link['href']
+          director_url = DOMAIN + director_slug
+          director_slug = director_slug.split('/')[-2]
+          data |= {
+             'name': director_name,
+             'slug': director_slug,
+             'url': director_url
+          }
         case "studio":
-            studio_name = result.a.text.strip()
-            studio_url = DOMAIN + result.a['href']
-            data |= {
-               'name': studio_name,
-               'url': studio_url
-            }
+          """
+          Studio DOM Structure:
+          <li class="search-result -contributor -studio">
+            <a href="/studio/...">Studio Name</a>
+          </li>
+          """
+          studio_name = result.a.text.strip()
+          studio_url = DOMAIN + result.a['href']
+          data |= {
+             'name': studio_name,
+             'url': studio_url
+          }
         case "story":
-            story_title = result.h3.span.text
-            story_writer = result.find("p", {"class": "attribution"})
-            story_writer_url = DOMAIN + story_writer.a['href'] if story_writer else None
-            story_writer = story_writer.text.strip() if story_writer else None
-            story_url = DOMAIN + result.figure.a['href']
-            data |= {
-               'title': story_title,
-               'url': story_url,
-               'writer': {
-                  'name': story_writer,
-                  'url': story_writer_url
-               }
-            }
+          """
+          Story DOM Structure:
+          <li>
+            <div class="card-summary">
+              <figure><a href="/story/..."></a></figure>
+              <h3><span>Story Title</span></h3>
+              <p class="attribution"><a href="/user/...">Writer</a></p>
+            </div>
+          </li>
+          """
+          story_title = result.h3.span.text
+          story_writer = result.find("p", {"class": "attribution"})
+          story_writer_url = DOMAIN + story_writer.a['href'] if story_writer else None
+          story_writer = story_writer.text.strip() if story_writer else None
+          story_url = DOMAIN + result.figure.a['href']
+          data |= {
+             'title': story_title,
+             'url': story_url,
+             'writer': {
+                'name': story_writer,
+                'url': story_writer_url
+             }
+          }
         case "journal":
-            journal_url = result.figure.a['href']
-            journal_time = result.time['datetime']
-            journal_title = result.h3.text
-            journal_teaser = result.find("div", {"class": "teaser"})
-            journal_teaser = journal_teaser.text.strip() if journal_teaser else None
-            writer = result.find("p", {"class": "attribution"})
-            writer_url = DOMAIN + writer.a['href'] if writer else None
-            writer_name = writer.text.strip() if writer else None
-            data |= {
-               'title': journal_title,
-               'url': journal_url,
-               'time': journal_time,
-               'writer': {
-                  'name': writer_name,
-                  'url': writer_url
-               }
-            }
+          """
+          Journal DOM Structure:
+          <li>
+            <div class="card-summary-journal-article">
+              <figure><a href="/journal/..."></a></figure>
+              <time datetime="..."></time>
+              <h3>Journal Title</h3>
+              <div class="teaser">Journal excerpt...</div>
+              <p class="attribution"><a href="/user/...">Writer</a></p>
+            </div>
+          </li>
+          """
+          journal_url = result.figure.a['href']
+          journal_time = result.time['datetime']
+          journal_title = result.h3.text
+          journal_teaser = result.find("div", {"class": "teaser"})
+          journal_teaser = journal_teaser.text.strip() if journal_teaser else None
+          writer = result.find("p", {"class": "attribution"})
+          writer_url = DOMAIN + writer.a['href'] if writer else None
+          writer_name = writer.text.strip() if writer else None
+          data |= {
+             'title': journal_title,
+             'url': journal_url,
+             'time': journal_time,
+             'writer': {
+                'name': writer_name,
+                'url': writer_url
+             }
+          }
         case _:
-          # unknown type or not ready yet
+          # Unknown type or parsing not implemented yet
           pass
 
       return data
@@ -301,6 +483,20 @@ class Search:
 # -- FUNCTIONS --
 
 def get_film_slug_from_title(title: str) -> str:
+    """
+    Helper function to get a film's slug from its title.
+    Uses film search to find the best match and returns the slug of the first result.
+    
+    Args:
+        title (str): The film title to search for
+        
+    Returns:
+        str: The film slug if found, None if no results
+        
+    Example:
+        >>> get_film_slug_from_title("The Matrix")
+        'the-matrix'
+    """
     try:
       query = Search(title, 'films')
       # return first page first result

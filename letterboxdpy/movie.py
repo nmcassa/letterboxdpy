@@ -7,7 +7,7 @@ from json import (
   loads as json_loads,
 )
 
-from letterboxdpy.utils.utils_parser import extract_numeric_text
+from letterboxdpy.utils.utils_parser import extract_numeric_text, get_meta_content
 from letterboxdpy.core.decorators import assert_instance
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.core.encoder import Encoder
@@ -210,9 +210,8 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_description(self, dom) -> str:
-        elem = dom.find("meta", attrs={'name':'description'})
         # elem_section = page.find("div", attrs={'class': 'truncate'}).text
-        self.description = elem['content'] if elem else None
+        self.description = get_meta_content(dom, name='description')
 
     # letterboxd.com/film/?
     def movie_popular_reviews(self, dom) -> list:
@@ -243,8 +242,13 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_title(self, dom) -> str:
-        elem = dom.find("h1", {"class": ["filmtitle"]})
-        elem = elem.text if elem else None
+        h1_elem = dom.find("h1", {"class": ["primaryname"]})
+        if h1_elem:
+            span_elem = h1_elem.find("span", {"class": ["name"]})
+            elem = span_elem.text if span_elem else h1_elem.text
+        else:
+            elem = dom.find("h1", {"class": ["filmtitle"]})
+            elem = elem.text if elem else None
         self.title = elem
 
     # letterboxd.com/film/?

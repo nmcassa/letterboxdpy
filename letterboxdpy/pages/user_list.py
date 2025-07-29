@@ -1,6 +1,18 @@
 import re
+from typing import Optional, TypedDict
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.utils.utils_parser import get_meta_content, get_movie_count_from_meta, get_body_content
+from letterboxdpy.utils.utils_url import check_url_match
+
+
+class ListMetaData(TypedDict):
+    """Type definition for list metadata"""
+    url: Optional[str]
+    title: Optional[str]
+    owner: Optional[str]
+    is_available: bool
+    error: Optional[str]
 
 
 class UserList:
@@ -26,24 +38,17 @@ class UserList:
     def get_tags(self) -> list: return extract_tags(self.dom)
     def get_movies(self) -> dict: return extract_movies(self.url, self.LIST_ITEMS_PER_PAGE)
     def get_count(self) -> int: return extract_count(self.dom)
+    def get_list_meta(self, url: str) -> ListMetaData: return extract_list_meta(self.dom, url)
 
 def extract_count(dom) -> int:
     """Extracts the number of films from the list DOM."""
     try:
-        data = dom.find("meta", attrs={'name': 'description'})
-        
-        if not data or 'content' not in data.attrs:
+        count = get_movie_count_from_meta(dom)
+        if count is None:
             raise ValueError("Meta description not found or missing 'content' attribute.")
-        
-        content = data['content']
-        film_count_str = content.split('A list of ')[1].split(' films')[0]
-        return int(film_count_str.replace(',', ''))
-
-    except IndexError:
-        raise RuntimeError("Failed to extract film count: Invalid structure in the description meta tag.")
+        return count
     except ValueError as e:
         raise RuntimeError("Failed to extract film count: " + str(e)) from e
-
 
 def extract_movies(list_url: str, items_per_page) -> dict:
     data = {}
@@ -83,9 +88,7 @@ def extract_movies_from_vertical_list(dom, max=20*5) -> dict:
     return movies
 
 def extract_title(dom) -> str:
-    data = dom.find("meta", attrs={'property': 'og:title'})
-    data = data['content'] if 'content' in data.attrs else None
-    return data
+    return get_meta_content(dom, property='og:title')
 
 def extract_author(dom) -> str:
     data = dom.find("span", attrs={'itemprop': 'name'})
@@ -93,9 +96,7 @@ def extract_author(dom) -> str:
     return data
 
 def extract_description(dom) -> str:
-    data = dom.find("meta", attrs={'property': 'og:description'})
-    data = data['content'] if data else None
-    return data
+    return get_meta_content(dom, property='og:description')
 
 def extract_date_created(dom) -> list:
     """
@@ -146,6 +147,50 @@ def extract_tags(dom) -> list:
         dom = dom.findChildren("a")
         for item in dom:
             data.append(item.text)
+
+    return data
+
+def extract_list_meta(dom, url: str) -> ListMetaData:
+    """
+    Extracts metadata from a Letterboxd list page.
+    Args:
+        dom: BeautifulSoup DOM object
+        url: The original URL of the list
+    Returns:
+        ListMetaData: A dictionary containing list metadata and status
+    """
+    data: ListMetaData = {
+        'url': None,
+        'title': None,
+        'owner': None,
+        'is_available': False,
+        'error': None
+    }
+
+    try:
+        # Extract basic metadata
+        list_url = get_meta_content(dom, property='og:url')
+        list_title = get_meta_content(dom, property='og:title')
+        list_owner = get_body_content(dom, 'data-owner')
+
+        # Check for URL redirection
+        if not check_url_match(url, list_url):
+            print(f'Redirected to {list_url}')
+
+        # Update metadata
+        data.update({
+            'url': list_url,
+            'title': list_title,
+            'owner': list_owner,
+            'is_available': True
+        })
+
+    except AttributeError as e:
+        data['error'] = f"Missing required metadata: {str(e)}"
+        print(f"Metadata extraction error: {e}")
+    except Exception as e:
+        data['error'] = f"Unexpected error: {str(e)}"
+        print(f"Unexpected error while checking the list: {e}")
 
     return data
 
