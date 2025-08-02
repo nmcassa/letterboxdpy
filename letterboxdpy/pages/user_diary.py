@@ -71,18 +71,53 @@ def extract_user_diary(
                 # <tr class="diary-entry-row .." data-viewing-id="516951060" ..>
                 log_id = row["data-viewing-id"]
 
-                # day column
-                date = dict(zip(
-                        ["year", "month", "day"],
-                        map(int, cols['day'].a['href'].split('/')[-4:])
-                    ))
-                # film column
-                poster = cols['film'].div
-                name = poster.img["alt"] or row.h3.text
-                slug = poster["data-film-slug"]
-                id = poster["data-film-id"]
-                # released column
-                release = cols["released"].text
+                # day column (updated for new HTML structure)
+                if 'daydate' in cols:
+                    date = dict(zip(
+                            ["year", "month", "day"],
+                            map(int, cols['daydate'].a['href'].split('/')[-4:])
+                        ))
+                elif 'day' in cols:  # fallback for old structure
+                    date = dict(zip(
+                            ["year", "month", "day"],
+                            map(int, cols['day'].a['href'].split('/')[-4:])
+                        ))
+                else:
+                    # Extract from monthdate if available
+                    date = {"year": None, "month": None, "day": None}
+                # film column (updated for new HTML structure)
+                if 'production' in cols:
+                    # Look for the poster div with data-film attributes
+                    production_col = cols['production']
+                    poster = production_col.find('div', {'data-film-slug': True}) or production_col.div
+                elif 'film' in cols:  # fallback for old structure
+                    poster = cols['film'].div
+                else:
+                    poster = None
+                
+                # Try to get data from actions column as fallback
+                actions = cols.get('actions')
+                
+                if poster and (poster.get("data-film-slug") or poster.get("data-film-id")):
+                    name = poster.img["alt"] if poster.img and poster.img.get("alt") else "Unknown"
+                    slug = poster.get("data-film-slug")
+                    id = poster.get("data-film-id")
+                elif actions and (actions.get("data-film-slug") or actions.get("data-film-id")):
+                    # Get from actions column
+                    name = actions.get("data-film-name", "Unknown")
+                    slug = actions.get("data-film-slug")
+                    id = actions.get("data-film-id")
+                else:
+                    name = "Unknown"
+                    slug = None
+                    id = None
+                # released column (updated for new HTML structure)
+                if 'releaseyear' in cols:
+                    release = cols["releaseyear"].text.strip()
+                elif 'released' in cols:  # fallback for old structure
+                    release = cols["released"].text.strip()
+                else:
+                    release = ""
                 release = int(release) if len(release) else None
                 # rewatch column
                 rewatched = "icon-status-off" not in cols["rewatch"]["class"]
@@ -102,7 +137,8 @@ def extract_user_diary(
                 slug = actions["data-film-slug"] # !film col
                 release = actions["ddata-film-release-year"] # !released col
                 """
-                runtime = actions["data-film-run-time"]
+                # runtime from actions (handle missing attribute)
+                runtime = actions.get("data-film-run-time") or actions.get("data-film-runtime")
                 runtime = int(runtime) if runtime else None
 
                 # create entry
