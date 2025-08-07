@@ -268,7 +268,7 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_tmdb_link(self, dom) -> str:
-        a = dom.find("a", {"data-track-action": ["TMDb"]})
+        a = dom.find("a", {"data-track-action": ["TMDB"]})
         self.tmdb_link = a['href'] if a else None
 
     # letterboxd.com/film/?
