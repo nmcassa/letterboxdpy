@@ -7,6 +7,7 @@ from typing import Generator
 from letterboxdpy.core.decorators import assert_instance
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.films import extract_movies_from_horizontal_list, _extract_movies_from_horizontal_list_lazy
+import itertools
 from letterboxdpy.pages.user_list import extract_movies_from_vertical_list, _extract_movies_from_vertical_list_lazy
 
 class Films:
@@ -34,24 +35,28 @@ class Films:
         return len(self.movies)
 
 
+    def _get_movie_page(self, page: int) -> Generator[tuple[str, dict]]:
+        page_url = self.ajax_url + f"/page/{page}"
+        dom = parse_url(page_url)
+        movies_found = False
+        if '.com/films/' in self.url:
+            for movie in _extract_movies_from_horizontal_list_lazy(dom):
+                movies_found = True
+                yield movie
+        elif '.com/film/' in self.url:
+            for movie in _extract_movies_from_vertical_list_lazy(dom):
+                movies_found = True
+                yield movie
+        if not movies_found:
+            return
+
     def get_movies_lazy(self) -> Generator[tuple[str, dict], None, None]:
         """Scrape and return a generator of movies from Letterboxd."""
-        page = 1
-        while True:
-            page_url = self.ajax_url + f"/page/{page}"
-            dom = parse_url(page_url)
-            movies_found = False
-            if '.com/films/' in self.url:
-                for movie in _extract_movies_from_horizontal_list_lazy(dom):
-                    movies_found = True
-                    yield movie
-            elif '.com/film/' in self.url:
-                for movie in _extract_movies_from_vertical_list_lazy(dom):
-                    movies_found = True
-                    yield movie
-            if not movies_found:
-                break
-            page += 1
+        pages = itertools.count(1)
+        pages = map(self._get_movie_page, pages)
+        pages = itertools.chain.from_iterable(pages)
+        pages = (movie for movie in pages)
+        return pages
 
     def get_movies(self) -> dict:
         """Scrape and return a dictionary of movies from Letterboxd."""
