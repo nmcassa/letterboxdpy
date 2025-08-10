@@ -3,10 +3,11 @@ if __loader__.name == '__main__':
     sys.path.append(sys.path[0] + '/..')
 
 from letterboxdpy.utils.utils_transform import get_ajax_url
+from typing import Generator
 from letterboxdpy.core.decorators import assert_instance
 from letterboxdpy.core.scraper import parse_url
-from letterboxdpy.pages.films import extract_movies_from_horizontal_list
-from letterboxdpy.pages.user_list import extract_movies_from_vertical_list
+from letterboxdpy.pages.films import extract_movies_from_horizontal_list, _extract_movies_from_horizontal_list_gen
+from letterboxdpy.pages.user_list import extract_movies_from_vertical_list, _extract_movies_from_vertical_list_gen
 
 class Films:
     """Fetch movies from Letterboxd based on different URLs."""
@@ -17,8 +18,40 @@ class Films:
         """Initialize Films class with a URL and scrape movies."""
         self.url = url
         self.ajax_url = get_ajax_url(url)
-        self.movies = self.get_movies()
-        self.count = len(self.movies)
+        self._movies: dict | None = None
+        self._count: int | None = None
+
+    @property
+    def movies(self) -> dict:
+        if self._movies is None:
+            self._movies = self.get_movies()
+        return self.get_movies()
+
+    @property
+    def count(self) -> int:
+        if self._movies is None:
+            self._movies = self.get_movies()
+        return len(self.movies)
+
+
+    def get_movies_lazy(self) -> Generator[tuple[str, dict], None, None]:
+        """Scrape and return a generator of movies from Letterboxd."""
+        page = 1
+        while True:
+            page_url = self.ajax_url + f"/page/{page}"
+            dom = parse_url(page_url)
+            movies_found = False
+            if '.com/films/' in self.url:
+                for movie in _extract_movies_from_horizontal_list_gen(dom):
+                    movies_found = True
+                    yield movie
+            elif '.com/film/' in self.url:
+                for movie in _extract_movies_from_vertical_list_gen(dom):
+                    movies_found = True
+                    yield movie
+            if not movies_found:
+                break
+            page += 1
 
     def get_movies(self) -> dict:
         """Scrape and return a dictionary of movies from Letterboxd."""
@@ -49,7 +82,7 @@ class Future:
           'rating-lowest', 'shortest', 'longest']
 
     def get_movies_with_args(args: list) -> dict:
-        # by 
+        # by
         pass
 
     def get_with_language(language: str):
@@ -97,7 +130,7 @@ def get_movies_by_genre(genre: str) -> dict:
 @assert_instance(str)
 def get_movies_by_service(service: str) -> dict:
     """
-    netflix, hulu, prime-video, disney-plus, itv-play, apple-tv, 
+    netflix, hulu, prime-video, disney-plus, itv-play, apple-tv,
     youtube-premium, amazon-prime-video, hbo-max, peacock, ...
     """
     BASE_URL = f"https://letterboxd.com/films/popular/this/week/on/{service}/"
