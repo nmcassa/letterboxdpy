@@ -254,7 +254,7 @@ class Movie:
     # letterboxd.com/film/?
     def movie_original_title(self, dom) -> str:
         elem = dom.find("h2", {"class": ["originalname"]})
-        elem = elem.text if elem else None
+        elem = elem.text.strip() if elem else None
         self.original_title = elem
 
     # letterboxd.com/film/?
