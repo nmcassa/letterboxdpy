@@ -223,6 +223,11 @@ class Movie:
         def extract_reviewer(article):
             return get_text_or_none(article.find("strong", {"class": ["displayname"]}))
 
+        def extract_review_link(article):
+            context_link = article.find("a", {"class": ["context"]})
+            href = context_link.get("href") if context_link else None
+            return (DOMAIN + href) if href else None
+
         def extract_rating(article):
             rating_span = article.find("span", {"class": ["rating"]})
             if not (rating_span and rating_span.text):
@@ -244,6 +249,7 @@ class Movie:
             for article in article_elements:
                 reviews.append({
                     "reviewer": extract_reviewer(article),
+                    "link": extract_review_link(article),
                     "rating": extract_rating(article),
                     "review": extract_review_text(article),
                 })
