@@ -215,24 +215,40 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_popular_reviews(self, dom) -> list:
-        data = dom.find("ul", {"class": ["film-popular-review"]})
-        items = data.find_all("div", {"class": ["film-detail-content"]}) if data else []
+        container_section = dom.find("section", {"class": ["film-reviews"]})
 
-        self.popular_reviews = []
-        for item in items:
-            curr = {}
+        def get_text_or_none(element):
+            return element.text.strip() if (element and element.text) else None
 
-            owner = item.find("strong", {"class": ["name"]})
-            rating = item.find("span", {"class": ['rating']})
-            review = item.find("div", {"class": ['body-text']})
+        def extract_reviewer(article):
+            return get_text_or_none(article.find("strong", {"class": ["displayname"]}))
 
-            review = review.p if review is not None else None
+        def extract_rating(article):
+            rating_span = article.find("span", {"class": ["rating"]})
+            if not (rating_span and rating_span.text):
+                for span in article.find_all("span"):
+                    classes = span.get("class") or []
+                    if any((cls == "rating") or cls.startswith("rating") for cls in classes):
+                        rating_span = span
+                        break
+            return get_text_or_none(rating_span)
 
-            curr['reviewer'] = owner.text if owner else None
-            curr['rating'] = rating.text if rating else None
-            curr['review'] = review.text if review else None
+        def extract_review_text(article):
+            body_div = article.find("div", {"class": ["body-text"]})
+            paragraph = body_div.find("p") if body_div else None
+            return get_text_or_none(paragraph)
 
-            self.popular_reviews.append(curr)
+        reviews: list[dict] = []
+        if container_section:
+            article_elements = container_section.find_all("article", {"class": ["production-viewing"]})
+            for article in article_elements:
+                reviews.append({
+                    "reviewer": extract_reviewer(article),
+                    "rating": extract_rating(article),
+                    "review": extract_review_text(article),
+                })
+
+        self.popular_reviews = reviews
 
     def movie_id(self, dom) -> str:
         elem = dom.find('span', 'block-flag-wrapper')
