@@ -220,6 +220,9 @@ class Movie:
         def get_text_or_none(element):
             return element.text.strip() if (element and element.text) else None
 
+        def extract_reviewer_username(article):
+            return article.get("data-person")
+
         def extract_reviewer_display_name(article):
             return get_text_or_none(article.find("strong", {"class": ["displayname"]}))
 
@@ -249,6 +252,7 @@ class Movie:
             for article in article_elements:
                 reviews.append({
                     "user": {
+                        "username": extract_reviewer_username(article),
                         "display_name": extract_reviewer_display_name(article)
                     },  
                     "link": extract_review_link(article),
