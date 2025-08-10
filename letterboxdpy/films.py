@@ -6,8 +6,8 @@ from letterboxdpy.utils.utils_transform import get_ajax_url
 from typing import Generator
 from letterboxdpy.core.decorators import assert_instance
 from letterboxdpy.core.scraper import parse_url
-from letterboxdpy.pages.films import extract_movies_from_horizontal_list, _extract_movies_from_horizontal_list_gen
-from letterboxdpy.pages.user_list import extract_movies_from_vertical_list, _extract_movies_from_vertical_list_gen
+from letterboxdpy.pages.films import extract_movies_from_horizontal_list, _extract_movies_from_horizontal_list_lazy
+from letterboxdpy.pages.user_list import extract_movies_from_vertical_list, _extract_movies_from_vertical_list_lazy
 
 class Films:
     """Fetch movies from Letterboxd based on different URLs."""
@@ -42,11 +42,11 @@ class Films:
             dom = parse_url(page_url)
             movies_found = False
             if '.com/films/' in self.url:
-                for movie in _extract_movies_from_horizontal_list_gen(dom):
+                for movie in _extract_movies_from_horizontal_list_lazy(dom):
                     movies_found = True
                     yield movie
             elif '.com/film/' in self.url:
-                for movie in _extract_movies_from_vertical_list_gen(dom):
+                for movie in _extract_movies_from_vertical_list_lazy(dom):
                     movies_found = True
                     yield movie
             if not movies_found:
