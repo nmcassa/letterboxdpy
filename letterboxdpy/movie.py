@@ -134,7 +134,7 @@ class Movie:
 
             details.append({
                 'type': item_type,
-                'name': item.text,
+                'name': item.text.strip(),
                 'slug': slug,
                 'url': DOMAIN + "/".join(url_parts)
             })
@@ -319,12 +319,13 @@ def movie_details(movie: Movie) -> dict:
     }
 
     for a in dom.find_all("a"):
+        text = a.text.strip()
         if a['href'][1:7] == 'studio':
-            data['studio'].append(a.text)
+            data['studio'].append(text)
         elif a['href'][7:14] == 'country':
-            data['country'].append(a.text)
+            data['country'].append(text)
         elif a['href'][7:15] == 'language':
-            data['language'].append(a.text)
+            data['language'].append(text)
 
     return data
 
