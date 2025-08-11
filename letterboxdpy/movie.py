@@ -7,7 +7,7 @@ from json import (
   loads as json_loads,
 )
 
-from letterboxdpy.utils.utils_parser import extract_numeric_text, get_meta_content
+from letterboxdpy.utils.utils_parser import extract_numeric_text, get_meta_content, extract_json_ld_script
 from letterboxdpy.core.decorators import assert_instance
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.core.encoder import Encoder
@@ -23,8 +23,7 @@ class Movie:
 
         dom = parse_url(self.url)
 
-        script = dom.find("script", type="application/ld+json")
-        script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
+        script = extract_json_ld_script(dom)
 
         # one line contents
         self.movie_id(dom)
