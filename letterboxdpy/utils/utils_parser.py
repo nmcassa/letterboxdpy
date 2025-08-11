@@ -234,3 +234,37 @@ def parse_review_text(dom_element):
     review_paragraphs = review.find_all('p')[1 if spoiler else 0:]
     review_text = '\n'.join([p.text for p in review_paragraphs])
     return review_text, spoiler
+
+def extract_json_ld_script(dom):
+    """
+    Extract JSON-LD script safely from DOM.
+    
+    Args:
+        dom: BeautifulSoup DOM object
+        
+    Returns:
+        Parsed JSON object or None if extraction fails
+        
+    Example:
+        >>> script_data = extract_json_ld_script(dom)
+        >>> movie_rating = script_data.get('aggregateRating', {}).get('ratingValue')
+    """
+    from json import loads as json_loads
+    
+    try:
+        script_elem = dom.find("script", type="application/ld+json")
+        if not script_elem or not script_elem.text:
+            return None
+        
+        script_text = script_elem.text.strip()
+        
+        # Handle comment format: /* ... */
+        if '/*' in script_text and '*/' in script_text:
+            try:
+                script_text = script_text.split('*/')[1].split('/*')[0]
+            except IndexError:
+                return None
+        
+        return json_loads(script_text)
+    except (ValueError, IndexError, Exception):  # ValueError covers JSONDecodeError in older Python
+        return None

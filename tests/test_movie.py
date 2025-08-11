@@ -24,6 +24,17 @@ class TestMovie(unittest.TestCase):
         data = self.movie.year
         self.assertEqual(data, 2005)
 
+    def test_movie_original_title_nullable(self):
+        data = self.movie.original_title
+        self.assertIsNone(data)
+    
+    def test_non_english_movie_original_title(self):
+        movie = Movie("parasite-2019")
+        self.assertEqual(movie.title, "Parasite")
+        self.assertIsNotNone(movie.original_title)
+        self.assertNotEqual(movie.title, movie.original_title)
+        self.assertEqual(movie.original_title, "기생충")
 
+    
 if __name__ == '__main__':
     unittest.main()

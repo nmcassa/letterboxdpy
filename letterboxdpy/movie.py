@@ -7,7 +7,7 @@ from json import (
   loads as json_loads,
 )
 
-from letterboxdpy.utils.utils_parser import extract_numeric_text, get_meta_content
+from letterboxdpy.utils.utils_parser import extract_numeric_text, get_meta_content, extract_json_ld_script
 from letterboxdpy.core.decorators import assert_instance
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.core.encoder import Encoder
@@ -23,8 +23,7 @@ class Movie:
 
         dom = parse_url(self.url)
 
-        script = dom.find("script", type="application/ld+json")
-        script = json_loads(script.text.split('*/')[1].split('/*')[0]) if script else None
+        script = extract_json_ld_script(dom)
 
         # one line contents
         self.movie_id(dom)
@@ -134,7 +133,7 @@ class Movie:
 
             details.append({
                 'type': item_type,
-                'name': item.text,
+                'name': item.text.strip(),
                 'slug': slug,
                 'url': DOMAIN + "/".join(url_parts)
             })
@@ -215,24 +214,52 @@ class Movie:
 
     # letterboxd.com/film/?
     def movie_popular_reviews(self, dom) -> list:
-        data = dom.find("ul", {"class": ["film-popular-review"]})
-        items = data.find_all("div", {"class": ["film-detail-content"]}) if data else []
+        container_section = dom.find("section", {"class": ["film-reviews"]})
 
-        self.popular_reviews = []
-        for item in items:
-            curr = {}
+        def get_text_or_none(element):
+            return element.text.strip() if (element and element.text) else None
 
-            owner = item.find("strong", {"class": ["name"]})
-            rating = item.find("span", {"class": ['rating']})
-            review = item.find("div", {"class": ['body-text']})
+        def extract_reviewer_username(article):
+            return article.get("data-person")
 
-            review = review.p if review is not None else None
+        def extract_reviewer_display_name(article):
+            return get_text_or_none(article.find("strong", {"class": ["displayname"]}))
 
-            curr['reviewer'] = owner.text if owner else None
-            curr['rating'] = rating.text if rating else None
-            curr['review'] = review.text if review else None
+        def extract_review_link(article):
+            context_link = article.find("a", {"class": ["context"]})
+            href = context_link.get("href") if context_link else None
+            return (DOMAIN + href) if href else None
 
-            self.popular_reviews.append(curr)
+        def extract_rating(article):
+            rating_span = article.find("span", {"class": ["rating"]})
+            if not (rating_span and rating_span.text):
+                for span in article.find_all("span"):
+                    classes = span.get("class") or []
+                    if any((cls == "rating") or cls.startswith("rating") for cls in classes):
+                        rating_span = span
+                        break
+            return get_text_or_none(rating_span)
+
+        def extract_review_text(article):
+            body_div = article.find("div", {"class": ["body-text"]})
+            paragraph = body_div.find("p") if body_div else None
+            return get_text_or_none(paragraph)
+
+        reviews: list[dict] = []
+        if container_section:
+            article_elements = container_section.find_all("article", {"class": ["production-viewing"]})
+            for article in article_elements:
+                reviews.append({
+                    "user": {
+                        "username": extract_reviewer_username(article),
+                        "display_name": extract_reviewer_display_name(article)
+                    },  
+                    "link": extract_review_link(article),
+                    "rating": extract_rating(article),
+                    "review": extract_review_text(article),
+                })
+
+        self.popular_reviews = reviews
 
     def movie_id(self, dom) -> str:
         elem = dom.find('span', 'block-flag-wrapper')
@@ -254,7 +281,7 @@ class Movie:
     # letterboxd.com/film/?
     def movie_original_title(self, dom) -> str:
         elem = dom.find("h2", {"class": ["originalname"]})
-        elem = elem.text if elem else None
+        elem = elem.text.strip() if elem else None
         self.original_title = elem
 
     # letterboxd.com/film/?
@@ -291,12 +318,13 @@ def movie_details(movie: Movie) -> dict:
     }
 
     for a in dom.find_all("a"):
+        text = a.text.strip()
         if a['href'][1:7] == 'studio':
-            data['studio'].append(a.text)
+            data['studio'].append(text)
         elif a['href'][7:14] == 'country':
-            data['country'].append(a.text)
+            data['country'].append(text)
         elif a['href'][7:15] == 'language':
-            data['language'].append(a.text)
+            data['language'].append(text)
 
     return data
 
