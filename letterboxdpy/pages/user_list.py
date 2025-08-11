@@ -4,6 +4,7 @@ from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.utils_parser import get_meta_content, get_movie_count_from_meta, get_body_content
 from letterboxdpy.utils.utils_url import check_url_match
+from typing import Generator
 
 
 class ListMetaData(TypedDict):
@@ -24,7 +25,7 @@ class UserList:
 
         self.username = username
         self.slug = slug
-        self.url = self.LIST_PATTERN % (username, slug) 
+        self.url = self.LIST_PATTERN % (username, slug)
         self.dom = parse_url(self.url)
 
     def __str__(self) -> str:
@@ -71,21 +72,22 @@ def extract_movies_from_vertical_list(dom, max=20*5) -> dict:
     supports all vertical lists
     ... users' watchlists, users' lists, ...
     """
+    return dict(_extract_movies_from_vertical_list_lazy(dom, max))
+
+def _extract_movies_from_vertical_list_lazy(dom, max=20*5) -> Generator[tuple[str, dict], None, None]:
     items = dom.find_all("div", {"class": "film-poster"})
 
-    movies = {}
     for item in items:
         movie_id = item['data-film-id']
-        movie_slug = item['data-film-slug'] 
+        movie_slug = item['data-film-slug']
         movie_name = item.img['alt']
 
-        movies[movie_id] = {
+        movie_data = {
             "slug": movie_slug,
             "name": movie_name,
             'url': f'https://letterboxd.com/film/{movie_slug}/'
         }
-
-    return movies
+        yield (movie_id, movie_data)
 
 def extract_title(dom) -> str:
     return get_meta_content(dom, property='og:title')
@@ -193,4 +195,3 @@ def extract_list_meta(dom, url: str) -> ListMetaData:
         print(f"Unexpected error while checking the list: {e}")
 
     return data
-
