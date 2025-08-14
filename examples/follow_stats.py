@@ -22,10 +22,24 @@ class FollowStatsAnalyzer:
         following_set = set(following.keys())
         followers_set = set(followers.keys())
         
+        not_followback = list(following_set - followers_set)
+        followback = list(following_set & followers_set)
+        fans = list(followers_set - following_set)
+        
         return {
-            'not_followback': list(following_set - followers_set),
-            'followback': list(following_set & followers_set),
-            'fans': list(followers_set - following_set)
+            'summary': {
+                'total_following': len(following_set),
+                'total_followers': len(followers_set),
+                'mutual_follows': len(followback),
+                'not_followback_count': len(not_followback),
+                'fans_count': len(fans),
+                'followback_ratio': round(len(followback) / len(following_set) * 100, 2) if following_set else 0
+            },
+            'details': {
+                'not_followback': not_followback,
+                'followback': followback,
+                'fans': fans
+            }
         }
 
 if __name__ == "__main__":
