@@ -9,6 +9,7 @@ MONTH_ABBREVIATIONS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
+DAY_ABBREVIATIONS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 # Domain/URL Constants
 URL_PROTOCOLS = ['http://', 'https://']
