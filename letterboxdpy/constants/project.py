@@ -31,3 +31,10 @@ GENRES = [
     "horror", "music", "mystery", "romance", "science-fiction",
     "thriller", "tv-movie", "war", "western"
 ]
+
+# Letterboxd Theme Colors
+class Colors:
+    BG = '#14181C'        # Letterboxd dark background
+    BLUE = '#456'         # Letterboxd blue
+    GREEN = '#00C030'     # Letterboxd green
+    TEXT = '#9AB'         # Letterboxd text gray
