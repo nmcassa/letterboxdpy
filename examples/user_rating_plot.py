@@ -15,14 +15,7 @@ import numpy as np
 from letterboxdpy.user import User
 from letterboxdpy.utils.utils_terminal import get_input
 from letterboxdpy.utils.utils_validators import is_whitespace_or_empty
-
-
-class Constants:
-    # Letterboxd-inspired colors
-    BG_COLOR = "#14181C"        # Letterboxd dark background
-    BAR_COLOR = "#456"          # Letterboxd blue
-    HIGHLIGHT_COLOR = "#00C030" # Letterboxd green
-    TEXT_COLOR = "#9AB"         # Letterboxd text gray
+from letterboxdpy.constants.project import Colors
 
 
 class LetterboxdRatingPlotter:
@@ -40,13 +33,13 @@ class LetterboxdRatingPlotter:
         # Nested helpers for readability
         def draw_header_and_stats(axis, stats_axis, total_count: int) -> None:
             axis.text(0.02, 0.98, "R A T I N G S", transform=axis.transAxes,
-                      fontsize=12, color=Constants.TEXT_COLOR, weight='bold', va='top', family='monospace')
+                      fontsize=12, color=Colors.TEXT, weight='bold', va='top', family='monospace')
             axis.text(0.98, 0.98, f"{total_count:,}", transform=axis.transAxes,
-                      fontsize=12, color=Constants.TEXT_COLOR, weight='bold', va='top', ha='right')
+                      fontsize=12, color=Colors.TEXT, weight='bold', va='top', ha='right')
             axis.text(0.02, 0.92, f"@{self.username}", transform=axis.transAxes,
                       fontsize=11, color='white', weight='bold', va='top')
             stats_axis.text(0.5, 0.5, f"Average: {average_rating}★  •  Total: {total_ratings:,}  •  Most Given: {most_given_rating}★",
-                            ha='center', va='center', fontsize=11, color=Constants.TEXT_COLOR, weight='bold')
+                            ha='center', va='center', fontsize=11, color=Colors.TEXT, weight='bold')
 
         def get_star_labels():
             positions = np.arange(0.5, 5.5, 0.5)
@@ -62,12 +55,12 @@ class LetterboxdRatingPlotter:
             max_count = max(counts_)
             for bar, count in zip(bars_, counts_):
                 if count == max_count:
-                    bar.set_color(Constants.HIGHLIGHT_COLOR)
+                    bar.set_color(Colors.GREEN)
                     bar.set_alpha(1.0)
                 if count > 0:
                     axis.text(bar.get_x() + bar.get_width() / 2, count + max_count * 0.01,
                               str(int(count)), ha="center", va="bottom", fontsize=8,
-                              color=Constants.TEXT_COLOR, alpha=0.9)
+                              color=Colors.TEXT, alpha=0.9)
 
         def style_axes(axis, counts_) -> None:
             axis.set_xlim(0.25, 5.25)
@@ -75,25 +68,25 @@ class LetterboxdRatingPlotter:
             axis.set_ylim(0, max_count * 1.12)
             tick_positions, tick_labels = get_star_labels()
             axis.set_xticks(tick_positions)
-            axis.set_xticklabels(tick_labels, fontsize=9, color=Constants.TEXT_COLOR)
+            axis.set_xticklabels(tick_labels, fontsize=9, color=Colors.TEXT)
             axis.set_yticks([])
             for spine in axis.spines.values():
                 spine.set_visible(False)
-            axis.grid(True, axis='y', alpha=0.1, color=Constants.TEXT_COLOR, linestyle='-')
+            axis.grid(True, axis='y', alpha=0.1, color=Colors.TEXT, linestyle='-')
 
         # Create Letterboxd-style plot
         fig, (ax, ax_stats) = plt.subplots(
             2, 1,
             figsize=(12, 8),
             gridspec_kw={"height_ratios": [0.86, 0.14], "hspace": 0},
-            facecolor=Constants.BG_COLOR,
+            facecolor=Colors.BG,
         )
         for a in (ax, ax_stats):
-            a.set_facecolor(Constants.BG_COLOR)
+            a.set_facecolor(Colors.BG)
         ax_stats.axis('off')
         fig.canvas.manager.set_window_title(f"RATINGS - {self.username}")
 
-        bars = ax.bar(rating_positions, rating_counts, width=0.45, color=Constants.BAR_COLOR, alpha=0.85)
+        bars = ax.bar(rating_positions, rating_counts, width=0.45, color=Colors.BLUE, alpha=0.85)
 
         # Header and bottom stats
         draw_header_and_stats(ax, ax_stats, total_ratings)
