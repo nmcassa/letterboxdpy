@@ -13,14 +13,13 @@ class UserWatchlist:
         return f"Not printable object of type: {self.__class__.__name__}"
 
     def get_owner(self): ...
-    def get_count(self) -> int: return extract_count(self.username)
+    def get_count(self) -> int: return extract_count(self.url)
     def get_movies(self) -> dict: return extract_movies(self.url, self.FILMS_PER_PAGE)
     def get_watchlist(self, filters: dict=None) -> dict: return extract_watchlist(self.username, filters)
 
-def extract_count(username: str) -> int:
+def extract_count(url: str) -> int:
     """Extracts the number of films from the watchlist page's DOM."""
-    BASE_URL = f"{DOMAIN}/{username}/watchlist/"
-    dom = parse_url(BASE_URL)
+    dom = parse_url(url)
 
     watchlist_div = dom.find("div", class_="s-watchlist-content")
     if watchlist_div and "data-num-entries" in watchlist_div.attrs:
