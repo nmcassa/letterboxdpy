@@ -13,10 +13,10 @@ class UserActivity:
         # https://letterboxd.com/<username>/activity/following/
         self.activity_following_url = f"{DOMAIN}/ajax/activity-pagination/{self.username}/following"
         
-    def get_activity(self) -> dict: return extract_activity(self.username, self.activity_url)
-    def get_activity_following(self) -> dict: return extract_activity(self.username, self.activity_following_url)
+    def get_activity(self) -> dict: return extract_activity(self.activity_url)
+    def get_activity_following(self) -> dict: return extract_activity(self.activity_following_url)
 
-def extract_activity(username: str, ajax_url: str) -> dict:
+def extract_activity(ajax_url: str) -> dict:
 
     def get_event_type(section) -> tuple:
         """

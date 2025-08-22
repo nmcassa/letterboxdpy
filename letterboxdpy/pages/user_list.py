@@ -4,6 +4,7 @@ from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.utils_parser import get_meta_content, get_movie_count_from_meta, get_body_content
 from letterboxdpy.utils.utils_url import check_url_match
+from letterboxdpy.utils.movies_extractor import extract_movies_from_vertical_list
 
 
 class ListMetaData(TypedDict):
@@ -65,27 +66,6 @@ def extract_movies(list_url: str, items_per_page) -> dict:
         page += 1
 
     return data
-
-def extract_movies_from_vertical_list(dom, max=20*5) -> dict:
-    """
-    supports all vertical lists
-    ... users' watchlists, users' lists, ...
-    """
-    items = dom.find_all("div", {"class": "film-poster"})
-
-    movies = {}
-    for item in items:
-        movie_id = item['data-film-id']
-        movie_slug = item['data-film-slug'] 
-        movie_name = item.img['alt']
-
-        movies[movie_id] = {
-            "slug": movie_slug,
-            "name": movie_name,
-            'url': f'https://letterboxd.com/film/{movie_slug}/'
-        }
-
-    return movies
 
 def extract_title(dom) -> str:
     return get_meta_content(dom, property='og:title')

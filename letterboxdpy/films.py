@@ -5,8 +5,7 @@ if __loader__.name == '__main__':
 from letterboxdpy.utils.utils_transform import get_ajax_url
 from letterboxdpy.core.decorators import assert_instance
 from letterboxdpy.core.scraper import parse_url
-from letterboxdpy.pages.films import extract_movies_from_horizontal_list
-from letterboxdpy.pages.user_list import extract_movies_from_vertical_list
+from letterboxdpy.utils.movies_extractor import extract_movies_from_horizontal_list, extract_movies_from_vertical_list
 
 class Films:
     """Fetch movies from Letterboxd based on different URLs."""
@@ -14,11 +13,29 @@ class Films:
     HORIZONTAL_MAX = 12*6
 
     def __init__(self, url: str):
-        """Initialize Films class with a URL and scrape movies."""
+        """Initialize Films class with a URL."""
         self.url = url
         self.ajax_url = get_ajax_url(url)
-        self.movies = self.get_movies()
-        self.count = len(self.movies)
+        self._movies = None
+
+    @property
+    def movies(self) -> dict:
+        """Get movies from the URL."""
+        if self._movies is None:
+            self._movies = self.get_movies()
+        return self._movies
+
+    @property
+    def count(self) -> int:
+        """Return the count of movies."""
+        return len(self.movies)
+
+    # Magic Methods
+    def __len__(self) -> int:
+        return self.count
+
+    def __getitem__(self, key: str):
+        return self.movies[key]
 
     def get_movies(self) -> dict:
         """Scrape and return a dictionary of movies from Letterboxd."""
@@ -30,11 +47,14 @@ class Films:
             dom = parse_url(page_url)
 
             if '.com/films/' in self.url:
+                # https://letterboxd.com/films/popular/
+                # https://letterboxd.com/films/like/v-for-vendetta/
                 new_movies = extract_movies_from_horizontal_list(dom)
                 movies |= new_movies
                 if len(new_movies) < self.HORIZONTAL_MAX:
                     break
             elif '.com/film/' in self.url:
+                # https://letterboxd.com/film/the-shawshank-redemption/similar/
                 new_movies = extract_movies_from_vertical_list(dom)
                 movies |= new_movies
                 if len(new_movies) < self.VERTICAL_MAX:
@@ -118,11 +138,6 @@ def get_movies_by_mini_theme(theme: str) -> dict:
     BASE_URL = f"https://letterboxd.com/films/ajax/mini-theme/{theme}"
     return Films(BASE_URL).movies
 
-@assert_instance(str)
-def get_movies_by_similar(movie_slug: str) -> dict:
-    BASE_URL = f"https://letterboxd.com/films/ajax/like/{movie_slug}"
-    return Films(BASE_URL).movies
-
 def print_movies(movies, title=None, max_count=None):
     """Print movies in a formatted list."""
     if title:
@@ -138,9 +153,10 @@ if __name__ == "__main__":
 
     # Movies similar to "V for Vendetta" are retrieved and printed.
     # https://letterboxd.com/films/like/v-for-vendetta/
-    movie_slug = "v-for-vendetta"
-    movies = get_movies_by_similar(movie_slug)
-    print_movies(movies, title=f"Similar to {movie_slug}")
+    from letterboxdpy.movie import Movie
+    movie_instance = Movie("v-for-vendetta")
+    movies = movie_instance.get_similar_movies()
+    print_movies(movies, title=f"Similar to {movie_instance.slug}")
 
     # Popular movies from the year 2027 are retrieved and displayed.
     # https://letterboxd.com/films/popular/this/week/year/2027/

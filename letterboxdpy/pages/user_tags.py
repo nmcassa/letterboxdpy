@@ -6,15 +6,16 @@ class UserTags:
 
     def __init__(self, username: str) -> None:
         self.username = username
+        self.url = f"{DOMAIN}/{self.username}/tags"
         self.films_url = f"{DOMAIN}/{self.username}/tags/films"
         self.diary_url = f"{DOMAIN}/{self.username}/tags/diary"
         self.reviews_url = f"{DOMAIN}/{self.username}/tags/reviews"
         self.lists_url = f"{DOMAIN}/{self.username}/tags/lists"
         
-    def get_user_tags(self) -> dict: return extract_user_tags(self.username)
+    def get_user_tags(self) -> dict: return extract_user_tags(self.url)
 
-def extract_user_tags(username: str) -> dict:
-    BASE_URL = f"{DOMAIN}/{username}/tags"
+def extract_user_tags(url: str) -> dict:
+    BASE_URL = url
     PAGES = ['films', 'diary', 'reviews', 'lists']
 
     def extract_tags(page: str) -> dict:

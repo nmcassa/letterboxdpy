@@ -9,9 +9,9 @@ class UserReviews:
         self.username = username
         self.url = f"{DOMAIN}/{self.username}/films/reviews"
         
-    def get_reviews(self): return extract_user_reviews(self.username)
+    def get_reviews(self): return extract_user_reviews(self.url)
 
-def extract_user_reviews(username: str) -> dict:
+def extract_user_reviews(url: str) -> dict:
     '''
     Returns a dictionary containing user reviews. The keys are unique log IDs,
     and each value is a dictionary with details about the review,
@@ -23,7 +23,7 @@ def extract_user_reviews(username: str) -> dict:
     data = {'reviews': {}}
     while True:
         page += 1
-        dom = parse_url(f"{DOMAIN}/{username}/films/reviews/page/{page}/")
+        dom = parse_url(f"{url}/page/{page}/")
 
         container = dom.find("div", {"class": ["viewing-list"]})
 
