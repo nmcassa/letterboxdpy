@@ -9,6 +9,7 @@ MONTH_ABBREVIATIONS = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
+DAY_ABBREVIATIONS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 # Domain/URL Constants
 URL_PROTOCOLS = ['http://', 'https://']
@@ -31,3 +32,10 @@ GENRES = [
     "horror", "music", "mystery", "romance", "science-fiction",
     "thriller", "tv-movie", "war", "western"
 ]
+
+# Letterboxd Theme Colors
+class Colors:
+    BG = '#14181C'        # Letterboxd dark background
+    BLUE = '#456'         # Letterboxd blue
+    GREEN = '#00C030'     # Letterboxd green
+    TEXT = '#9AB'         # Letterboxd text gray
