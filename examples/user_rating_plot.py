@@ -1,88 +1,151 @@
+"""
+Letterboxd Ratings Histogram
+
+Recreates the ratings distribution section of a Letterboxd profile with a clean, professional layout.
+- Half-star tick labels (½, ★, ★½, …, ★★★★★)
+- Shows username, total ratings, average, and most given rating
+- Letterboxd-inspired color scheme
+"""
+
 import argparse
 import sys
-import os
 import matplotlib.pyplot as plt
-import json
 import numpy as np
 
-try:
-    from letterboxdpy.user import User
-except ImportError:
-    try:
-        sys.path.append(os.path.join(sys.path[0], '..'))
-        from letterboxdpy.user import User
-    except (ImportError, ValueError) as e:
-        raise ImportError(f"Error importing 'letterboxdpy': {e}. Please install the package.") from e
+from letterboxdpy.user import User
+from letterboxdpy.utils.utils_terminal import get_input
+from letterboxdpy.utils.utils_validators import is_whitespace_or_empty
+from letterboxdpy.constants.project import Colors
 
 
-def create_rating_distribution_plot(user_ratings: dict):
-    mean_rating = round(sum(rating * count for rating, count in user_ratings.items()) / sum(user_ratings.values()), 2)
-    all_ratings = [rating for rating, count in user_ratings.items() for _ in range(count)]
-    
-    plt.style.use('dark_background')
-    figure, axis = plt.subplots(figsize=(12, 6))
-    
-    rating_intervals = np.arange(0.25, 5.75, 0.5)
-    rating_counts, _, histogram_bars = axis.hist(all_ratings, bins=rating_intervals, color="#5A5F71", rwidth=0.8)
-    
-    plot_statistics_text = f"Average: {mean_rating}★     Total Ratings: {len(all_ratings):,}"
-    plt.text(0.5, 1.05, plot_statistics_text, 
-             ha='center', transform=axis.transAxes, fontsize=12, color='white', weight='bold')
-    
-    highest_count = max(rating_counts)
-    for bar, rating_frequency in zip(histogram_bars, rating_counts):
-        if rating_frequency == highest_count:
-            bar.set_color("#4CAF50")
+class LetterboxdRatingPlotter:
+    def __init__(self, username: str = None):
+        self.username = username
         
-        if rating_frequency > 0:
-            bar_center_x = bar.get_x() + bar.get_width()/2
-            text_y_position = rating_frequency + highest_count*0.02
-            axis.text(bar_center_x, text_y_position,
-                     str(int(rating_frequency)), 
-                     ha="center", va="bottom", fontsize=10,
-                     color="white", weight='bold')
-    
-    axis.set_xlim(0.25, 5.25)
-    axis.set_ylim(0, highest_count * 1.15)
-    
-    rating_labels = np.arange(0.5, 5.5, 0.5)
-    axis.set_xticks(rating_labels)
-    axis.set_xticklabels([f"{rating:.1f}★" for rating in rating_labels], fontsize=10)
-    axis.set_yticks([])
-    
-    axis.set_title("Letterboxd Rating Distribution", fontsize=16, weight="bold", pad=35)
-    
-    for spine_location in ["top", "right", "left"]:
-        axis.spines[spine_location].set_visible(False)
-    axis.spines["bottom"].set_color("#FFFFFF")
-    
-    plt.subplots_adjust(top=0.88, bottom=0.15)
-    plt.tight_layout()
-    plt.show()
+    def create_plot(self, ratings: dict):
+        """Create Letterboxd-style rating distribution plot with enhancements"""
+        rating_positions = np.arange(0.5, 5.5, 0.5)
+        rating_counts = np.array([ratings.get(rating, 0) for rating in rating_positions])
+        total_ratings = int(rating_counts.sum())
+        average_rating = round(float((rating_positions * rating_counts).sum() / total_ratings), 2) if total_ratings else 0.0
+        most_given_rating = float(rating_positions[rating_counts.argmax()]) if total_ratings else 0.5
 
-def fetch_letterboxd_ratings(username: str) -> dict:
-    rating_distribution = {rating: 0 for rating in np.arange(0.5, 5.5, 0.5)}
-    
-    user_movies = User(username).get_films()["movies"]
-    for movie_data in user_movies.values():
-        if movie_rating := movie_data.get("rating"):
-            converted_rating = movie_rating/2  
-            rating_distribution[converted_rating] = rating_distribution.get(converted_rating, 0) + 1
-            
-    return rating_distribution
+        # Nested helpers for readability
+        def draw_header_and_stats(axis, stats_axis, total_count: int) -> None:
+            axis.text(0.02, 0.98, "R A T I N G S", transform=axis.transAxes,
+                      fontsize=12, color=Colors.TEXT, weight='bold', va='top', family='monospace')
+            axis.text(0.98, 0.98, f"{total_count:,}", transform=axis.transAxes,
+                      fontsize=12, color=Colors.TEXT, weight='bold', va='top', ha='right')
+            axis.text(0.02, 0.92, f"@{self.username}", transform=axis.transAxes,
+                      fontsize=11, color='white', weight='bold', va='top')
+            stats_axis.text(0.5, 0.5, f"Average: {average_rating}★  •  Total: {total_ratings:,}  •  Most Given: {most_given_rating}★",
+                            ha='center', va='center', fontsize=11, color=Colors.TEXT, weight='bold')
+
+        def get_star_labels():
+            positions = np.arange(0.5, 5.5, 0.5)
+            labels = [
+                ("½★" if r == 0.5 else ("★" * int(r) + "½" if r % 1 == 0.5 else "★" * int(r)))
+                for r in positions
+            ]
+            return positions, labels
+
+        def label_bars(axis, bars_, counts_) -> None:
+            if len(counts_) == 0:
+                return
+            max_count = max(counts_)
+            for bar, count in zip(bars_, counts_):
+                if count == max_count:
+                    bar.set_color(Colors.GREEN)
+                    bar.set_alpha(1.0)
+                if count > 0:
+                    axis.text(bar.get_x() + bar.get_width() / 2, count + max_count * 0.01,
+                              str(int(count)), ha="center", va="bottom", fontsize=8,
+                              color=Colors.TEXT, alpha=0.9)
+
+        def style_axes(axis, counts_) -> None:
+            axis.set_xlim(0.25, 5.25)
+            max_count = max(counts_) if len(counts_) else 0
+            axis.set_ylim(0, max_count * 1.12)
+            tick_positions, tick_labels = get_star_labels()
+            axis.set_xticks(tick_positions)
+            axis.set_xticklabels(tick_labels, fontsize=9, color=Colors.TEXT)
+            axis.set_yticks([])
+            for spine in axis.spines.values():
+                spine.set_visible(False)
+            axis.grid(True, axis='y', alpha=0.1, color=Colors.TEXT, linestyle='-')
+
+        # Create Letterboxd-style plot
+        fig, (ax, ax_stats) = plt.subplots(
+            2, 1,
+            figsize=(12, 8),
+            gridspec_kw={"height_ratios": [0.86, 0.14], "hspace": 0},
+            facecolor=Colors.BG,
+        )
+        for a in (ax, ax_stats):
+            a.set_facecolor(Colors.BG)
+        ax_stats.axis('off')
+        fig.canvas.manager.set_window_title(f"RATINGS - {self.username}")
+
+        bars = ax.bar(rating_positions, rating_counts, width=0.45, color=Colors.BLUE, alpha=0.85)
+
+        # Header and bottom stats
+        draw_header_and_stats(ax, ax_stats, total_ratings)
+
+        # Bar labels and highlight
+        label_bars(ax, bars, rating_counts)
+
+        # Axes styling and ticks
+        style_axes(ax, rating_counts)
+
+        # Layout handled by GridSpec; light tightening only
+        plt.tight_layout()
+        plt.show()
+
+    def fetch_ratings(self, username: str = None) -> dict:
+        """Fetch user ratings from Letterboxd"""
+        username = username or self.username
+        ratings = {r: 0 for r in np.arange(0.5, 5.5, 0.5)}
+        
+        print(f"Fetching ratings for @{username}...")
+        movies = User(username).get_films()["movies"]
+        print(f"Processing {len(movies)} rated movies...")
+        
+        for movie in movies.values():
+            if rating := movie.get("rating"):
+                ratings[rating/2] += 1
+        
+        total_ratings = sum(ratings.values())
+        print(f"Found {total_ratings} ratings. Creating plot...")
+        return ratings
+
+    def plot(self, username: str = None):
+        """Fetch ratings and create plot"""
+        if username:
+            self.username = username
+
+        ratings = self.fetch_ratings()
+        if sum(ratings.values()) > 0:
+            self.create_plot(ratings)
+        else:
+            print(f"No ratings found for user: {self.username}")
+
+    def run(self):
+        """Main program loop"""
+        sys.stdout.reconfigure(encoding="utf-8")
+        parser = argparse.ArgumentParser(description="Visualize Letterboxd user rating distribution.")
+        parser.add_argument("--user", help="Letterboxd username to analyze")
+
+        args = parser.parse_args()
+        
+        username = None if is_whitespace_or_empty(args.user) else args.user
+        if not username:
+            username = get_input("Enter Letterboxd username: ")
+        self.plot(username)
+
 
 def main():
-    sys.stdout.reconfigure(encoding="utf-8")
-    argument_parser = argparse.ArgumentParser(description="Visualize Letterboxd user rating distribution.")
-    argument_parser.add_argument("--user", help="Letterboxd username to analyze")
-    
-    letterboxd_username = argument_parser.parse_args().user or input("Enter Letterboxd username: ").strip()
-    
-    user_rating_data = fetch_letterboxd_ratings(letterboxd_username)
-    if user_rating_data:
-        create_rating_distribution_plot(user_rating_data)
-    else:
-        print(f"No ratings found for Letterboxd user: {letterboxd_username}")
+    """Legacy function compatibility"""
+    LetterboxdRatingPlotter().run()
 
 if __name__ == "__main__":
     main()

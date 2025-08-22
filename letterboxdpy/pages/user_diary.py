@@ -221,8 +221,8 @@ def extract_user_wrapped(username: str, year: int=CURRENT_YEAR) -> dict:
 
     movies = {}
     milestones = {}
-    months = {}.fromkeys([1,2,3,4,5,6,7,8,9,10,11,12], 0)
-    days = {}.fromkeys([1,2,3,4,5,6,7], 0)
+    months = {}.fromkeys(range(1, 13), 0)  # 12 months
+    days = {}.fromkeys(range(1, 8), 0)    # 7 days (1=Monday, 7=Sunday)
     total_review = 0
     total_runtime = 0
     first_watched = None
