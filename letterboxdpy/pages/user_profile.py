@@ -183,9 +183,18 @@ def extract_watchlist_recent(dom) -> dict:
     """Extracts recent watchlist items from the DOM, with error handling."""
     def extract_movie_info(item) -> dict:
         """Extracts movie information from a watchlist item."""
-        film_id = item.get('data-film-id')
-        film_slug = item.get('data-film-slug')
-        film_name = item.img.get('alt', "Unknown") if item.img else "Unknown"
+        # Look for data attributes in the nested react-component div
+        react_div = item.find('div', {'class': 'react-component'})
+        
+        if react_div:
+            film_id = react_div.get('data-film-id')
+            film_slug = react_div.get('data-item-slug')
+            film_name = react_div.get('data-item-name', "Unknown")
+        else:
+            # Fallback to original method (for backwards compatibility)
+            film_id = item.get('data-film-id')
+            film_slug = item.get('data-film-slug')
+            film_name = item.img.get('alt', "Unknown") if item.img else "Unknown"
 
         return {
             'id': film_id,
@@ -200,7 +209,7 @@ def extract_watchlist_recent(dom) -> dict:
         # User watchlist is not visible or there are no items in the watchlist
         return watchlist_recent
 
-    watchlist_items = section.find_all("li", {"class": ["film-poster"]})
+    watchlist_items = section.find_all("li", {"class": ["posteritem"]})
 
     if not watchlist_items:
         raise ValueError("No watchlist items found in the DOM")
