@@ -85,32 +85,13 @@ def extract_user_diary(
                 else:
                     # Extract from monthdate if available
                     date = {"year": None, "month": None, "day": None}
-                # film column (updated for new HTML structure)
-                if 'production' in cols:
-                    # Look for the poster div with data-film attributes
-                    production_col = cols['production']
-                    poster = production_col.find('div', {'data-film-slug': True}) or production_col.div
-                elif 'film' in cols:  # fallback for old structure
-                    poster = cols['film'].div
-                else:
-                    poster = None
+                # Extract film data from react-component
+                production_col = cols.get('production')
+                react_div = production_col.find('div', {'class': 'react-component'}) if production_col else None
                 
-                # Try to get data from actions column as fallback
-                actions = cols.get('actions')
-                
-                if poster and (poster.get("data-film-slug") or poster.get("data-film-id")):
-                    name = poster.img["alt"] if poster.img and poster.img.get("alt") else "Unknown"
-                    slug = poster.get("data-film-slug")
-                    id = poster.get("data-film-id")
-                elif actions and (actions.get("data-film-slug") or actions.get("data-film-id")):
-                    # Get from actions column
-                    name = actions.get("data-film-name", "Unknown")
-                    slug = actions.get("data-film-slug")
-                    id = actions.get("data-film-id")
-                else:
-                    name = "Unknown"
-                    slug = None
-                    id = None
+                name = react_div.get("data-item-name", "Unknown") if react_div else "Unknown"
+                slug = react_div.get("data-item-slug") if react_div else None
+                id = react_div.get("data-film-id") if react_div else None
                 # released column (updated for new HTML structure)
                 if 'releaseyear' in cols:
                     release = cols["releaseyear"].text.strip()
