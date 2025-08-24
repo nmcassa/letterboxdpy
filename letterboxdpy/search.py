@@ -102,7 +102,7 @@ class Search:
       result_types = {
         # More specific types first to avoid false matches
         # Format: 'type': [class_to_check_on_li, [class_to_check_on_children]]
-        'list': ["list-set"],  # <li class="list-set">
+        'list': ["search-result", "-list"],  # <li class="search-result -list">
         'review': ["search-result", "-viewing"],  # <li class="search-result -viewing">
         'member': ["search-result", "-person"],  # <li class="search-result -person">
         'tag': ["search-result", "-tag"],  # <li class="search-result -tag">
@@ -290,48 +290,70 @@ class Search:
         case "list":
           """
           List DOM Structure:
-          <li class="list-set">
-            <section data-film-list-id="..." data-person="username">
-              <a href="/user/list/">
-                <h2>List Title</h2>
-                <small class="value">X films</small>
-                <strong class="displayname">Owner Name</strong>
-              </a>
-              <a class="icon-like">X</a>
-              <a class="icon-comment">X</a>
-            </section>
+          <li class="search-result -list">
+            <article class="list-summary" data-film-list-id="..." data-person="username">
+              <div class="layout">
+                <div class="body">
+                  <div class="masthead">
+                    <h2 class="name prettify">
+                      <a href="/user/list/">List Title</a>
+                    </h2>
+                    <div class="attribution-block">
+                      <div class="body">
+                        <span class="attribution-detail">
+                          <a class="owner" href="/user/">
+                            <strong class="displayname">Owner Name</strong>
+                          </a>
+                        </span>
+                        <span class="content-reactions-strip -filmlist">
+                          <span class="value">X films</span>
+                          <a class="inlineicon icon-like" href="/user/list/likes/">50K</a>
+                          <a class="inlineicon icon-comment" href="/user/list/#comments">256</a>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
           </li>
           """
-          list_id = result.section['data-film-list-id']
-          list_url = result.a['href']
+          # Real DOM structure parsing
+          article = result.find('article', {'class': 'list-summary'})
+          if not article:
+            return data
+          
+          # Basic list info from article attributes
+          list_id = article.get('data-film-list-id')
+          owner_slug = article.get('data-person')
+          
+          # Title and URL from h2 > a
+          title_link = article.find('h2', {'class': 'name'}).find('a')
+          list_url = title_link['href']
+          list_title = title_link.text.strip()
           list_slug = list_url.split('/')[-2]
           list_url = DOMAIN + list_url
-          list_title = result.h2.text.strip()
           
-          # Extract film count
-          item_count = result.find('small', {'class': 'value'})
-          item_count = int(
-             item_count.text.split('f')[0].strip().replace(',', '')
-             ) if item_count else None
+          # Extract film count from span.value
+          value_span = article.find('span', {'class': 'value'})
+          item_count = None
+          if value_span:
+            text = value_span.text.strip()
+            if 'film' in text:
+              item_count = int(text.split('film')[0].strip().replace(',', ''))
 
-          # Extract likes count
-          like_count = result.find('a', {'class': 'icon-like'})
-          like_count = extract_and_convert_shorthand(like_count)
-
-          # Extract comments count
-          comment_count = result.find('a', {'class': 'icon-comment'})
-          comment_count = extract_and_convert_shorthand(comment_count)
-
-          # Extract owner info - updated for new HTML structure
-          owner_strong = result.find('strong', {'class': 'displayname'})
-          if owner_strong:
-            owner_name = owner_strong.text.strip()
-          else:
-            owner_name = None
+          # Extract likes count from inlineicon icon-like
+          like_elem = article.find('a', {'class': ['inlineicon', 'icon-like']})
+          like_count = extract_and_convert_shorthand(like_elem)
           
-          # Get username from data-person attribute on section
-          section = result.find("section")
-          owner_slug = section.get('data-person').lower() if section and section.get('data-person') else None
+          # Extract comments count from inlineicon icon-comment  
+          comment_elem = article.find('a', {'class': ['inlineicon', 'icon-comment']})
+          comment_count = extract_and_convert_shorthand(comment_elem)
+
+          # Extract owner info from strong.displayname
+          owner_strong = article.find('strong', {'class': 'displayname'})
+          owner_name = owner_strong.text.strip() if owner_strong else owner_slug
+          owner_slug = owner_slug.lower() if owner_slug else None
           owner_url = f"{DOMAIN}/{owner_slug}/" if owner_slug else None
 
           data |= {
