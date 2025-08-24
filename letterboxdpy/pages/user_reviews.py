@@ -38,11 +38,20 @@ def extract_user_reviews(url: str) -> dict:
             ...
 
         for log in logs:
+            # Handle react structure
+            react_component = log.parent.find("div", {"class": "react-component"}) or log.parent.div
+            
             movie_name = log.a.text
-            slug = log.parent.div['data-film-slug']
-            movie_id = log.parent.div['data-film-id']
+            slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
+            movie_id = react_component['data-film-id']
             # str   ^^^--- movie_id: unique id of the movie.
-            release = int(log.small.text) if log.small else None
+            # Find release year in spans
+            release = None
+            spans = log.find_all('span')
+            for span in spans:
+                if span.text and span.text.strip().isdigit() and len(span.text.strip()) == 4:
+                    release = int(span.text.strip())
+                    break
             movie_link = f"{DOMAIN}/film/{slug}/"
             log_id = log['data-object-id'].split(':')[-1]
             # str ^^^--- log_id: unique id of the review.
