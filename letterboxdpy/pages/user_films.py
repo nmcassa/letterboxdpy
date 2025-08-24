@@ -75,31 +75,58 @@ def extract_movies_from_user_watched(dom, max=12*6) -> dict:
     """
     supports user watched films section
     """
-    def extract_rating_and_like_status(container):
+    def _extract_rating_and_like_status(container):
         """Parse rating and like status from viewing data spans."""
+    
+        def _extract_rating_from_span(span):
+            """Extract rating from span using pattern matching."""
+            classes = span.get('class', [])
+            
+            # Skip if no rating-related classes found
+            if not any('rating' in cls or 'rated-' in cls for cls in classes):
+                return None
+            
+            # Define extraction patterns (modern first, legacy as fallback)
+            patterns = [
+                lambda cls: cls.startswith('rated-') and cls.split('-')[-1],     # rated-X
+                lambda cls: 'rating' in cls and '-' in cls and cls != 'rating' and cls.split('-')[-1]  # rating-color-X
+            ]
+            
+            for pattern in patterns:
+                for cls in classes:
+                    try:
+                        rating_str = pattern(cls)
+                        if rating_str and rating_str.isdigit():
+                            return int(rating_str)
+                    except (ValueError, IndexError, AttributeError):
+                        continue
+                        
+            return None
+        
+        def _extract_like_status(span):
+            """Extract like status from span class."""
+            return any('like' in cls for cls in span.get('class', []))
+
         poster_viewingdata = container.find("p", {"class": "poster-viewingdata"}) or container.p
         rating = None
         liked = False
 
         if poster_viewingdata and poster_viewingdata.span:
             for span in poster_viewingdata.find_all("span"):
-                if span.get('class') and 'rating' in span['class']:
-                    try:
-                        rating = int([cls for cls in span['class'] if 'rating' in cls][0].split('-')[-1])
-                    except (ValueError, IndexError):
-                        pass
-                elif span.get('class') and 'like' in span['class']:
-                    liked = True
+                if rating is None:
+                    rating = _extract_rating_from_span(span)
+                if not liked:
+                    liked = _extract_like_status(span)
         
         return rating, liked
     
-    def get_movie_details(container):
+    def _get_movie_details(container):
         """Extract complete movie information including rating and like status."""
         react_component = container.find("div", {"class": "react-component"}) or container.div
         if not react_component or 'data-film-id' not in react_component.attrs:
             return None
             
-        rating, liked = extract_rating_and_like_status(container)
+        rating, liked = _extract_rating_and_like_status(container)
         
         movie_slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
         movie_id = react_component['data-film-id']
@@ -112,13 +139,28 @@ def extract_movies_from_user_watched(dom, max=12*6) -> dict:
             "liked": liked
         }
 
-    containers = dom.find_all("li", {"class": ["griditem"]}) or dom.find_all("li", {"class": ["poster-container"]})
+    def _find_movie_containers(dom):
+        """Find movie containers using modern structure with legacy fallback."""
+        container_selectors = [
+            ("li", {"class": "griditem"}),      # Modern React structure
+            ("li", {"class": "poster-container"}),  # Legacy structure
+            ("li", {"class": "posteritem"})     # Liked films structure
+        ]
+        
+        for tag, attrs in container_selectors:
+            containers = dom.find_all(tag, attrs)
+            if containers:
+                return containers
+        return []
+
+    containers = _find_movie_containers(dom)
+
     movies = {}
     for container in containers:
         if len(movies) >= max:
             break
             
-        movie_details = get_movie_details(container)
+        movie_details = _get_movie_details(container)
         if movie_details:
             slug, data = movie_details
             movies[slug] = data
