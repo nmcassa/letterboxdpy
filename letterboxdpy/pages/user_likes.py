@@ -1,7 +1,7 @@
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.user_films import extract_user_films
-from letterboxdpy.utils.utils_parser import parse_review_date
+from letterboxdpy.utils.utils_parser import parse_review_date, parse_iso_date
 
 
 class UserLikes:
@@ -16,9 +16,17 @@ class UserLikes:
         self.reviews_url = f"{self._base_url}/reviews/"
         self.lists_url = f"{self._base_url}/lists"
 
-    def get_liked_films(self) -> dict: return extract_user_films(self.films_url)
-    def get_liked_reviews(self) -> dict: return extract_liked_reviews(self.reviews_url)
-    def get_liked_lists(self) -> dict: return extract_liked_lists(self.lists_url)
+    def get_liked_films(self): 
+        """Get user's liked films."""
+        return extract_user_films(self.films_url)
+    
+    def get_liked_reviews(self): 
+        """Get user's liked reviews with detailed structure."""
+        return extract_liked_reviews(self.reviews_url)
+    
+    def get_liked_lists(self): 
+        """Get user's liked lists with count and pagination info."""
+        return extract_liked_lists(self.lists_url)
 
 def extract_liked_reviews(url: str) -> dict:
     """Extracts liked reviews from the user's likes page."""
@@ -39,34 +47,46 @@ def extract_liked_reviews(url: str) -> dict:
             # For production-viewing structure, the review detail is in the body div
             elem_review_detail = item.find("div", {"class": ["body"]})
             if not elem_review_detail:
-                continue
+                raise ValueError(f"Review detail is missing for review item")
                 
             # Extract user data
             username = item.get('data-owner', '')
+            
+            if not username:
+                raise ValueError(f"Username is missing for review item")
+                
             avatar_link = elem_review_detail.find('a', {"class": "avatar"})
             user_url = DOMAIN + avatar_link['href'] if avatar_link else f"{DOMAIN}/{username}/"
             name_elem = elem_review_detail.find('strong', {'class': 'name'})
             display_name = name_elem.text.strip() if name_elem else username
             review_log_type = "Review"
             
-            # Extract movie information from header
+            # Extract movie data
             header = elem_review_detail.find("header", {"class": "inline-production-masthead"})
             if not header:
-                continue
+                raise ValueError(f"Header is missing for review item")
                 
             film_link = header.find("a", href=lambda x: x and "/film/" in x)
             if not film_link:
-                continue
+                raise ValueError(f"Film link is missing for review item")
                 
             movie_name = film_link.text.strip()
+            if not movie_name:
+                raise ValueError(f"Movie name is missing for review by user '{username}'")
+                
             movie_slug = film_link['href'].split('/film/')[-1].rstrip('/')
+            if not movie_slug:
+                raise ValueError(f"Movie slug is missing for movie '{movie_name}' by user '{username}'")
+                
             movie_url = f"{DOMAIN}/film/{movie_slug}/"
             
-            # Look for react-component for movie ID
             react_component = item.find("div", {"class": "react-component"})
             movie_id = react_component.get('data-film-id') if react_component else None
             
-            # Look for release year
+            if not movie_id:
+                raise ValueError(f"Movie ID is missing for review of '{movie_name}' by user '{username}'")
+            
+            # Extract release year
             movie_release = None
             if header:
                 import re
@@ -74,13 +94,19 @@ def extract_liked_reviews(url: str) -> dict:
                 year_match = re.search(r'\b(19|20)\d{2}\b', header_text)
                 if year_match:
                     movie_release = int(year_match.group())
+            
+            if not movie_release:
+                raise ValueError(f"Movie release year is missing for '{movie_name}' (ID: {movie_id}) by user '{username}'")
 
-            # Review details
+            # Extract review data
             review_id = item.get('data-object-id', '').split(':')[-1]
+            if not review_id:
+                raise ValueError(f"Review ID is missing for review of '{movie_name}' by user '{username}'")
+                
             review_url = movie_url  # Default to movie URL
             review_no = 0  # Default value
             
-            # Look for rating stars
+            # Extract rating (optional)
             review_rating = None
             all_spans = elem_review_detail.find_all("span")
             for span in all_spans:
@@ -93,7 +119,7 @@ def extract_liked_reviews(url: str) -> dict:
                     except (ValueError, IndexError):
                         pass
 
-            # Look for review content
+            # Extract content and spoiler flag
             content_elem = elem_review_detail.find("div", {"class": "body-text"})
             spoiler = False
             review_content = ""
@@ -105,16 +131,28 @@ def extract_liked_reviews(url: str) -> dict:
                 paragraphs = content_elem.find_all('p')
                 if paragraphs:
                     review_content = '\n'.join([p.get_text().strip() for p in paragraphs if p.get_text().strip()])
+            
+            if not review_content or review_content.strip() == "":
+                raise ValueError(f"Review content is missing for review ID '{review_id}' of '{movie_name}' by user '{username}'")
 
-            # Look for date
+            # Extract date
             date_elem = elem_review_detail.find("span", {"class": "_nobr"}) or elem_review_detail.find("time")
             review_date = None
             if date_elem:
                 try:
-                    review_date = parse_review_date(review_log_type, date_elem)
+                    # If it's a time element with datetime attribute, use existing parser
+                    if date_elem.name == 'time' and date_elem.get('datetime'):
+                        review_date = parse_iso_date(date_elem['datetime'])
+                    else:
+                        # Use the original parsing method
+                        review_date = parse_review_date(review_log_type, date_elem)
                 except (ValueError, IndexError):
                     review_date = None
+            
+            if not review_date:
+                raise ValueError(f"Review date is missing for review ID '{review_id}' of '{movie_name}' by user '{username}'")
 
+            # Build review entry
             ret['reviews'][review_id] = {
                 'type': review_log_type,
                 'no': review_no,
@@ -158,21 +196,24 @@ def extract_liked_lists(url: str) -> dict:
         dom = parse_url(page_url)
         return dom.find_all('article', {'class': 'list-summary'})
     
-    def extract_list_data(item) -> dict:
+    def extract_list_data(item):
         """Extract data from a single list item."""
         list_id = item.get('data-film-list-id')
-        if not list_id:
-            return None
             
         # Extract title and URL
         title_elem = item.find('h2', {'class': 'name'})
-        if not title_elem or not title_elem.find('a'):
-            return None
             
         title_link = title_elem.find('a')
         title = title_link.text.strip()
         list_url = DOMAIN + title_link['href']
         slug = title_link['href'].split('/')[-2]
+        
+        # Extract description
+        description = ""
+        notes_div = item.find('div', {'class': ['notes', 'body-text', '-reset', '-prose']})
+        if notes_div:
+            paragraphs = notes_div.find_all('p')
+            description = '\n'.join([p.get_text().strip() for p in paragraphs])
         
         # Extract other data
         value_elem = item.find('span', {'class': 'value'})
@@ -199,9 +240,10 @@ def extract_liked_lists(url: str) -> dict:
                     pass
         
         return {
+            'id': list_id,
             'title': title,
             'slug': slug,
-            'description': '',  # Description extraction can be added later
+            'description': description,
             'url': list_url,
             'count': count,
             'likes': likes,
