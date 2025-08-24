@@ -8,10 +8,11 @@ class UserActivity:
 
     def __init__(self, username: str) -> None:
         self.username = username
-        # https://letterboxd.com/<username>/activity/
-        self.activity_url = f"{DOMAIN}/ajax/activity-pagination/{self.username}"
-        # https://letterboxd.com/<username>/activity/following/
-        self.activity_following_url = f"{DOMAIN}/ajax/activity-pagination/{self.username}/following"
+        self._base_url = f"{DOMAIN}/ajax/activity-pagination/{self.username}"
+        
+        # Activity endpoints
+        self.activity_url = self._base_url
+        self.activity_following_url = f"{self._base_url}/following"
         
     def get_activity(self) -> dict: return extract_activity(self.activity_url)
     def get_activity_following(self) -> dict: return extract_activity(self.activity_following_url)
@@ -45,14 +46,16 @@ def extract_activity(ajax_url: str) -> dict:
             Processes the review-specific log data.
             """
             detail = section.find("div", {"class": "film-detail-content"})
+            if not detail or not detail.p:
+                return {}
             log_title = detail.p.text.strip()
             log_type = log_title.split()[-1]
-            film = detail.h2.find(text=True)
+            film = detail.h2.find(text=True) if detail.h2 else None
 
             rating = section.find("span", {"class": ["rating"], })
             rating = int(rating['class'][-1].split('-')[-1]) if rating else None
 
-            film_year = detail.h2.small.text
+            film_year = detail.h2.small.text if detail.h2 and detail.h2.small else None
             film_year = int(film_year) if film_year else None
 
             review, spoiler = parse_review_text(detail)
@@ -110,7 +113,6 @@ def extract_activity(ajax_url: str) -> dict:
         return {log_id: log_data}
 
     data = {
-        'user': username,
         'logs': {},
         'total_logs': 0
     }
