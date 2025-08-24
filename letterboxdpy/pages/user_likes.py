@@ -23,12 +23,17 @@ class UserLikes:
 def extract_liked_reviews(url: str) -> dict:
     """Extracts liked reviews from the user's likes page."""
     REVIEWS_PER_PAGE = 12
-    page = 1
     ret = {'reviews': {}}
 
+    def process_page(page: int) -> list:
+        """Process a single page and return list of review items."""
+        page_url = f"{url}/page/{page}" if page > 1 else url
+        dom = parse_url(page_url)
+        return dom.find_all("article", {"class": ["production-viewing"]})
+
+    page = 1
     while True:
-        dom = parse_url(url + f'/page/{page}')
-        items = dom.find_all("article", {"class": ["production-viewing"]})
+        items = process_page(page)
 
         for item in items:
             # For production-viewing structure, the review detail is in the body div
@@ -143,71 +148,76 @@ def extract_liked_reviews(url: str) -> dict:
     return ret
 
 def extract_liked_lists(url: str) -> dict:
-    """Extract liked lists from user's likes page."""
-    from letterboxdpy.utils.lists_extractor import ListsExtractor
-    
-    # Use custom extraction for liked lists (different HTML structure)
+    """Extract liked lists from user's likes page."""    
     LISTS_PER_PAGE = 12
-    page = 1
     data = {'lists': {}}
     
-    while True:
+    def process_page(page: int) -> list:
+        """Process a single page and return list of list summaries."""
         page_url = f"{url}/page/{page}" if page > 1 else url
         dom = parse_url(page_url)
+        return dom.find_all('article', {'class': 'list-summary'})
+    
+    def extract_list_data(item) -> dict:
+        """Extract data from a single list item."""
+        list_id = item.get('data-film-list-id')
+        if not list_id:
+            return None
+            
+        # Extract title and URL
+        title_elem = item.find('h2', {'class': 'name'})
+        if not title_elem or not title_elem.find('a'):
+            return None
+            
+        title_link = title_elem.find('a')
+        title = title_link.text.strip()
+        list_url = DOMAIN + title_link['href']
+        slug = title_link['href'].split('/')[-2]
         
-        # Find list summaries (liked lists use different HTML structure)
-        list_summaries = dom.find_all('article', {'class': 'list-summary'})
+        # Extract other data
+        value_elem = item.find('span', {'class': 'value'})
+        count = int(value_elem.text.strip().split()[0].replace(',', '')) if value_elem else 0
+        
+        likes_elem = item.find('a', {'class': lambda x: x and 'icon-like' in x})
+        likes = 0
+        if likes_elem:
+            likes_span = likes_elem.find('span', {'class': 'label'})
+            if likes_span:
+                try:
+                    likes = int(likes_span.text.strip())
+                except ValueError:
+                    pass
+        
+        comments_elem = item.find('a', {'class': lambda x: x and 'icon-comment' in x})
+        comments = 0
+        if comments_elem:
+            comments_span = comments_elem.find('span', {'class': 'label'})
+            if comments_span:
+                try:
+                    comments = int(comments_span.text.strip())
+                except ValueError:
+                    pass
+        
+        return {
+            'title': title,
+            'slug': slug,
+            'description': '',  # Description extraction can be added later
+            'url': list_url,
+            'count': count,
+            'likes': likes,
+            'comments': comments
+        }
+    
+    page = 1
+    while True:
+        list_summaries = process_page(page)
         
         for item in list_summaries:
             try:
-                list_id = item.get('data-film-list-id')
-                if not list_id:
-                    continue
-                
-                # Extract title and URL
-                title_elem = item.find('h2', {'class': 'name'})
-                if not title_elem or not title_elem.find('a'):
-                    continue
-                    
-                title_link = title_elem.find('a')
-                title = title_link.text.strip()
-                list_url = DOMAIN + title_link['href']
-                slug = title_link['href'].split('/')[-2]
-                
-                # Extract other data
-                value_elem = item.find('span', {'class': 'value'})
-                count = int(value_elem.text.strip().split()[0].replace(',', '')) if value_elem else 0
-                
-                likes_elem = item.find('a', {'class': lambda x: x and 'icon-like' in x})
-                likes = 0
-                if likes_elem:
-                    likes_span = likes_elem.find('span', {'class': 'label'})
-                    if likes_span:
-                        try:
-                            likes = int(likes_span.text.strip())
-                        except ValueError:
-                            pass
-                
-                comments_elem = item.find('a', {'class': lambda x: x and 'icon-comment' in x})
-                comments = 0
-                if comments_elem:
-                    comments_span = comments_elem.find('span', {'class': 'label'})
-                    if comments_span:
-                        try:
-                            comments = int(comments_span.text.strip())
-                        except ValueError:
-                            pass
-                
-                data['lists'][list_id] = {
-                    'title': title,
-                    'slug': slug,
-                    'description': '',  # Description extraction can be added later
-                    'url': list_url,
-                    'count': count,
-                    'likes': likes,
-                    'comments': comments
-                }
-                
+                list_data = extract_list_data(item)
+                if list_data:
+                    list_id = item.get('data-film-list-id')
+                    data['lists'][list_id] = list_data
             except Exception:
                 continue
         
