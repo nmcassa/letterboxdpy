@@ -98,6 +98,8 @@ class User:
         return self.pages.likes.get_liked_films()
     def get_liked_reviews(self) -> dict:
         return self.pages.likes.get_liked_reviews()
+    def get_liked_lists(self) -> dict:
+        return self.pages.likes.get_liked_lists()
     
     def get_list(self, slug: str) -> LetterboxdList: 
         return LetterboxdList(self.username, slug)
