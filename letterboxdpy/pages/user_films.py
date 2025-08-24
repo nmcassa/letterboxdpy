@@ -75,28 +75,53 @@ def extract_movies_from_user_watched(dom, max=12*6) -> dict:
     """
     supports user watched films section
     """
-    poster_containers = dom.find_all("li", {"class": ["poster-container"]})
-
-    movies = {}
-    for poster_container in poster_containers:
-        poster = poster_container.div
-        poster_viewingdata = poster_container.p
+    def extract_rating_and_like_status(container):
+        """Parse rating and like status from viewing data spans."""
+        poster_viewingdata = container.find("p", {"class": "poster-viewingdata"}) or container.p
         rating = None
         liked = False
 
-        if poster_viewingdata.span:
+        if poster_viewingdata and poster_viewingdata.span:
             for span in poster_viewingdata.find_all("span"):
-                if 'rating' in span['class']:
-                    rating = int(poster_viewingdata.span['class'][-1].split('-')[-1])
-                elif 'like' in span['class']:
+                if span.get('class') and 'rating' in span['class']:
+                    try:
+                        rating = int([cls for cls in span['class'] if 'rating' in cls][0].split('-')[-1])
+                    except (ValueError, IndexError):
+                        pass
+                elif span.get('class') and 'like' in span['class']:
                     liked = True
+        
+        return rating, liked
+    
+    def get_movie_details(container):
+        """Extract complete movie information including rating and like status."""
+        react_component = container.find("div", {"class": "react-component"}) or container.div
+        if not react_component or 'data-film-id' not in react_component.attrs:
+            return None
+            
+        rating, liked = extract_rating_and_like_status(container)
+        
+        movie_slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
+        movie_id = react_component['data-film-id']
+        movie_name = react_component.get('data-item-name') or react_component.img['alt']
 
-        movies[poster["data-film-slug"]] = {
-            'name': poster.img["alt"],
-            "id": poster["data-film-id"],
+        return movie_slug, {
+            'name': movie_name,
+            "id": movie_id,
             "rating": rating,
             "liked": liked
         }
+
+    containers = dom.find_all("li", {"class": ["griditem"]}) or dom.find_all("li", {"class": ["poster-container"]})
+    movies = {}
+    for container in containers:
+        if len(movies) >= max:
+            break
+            
+        movie_details = get_movie_details(container)
+        if movie_details:
+            slug, data = movie_details
+            movies[slug] = data
 
     return movies
 

@@ -71,32 +71,38 @@ def extract_watchlist(username: str, filters: dict = None) -> dict:
             f += "+".join([str(v) for v in values]) + "/"
         BASE_URL += f
 
+    def extract_movie_info(container):
+        """Extract film ID, slug, and name from watchlist container."""
+        react_component = container.find("div", {"class": "react-component"}) or container.div
+        if not react_component or 'data-film-id' not in react_component.attrs:
+            return None
+            
+        film_id = react_component['data-film-id']
+        slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
+        name = react_component.get('data-item-name') or react_component.img['alt']
+        
+        return film_id, slug, name
+
     page = 1
     no = 1
     while True:
         dom = parse_url(f'{BASE_URL}/page/{page}')
+        containers = dom.find_all("li", {"class": "griditem"}) or dom.find_all("li", {"class": ["poster-container"]})
+        
+        for container in containers:
+            movie_info = extract_movie_info(container)
+            if movie_info:
+                film_id, slug, name = movie_info
+                data['data'][film_id] = {
+                    'name': name,
+                    'slug': slug,
+                    'page': page,
+                    'url': f"{DOMAIN}/film/{slug}/",
+                    'no': no
+                }
+                no += 1
 
-        poster_containers = dom.find_all("li", {"class": ["poster-container"]})
-        for poster_container in poster_containers:
-            poster = poster_container.div
-            img = poster_container.div.img
-
-            film_id = poster['data-film-id']
-            slug = poster['data-film-slug']
-            name = img['alt']
-
-            # Add film details to the data dictionary
-            data['data'][film_id] = {
-                'name': name,
-                'slug': slug,
-                'page': page,
-                'url': f"{DOMAIN}/films/{slug}/",
-                'no': no
-            }
-            no += 1
-
-        # Check if we have reached the last page
-        if len(poster_containers) < FILMS_PER_PAGE:
+        if len(containers) < FILMS_PER_PAGE:
             break
         page += 1
 

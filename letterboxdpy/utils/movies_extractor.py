@@ -61,21 +61,31 @@ def extract_movies_from_vertical_list(dom, max_items=20*5) -> dict:
     Returns:
         dict: Movie data with film IDs as keys
     """
-    items = dom.find_all("div", {"class": "film-poster"})
+    def get_movie_data(item):
+        """Extract movie ID, slug, and name from container element."""
+        react_component = item.find("div", {"class": "react-component"}) if item.name == "li" else item
+        if not react_component or 'data-film-id' not in react_component.attrs:
+            return None
+            
+        movie_id = react_component['data-film-id']
+        movie_slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
+        movie_name = react_component.get('data-item-name') or react_component.img['alt']
 
+        return movie_id, {
+            "slug": movie_slug,
+            "name": movie_name,
+            'url': f'https://letterboxd.com/film/{movie_slug}/'
+        }
+
+    items = dom.find_all("li", {"class": "griditem"}) or dom.find_all("div", {"class": "film-poster"})
     movies = {}
     for item in items:
         if len(movies) >= max_items:
             break
             
-        movie_id = item['data-film-id']
-        movie_slug = item['data-film-slug'] 
-        movie_name = item.img['alt']
-
-        movies[movie_id] = {
-            "slug": movie_slug,
-            "name": movie_name,
-            'url': f'https://letterboxd.com/film/{movie_slug}/'
-        }
+        movie_data = get_movie_data(item)
+        if movie_data:
+            movie_id, data = movie_data
+            movies[movie_id] = data
 
     return movies
