@@ -1,7 +1,10 @@
-from datetime import datetime
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.utils.utils_parser import parse_review_text
+from letterboxdpy.utils.activity_extractor import (
+    parse_activity_datetime, build_time_data, get_event_type, get_log_title, 
+    get_log_type, process_review_activity, process_basic_activity, 
+    process_newlist_activity
+)
 
 
 class UserActivity:
@@ -19,118 +22,79 @@ class UserActivity:
 
 def extract_activity(ajax_url: str) -> dict:
 
-    def get_event_type(section) -> tuple:
-        """
-        Extracts the event type and log ID from the section.
-        """
-        event_type = None
-        if any(x.startswith('-') for x in section['class']):
-            event_type = list(filter(lambda x: x.startswith('-'), section['class']))[0][1:]
-        return event_type
+   def _process_log(section, event_type) -> dict:
+       """Process activity log depending on event type."""
+       log_id = section["data-activity-id"]
+       date = parse_activity_datetime(section.find("time")['datetime'])
+       log_title = get_log_title(section)
+       log_type = get_log_type(event_type, section)
+       
+       log_data = {
+           'event_type': event_type,
+           'log_type': log_type,
+           'title': log_title,
+           'time': build_time_data(date)
+       }
 
-    def process_activity_log(section, event_type) -> dict:
-        """
-        Processes the activity log depending on the event type.
-        """
-        def parse_datetime(date_string: str) -> datetime:
-            """
-            Parses a datetime string, handling microseconds if present.
-            """
-            try:
-                return datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
-            except ValueError:
-                return datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+       if event_type == 'review':
+           review_data = process_review_activity(section, log_type)
+           if review_data.get('film'):
+               log_data['film'] = review_data['film']
+           if review_data.get('film_year'):
+               log_data['film_year'] = review_data['film_year']
+           if review_data.get('rating'):
+               log_data['rating'] = review_data['rating']
+           if review_data.get('review'):
+               log_data['review'] = review_data['review']
+           if review_data.get('spoiler'):
+               log_data['spoiler'] = review_data['spoiler']
+       elif event_type == 'basic':
+           basic_data = process_basic_activity(section, log_title, log_type)
+           if basic_data.get('username'):
+               log_data['username'] = basic_data['username']
+           if basic_data.get('film'):
+               log_data['film'] = basic_data['film']
+           if basic_data.get('comment'):
+               log_data['comment'] = basic_data['comment']
+           if basic_data.get('target_url'):
+               log_data['target_url'] = basic_data['target_url']
+           if basic_data.get('cloned_list'):
+               log_data['cloned_list'] = basic_data['cloned_list']
+       elif event_type == 'newlist':
+           newlist_data = process_newlist_activity(section, log_title, log_type)
+           if newlist_data.get('film_count'):
+               log_data['film_count'] = newlist_data['film_count']
+           if newlist_data.get('description'):
+               log_data['description'] = newlist_data['description']
+           if newlist_data.get('likes'):
+               log_data['likes'] = newlist_data['likes']
+           if newlist_data.get('comments'):
+               log_data['comments'] = newlist_data['comments']
+           if newlist_data.get('target_list'):
+               log_data['target_list'] = newlist_data['target_list']
+           if newlist_data.get('source_list'):
+               log_data['source_list'] = newlist_data['source_list']
 
-        def process_review_log() -> dict:
-            """
-            Processes the review-specific log data.
-            """
-            detail = section.find("div", {"class": "film-detail-content"})
-            if not detail or not detail.p:
-                return {}
-            log_title = detail.p.text.strip()
-            log_type = log_title.split()[-1]
-            film = detail.h2.find(text=True) if detail.h2 else None
+       return {log_id: log_data}
 
-            rating = section.find("span", {"class": ["rating"], })
-            rating = int(rating['class'][-1].split('-')[-1]) if rating else None
+   data = {
+       'logs': {},
+       'total_logs': 0
+   }
 
-            film_year = detail.h2.small.text if detail.h2 and detail.h2.small else None
-            film_year = int(film_year) if film_year else None
+   dom = parse_url(ajax_url)
+   sections = dom.find_all("section")
 
-            review, spoiler = parse_review_text(detail)
+   if not sections:
+       return data
 
-            return {
-                'type': log_type,
-                'title': log_title,
-                'film': film,
-                'film_year': film_year,
-                'rating': rating,
-                'spoiler': spoiler,
-                'review': review
-            }
+   for section in sections:
+       event_type = get_event_type(section)
+       if event_type in ('review', 'basic', 'newlist'):
+           log_data = _process_log(section, event_type)
+           data['logs'].update(log_data)
+           data['total_logs'] = len(data['logs'])
+       elif 'no-activity-message' in section['class']:
+           break
 
-        def process_basic_log() -> dict:
-            """
-            Processes the basic log data.
-            """
-            log_title = section.p.text.strip()
-            log_type = log_title.split()[1]
-            log_data = {'log_type': log_type, 'title': log_title}
-
-            if log_type == 'followed':
-                username = section.find("a", {"class": "target"})['href'].replace('/', '')
-                log_data['username'] = username
-            elif log_type == 'liked':
-                # display_name = section.find("strong",{"class":["name"]}).text.replace('\u2019s',"")
-                username = section.find("a", {"class": "target"})['href'].split('/')[1]
-                log_data['username'] = username
-            elif log_type == 'watched':
-                film = section.find("a",{"class":["target"]}).text.split('  ')[-1].strip()
-                log_data['film'] = film if film else None
-
-            return log_data
-
-        log_id = section["data-activity-id"]
-        date = parse_datetime(section.find("time")['datetime'])
-        log_data = {
-            'event_type': event_type,
-            'time': {
-                'year': date.year,
-                'month': date.month,
-                'day': date.day,
-                'hour': date.hour,
-                'minute': date.minute,
-                'second': date.second
-            }
-        }
-
-        if event_type == 'review':
-            log_data.update(process_review_log())
-        elif event_type == 'basic':
-            log_data.update(process_basic_log())
-
-        return {log_id: log_data}
-
-    data = {
-        'logs': {},
-        'total_logs': 0
-    }
-
-    dom = parse_url(ajax_url)
-    sections = dom.find_all("section")
-
-    if not sections:
-        # User {username} has no activity.
-        return data
-
-    for section in sections:
-        event_type = get_event_type(section)
-        if event_type in ('review', 'basic'):
-            log_data = process_activity_log(section, event_type)
-            data['logs'].update(log_data)
-            data['total_logs'] = len(data['logs'])
-        elif 'no-activity-message' in section['class']:
-            break
-
-    return data
+   return data
