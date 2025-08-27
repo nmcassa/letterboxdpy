@@ -7,7 +7,6 @@ Helper functions for extracting activity data from Letterboxd DOM elements.
 from datetime import datetime
 from letterboxdpy.utils.utils_parser import parse_review_text
 
-
 def parse_activity_datetime(date_string: str) -> datetime:
     """Parse datetime string with microseconds support."""
     try:
@@ -294,3 +293,19 @@ def process_newlist_activity(section, title: str, log_type: str) -> dict:
             log_data['source_list'] = list_info['source_list']
     
     return log_data
+
+
+def get_log_item_slug(event_type: str, section) -> str | None:
+    """Extract log item slug based on event type."""
+
+    if event_type == "basic":
+        anchor_tag = section.find("a", {"class": "target"})
+        item_slug = anchor_tag.attrs['href'].split('/')[-2]
+        return item_slug
+    
+    elif event_type == "review":
+        div = section.find("div", {"class": "react-component"})
+        item_slug = div.attrs.get("data-item-slug")
+        return item_slug
+    
+    return None

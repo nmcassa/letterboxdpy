@@ -3,7 +3,7 @@ from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.activity_extractor import (
     parse_activity_datetime, build_time_data, get_event_type, get_log_title, 
     get_log_type, process_review_activity, process_basic_activity, 
-    process_newlist_activity
+    process_newlist_activity, get_log_item_slug
 )
 
 
@@ -28,12 +28,14 @@ def extract_activity(ajax_url: str) -> dict:
        date = parse_activity_datetime(section.find("time")['datetime'])
        log_title = get_log_title(section)
        log_type = get_log_type(event_type, section)
-       
+       log_item_slug = get_log_item_slug(event_type, section)
+
        log_data = {
            'event_type': event_type,
            'log_type': log_type,
            'title': log_title,
-           'time': build_time_data(date)
+           'time': build_time_data(date),
+           'item_slug': log_item_slug # might check if activity have one before adding it
        }
 
        if event_type == 'review':
