@@ -35,7 +35,7 @@ def extract_activity(ajax_url: str) -> dict:
            'log_type': log_type,
            'title': log_title,
            'time': build_time_data(date),
-           'item_slug': log_item_slug # might check if activity have one before adding it
+           'item_slug': log_item_slug
        }
 
        if event_type == 'review':
