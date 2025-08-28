@@ -11,47 +11,54 @@ print(user_instance.get_activity())
 
 ```json
 {
-  "logs": {
+  "metadata": {
+    "export_timestamp": "2025-08-28T17:31:22.001861",
+    "source_url": "https://letterboxd.com/ajax/activity-pagination/nmcassa",
+    "total_activities": 3
+  },
+  "activities": {
     "9659817024": {
-      "event_type": "review",
-      "time": {
-        "year": 2025,
-        "month": 8,
-        "day": 24,
-        "hour": 14,
-        "minute": 40,
-        "second": 23
+      "activity_type": "review",
+      "timestamp": "2025-08-24T14:40:23.000000Z",
+      "content": {
+        "action": "watched",
+        "description": "nmcassa watched and rated The Matrix ★★★★★",
+        "movie": {
+          "title": "The Matrix",
+          "year": 1999,
+          "slug": "the-matrix",
+          "url": "https://letterboxd.com/film/the-matrix/"
+        },
+        "rating": 5
       }
     },
     "9624102431": {
-      "event_type": "basic",
-      "time": {
-        "year": 2025,
-        "month": 8,
-        "day": 19,
-        "hour": 16,
-        "minute": 49,
-        "second": 13
-      },
-      "log_type": "liked",
-      "title": "nmcassa liked Ben Wold's review of Superman",
-      "username": "ben24wold"
+      "activity_type": "basic",
+      "timestamp": "2025-08-19T16:49:13.000000Z",
+      "content": {
+        "action": "liked",
+        "description": "nmcassa liked Ben Wold's review of Superman",
+        "movie": {
+          "title": "review of Superman",
+          "slug": "superman",
+          "url": "https://letterboxd.com/film/superman/"
+        }
+      }
     },
     "9624100380": {
-      "event_type": "basic",
-      "time": {
-        "year": 2025,
-        "month": 8,
-        "day": 19,
-        "hour": 16,
-        "minute": 48,
-        "second": 50
-      },
-      "log_type": "added",
-      "title": "nmcassa added The Substance to their watchlist"
+      "activity_type": "basic",
+      "timestamp": "2025-08-19T16:48:50.000000Z",
+      "content": {
+        "action": "added",
+        "description": "nmcassa added The Substance to their watchlist",
+        "movie": {
+          "title": "The Substance",
+          "slug": "the-substance",
+          "url": "https://letterboxd.com/film/the-substance/"
+        }
+      }
     }
-  },
-  "total_logs": 20
+  }
 }
 ```
 </details>

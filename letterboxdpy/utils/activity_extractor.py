@@ -15,16 +15,9 @@ def parse_activity_datetime(date_string: str) -> datetime:
         return datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
 
 
-def build_time_data(date_obj: datetime) -> dict:
-    """Build time data dictionary from datetime object."""
-    return {
-        'year': date_obj.year,
-        'month': date_obj.month,
-        'day': date_obj.day,
-        'hour': date_obj.hour,
-        'minute': date_obj.minute,
-        'second': date_obj.second
-    }
+def build_time_data(date_obj: datetime) -> str:
+    """Build ISO timestamp string in standard format."""
+    return date_obj.isoformat() + 'Z'
 
 
 def get_event_type(section) -> str:
@@ -88,20 +81,32 @@ def get_log_type(event_type: str, section) -> str:
 
 
 # Film and User Info Extractors
-def get_film_info(section) -> tuple:
-    """Extract film name and year from section."""
-    film = None
-    film_year = None
+def get_film_info(section, item_slug: str = None) -> dict:
+    """Extract film information from section."""
+    film_data = {
+        'title': None,
+        'year': None,
+        'slug': item_slug,
+        'url': None
+    }
+    
     h2 = section.find("h2")
     if h2:
-        film = h2.get_text().strip()
+        film_data['title'] = h2.get_text().strip()
+        
+        # Extract year
         year_link = section.find("a", href=lambda x: x and "/films/year/" in str(x))
         if year_link:
             try:
-                film_year = int(year_link.get_text().strip())
+                film_data['year'] = int(year_link.get_text().strip())
             except ValueError:
-                film_year = None
-    return film, film_year
+                pass
+    
+    # Build URL from slug if available
+    if item_slug:
+        film_data['url'] = f"https://letterboxd.com/film/{item_slug}/"
+    
+    return film_data
 
 
 def get_rating(section) -> int:
@@ -120,13 +125,23 @@ def build_review_title(film: str, log_type: str, rating: int, section) -> str:
     return ""
 
 
-def get_username(section) -> str:
-    """Extract username from target link."""
+def get_user_info(section) -> dict:
+    """Extract user information from section."""
+    user_data = {
+        'username': None,
+        'display_name': None,
+        'profile_url': None
+    }
+    
     target = section.find("a", {"class": "target"})
     if target:
         href = target.get('href', '')
-        return href.replace('/', '') if '/' not in href[1:] else href.split('/')[1]
-    return ""
+        username = href.replace('/', '') if '/' not in href[1:] else href.split('/')[1]
+        user_data['username'] = username
+        user_data['display_name'] = target.get_text().strip()
+        user_data['profile_url'] = f"https://letterboxd.com{href}" if href.startswith('/') else href
+    
+    return user_data
 
 
 def get_comment_data(section) -> dict:
@@ -227,7 +242,7 @@ def get_list_info(section) -> dict:
 
 
 # Activity Processing Functions
-def process_review_activity(section, log_type: str) -> dict:
+def process_review_activity(section, log_type: str, item_slug: str = None) -> dict:
     """Process review-specific log data."""
     detail = section.find("div", {"class": "table-activity-viewing"})
     if not detail:
@@ -235,42 +250,90 @@ def process_review_activity(section, log_type: str) -> dict:
         if not detail:
             return {}
 
-    film, film_year = get_film_info(section)
+    # Get structured film information
+    film_info = get_film_info(section, item_slug)
     rating = get_rating(section)
     review, spoiler = parse_review_text(section)
-    log_title = build_review_title(film, log_type, rating, section)
+    log_title = build_review_title(film_info.get('title'), log_type, rating, section)
 
-    return {
-        'log_type': log_type,
-        'title': log_title,
-        'film': film,
-        'film_year': film_year,
-        'rating': rating,
-        'review': review,
-        'spoiler': spoiler
+    activity_data = {
+        'action': log_type,
+        'description': log_title
     }
 
+    # Add movie information if available
+    if any(film_info.values()):
+        activity_data['movie'] = {k: v for k, v in film_info.items() if v is not None}
 
-def process_basic_activity(section, title: str, log_type: str) -> dict:
-    """Process basic log data."""
-    log_data = {'log_type': log_type, 'title': title}
+    # Add rating information
+    if rating:
+        activity_data['rating'] = rating
+
+    # Add review information
+    if review:
+        activity_data['review'] = {
+            'content': review,
+            'contains_spoilers': spoiler if spoiler is not None else False
+        }
+
+    return activity_data
+
+
+def process_basic_activity(section, title: str, log_type: str, item_slug: str = None) -> dict:
+    """Process basic activity log data."""
+    activity_data = {
+        'action': log_type,
+        'description': title
+    }
 
     if log_type == 'followed':
-        log_data['username'] = get_username(section)
-    elif log_type == 'liked':
-        log_data['username'] = get_username(section)
-    elif log_type == 'watched':
-        log_data['film'] = get_film_name(section)
+        # Extract user information for follow activities
+        target = section.find("a", {"class": "target"})
+        if target:
+            href = target.get('href', '')
+            username = href.replace('/', '') if '/' not in href[1:] else href.split('/')[1]
+            activity_data['user'] = {
+                'username': username,
+                'display_name': target.get_text().strip(),
+                'profile_url': f"https://letterboxd.com{href}" if href.startswith('/') else href
+            }
+    
+    elif log_type in ['liked', 'watched', 'added', 'rated']:
+        # Extract movie information for film-related activities
+        movie_data = {}
+        
+        # Get film title from target link
+        film_name = get_film_name(section)
+        if film_name:
+            movie_data['title'] = film_name
+        
+        # Add slug and URL when available
+        if item_slug:
+            movie_data['slug'] = item_slug
+            movie_data['url'] = f"https://letterboxd.com/film/{item_slug}/"
+        
+        # Extract year information when available
+        film_info = get_film_info(section, item_slug)
+        if film_info.get('year'):
+            movie_data['year'] = film_info['year']
+        
+        if movie_data:
+            activity_data['movie'] = movie_data
+    
     elif log_type == 'commented':
         comment_data = get_comment_data(section)
         if comment_data.get('comment'):
-            log_data['comment'] = comment_data['comment']
-        if comment_data.get('target_url'):
-            log_data['target_url'] = comment_data['target_url']
+            activity_data['comment'] = {
+                'content': comment_data['comment'],
+                'target_url': comment_data.get('target_url')
+            }
+    
     elif log_type == 'cloned':
-        log_data['cloned_list'] = get_cloned_list(section)
+        cloned_list_name = get_cloned_list(section)
+        if cloned_list_name:
+            activity_data['list'] = {'name': cloned_list_name}
 
-    return log_data
+    return activity_data
 
 
 def process_newlist_activity(section, title: str, log_type: str) -> dict:

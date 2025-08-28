@@ -23,65 +23,42 @@ class UserActivity:
 def extract_activity(ajax_url: str) -> dict:
 
    def _process_log(section, event_type) -> dict:
-       """Process activity log depending on event type."""
+       """Process activity log and extract data."""
        log_id = section["data-activity-id"]
        date = parse_activity_datetime(section.find("time")['datetime'])
        log_title = get_log_title(section)
        log_type = get_log_type(event_type, section)
        log_item_slug = get_log_item_slug(event_type, section)
 
+       # Build activity data structure
        log_data = {
-           'event_type': event_type,
-           'log_type': log_type,
-           'title': log_title,
-           'time': build_time_data(date),
-           'item_slug': log_item_slug
+           'activity_type': event_type,
+           'timestamp': build_time_data(date),
+           'content': {}
        }
 
+       # Process content by activity type
        if event_type == 'review':
-           review_data = process_review_activity(section, log_type)
-           if review_data.get('film'):
-               log_data['film'] = review_data['film']
-           if review_data.get('film_year'):
-               log_data['film_year'] = review_data['film_year']
-           if review_data.get('rating'):
-               log_data['rating'] = review_data['rating']
-           if review_data.get('review'):
-               log_data['review'] = review_data['review']
-           if review_data.get('spoiler'):
-               log_data['spoiler'] = review_data['spoiler']
+           content_data = process_review_activity(section, log_type, log_item_slug)
+           log_data['content'] = content_data
        elif event_type == 'basic':
-           basic_data = process_basic_activity(section, log_title, log_type)
-           if basic_data.get('username'):
-               log_data['username'] = basic_data['username']
-           if basic_data.get('film'):
-               log_data['film'] = basic_data['film']
-           if basic_data.get('comment'):
-               log_data['comment'] = basic_data['comment']
-           if basic_data.get('target_url'):
-               log_data['target_url'] = basic_data['target_url']
-           if basic_data.get('cloned_list'):
-               log_data['cloned_list'] = basic_data['cloned_list']
+           content_data = process_basic_activity(section, log_title, log_type, log_item_slug)
+           log_data['content'] = content_data
        elif event_type == 'newlist':
-           newlist_data = process_newlist_activity(section, log_title, log_type)
-           if newlist_data.get('film_count'):
-               log_data['film_count'] = newlist_data['film_count']
-           if newlist_data.get('description'):
-               log_data['description'] = newlist_data['description']
-           if newlist_data.get('likes'):
-               log_data['likes'] = newlist_data['likes']
-           if newlist_data.get('comments'):
-               log_data['comments'] = newlist_data['comments']
-           if newlist_data.get('target_list'):
-               log_data['target_list'] = newlist_data['target_list']
-           if newlist_data.get('source_list'):
-               log_data['source_list'] = newlist_data['source_list']
+           content_data = process_newlist_activity(section, log_title, log_type)
+           log_data['content'] = content_data
 
        return {log_id: log_data}
 
+   from datetime import datetime
+   
    data = {
-       'logs': {},
-       'total_logs': 0
+       'metadata': {
+           'export_timestamp': datetime.now().isoformat(),
+           'source_url': ajax_url,
+           'total_activities': 0
+       },
+       'activities': {}
    }
 
    dom = parse_url(ajax_url)
@@ -94,8 +71,8 @@ def extract_activity(ajax_url: str) -> dict:
        event_type = get_event_type(section)
        if event_type in ('review', 'basic', 'newlist'):
            log_data = _process_log(section, event_type)
-           data['logs'].update(log_data)
-           data['total_logs'] = len(data['logs'])
+           data['activities'].update(log_data)
+           data['metadata']['total_activities'] = len(data['activities'])
        elif 'no-activity-message' in section['class']:
            break
 
