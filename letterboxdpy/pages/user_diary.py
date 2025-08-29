@@ -43,6 +43,17 @@ def extract_user_diary(
     Returns:
         dict: A dictionary with diary entries, each containing movie details, rewatch status, rating, like status, review status, and entry date.
     """
+    
+    def extract_movie_name(react_div, default="Unknown"):
+        if not react_div:
+            return default
+
+        raw_name = react_div.get("data-item-name", default)
+        if not raw_name or not isinstance(raw_name, str):
+            return default
+
+        return raw_name.rsplit(' (', 1)[0] if ' (' in raw_name and raw_name.endswith(')') else raw_name
+
     date_filter = f"for/{year}/" if year else ""
     date_filter += f"{str(month).zfill(2)}/" if month else ""
     date_filter += f"{str(day).zfill(2)}/" if day else ""
@@ -89,7 +100,7 @@ def extract_user_diary(
                 production_col = cols.get('production')
                 react_div = production_col.find('div', {'class': 'react-component'}) if production_col else None
                 
-                name = react_div.get("data-item-name", "Unknown") if react_div else "Unknown"
+                name = extract_movie_name(react_div)
                 slug = react_div.get("data-item-slug") if react_div else None
                 id = react_div.get("data-film-id") if react_div else None
                 # released column (updated for new HTML structure)
