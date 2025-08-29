@@ -321,6 +321,11 @@ def process_basic_activity(section, title: str, log_type: str, item_slug: str = 
         
         if movie_data:
             activity_data['movie'] = movie_data
+
+        # Add rating
+        rating = get_rating(section)
+        if rating:
+            activity_data['rating'] = rating
     
     elif log_type == 'commented':
         comment_data = get_comment_data(section)
