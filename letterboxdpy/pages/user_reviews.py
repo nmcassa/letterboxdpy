@@ -56,7 +56,6 @@ def extract_user_reviews(url: str) -> dict:
             log_id = log['data-object-id'].split(':')[-1]
             # str ^^^--- log_id: unique id of the review.
             log_link = DOMAIN + log.a['href']
-            print(log_link)
             log_no = log_link.split(slug)[-1]
             log_no = int(log_no.replace('/', '')) if log_no.count('/') == 2 else 0
             # int ^^^--- log_no: there can be multiple reviews for a movie.
