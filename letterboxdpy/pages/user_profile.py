@@ -148,23 +148,54 @@ def extract_stats(dom) -> dict:
 def extract_favorites(dom) -> dict:
     """Extracts favorite films from the DOM and returns them as a dictionary."""
     try:
-        data = dom.find("section", {"id": ["favourites"]})
-        children = data.findChildren("div") if data else []
+        favorites_section = dom.find("section", {"id": "favourites"})
+        if not favorites_section:
+            return {}
+        
+        poster_list = favorites_section.find("ul", class_="poster-list")
+        if not poster_list:
+            return {}
+            
         favorites = {}
-
-        for div in children:
-            poster = div.find("img")
-            if poster and 'data-film-slug' in poster.parent.attrs and 'data-film-id' in poster.parent.attrs:
-                movie_slug = poster.parent['data-film-slug']
-                movie_id = poster.parent['data-film-id']
-                movie_name = poster['alt']
-
+        items = poster_list.find_all("li")
+        
+        for item in items:
+            react_div = item.find("div", class_="react-component")
+            if not react_div:
+                continue
+                
+            # Extract data from react component attributes
+            movie_id = react_div.get('data-film-id')
+            movie_slug = react_div.get('data-item-slug')
+            movie_name = react_div.get('data-item-name')
+            
+            # Clean movie name (remove year) like we did in diary
+            if movie_name and ' (' in movie_name and movie_name.endswith(')'):
+                movie_name = movie_name.rsplit(' (', 1)[0]
+            
+            if movie_id and movie_slug and movie_name:
+                # Extract additional data
+                full_display_name = react_div.get('data-item-full-display-name', '')
+                target_link = react_div.get('data-target-link', '')
+                
+                # Extract release year from full display name
+                release_year = None
+                if full_display_name and '(' in full_display_name and ')' in full_display_name:
+                    try:
+                        year_part = full_display_name.split('(')[-1].split(')')[0]
+                        release_year = int(year_part) if year_part.isdigit() else None
+                    except (ValueError, IndexError):
+                        pass
+                
                 favorites[movie_id] = {
                     'slug': movie_slug,
-                    'name': movie_name
+                    'name': movie_name,
+                    'url': f'https://letterboxd.com/film/{movie_slug}/',
+                    'year': release_year,
+                    'log_url': f'https://letterboxd.com{target_link}' if target_link else None
                 }
         
-        return favorites  # Return the favorites dictionary
+        return favorites
     except Exception as e:
         raise RuntimeError("Failed to extract favorites from DOM") from e
 
