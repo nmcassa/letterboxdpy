@@ -15,13 +15,13 @@ print(user.user_films(user_instance))
     "civil-war-2024": {
       "name": "Civil War",
       "id": "834656",
-      "rating": 3,
+      "rating": 1.5,
       "liked": false
     },
     "monkey-man": {
       "name": "Monkey Man",
       "id": "488751",
-      "rating": 9,
+      "rating": 4.5,
       "liked": true
     },...
   },
@@ -30,7 +30,7 @@ print(user.user_films(user_instance))
   "rating_count": 518,
   "liked_percentage": 14.29,
   "rating_percentage": 92.5,
-  "rating_average": 6.47
+  "rating_average": 3.24
 }
 ```
 </details>
