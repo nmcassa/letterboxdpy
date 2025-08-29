@@ -112,7 +112,7 @@ def get_film_info(section, item_slug: str = None) -> dict:
 def get_rating(section) -> int:
     """Extract user rating from section."""
     rating = section.find("span", {"class": ["rating"], })
-    return int(rating['class'][-1].split('-')[-1]) if rating else None
+    return int(rating['class'][-1].split('-')[-1]) / 2 if rating else None
 
 
 def build_review_title(film: str, log_type: str, rating: int, section) -> str:
@@ -120,7 +120,9 @@ def build_review_title(film: str, log_type: str, rating: int, section) -> str:
     if film and log_type:
         username = section.find("a", href=lambda x: x and x.startswith('/') and len(x.split('/')) == 3)
         username_text = username.get_text().strip() if username else "User"
-        rating_text = "★" * rating if rating else ""
+        rating_text = "★" * int(rating) if rating else ""
+        if not float(rating).is_integer():
+            rating_text += '½'
         return f"{username_text} {log_type} {film} {rating_text}".strip()
     return ""
 
@@ -161,7 +163,7 @@ def get_film_name(section) -> str:
     """Extract film name from target link."""
     target = section.find("a", {"class": ["target"]})
     if target:
-        return target.text.split('  ')[-1].strip()
+        return target.text.split('  ')[-1].strip().removeprefix("review of ")
     return ""
 
 
@@ -319,6 +321,11 @@ def process_basic_activity(section, title: str, log_type: str, item_slug: str = 
         
         if movie_data:
             activity_data['movie'] = movie_data
+
+        # Add rating
+        rating = get_rating(section)
+        if rating:
+            activity_data['rating'] = rating
     
     elif log_type == 'commented':
         comment_data = get_comment_data(section)
