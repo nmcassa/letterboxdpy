@@ -29,7 +29,7 @@ print(user_instance.get_activity())
           "slug": "the-matrix",
           "url": "https://letterboxd.com/film/the-matrix/"
         },
-        "rating": 5
+        "rating": 5.0
       }
     },
     "9624102431": {
@@ -39,7 +39,7 @@ print(user_instance.get_activity())
         "action": "liked",
         "description": "nmcassa liked Ben Wold's review of Superman",
         "movie": {
-          "title": "review of Superman",
+          "title": "Superman",
           "slug": "superman",
           "url": "https://letterboxd.com/film/superman/"
         }
