@@ -163,7 +163,7 @@ def get_film_name(section) -> str:
     """Extract film name from target link."""
     target = section.find("a", {"class": ["target"]})
     if target:
-        return target.text.split('  ')[-1].strip()
+        return target.text.split('  ')[-1].strip().removeprefix("review of ")
     return ""
 
 
