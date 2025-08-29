@@ -35,10 +35,11 @@ user_instance = user.User(username)
 current_directory = os.getcwd()
 
 # Export directories
-EXPORTS_DIR = build_path(current_directory, 'exports')
+EXAMPLES_DIR = build_path(current_directory, 'examples')
+EXPORTS_DIR = build_path(EXAMPLES_DIR, 'exports')
 USERS_FOLDER = build_path(EXPORTS_DIR, 'users')
 USER_FOLDER = build_path(USERS_FOLDER, user_instance.username)
-directories = [EXPORTS_DIR, USERS_FOLDER, USER_FOLDER]
+directories = [EXAMPLES_DIR, EXPORTS_DIR, USERS_FOLDER, USER_FOLDER]
 check_and_create_dirs(directories)
 
 start_time = time.time()
