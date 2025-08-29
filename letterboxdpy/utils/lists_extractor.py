@@ -4,7 +4,7 @@ This module provides common functionality for extracting list data
 from user lists, movie lists, and individual list pages.
 """
 
-from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
+from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand, extract_numeric_text
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 
@@ -32,44 +32,51 @@ class ListsExtractor:
     LISTS_PER_PAGE = 12
     
     @classmethod
-    def from_url(cls, base_url: str) -> dict:
+    def from_url(cls, base_url: str, max_lists: int = None) -> dict:
         """
         Extract lists collection from URL.
         
         Args:
             base_url: Base URL without page parameter
+            max_lists: Maximum number of lists to return (optional limit)
             
         Returns:
             dict: Contains 'lists', 'count', 'last_page'
         """
-        data = {'lists': {}}
+        data = {'lists': {}, 'limit': max_lists}
         page = 1
         
         while True:
-            list_set = cls._fetch_page_data(base_url, page)
-            if not list_set:
+            lists = cls._fetch_page_data(base_url, page)
+            
+            if not lists:
                 break
 
-            lists = list_set.find_all(*cls.SELECTORS['lists'])
             for item in lists:
                 list_data = cls._extract_list_data(item)
                 data['lists'] |= list_data
 
-            if len(lists) < cls.LISTS_PER_PAGE:
+                if max_lists and len(data['lists']) >= max_lists:
+                    # Limit reached
+                    data['limit'] = True
+                    break
+
+            if data['limit'] or len(lists) < cls.LISTS_PER_PAGE:
+                # Is last page or limit reached
                 break
+
             page += 1
 
         data['count'] = len(data['lists'])
         data['last_page'] = page
 
         return data
-    
+
     @classmethod
     def _fetch_page_data(cls, base_url: str, page: int):
         """Fetch and parse page data."""
         dom = parse_url(f'{base_url}/page/{page}')
-        list_set = dom.find(*cls.SELECTORS['list_set'])
-        return list_set
+        return dom.find_all('article', {'class': 'list-summary'})
 
     @classmethod
     def _extract_list_data(cls, item) -> dict:
@@ -79,33 +86,41 @@ class ListsExtractor:
             return item['data-film-list-id']
 
         def get_title() -> str:
-            return item.find(*cls.SELECTORS['title']).text.strip()
+            title_elem = item.find('h2', {'class': 'name'})
+            return title_elem.text.strip()
 
         def get_description() -> str:
-            description = item.find(*cls.SELECTORS['description'])
+            description = item.find('div', {'class': ['notes', 'body-text']})
             if description:
                 paragraphs = description.find_all('p')
                 return '\n'.join([p.text for p in paragraphs])
-            return description
+            return ""
 
         def get_url() -> str:
-            return DOMAIN + item.find(*cls.SELECTORS['title']).a['href']
+            title_elem = item.find('h2', {'class': 'name'})
+            return DOMAIN + title_elem.a['href']
 
         def get_slug() -> str:
             return get_url().split('/')[-2]
 
         def get_count() -> int:
-            return int(item.find(*cls.SELECTORS['value']).text.split()[0].replace(',', ''))
+            value_elem = item.find(*cls.SELECTORS['value'])
+            if value_elem:
+                count = extract_numeric_text(value_elem.text)
+                return count if count is not None else 0
 
         def get_likes() -> int:
             likes = item.find(*cls.SELECTORS['likes'])
-            likes = extract_and_convert_shorthand(likes)
-            return likes
+            if likes:
+                likes = extract_and_convert_shorthand(likes)
+                return likes
+            return 0
 
         def get_comments() -> int:
             comments = item.find(*cls.SELECTORS['comments'])
-            comments = int(comments.text.split()[0].replace(',','')) if comments else 0
-            return comments
+            if comments:
+                return extract_and_convert_shorthand(comments)
+            return 0
 
         return {
              get_id(): {
