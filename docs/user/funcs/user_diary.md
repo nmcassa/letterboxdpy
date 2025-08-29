@@ -19,7 +19,7 @@ print(user.user_diary(user_instance))
             "release": 2010,
             "runtime": 108,
             "rewatched": false,
-            "rating": 9,
+            "rating": 4.5,
             "liked": true,
             "reviewed": false,
             "date": {
@@ -37,7 +37,7 @@ print(user.user_diary(user_instance))
             "release": 2018,
             "runtime": 86,
             "rewatched": false,
-            "rating": 8,
+            "rating": 4,
             "liked": false,
             "reviewed": false,
             "date": {
