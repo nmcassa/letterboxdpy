@@ -7,30 +7,42 @@
   "bio": null,
   "location": null,
   "website": null,
-  "watchlist_length": 74,
+  "watchlist_length": 78,
   "stats": {
-    "films": 594,
-    "this_year": 74,
+    "films": 674,
+    "this_year": 61,
     "lists": 2,
-    "following": 7,
-    "followers": 7
+    "following": 8,
+    "followers": 8
   },
   "favorites": {
-    "95113": {
-      "slug": "the-grand-budapest-hotel",
-      "name": "The Grand Budapest Hotel"
-    },
     "51794": {
       "slug": "the-king-of-comedy",
-      "name": "The King of Comedy"
+      "name": "The King of Comedy",
+      "url": "https://letterboxd.com/film/the-king-of-comedy/",
+      "year": 1982,
+      "log_url": "https://letterboxd.com/nmcassa/film/the-king-of-comedy/activity/"
     },
     "51529": {
       "slug": "the-conversation",
-      "name": "The Conversation"
+      "name": "The Conversation",
+      "url": "https://letterboxd.com/film/the-conversation/",
+      "year": 1974,
+      "log_url": "https://letterboxd.com/nmcassa/film/the-conversation/"
     },
     "51090": {
       "slug": "rocky",
-      "name": "Rocky"
+      "name": "Rocky",
+      "url": "https://letterboxd.com/film/rocky/",
+      "year": 1976,
+      "log_url": "https://letterboxd.com/nmcassa/film/rocky/"
+    },
+    "46911": {
+      "slug": "children-of-men",
+      "name": "Children of Men",
+      "url": "https://letterboxd.com/film/children-of-men/",
+      "year": 2006,
+      "log_url": "https://letterboxd.com/nmcassa/film/children-of-men/"
     }
   },
   "avatar": {
@@ -40,93 +52,93 @@
   },
   "recent": {
     "watchlist": {
-      "1042841": {
-        "id": "1042841",
-        "slug": "the-contestant-2023",
-        "name": "The Contestant"
+      "19921": {
+        "id": "19921",
+        "slug": "the-fighter-2010",
+        "name": "The Fighter (2010)"
       },
-      "51946": {
-        "id": "51946",
-        "slug": "run-lola-run",
-        "name": "Run Lola Run"
+      "46431": {
+        "id": "46431",
+        "slug": "rounders",
+        "name": "Rounders (1998)"
       },
-      "45820": {
-        "id": "45820",
-        "slug": "atlantis-the-lost-empire",
-        "name": "Atlantis: The Lost Empire"
+      "45224": {
+        "id": "45224",
+        "slug": "thief",
+        "name": "Thief (1981)"
       },
-      "43952": {
-        "id": "43952",
-        "slug": "the-man-from-earth",
-        "name": "The Man from Earth"
+      "32345": {
+        "id": "32345",
+        "slug": "taste-of-cherry",
+        "name": "Taste of Cherry (1997)"
       },
-      "46433": {
-        "id": "46433",
-        "slug": "swingers",
-        "name": "Swingers"
+      "41544": {
+        "id": "41544",
+        "slug": "waiting-for-guffman",
+        "name": "Waiting for Guffman (1996)"
       }
     },
     "diary": {
       "months": {
-        "9": {
-          "22": [
-            {
-              "name": "The Substance",
-              "slug": "the-substance"
-            },
-            {
-              "name": "Whiplash",
-              "slug": "1"
-            }
-          ],
-          "13": [
-            {
-              "name": "Speak No Evil",
-              "slug": "speak-no-evil-2024"
-            }
-          ],
-          "12": [
-            {
-              "name": "Kindergarten Cop",
-              "slug": "kindergarten-cop"
-            }
-          ],
-          "11": [
-            {
-              "name": "Doom",
-              "slug": "doom"
-            }
-          ],
-          "6": [
-            {
-              "name": "Clerks",
-              "slug": "clerks"
-            }
-          ],
-          "2": [
-            {
-              "name": "Blink Twice",
-              "slug": "blink-twice"
-            }
-          ]
-        },
         "8": {
-          "30": [
+          "25": [
             {
-              "name": "Shaun of the Dead",
-              "slug": "shaun-of-the-dead"
+              "name": "F1",
+              "slug": "f1"
+            }
+          ],
+          "24": [
+            {
+              "name": "Caught Stealing",
+              "slug": "caught-stealing"
             }
           ],
           "23": [
             {
-              "name": "The Devil Wears Prada",
-              "slug": "the-devil-wears-prada"
+              "name": "Zodiac",
+              "slug": "zodiac"
             }
           ],
-          "20": [
+          "18": [
             {
-              "name": "Alien",
-              "slug": "1"
+              "name": "Superman",
+              "slug": "superman-2025"
+            }
+          ],
+          "16": [
+            {
+              "name": "The Game",
+              "slug": "the-game"
+            }
+          ],
+          "12": [
+            {
+              "name": "Weapons",
+              "slug": "weapons-2025"
+            }
+          ],
+          "10": [
+            {
+              "name": "We're the Millers",
+              "slug": "were-the-millers"
+            }
+          ]
+        },
+        "7": {
+          "27": [
+            {
+              "name": "Game Night",
+              "slug": "game-night"
+            },
+            {
+              "name": "Paths of Glory",
+              "slug": "paths-of-glory"
+            }
+          ],
+          "26": [
+            {
+              "name": "The Other Guys",
+              "slug": "the-other-guys"
             }
           ]
         }
