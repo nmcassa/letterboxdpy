@@ -179,8 +179,9 @@ def get_comment_data(section) -> dict:
 
 def get_film_name(section) -> str:
     """Extract film name from target link."""
-    target = section.find("a", {"class": ["target"]})
-    if target:
+    targets = section.find_all("a", {"class": ["target"]})
+    if targets:
+        target = targets[-1]
         return target.text.split('  ')[-1].strip().removeprefix("review of ")
     return ""
 
@@ -319,26 +320,40 @@ def process_basic_activity(section, title: str, log_type: str, item_slug: str = 
             }
     
     elif log_type in ['liked', 'watched', 'added', 'rated']:
-        # Extract movie information for film-related activities
-        movie_data = {}
+        # Extract movie/list information for related activities
+        item_data = {}
         
-        # Get film title from target link
-        film_name = get_film_name(section)
-        if film_name:
-            movie_data['title'] = film_name
+        # Find the actual target (usually the last target in the row)
+        targets = section.find_all("a", {"class": "target"})
+        target = targets[-1] if targets else None
+        href = target.get('href', '') if target else ''
         
-        # Add slug and URL when available
+        # Check if this is a list or a movie
+        is_list = '/list/' in href
+        
+        # Get item title
+        item_name = get_film_name(section)
+        if item_name:
+            # Clean up list name if it ends with " list"
+            if is_list:
+                item_name = item_name.removesuffix(" list")
+            item_data['title'] = item_name
+        
+        # Add slug and URL
         if item_slug:
-            movie_data['slug'] = item_slug
-            movie_data['url'] = f"https://letterboxd.com/film/{item_slug}/"
+            item_data['slug'] = item_slug
+            if is_list:
+                # Use the href from the target for the full list URL
+                item_data['url'] = f"https://letterboxd.com{href}"
+            else:
+                item_data['url'] = f"https://letterboxd.com/film/{item_slug}/"
+                # Restore year extraction for movies
+                film_info = get_film_info(section, item_slug)
+                if film_info.get('year'):
+                    item_data['year'] = film_info['year']
         
-        # Extract year information when available
-        film_info = get_film_info(section, item_slug)
-        if film_info.get('year'):
-            movie_data['year'] = film_info['year']
-        
-        if movie_data:
-            activity_data['movie'] = movie_data
+        if item_data:
+            activity_data['list' if is_list else 'movie'] = item_data
 
         # Add rating
         rating = get_rating(section)
@@ -387,8 +402,10 @@ def get_log_item_slug(event_type: str, section) -> str | None:
     """Extract log item slug based on event type."""
 
     if event_type == "basic":
-        anchor_tag = section.find("a", {"class": "target"})
-        item_slug = anchor_tag.attrs['href'].split('/')[-2]
+        targets = section.find_all("a", {"class": "target"})
+        if not targets:
+            return None
+        item_slug = targets[-1].attrs['href'].split('/')[-2]
         return item_slug
     
     elif event_type == "review":
