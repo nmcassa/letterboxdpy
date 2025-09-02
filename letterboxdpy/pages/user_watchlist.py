@@ -1,6 +1,7 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.pages.user_list import extract_movies
+from letterboxdpy.utils.utils_transform import parse_movie_name
 
 class UserWatchlist:
     FILMS_PER_PAGE = 7*4
@@ -77,11 +78,13 @@ def extract_watchlist(username: str, filters: dict = None) -> dict:
         if not react_component or 'data-film-id' not in react_component.attrs:
             return None
             
-        film_id = react_component['data-film-id']
-        slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
-        name = react_component.get('data-item-name') or react_component.img['alt']
-        
-        return film_id, slug, name
+        movie_id = react_component['data-film-id']
+        movie_slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
+        movie_name = react_component.get('data-item-name') or react_component.img['alt']
+        movie_year = None
+        movie_name, movie_year = parse_movie_name(movie_name).values()
+
+        return movie_id, movie_slug, movie_name, movie_year
 
     page = 1
     no = 1
@@ -92,12 +95,13 @@ def extract_watchlist(username: str, filters: dict = None) -> dict:
         for container in containers:
             movie_info = extract_movie_info(container)
             if movie_info:
-                film_id, slug, name = movie_info
-                data['data'][film_id] = {
-                    'name': name,
-                    'slug': slug,
+                movie_id, movie_slug, movie_name, movie_year = movie_info
+                data['data'][movie_id] = {
+                    'name': movie_name,
+                    'slug': movie_slug,
+                    'year': movie_year,
                     'page': page,
-                    'url': f"{DOMAIN}/film/{slug}/",
+                    'url': f"{DOMAIN}/film/{movie_slug}/",
                     'no': no
                 }
                 no += 1
