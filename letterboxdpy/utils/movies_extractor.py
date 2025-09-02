@@ -77,7 +77,7 @@ def extract_movies_from_vertical_list(dom, max_items=20*5) -> dict:
             'url': f'https://letterboxd.com/film/{movie_slug}/'
         }
 
-    items = dom.find_all("li", {"class": "posteritem"})
+    items = dom.find_all("li", {"class": "posteritem"}) or dom.find_all("li", {"class": "griditem"})
     movies = {}
     for item in items:
         if len(movies) >= max_items:
