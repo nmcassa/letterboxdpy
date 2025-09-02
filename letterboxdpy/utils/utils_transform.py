@@ -21,3 +21,15 @@ def get_ajax_url(url: str) -> str:
     ax = ".com/films/ajax"
     
     return url if ax in url else url.replace(x, ax)
+
+def parse_movie_name(movie_name: str) -> dict:
+    """Split the actual `movie_name` from his `year`"""
+    movie_name = movie_name.split()
+    year = movie_name.pop(-1)
+    movie_name = ' '.join(movie_name)
+    film_year = year[1:-1]
+    
+    return {
+        "movie_name": movie_name,
+        "film_year": film_year
+    }
