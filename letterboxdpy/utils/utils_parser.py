@@ -268,3 +268,15 @@ def extract_json_ld_script(dom):
         return json_loads(script_text)
     except (ValueError, IndexError, Exception):  # ValueError covers JSONDecodeError in older Python
         return None
+
+def parse_movie_name(movie_name: str) -> dict:
+    """Split the actual `movie_name` from his `year`"""
+    movie_name = movie_name.split()
+    year = movie_name.pop(-1)
+    movie_name = ' '.join(movie_name)
+    film_year = year[1:-1]
+
+    return {
+        "movie_name": movie_name,
+        "film_year": film_year
+    }

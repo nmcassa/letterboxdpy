@@ -1,8 +1,8 @@
 import re
 from json import loads as json_loads
 
-from letterboxdpy.utils.utils_transform import month_to_index, parse_movie_name
-from letterboxdpy.utils.utils_parser import get_meta_content, get_body_content
+from letterboxdpy.utils.utils_transform import month_to_index
+from letterboxdpy.utils.utils_parser import get_meta_content, get_body_content, parse_movie_name
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN

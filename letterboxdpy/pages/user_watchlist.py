@@ -1,7 +1,7 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.pages.user_list import extract_movies
-from letterboxdpy.utils.utils_transform import parse_movie_name
+from letterboxdpy.utils.utils_parser import parse_movie_name
 
 class UserWatchlist:
     FILMS_PER_PAGE = 7*4
