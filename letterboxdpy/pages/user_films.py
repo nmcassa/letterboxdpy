@@ -1,6 +1,6 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN, GENRES
-
+from letterboxdpy.utils.utils_parser import parse_movie_name
 
 class UserFilms:
 
@@ -131,12 +131,15 @@ def extract_movies_from_user_watched(dom, max=12*6) -> dict:
         movie_slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
         movie_id = react_component['data-film-id']
         movie_name = react_component.get('data-item-name') or react_component.img['alt']
+        movie_year = None
+        movie_name, movie_year = parse_movie_name(movie_name).values()
 
         return movie_slug, {
-            'name': movie_name,
+            "name": movie_name,
             "id": movie_id,
             "rating": rating,
-            "liked": liked
+            "liked": liked,
+            "year": movie_year
         }
 
     def _find_movie_containers(dom):
