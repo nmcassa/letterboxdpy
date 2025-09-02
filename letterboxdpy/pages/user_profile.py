@@ -227,10 +227,17 @@ def extract_watchlist_recent(dom) -> dict:
             film_slug = item.get('data-film-slug')
             film_name = item.img.get('alt', "Unknown") if item.img else "Unknown"
 
+        if film_name != "Unknown":
+            film_name = film_name.split()
+            year = film_name.pop(-1)
+            film_name = ' '.join(film_name)
+            film_year = year[1:-1]
+
         return {
             'id': film_id,
             'slug': film_slug,
-            'name': film_name
+            'name': film_name,
+            'year': film_year
         }
 
     watchlist_recent = {}
