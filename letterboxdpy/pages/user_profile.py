@@ -1,7 +1,7 @@
 import re
 from json import loads as json_loads
 
-from letterboxdpy.utils.utils_transform import month_to_index
+from letterboxdpy.utils.utils_transform import month_to_index, parse_movie_name
 from letterboxdpy.utils.utils_parser import get_meta_content, get_body_content
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.avatar import Avatar
@@ -218,26 +218,24 @@ def extract_watchlist_recent(dom) -> dict:
         react_div = item.find('div', {'class': 'react-component'})
         
         if react_div:
-            film_id = react_div.get('data-film-id')
-            film_slug = react_div.get('data-item-slug')
-            film_name = react_div.get('data-item-name', "Unknown")
+            movie_id = react_div.get('data-film-id')
+            movie_slug = react_div.get('data-item-slug')
+            movie_name = react_div.get('data-item-name', "Unknown")
         else:
             # Fallback to original method (for backwards compatibility)
-            film_id = item.get('data-film-id')
-            film_slug = item.get('data-film-slug')
-            film_name = item.img.get('alt', "Unknown") if item.img else "Unknown"
+            movie_id = item.get('data-film-id')
+            movie_slug = item.get('data-film-slug')
+            movie_name = item.img.get('alt', "Unknown") if item.img else "Unknown"
 
-        if film_name != "Unknown":
-            film_name = film_name.split()
-            year = film_name.pop(-1)
-            film_name = ' '.join(film_name)
-            film_year = year[1:-1]
+        movie_year = None
+        if movie_name != "Unknown":
+            movie_name, movie_year = parse_movie_name(movie_name).values()
 
         return {
-            'id': film_id,
-            'slug': film_slug,
-            'name': film_name,
-            'year': film_year
+            'id': movie_id,
+            'slug': movie_slug,
+            'name': movie_name,
+            'year': movie_year
         }
 
     watchlist_recent = {}
