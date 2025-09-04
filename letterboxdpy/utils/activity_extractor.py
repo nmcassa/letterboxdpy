@@ -117,14 +117,32 @@ def get_rating(section) -> int:
 
 def build_review_title(film: str, log_type: str, rating: int, section) -> str:
     """Build readable title for review activity."""
-    if film and log_type:
-        username = section.find("a", href=lambda x: x and x.startswith('/') and len(x.split('/')) == 3)
-        username_text = username.get_text().strip() if username else "User"
-        rating_text = "★" * int(rating) if rating else ""
+    if not (film and log_type):
+        return ""
+    
+    def extract_username() -> str:
+        """Extract username from section element."""
+        def is_user_profile_link(href):
+            """Check if href is a valid user profile link (e.g., '/username/')."""
+            return href and href.startswith('/') and len(href.split('/')) == 3
+        
+        username_elem = section.find("a", href=is_user_profile_link)
+        return username_elem.get_text().strip() if username_elem else "User"
+    
+    def build_rating_stars() -> str:
+        """Build star rating text with half-star support."""
+        if not rating:
+            return ""
+        
+        stars = "★" * int(rating)
         if not float(rating).is_integer():
-            rating_text += '½'
-        return f"{username_text} {log_type} {film} {rating_text}".strip()
-    return ""
+            stars += '½'
+        return stars
+    
+    username = extract_username()
+    rating_text = build_rating_stars()
+    
+    return f"{username} {log_type} {film} {rating_text}".strip()
 
 
 def get_user_info(section) -> dict:
