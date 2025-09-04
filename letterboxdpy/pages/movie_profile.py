@@ -117,8 +117,16 @@ def extract_movie_poster(script):
 def extract_movie_banner(dom):
     """Extract movie banner from DOM."""
     elem = dom.find("div", {"id": ["backdrop"]})
-    exists = elem and "data-backdrop" in elem.attrs
-    return elem['data-backdrop'].split('?')[0] if exists else None
+    if not elem:
+        return None
+    
+    # Try high-res first, fallback to standard
+    if "data-backdrop2x" in elem.attrs:
+        return elem['data-backdrop2x'].split('?')[0]
+    elif "data-backdrop" in elem.attrs:
+        return elem['data-backdrop'].split('?')[0]
+    
+    return None
 
 def extract_movie_tagline(dom):
     """Extract movie tagline from DOM."""
