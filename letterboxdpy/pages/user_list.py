@@ -12,6 +12,7 @@ class ListMetaData(TypedDict):
     url: Optional[str]
     title: Optional[str]
     owner: Optional[str]
+    list_id: Optional[str]
     is_available: bool
     error: Optional[str]
 
@@ -39,7 +40,46 @@ class UserList:
     def get_tags(self) -> list: return extract_tags(self.dom)
     def get_movies(self) -> dict: return extract_movies(self.url, self.LIST_ITEMS_PER_PAGE)
     def get_count(self) -> int: return extract_count(self.dom)
+    def get_list_id(self) -> Optional[str]: return extract_list_id(self.dom)
     def get_list_meta(self, url: str) -> ListMetaData: return extract_list_meta(self.dom, url)
+
+def extract_list_id(dom) -> Optional[str]:
+    """
+    Extracts the list ID from the list page DOM.
+    
+    Args:
+        dom: BeautifulSoup DOM object of the list page
+        
+    Returns:
+        List ID as string or None if not found
+    """
+    try:
+        # Method 1: Look for data-report-url attribute in report link
+        report_link = dom.find('span', {'data-report-url': True})
+        if report_link:
+            report_url = report_link.get('data-report-url')
+            if report_url and 'filmlist:' in report_url:
+                # Extract ID from pattern like "/ajax/filmlist:30052453/report-form"
+                import re
+                match = re.search(r'filmlist:(\d+)', report_url)
+                if match:
+                    return match.group(1)
+        
+        # Method 2: Look for data-popmenu-id attribute
+        report_menu = dom.find('a', {'data-popmenu-id': True})
+        if report_menu:
+            popmenu_id = report_menu.get('data-popmenu-id')
+            if popmenu_id and 'list-' in popmenu_id:
+                # Extract ID from pattern like "report-member-username-list-30052453"
+                import re
+                match = re.search(r'list-(\d+)$', popmenu_id)
+                if match:
+                    return match.group(1)
+        
+        return None
+    except Exception as e:
+        print(f"Error extracting list ID: {e}")
+        return None
 
 def extract_count(dom) -> int:
     """Extracts the number of films from the list DOM."""
@@ -143,6 +183,7 @@ def extract_list_meta(dom, url: str) -> ListMetaData:
         'url': None,
         'title': None,
         'owner': None,
+        'list_id': None,
         'is_available': False,
         'error': None
     }
@@ -152,6 +193,7 @@ def extract_list_meta(dom, url: str) -> ListMetaData:
         list_url = get_meta_content(dom, property='og:url')
         list_title = get_meta_content(dom, property='og:title')
         list_owner = get_body_content(dom, 'data-owner')
+        list_id = extract_list_id(dom)
 
         # Check for URL redirection
         if not check_url_match(url, list_url):
@@ -162,6 +204,7 @@ def extract_list_meta(dom, url: str) -> ListMetaData:
             'url': list_url,
             'title': list_title,
             'owner': list_owner,
+            'list_id': list_id,
             'is_available': True
         })
 

@@ -268,3 +268,27 @@ def extract_json_ld_script(dom):
         return json_loads(script_text)
     except (ValueError, IndexError, Exception):  # ValueError covers JSONDecodeError in older Python
         return None
+
+def extract_list_id_from_url(url: str) -> Optional[str]:
+    """
+    Extract list ID from a Letterboxd list URL.
+    
+    Args:
+        url: Full URL to a Letterboxd list (e.g., 'https://letterboxd.com/user/list/name/')
+        
+    Returns:
+        List ID as string or None if extraction fails
+        
+    Example:
+        >>> list_id = extract_list_id_from_url('https://letterboxd.com/nmcassa/list/def-con-movie-list/')
+        >>> print(list_id)  # '30052453'
+    """
+    from letterboxdpy.core.scraper import parse_url
+    from letterboxdpy.pages.user_list import extract_list_id
+    
+    try:
+        dom = parse_url(url)
+        return extract_list_id(dom)
+    except Exception as e:
+        print(f"Error extracting list ID from URL: {e}")
+        return None
