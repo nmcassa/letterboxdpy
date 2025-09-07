@@ -37,6 +37,7 @@ class List:
         self.date_updated = self.get_date_updated()
         self.tags = self.get_tags()
         self.count = self.get_count()
+        self.list_id = self.get_list_id()
 
     # Properties
     @property
@@ -81,11 +82,12 @@ class List:
     def get_tags(self) -> list: return self.pages.list.get_tags()
     def get_movies(self) -> dict: return self.pages.list.get_movies()
     def get_count(self) -> int: return self.pages.list.get_count()
+    def get_list_id(self) -> str: return self.pages.list.get_list_id()
     def get_list_meta(self, url: str) -> ListMetaData: return self.pages.list.get_list_meta(url)
 
 if __name__ == "__main__":
     # user list usage:
-    list_instance = List("mrbs", "the-suspense-is-killing-us-siku-main-feed-6")
+    list_instance = List("nmcassa", "def-con-movie-list")
     movies = list_instance.movies
     assert len(movies) == list_instance.count, "Count mismatch"
 
@@ -98,4 +100,5 @@ if __name__ == "__main__":
     print('updated:', list_instance.date_updated)
     print('tags:', list_instance.tags)
     print('count:', list_instance.count)
+    print('list_id:', list_instance.list_id)
     print('movies:', movies)
