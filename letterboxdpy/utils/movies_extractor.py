@@ -31,7 +31,7 @@ def extract_movies_from_horizontal_list(dom, max_items=12*6) -> dict:
             
         movie_rating = float(item[rating_key]) if rating_key in item.attrs else None
         movie_id = item.div['data-film-id']
-        movie_slug = item.div['data-film-slug'] 
+        movie_slug = item.div['data-item-slug'] 
         movie_name = item.img['alt']
 
         movies[movie_id] = {
