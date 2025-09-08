@@ -317,7 +317,11 @@ def process_basic_activity(section, title: str, log_type: str, item_slug: str = 
                 'display_name': target.get_text().strip(),
                 'profile_url': f"https://letterboxd.com{href}" if href.startswith('/') else href
             }
-    
+
+    # The user liked a list
+    elif log_type == 'liked' and not item_slug:
+        activity_data['list'] = get_liked_list_data(section)
+
     elif log_type in ['liked', 'watched', 'added', 'rated']:
         # Extract movie information for film-related activities
         movie_data = {}
@@ -388,7 +392,10 @@ def get_log_item_slug(event_type: str, section) -> str | None:
 
     if event_type == "basic":
         anchor_tag = section.find("a", {"class": "target"})
-        item_slug = anchor_tag.attrs['href'].split('/')[-2]
+        anchor_href = anchor_tag.get('href')
+        if '/list/' in anchor_href or not anchor_href:
+            return None
+        item_slug = anchor_href.split('/')[-2]
         return item_slug
     
     elif event_type == "review":
@@ -397,3 +404,12 @@ def get_log_item_slug(event_type: str, section) -> str | None:
         return item_slug
     
     return None
+
+def get_liked_list_data(section):
+    anchor_tag = section.find("a", {"class": "target"})
+    anchor_href = anchor_tag.get('href')
+    liked_list_data = {
+        "title": anchor_tag.text,
+        "url": f"https://letterboxd.com{anchor_href}"
+    }
+    return liked_list_data
