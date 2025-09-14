@@ -6,18 +6,16 @@ Helper functions for extracting activity data from Letterboxd DOM elements.
 
 from datetime import datetime
 from letterboxdpy.utils.utils_parser import parse_review_text
+from letterboxdpy.utils.date_utils import DateUtils
 
 def parse_activity_datetime(date_string: str) -> datetime:
-    """Parse datetime string with microseconds support."""
-    try:
-        return datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
-    except ValueError:
-        return datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+    """Parse datetime string from activity feed."""
+    return DateUtils.parse_letterboxd_date(date_string)
 
 
 def build_time_data(date_obj: datetime) -> str:
-    """Build ISO timestamp string in standard format."""
-    return date_obj.isoformat() + 'Z'
+    """Build ISO timestamp string for activity data."""
+    return DateUtils.format_to_iso(date_obj)
 
 
 def get_event_type(section) -> str:
