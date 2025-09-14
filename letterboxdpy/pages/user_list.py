@@ -1,20 +1,16 @@
 import re
-from typing import Optional, TypedDict
+
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.utils_parser import get_meta_content, get_movie_count_from_meta, get_body_content
 from letterboxdpy.utils.utils_url import check_url_match
 from letterboxdpy.utils.movies_extractor import extract_movies_from_vertical_list
+from letterboxdpy.utils.date_utils import DateUtils
 
 
-class ListMetaData(TypedDict):
+class ListMetaData(dict):
     """Type definition for list metadata"""
-    url: Optional[str]
-    title: Optional[str]
-    owner: Optional[str]
-    list_id: Optional[str]
-    is_available: bool
-    error: Optional[str]
+    pass
 
 
 class UserList:
@@ -40,10 +36,10 @@ class UserList:
     def get_tags(self) -> list: return extract_tags(self.dom)
     def get_movies(self) -> dict: return extract_movies(self.url, self.LIST_ITEMS_PER_PAGE)
     def get_count(self) -> int: return extract_count(self.dom)
-    def get_list_id(self) -> Optional[str]: return extract_list_id(self.dom)
+    def get_list_id(self) -> str | None: return extract_list_id(self.dom)
     def get_list_meta(self, url: str) -> ListMetaData: return extract_list_meta(self.dom, url)
 
-def extract_list_id(dom) -> Optional[str]:
+def extract_list_id(dom) -> str | None:
     """
     Extracts the list ID from the list page DOM.
     
@@ -118,40 +114,34 @@ def extract_author(dom) -> str:
 def extract_description(dom) -> str:
     return get_meta_content(dom, property='og:description')
 
-def extract_date_created(dom) -> list:
-    """
-    Scrapes the list page to find and return the creation
-    .. date as a string, defaulting to the last updated
-    .. date if creation is not available.
-    The decorator ensures a valid List is passed.
-    """
+def extract_date_created(dom) -> str | None:
+    """Extract list creation date in ISO format."""
+    # Look for published date span
     data = dom.find("span", {"class": "published is-updated"})
-
-    if data:
-        data = data.findChild("time").text
-    else:
+    if not data:
         data = dom.find("span", {"class": "published"})
-        if data: # Watchlists won't have a date created
-            data = data.text
+    
+    if data:
+        time_element = data.findChild("time")
+        if time_element and time_element.get('datetime'):
+            return DateUtils.to_iso(time_element.get('datetime'))
+    
+    return None
 
-    return data
-
-def extract_date_updated(dom) -> list:
-    """
-    Scrapes the list page to find and return either
-    .. the last updated or published date as a string.
-    The decorator ensures a valid List is passed.
-    """
+def extract_date_updated(dom) -> str | None:
+    """Extract list update date in ISO format."""
+    # Look for updated date span
     data = dom.find("span", {"class": "updated"})
-
-    if data:
-        data = data.findChild("time").text
-    else:
+    if not data:
+        # Use published date if no separate update date
         data = dom.find("span", {"class": "published"})
-        if data: # Watchlists won't have a date updated
-            data = data.text
-
-    return data
+    
+    if data:
+        time_element = data.findChild("time")
+        if time_element and time_element.get('datetime'):
+            return DateUtils.to_iso(time_element.get('datetime'))
+    
+    return None
 
 def extract_tags(dom) -> list:
     """
