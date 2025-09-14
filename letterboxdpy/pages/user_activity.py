@@ -1,5 +1,6 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.utils.date_utils import DateUtils
 from letterboxdpy.utils.activity_extractor import (
     parse_activity_datetime, build_time_data, get_event_type, get_log_title, 
     get_log_type, process_review_activity, process_basic_activity, 
@@ -54,7 +55,7 @@ def extract_activity(ajax_url: str) -> dict:
    
    data = {
        'metadata': {
-           'export_timestamp': datetime.now().isoformat(),
+           'export_timestamp': DateUtils.format_to_iso(datetime.now()),
            'source_url': ajax_url,
            'total_activities': 0
        },
