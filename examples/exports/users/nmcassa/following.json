@@ -1,23 +1,122 @@
 {
+  "ramenfeedgg": {
+    "username": "ramenfeedgg",
+    "name": "ramenfeedgg",
+    "url": "https://letterboxd.com/ramenfeedgg",
+    "avatar": {
+      "exists": false,
+      "upscaled": false,
+      "url": "https://s.ltrbxd.com/static/img/avatar80-CTtJ8HSs.png"
+    },
+    "followers": 5,
+    "following": 6,
+    "watched": 171,
+    "lists": 0,
+    "likes": 19
+  },
   "ben24wold": {
-    "display_name": "Ben Wold"
+    "username": "ben24wold",
+    "name": "Ben Wold",
+    "url": "https://letterboxd.com/ben24wold",
+    "avatar": {
+      "exists": true,
+      "upscaled": true,
+      "url": "https://a.ltrbxd.com/resized/avatar/twitter/1/7/9/3/7/5/9/shard/http___pbs.twimg.com_profile_images_1258867765965963269_SckczIvD-0-1000-0-1000-crop.jpg"
+    },
+    "followers": 37,
+    "following": 15,
+    "watched": 662,
+    "lists": 37,
+    "likes": 467
   },
   "ppark": {
-    "display_name": "ppark"
+    "username": "ppark",
+    "name": "ppark",
+    "url": "https://letterboxd.com/ppark",
+    "avatar": {
+      "exists": true,
+      "upscaled": true,
+      "url": "https://a.ltrbxd.com/resized/avatar/upload/5/9/0/5/5/1/0/shard/avtr-0-1000-0-1000-crop.jpg"
+    },
+    "followers": 7,
+    "following": 6,
+    "watched": 876,
+    "lists": 1,
+    "likes": 372
   },
   "joacogarcia2023": {
-    "display_name": "joacogarcia2023"
+    "username": "joacogarcia2023",
+    "name": "joacogarcia2023",
+    "url": "https://letterboxd.com/joacogarcia2023",
+    "avatar": {
+      "exists": true,
+      "upscaled": true,
+      "url": "https://a.ltrbxd.com/resized/avatar/upload/1/0/1/4/0/6/6/7/shard/avtr-0-1000-0-1000-crop.jpg"
+    },
+    "followers": 14,
+    "following": 6,
+    "watched": 198,
+    "lists": 0,
+    "likes": 1
   },
   "ryanshubert": {
-    "display_name": "ryanshubert"
+    "username": "ryanshubert",
+    "name": "ryanshubert",
+    "url": "https://letterboxd.com/ryanshubert",
+    "avatar": {
+      "exists": true,
+      "upscaled": true,
+      "url": "https://a.ltrbxd.com/resized/avatar/upload/2/3/6/9/1/6/5/shard/avtr-0-1000-0-1000-crop.jpg"
+    },
+    "followers": 22,
+    "following": 32,
+    "watched": 1,
+    "lists": 7,
+    "likes": 791
   },
   "connoreatspants": {
-    "display_name": "ConnorEatsPants"
+    "username": "connoreatspants",
+    "name": "ConnorEatsPants",
+    "url": "https://letterboxd.com/connoreatspants",
+    "avatar": {
+      "exists": true,
+      "upscaled": true,
+      "url": "https://a.ltrbxd.com/resized/avatar/upload/3/6/8/9/5/9/8/shard/avtr-0-1000-0-1000-crop.jpg"
+    },
+    "followers": 44,
+    "following": 21,
+    "watched": 162,
+    "lists": 0,
+    "likes": 116
   },
   "kurstboy": {
-    "display_name": "Karsten"
+    "username": "kurstboy",
+    "name": "Karsten",
+    "url": "https://letterboxd.com/kurstboy",
+    "avatar": {
+      "exists": true,
+      "upscaled": true,
+      "url": "https://a.ltrbxd.com/resized/avatar/twitter/4/9/0/4/5/7/shard/http___pbs.twimg.com_profile_images_1001935353740177414_9ZQ0Noe4-0-1000-0-1000-crop.jpg"
+    },
+    "followers": 225,
+    "following": 187,
+    "watched": 2,
+    "lists": 60,
+    "likes": 3
   },
   "jordynhf": {
-    "display_name": "jordynhf"
+    "username": "jordynhf",
+    "name": "jordynhf",
+    "url": "https://letterboxd.com/jordynhf",
+    "avatar": {
+      "exists": true,
+      "upscaled": true,
+      "url": "https://a.ltrbxd.com/resized/avatar/upload/2/2/9/0/1/4/8/shard/avtr-0-1000-0-1000-crop.jpg"
+    },
+    "followers": 22,
+    "following": 23,
+    "watched": 852,
+    "lists": 2,
+    "likes": 201
   }
 }

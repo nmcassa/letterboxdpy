@@ -9,8 +9,8 @@
   "website": null,
   "watchlist_length": 78,
   "stats": {
-    "films": 674,
-    "this_year": 61,
+    "films": 677,
+    "this_year": 66,
     "lists": 2,
     "following": 8,
     "followers": 8
@@ -52,35 +52,68 @@
   },
   "recent": {
     "watchlist": {
+      "45577": {
+        "id": "45577",
+        "slug": "human-traffic",
+        "name": "Human Traffic",
+        "year": 1999
+      },
       "19921": {
         "id": "19921",
         "slug": "the-fighter-2010",
-        "name": "The Fighter (2010)"
+        "name": "The Fighter",
+        "year": 2010
       },
       "46431": {
         "id": "46431",
         "slug": "rounders",
-        "name": "Rounders (1998)"
+        "name": "Rounders",
+        "year": 1998
       },
       "45224": {
         "id": "45224",
         "slug": "thief",
-        "name": "Thief (1981)"
+        "name": "Thief",
+        "year": 1981
       },
       "32345": {
         "id": "32345",
         "slug": "taste-of-cherry",
-        "name": "Taste of Cherry (1997)"
-      },
-      "41544": {
-        "id": "41544",
-        "slug": "waiting-for-guffman",
-        "name": "Waiting for Guffman (1996)"
+        "name": "Taste of Cherry",
+        "year": 1997
       }
     },
     "diary": {
       "months": {
+        "9": {
+          "12": [
+            {
+              "name": "Toy Story",
+              "slug": "toy-story"
+            },
+            {
+              "name": "Cars",
+              "slug": "cars"
+            }
+          ],
+          "6": [
+            {
+              "name": "Full Metal Jacket",
+              "slug": "full-metal-jacket"
+            },
+            {
+              "name": "Up",
+              "slug": "up"
+            }
+          ]
+        },
         "8": {
+          "30": [
+            {
+              "name": "WALL\u00b7E",
+              "slug": "walle"
+            }
+          ],
           "25": [
             {
               "name": "F1",
@@ -109,36 +142,6 @@
             {
               "name": "The Game",
               "slug": "the-game"
-            }
-          ],
-          "12": [
-            {
-              "name": "Weapons",
-              "slug": "weapons-2025"
-            }
-          ],
-          "10": [
-            {
-              "name": "We're the Millers",
-              "slug": "were-the-millers"
-            }
-          ]
-        },
-        "7": {
-          "27": [
-            {
-              "name": "Game Night",
-              "slug": "game-night"
-            },
-            {
-              "name": "Paths of Glory",
-              "slug": "paths-of-glory"
-            }
-          ],
-          "26": [
-            {
-              "name": "The Other Guys",
-              "slug": "the-other-guys"
             }
           ]
         }

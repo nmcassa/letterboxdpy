@@ -1,372 +1,470 @@
 {
-  "1042841": {
-    "slug": "the-contestant-2023",
-    "name": "The Contestant",
-    "url": "https://letterboxd.com/film/the-contestant-2023/"
+  "45577": {
+    "slug": "human-traffic",
+    "name": "Human Traffic",
+    "year": 1999,
+    "url": "https://letterboxd.com/film/human-traffic/"
+  },
+  "19921": {
+    "slug": "the-fighter-2010",
+    "name": "The Fighter",
+    "year": 2010,
+    "url": "https://letterboxd.com/film/the-fighter-2010/"
+  },
+  "46431": {
+    "slug": "rounders",
+    "name": "Rounders",
+    "year": 1998,
+    "url": "https://letterboxd.com/film/rounders/"
+  },
+  "45224": {
+    "slug": "thief",
+    "name": "Thief",
+    "year": 1981,
+    "url": "https://letterboxd.com/film/thief/"
+  },
+  "32345": {
+    "slug": "taste-of-cherry",
+    "name": "Taste of Cherry",
+    "year": 1997,
+    "url": "https://letterboxd.com/film/taste-of-cherry/"
+  },
+  "41544": {
+    "slug": "waiting-for-guffman",
+    "name": "Waiting for Guffman",
+    "year": 1996,
+    "url": "https://letterboxd.com/film/waiting-for-guffman/"
+  },
+  "10261": {
+    "slug": "the-animatrix",
+    "name": "The Animatrix",
+    "year": 2003,
+    "url": "https://letterboxd.com/film/the-animatrix/"
+  },
+  "50188": {
+    "slug": "innerspace",
+    "name": "Innerspace",
+    "year": 1987,
+    "url": "https://letterboxd.com/film/innerspace/"
+  },
+  "35267": {
+    "slug": "the-war-game",
+    "name": "The War Game",
+    "year": 1966,
+    "url": "https://letterboxd.com/film/the-war-game/"
+  },
+  "305515": {
+    "slug": "under-the-sun-2016",
+    "name": "Under the Sun",
+    "year": 2015,
+    "url": "https://letterboxd.com/film/under-the-sun-2016/"
+  },
+  "51388": {
+    "slug": "the-evil-dead",
+    "name": "The Evil Dead",
+    "year": 1981,
+    "url": "https://letterboxd.com/film/the-evil-dead/"
+  },
+  "420563": {
+    "slug": "american-animals",
+    "name": "American Animals",
+    "year": 2018,
+    "url": "https://letterboxd.com/film/american-animals/"
+  },
+  "70792": {
+    "slug": "the-imposter-2012",
+    "name": "The Imposter",
+    "year": 2012,
+    "url": "https://letterboxd.com/film/the-imposter-2012/"
   },
   "51946": {
     "slug": "run-lola-run",
     "name": "Run Lola Run",
+    "year": 1998,
     "url": "https://letterboxd.com/film/run-lola-run/"
   },
   "45820": {
     "slug": "atlantis-the-lost-empire",
     "name": "Atlantis: The Lost Empire",
+    "year": 2001,
     "url": "https://letterboxd.com/film/atlantis-the-lost-empire/"
   },
   "43952": {
     "slug": "the-man-from-earth",
     "name": "The Man from Earth",
+    "year": 2007,
     "url": "https://letterboxd.com/film/the-man-from-earth/"
   },
   "46433": {
     "slug": "swingers",
     "name": "Swingers",
+    "year": 1996,
     "url": "https://letterboxd.com/film/swingers/"
   },
   "23772": {
     "slug": "peppermint-candy",
     "name": "Peppermint Candy",
+    "year": 1999,
     "url": "https://letterboxd.com/film/peppermint-candy/"
   },
   "353485": {
     "slug": "ad-astra-2019",
     "name": "Ad Astra",
+    "year": 2019,
     "url": "https://letterboxd.com/film/ad-astra-2019/"
   },
   "51370": {
     "slug": "gattaca",
     "name": "Gattaca",
+    "year": 1997,
     "url": "https://letterboxd.com/film/gattaca/"
-  },
-  "51521": {
-    "slug": "full-metal-jacket",
-    "name": "Full Metal Jacket",
-    "url": "https://letterboxd.com/film/full-metal-jacket/"
-  },
-  "51194": {
-    "slug": "paths-of-glory",
-    "name": "Paths of Glory",
-    "url": "https://letterboxd.com/film/paths-of-glory/"
   },
   "330810": {
     "slug": "under-the-silver-lake",
     "name": "Under the Silver Lake",
+    "year": 2018,
     "url": "https://letterboxd.com/film/under-the-silver-lake/"
   },
   "43318": {
     "slug": "timecrimes",
     "name": "Timecrimes",
+    "year": 2007,
     "url": "https://letterboxd.com/film/timecrimes/"
   },
   "18627": {
     "slug": "incendies",
     "name": "Incendies",
+    "year": 2010,
     "url": "https://letterboxd.com/film/incendies/"
-  },
-  "197628": {
-    "slug": "sicario-2015",
-    "name": "Sicario",
-    "url": "https://letterboxd.com/film/sicario-2015/"
   },
   "132034": {
     "slug": "enemy",
     "name": "Enemy",
+    "year": 2013,
     "url": "https://letterboxd.com/film/enemy/"
   },
   "41461": {
     "slug": "days-of-heaven",
     "name": "Days of Heaven",
+    "year": 1978,
     "url": "https://letterboxd.com/film/days-of-heaven/"
   },
   "943472": {
     "slug": "the-pig-the-snake-and-the-pigeon",
     "name": "The Pig, the Snake and the Pigeon",
+    "year": 2023,
     "url": "https://letterboxd.com/film/the-pig-the-snake-and-the-pigeon/"
   },
   "7023": {
     "slug": "the-man-who-stole-the-sun",
     "name": "The Man Who Stole the Sun",
+    "year": 1979,
     "url": "https://letterboxd.com/film/the-man-who-stole-the-sun/"
   },
   "51075": {
     "slug": "the-fountain",
     "name": "The Fountain",
+    "year": 2006,
     "url": "https://letterboxd.com/film/the-fountain/"
   },
   "51481": {
     "slug": "battleship-potemkin",
     "name": "Battleship Potemkin",
+    "year": 1925,
     "url": "https://letterboxd.com/film/battleship-potemkin/"
   },
   "49955": {
     "slug": "the-trial",
     "name": "The Trial",
+    "year": 1962,
     "url": "https://letterboxd.com/film/the-trial/"
   },
   "34618": {
     "slug": "pulse-2001",
     "name": "Pulse",
+    "year": 2001,
     "url": "https://letterboxd.com/film/pulse-2001/"
   },
   "51707": {
     "slug": "raising-arizona",
     "name": "Raising Arizona",
+    "year": 1987,
     "url": "https://letterboxd.com/film/raising-arizona/"
   },
   "19573": {
     "slug": "the-hourglass-sanatorium",
     "name": "The Hourglass Sanatorium",
+    "year": 1973,
     "url": "https://letterboxd.com/film/the-hourglass-sanatorium/"
   },
   "50912": {
     "slug": "la-chinoise",
     "name": "La Chinoise",
+    "year": 1967,
     "url": "https://letterboxd.com/film/la-chinoise/"
   },
   "45909": {
     "slug": "network",
     "name": "Network",
+    "year": 1976,
     "url": "https://letterboxd.com/film/network/"
-  },
-  "50168": {
-    "slug": "the-game",
-    "name": "The Game",
-    "url": "https://letterboxd.com/film/the-game/"
   },
   "51483": {
     "slug": "requiem-for-a-dream",
     "name": "Requiem for a Dream",
+    "year": 2000,
     "url": "https://letterboxd.com/film/requiem-for-a-dream/"
   },
   "45206": {
     "slug": "altered-states",
     "name": "Altered States",
+    "year": 1980,
     "url": "https://letterboxd.com/film/altered-states/"
   },
   "363460": {
     "slug": "night-is-short-walk-on-girl",
     "name": "Night Is Short, Walk On Girl",
+    "year": 2017,
     "url": "https://letterboxd.com/film/night-is-short-walk-on-girl/"
-  },
-  "50725": {
-    "slug": "fear-and-loathing-in-las-vegas",
-    "name": "Fear and Loathing in Las Vegas",
-    "url": "https://letterboxd.com/film/fear-and-loathing-in-las-vegas/"
   },
   "24284": {
     "slug": "the-heartbreak-kid-1972",
     "name": "The Heartbreak Kid",
+    "year": 1972,
     "url": "https://letterboxd.com/film/the-heartbreak-kid-1972/"
   },
   "41662": {
     "slug": "the-wicker-man",
     "name": "The Wicker Man",
+    "year": 1973,
     "url": "https://letterboxd.com/film/the-wicker-man/"
   },
   "51397": {
     "slug": "from-dusk-till-dawn",
     "name": "From Dusk Till Dawn",
+    "year": 1996,
     "url": "https://letterboxd.com/film/from-dusk-till-dawn/"
   },
   "247121": {
     "slug": "victoria-2015",
     "name": "Victoria",
+    "year": 2015,
     "url": "https://letterboxd.com/film/victoria-2015/"
   },
   "51396": {
     "slug": "fantasia",
     "name": "Fantasia",
+    "year": 1940,
     "url": "https://letterboxd.com/film/fantasia/"
   },
   "46158": {
     "slug": "the-andromeda-strain",
     "name": "The Andromeda Strain",
+    "year": 1971,
     "url": "https://letterboxd.com/film/the-andromeda-strain/"
   },
   "34829": {
     "slug": "mishima-a-life-in-four-chapters",
     "name": "Mishima: A Life in Four Chapters",
+    "year": 1985,
     "url": "https://letterboxd.com/film/mishima-a-life-in-four-chapters/"
   },
   "51315": {
     "slug": "videodrome",
     "name": "Videodrome",
+    "year": 1983,
     "url": "https://letterboxd.com/film/videodrome/"
   },
   "35224": {
     "slug": "crumb",
     "name": "Crumb",
+    "year": 1994,
     "url": "https://letterboxd.com/film/crumb/"
   },
   "55864": {
     "slug": "good-morning",
     "name": "Good Morning",
+    "year": 1959,
     "url": "https://letterboxd.com/film/good-morning/"
   },
   "63180": {
     "slug": "chronicle",
     "name": "Chronicle",
+    "year": 2012,
     "url": "https://letterboxd.com/film/chronicle/"
   },
   "40728": {
     "slug": "chris-rock-bigger-blacker",
     "name": "Chris Rock: Bigger & Blacker",
+    "year": 1999,
     "url": "https://letterboxd.com/film/chris-rock-bigger-blacker/"
   },
   "51291": {
     "slug": "total-recall",
     "name": "Total Recall",
+    "year": 1990,
     "url": "https://letterboxd.com/film/total-recall/"
   },
   "51871": {
     "slug": "minority-report",
     "name": "Minority Report",
+    "year": 2002,
     "url": "https://letterboxd.com/film/minority-report/"
   },
   "29041": {
     "slug": "enter-the-void",
     "name": "Enter the Void",
+    "year": 2009,
     "url": "https://letterboxd.com/film/enter-the-void/"
   },
   "45602": {
     "slug": "chungking-express",
     "name": "Chungking Express",
+    "year": 1994,
     "url": "https://letterboxd.com/film/chungking-express/"
   },
   "51981": {
     "slug": "brazil",
     "name": "Brazil",
+    "year": 1985,
     "url": "https://letterboxd.com/film/brazil/"
   },
   "51308": {
     "slug": "2046",
     "name": "2046",
+    "year": 2004,
     "url": "https://letterboxd.com/film/2046/"
-  },
-  "51593": {
-    "slug": "casino",
-    "name": "Casino",
-    "url": "https://letterboxd.com/film/casino/"
   },
   "46908": {
     "slug": "ichi-the-killer",
     "name": "Ichi the Killer",
+    "year": 2001,
     "url": "https://letterboxd.com/film/ichi-the-killer/"
   },
   "51469": {
     "slug": "paris-texas",
     "name": "Paris, Texas",
+    "year": 1984,
     "url": "https://letterboxd.com/film/paris-texas/"
   },
   "39611": {
     "slug": "nine-to-five",
     "name": "Nine to Five",
+    "year": 1980,
     "url": "https://letterboxd.com/film/nine-to-five/"
   },
   "51440": {
     "slug": "contact",
     "name": "Contact",
+    "year": 1997,
     "url": "https://letterboxd.com/film/contact/"
   },
   "50956": {
     "slug": "raging-bull",
     "name": "Raging Bull",
+    "year": 1980,
     "url": "https://letterboxd.com/film/raging-bull/"
   },
   "38374": {
     "slug": "possession",
     "name": "Possession",
+    "year": 1981,
     "url": "https://letterboxd.com/film/possession/"
   },
   "683486": {
     "slug": "james-acaster-cold-lasagne-hate-myself-1999",
     "name": "James Acaster: Cold Lasagne Hate Myself 1999",
+    "year": 2020,
     "url": "https://letterboxd.com/film/james-acaster-cold-lasagne-hate-myself-1999/"
   },
   "49267": {
     "slug": "hearts-of-darkness-a-filmmakers-apocalypse",
     "name": "Hearts of Darkness: A Filmmaker's Apocalypse",
+    "year": 1991,
     "url": "https://letterboxd.com/film/hearts-of-darkness-a-filmmakers-apocalypse/"
-  },
-  "51383": {
-    "slug": "goodfellas",
-    "name": "GoodFellas",
-    "url": "https://letterboxd.com/film/goodfellas/"
   },
   "51407": {
     "slug": "the-sixth-sense",
     "name": "The Sixth Sense",
+    "year": 1999,
     "url": "https://letterboxd.com/film/the-sixth-sense/"
   },
   "420137": {
     "slug": "its-such-a-beautiful-day",
     "name": "It's Such a Beautiful Day",
+    "year": 2012,
     "url": "https://letterboxd.com/film/its-such-a-beautiful-day/"
   },
   "263221": {
     "slug": "manchester-by-the-sea",
     "name": "Manchester by the Sea",
+    "year": 2016,
     "url": "https://letterboxd.com/film/manchester-by-the-sea/"
   },
   "426983": {
     "slug": "aniara-2018",
     "name": "Aniara",
+    "year": 2018,
     "url": "https://letterboxd.com/film/aniara-2018/"
   },
   "45479": {
     "slug": "drunken-master",
     "name": "Drunken Master",
+    "year": 1978,
     "url": "https://letterboxd.com/film/drunken-master/"
   },
   "444617": {
     "slug": "free-solo",
     "name": "Free Solo",
+    "year": 2018,
     "url": "https://letterboxd.com/film/free-solo/"
   },
   "436873": {
     "slug": "climax-2018",
     "name": "Climax",
+    "year": 2018,
     "url": "https://letterboxd.com/film/climax-2018/"
   },
   "43209": {
     "slug": "hoop-dreams",
     "name": "Hoop Dreams",
+    "year": 1994,
     "url": "https://letterboxd.com/film/hoop-dreams/"
   },
   "587612": {
     "slug": "days-2020",
     "name": "Days",
+    "year": 2020,
     "url": "https://letterboxd.com/film/days-2020/"
   },
   "30699": {
     "slug": "california-split",
     "name": "California Split",
+    "year": 1974,
     "url": "https://letterboxd.com/film/california-split/"
   },
   "310199": {
     "slug": "dunkirk-2017",
     "name": "Dunkirk",
+    "year": 2017,
     "url": "https://letterboxd.com/film/dunkirk-2017/"
   },
   "41012": {
     "slug": "moon",
     "name": "Moon",
+    "year": 2009,
     "url": "https://letterboxd.com/film/moon/"
-  },
-  "117621": {
-    "slug": "interstellar",
-    "name": "Interstellar",
-    "url": "https://letterboxd.com/film/interstellar/"
   },
   "35988": {
     "slug": "yi-yi",
     "name": "Yi Yi",
+    "year": 2000,
     "url": "https://letterboxd.com/film/yi-yi/"
   },
   "460155": {
     "slug": "1917",
     "name": "1917",
+    "year": 2019,
     "url": "https://letterboxd.com/film/1917/"
   }
 }
