@@ -214,23 +214,30 @@ def extract_watchlist_recent(dom) -> dict:
     """Extracts recent watchlist items from the DOM, with error handling."""
     def extract_movie_info(item) -> dict:
         """Extracts movie information from a watchlist item."""
+        from letterboxdpy.utils.utils_string import extract_year_from_movie_name, clean_movie_name
+        
         # Look for data attributes in the nested react-component div
         react_div = item.find('div', {'class': 'react-component'})
         
         if react_div:
             film_id = react_div.get('data-film-id')
             film_slug = react_div.get('data-item-slug')
-            film_name = react_div.get('data-item-name', "Unknown")
+            raw_name = react_div.get('data-item-name', "Unknown")
+            film_name = clean_movie_name(raw_name)
+            year = extract_year_from_movie_name(raw_name)
         else:
             # Fallback to original method (for backwards compatibility)
             film_id = item.get('data-film-id')
             film_slug = item.get('data-film-slug')
-            film_name = item.img.get('alt', "Unknown") if item.img else "Unknown"
+            raw_name = item.img.get('alt', "Unknown") if item.img else "Unknown"
+            film_name = clean_movie_name(raw_name)
+            year = extract_year_from_movie_name(raw_name)
 
         return {
             'id': film_id,
             'slug': film_slug,
-            'name': film_name
+            'name': film_name,
+            'year': year
         }
 
     watchlist_recent = {}
