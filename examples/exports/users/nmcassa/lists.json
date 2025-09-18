@@ -1,9 +1,12 @@
 {
+  "limit": null,
+  "count": 2,
+  "last_page": 1,
   "lists": {
     "46710824": {
       "title": "Movies to Watch with Priscilla Park",
       "slug": "movies-to-watch-with-priscilla-park",
-      "description": null,
+      "description": "",
       "url": "https://letterboxd.com/nmcassa/list/movies-to-watch-with-priscilla-park/",
       "count": 19,
       "likes": 1,
@@ -15,10 +18,8 @@
       "description": "The DEF CON Hacking Conference's suggested movie list. defcon.org/html/links/movie-list.html",
       "url": "https://letterboxd.com/nmcassa/list/def-con-movie-list/",
       "count": 11,
-      "likes": 1,
+      "likes": 2,
       "comments": 0
     }
-  },
-  "count": 2,
-  "last_page": 1
+  }
 }
