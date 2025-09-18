@@ -79,37 +79,23 @@ def extract_watchlist(username: str, filters: dict = None) -> dict:
                 
         Example:
             Input: container with "The Matrix (1999)"
-            Output: {"id": "12345", "slug": "the-matrix", "name": "The Matrix (1999)", "year": 1999}
+            Output: {"id": "12345", "slug": "the-matrix", "name": "The Matrix", "year": 1999}
         """
-        def extract_year_from_name(movie_name: str) -> int | None:
-            """Extract year from movie name if it's in parentheses format.
-            
-            Example:
-                extract_year_from_name("The Matrix (1999)") -> 1999
-                extract_year_from_name("Inception") -> None
-            """
-            if not movie_name or '(' not in movie_name or ')' not in movie_name:
-                return None
-            
-            try:
-                year_part = movie_name.split('(')[-1].split(')')[0]
-                if year_part.isdigit() and len(year_part) == 4:
-                    return int(year_part)
-            except (ValueError, IndexError):
-                pass
-            
-            return None
+        from letterboxdpy.utils.utils_string import extract_year_from_movie_name, clean_movie_name
         
         data = container.find("div", {"class": "react-component"}) or container.div
         if not data or 'data-film-id' not in data.attrs:
             return None
             
-        name = data.get('data-item-name') or data.img['alt']
+        raw_name = data.get('data-item-name') or data.img['alt']
+        name = clean_movie_name(raw_name)
+        year = extract_year_from_movie_name(raw_name)
+        
         context = {
             "id": data['data-film-id'],
             "slug": data.get('data-item-slug') or data.get('data-film-slug'),
             "name": name,
-            "year": extract_year_from_name(name)
+            "year": year
         }
         
         return context
