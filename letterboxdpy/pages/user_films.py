@@ -122,6 +122,8 @@ def extract_movies_from_user_watched(dom, max=12*6) -> dict:
     
     def _get_movie_details(container):
         """Extract complete movie information including rating and like status."""
+        from letterboxdpy.utils.utils_string import extract_year_from_movie_name, clean_movie_name
+        
         react_component = container.find("div", {"class": "react-component"}) or container.div
         if not react_component or 'data-film-id' not in react_component.attrs:
             return None
@@ -130,12 +132,15 @@ def extract_movies_from_user_watched(dom, max=12*6) -> dict:
         
         movie_slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
         movie_id = react_component['data-film-id']
-        movie_name = react_component.get('data-item-name') or react_component.img['alt']
+        raw_name = react_component.get('data-item-name') or react_component.img['alt']
+        movie_name = clean_movie_name(raw_name)
+        year = extract_year_from_movie_name(raw_name)
 
         return movie_slug, {
             'name': movie_name,
             "id": movie_id,
             "rating": rating,
+            "year": year,
             "liked": liked
         }
 
