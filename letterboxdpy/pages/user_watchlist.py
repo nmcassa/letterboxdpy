@@ -71,17 +71,48 @@ def extract_watchlist(username: str, filters: dict = None) -> dict:
             f += "+".join([str(v) for v in values]) + "/"
         BASE_URL += f
 
-    def extract_movie_info(container):
-        """Extract film ID, slug, and name from watchlist container."""
-        react_component = container.find("div", {"class": "react-component"}) or container.div
-        if not react_component or 'data-film-id' not in react_component.attrs:
+    def extract_movie_info(container) -> dict[str, str | int | None] | None:
+        """Extract film ID, slug, name, and year from watchlist container.
+        
+        Returns:
+            dict: {"id": str, "slug": str, "name": str, "year": int|None} or None if extraction fails
+                
+        Example:
+            Input: container with "The Matrix (1999)"
+            Output: {"id": "12345", "slug": "the-matrix", "name": "The Matrix (1999)", "year": 1999}
+        """
+        def extract_year_from_name(movie_name: str) -> int | None:
+            """Extract year from movie name if it's in parentheses format.
+            
+            Example:
+                extract_year_from_name("The Matrix (1999)") -> 1999
+                extract_year_from_name("Inception") -> None
+            """
+            if not movie_name or '(' not in movie_name or ')' not in movie_name:
+                return None
+            
+            try:
+                year_part = movie_name.split('(')[-1].split(')')[0]
+                if year_part.isdigit() and len(year_part) == 4:
+                    return int(year_part)
+            except (ValueError, IndexError):
+                pass
+            
+            return None
+        
+        data = container.find("div", {"class": "react-component"}) or container.div
+        if not data or 'data-film-id' not in data.attrs:
             return None
             
-        film_id = react_component['data-film-id']
-        slug = react_component.get('data-item-slug') or react_component.get('data-film-slug')
-        name = react_component.get('data-item-name') or react_component.img['alt']
+        name = data.get('data-item-name') or data.img['alt']
+        context = {
+            "id": data['data-film-id'],
+            "slug": data.get('data-item-slug') or data.get('data-film-slug'),
+            "name": name,
+            "year": extract_year_from_name(name)
+        }
         
-        return film_id, slug, name
+        return context
 
     page = 1
     no = 1
@@ -92,12 +123,12 @@ def extract_watchlist(username: str, filters: dict = None) -> dict:
         for container in containers:
             movie_info = extract_movie_info(container)
             if movie_info:
-                film_id, slug, name = movie_info
-                data['data'][film_id] = {
-                    'name': name,
-                    'slug': slug,
+                data['data'][movie_info["id"]] = {
+                    'name': movie_info["name"],
+                    'slug': movie_info["slug"],
+                    'year': movie_info["year"],
                     'page': page,
-                    'url': f"{DOMAIN}/film/{slug}/",
+                    'url': f"{DOMAIN}/film/{movie_info['slug']}/",
                     'no': no
                 }
                 no += 1
