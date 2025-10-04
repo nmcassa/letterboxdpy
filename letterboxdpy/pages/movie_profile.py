@@ -1,6 +1,6 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content
+from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content, extract_numeric_text
 
 
 class MovieProfile:
@@ -65,10 +65,7 @@ def extract_movie_original_title(dom):
 def extract_movie_runtime(dom):
     """Extract movie runtime from DOM."""
     elem = dom.find("p", {"class": ["text-footer"]})
-    elem = elem.text if elem else None
-    return int(
-        elem.split('min')[0].replace(',', '').strip()
-    ) if elem and 'min' in elem else None
+    return extract_numeric_text(elem.text) if elem else None
 
 def extract_movie_rating(dom, script=None):
     """Extract movie rating from DOM."""
