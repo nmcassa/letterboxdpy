@@ -162,53 +162,52 @@ class Search:
       match result_type:
         case "film":
           """
-          Film DOM Structure:
+          Letterboxd search result structure:
           <li class="search-result -production">
-            <article class="production-viewing -film">
-              <div class="film-poster" data-film-slug="..." data-target-link="/film/...">
-                <img alt="Film Title" src="...">
+            <div class="react-component figure" data-component-class="LazyPoster" 
+                 data-item-name="Film Title (Year)" data-item-slug="film-slug" 
+                 data-item-link="/film/film-slug/" data-target-link="/film/film-slug/"
+                 data-film-id="12345">
+              <div class="poster film-poster">
+                <img alt="Film Title" class="image" src="..." />
               </div>
-              <div class="body">
-                <h2><span class="film-title-wrapper">
-                  <a href="/film/...">Film Title 
-                    <small class="metadata"><a href="/films/year/...">Year</a></small>
-                  </a>
-                </span></h2>
-                <p class="film-metadata">Directed by <a href="/director/...">Director</a></p>
-              </div>
-            </article>
+            </div>
           </li>
           """
-          # Navigate through the nested structure: li > article > div.film-poster
-          film_poster = result.find("div", {"class": lambda x: x and "film-poster" in x})
-          film_metadata = result.find("p", {"class": "film-metadata"})
+          # Find film container div
+          film_container = result.find("div", {"class": "react-component"})
           
-          # Extract basic film info from poster div attributes
-          slug = film_poster['data-film-slug']
-          name = film_poster.img['alt']
-          url = DOMAIN + film_poster['data-target-link']
-          poster = None # film_poster.img['src']
-          
-          # Extract year from nested structure: h2 > span > a > small > a
-          movie_year = result.find("small", {"class": "metadata"})
-          if movie_year and movie_year.a:
+          if film_container:
+            # Get basic film info from container
+            slug = film_container.get('data-item-slug')
+            name = film_container.get('data-item-name')
+            url = DOMAIN + film_container.get('data-target-link')
+            
+            # Get poster from nested img element
+            poster_img = film_container.find("img", {"class": "image"})
+            poster = poster_img.get('src') if poster_img else None
+            
+            # Extract year from metadata
+            movie_year = result.find("small", {"class": "metadata"})
+            if movie_year and movie_year.a:
               movie_year = int(movie_year.a.text) if movie_year.a.text.isdigit() else None
-          else:
+            else:
               movie_year = None
           
-          # Extract directors from metadata paragraph
+          # Extract directors from film-metadata paragraph
           directors = []
+          film_metadata = result.find("p", {"class": "film-metadata"})
           if film_metadata:
             for a in film_metadata.find_all("a"):
-              director_slug = a['href'].split('/')[-2]
-              director_name = a.text
-              director_url = DOMAIN + a['href']
+              director_slug = a.get('href', '').split('/')[-2]
+              director_name = a.text.strip()
+              director_url = DOMAIN + a.get('href', '')
 
               directors.append({
                 'name': director_name,
                 'slug': director_slug,
                 'url': director_url
-                })
+              })
 
           data |= {
              'slug': slug,
