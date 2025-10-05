@@ -1,27 +1,20 @@
+"""
+Letterboxd List Search and Export Tool
+
+Searches for Letterboxd lists and exports them to CSV files.
+- Search lists by query
+- Export multiple lists to CSV format
+- Automatic directory creation
+- Batch processing support
+"""
+
 import sys
 import os
 import csv
 
-try:
-    from letterboxdpy.search import Search
-    from letterboxdpy.list import List
-    from letterboxdpy.utils.utils_terminal import get_input, args_exists
-except ImportError:
-    try:
-        sys.path.append(os.path.join(sys.path[0], '..'))
-        from letterboxdpy.search import Search
-        from letterboxdpy.list import List
-        from letterboxdpy.utils.utils_terminal import get_input, args_exists
-    except (ImportError, ValueError) as e:
-        print("The 'letterboxdpy' module is not installed.")
-        print(f"Error details: {e}")
-        response = input("Would you like to install it? (y/n): ").lower()
-        if response == 'y':
-            os.system("pip install letterboxdpy --force")
-            print("Installation complete. Running script again...")
-            sys.exit(0)
-        print("Exiting...")
-        sys.exit(1)
+from letterboxdpy.search import Search
+from letterboxdpy.list import List
+from letterboxdpy.utils.utils_terminal import get_input, args_exists
 
 def save_results_to_csv(list_instance: List, csv_file: str) -> None:
     """Saves movie list results to a CSV file."""

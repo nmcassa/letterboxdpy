@@ -315,6 +315,12 @@ from letterboxdpy.films import Films
 from letterboxdpy.members import Members
 ```
 
+<h1 id="Examples">Examples</h1>
+
+Example scripts demonstrating various features are available in the [`examples/`](examples/) directory.
+
+See [`examples/README.md`](examples/README.md) for detailed usage instructions.
+
 <h1 id="Testing">Testing</h1>
 
 You may test the plugin by using the built-in `unittest` package through the CLI:

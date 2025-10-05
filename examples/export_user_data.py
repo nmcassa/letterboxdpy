@@ -1,31 +1,21 @@
+"""
+Letterboxd User Data Exporter
+
+Exports comprehensive user data from Letterboxd profiles.
+- Export all user data (films, reviews, lists, followers, etc.)
+- Automatic JSON file generation
+- Organized directory structure
+- Progress tracking and timing
+"""
+
 import time
 import sys
 import os
 
-try:
-    # package is installed
-    from letterboxdpy import user
-    from letterboxdpy.utils.utils_string import strip_prefix
-    from letterboxdpy.utils.utils_terminal import get_input
-    from letterboxdpy.utils.utils_file import build_path, check_and_create_dirs, save_json, build_click_url
-except ImportError:
-    # not installed
-    try:
-        # use local copy
-        sys.path.append(sys.path[0] + '/..')
-        from letterboxdpy import user
-        from letterboxdpy.utils.utils_string import strip_prefix
-        from letterboxdpy.utils.utils_terminal import get_input
-        from letterboxdpy.utils.utils_file import build_path, check_and_create_dirs, save_json, build_click_url
-    except (ImportError, ValueError):
-        print("letterboxdpy not installed, would you like to install it?")
-        response = input("y/n: ").lower()
-        if response == "y":
-            os.system("pip install letterboxdpy --force")
-            print("Installation complete, running script again...")
-            sys.exit(0)
-        print("Exiting...")
-        sys.exit(1)
+from letterboxdpy import user
+from letterboxdpy.utils.utils_string import strip_prefix
+from letterboxdpy.utils.utils_terminal import get_input
+from letterboxdpy.utils.utils_file import build_path, check_and_create_dirs, save_json, build_click_url
 
 # -- MAIN --
 

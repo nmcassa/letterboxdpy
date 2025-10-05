@@ -1,3 +1,13 @@
+"""
+Letterboxd Follow Statistics Analyzer
+
+Analyzes follow relationships and statistics for Letterboxd users.
+- Calculate followback ratios and mutual follows
+- Identify fans and non-followback accounts
+- Generate detailed follow statistics
+- JSON output format
+"""
+
 import sys
 from json import dumps as json_dumps
 

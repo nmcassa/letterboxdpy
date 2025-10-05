@@ -1,29 +1,20 @@
+"""
+Letterboxd Diary Poster Downloader
+
+Downloads movie posters from user's diary entries.
+- Extract poster URLs from diary entries
+- Download and organize posters by year
+- Automatic directory structure creation
+- Skip existing files with size checking
+"""
+
 import requests
 import sys
 import os
 
-try:
-    # package is installed
-    from letterboxdpy import user
-    from letterboxdpy.core.scraper import parse_url
-    from letterboxdpy.utils.utils_terminal import get_input, args_exists
-except ImportError:
-    # not installed
-    try:
-        # use local copy
-        sys.path.append(sys.path[0] + '/..')
-        from letterboxdpy import user
-        from letterboxdpy.core.scraper import parse_url
-        from letterboxdpy.utils.utils_terminal import get_input, args_exists
-    except (ImportError, ValueError):
-        print("letterboxdpy not installed, would you like to install it?")
-        response = input("y/n: ").lower()
-        if response == "y":
-            os.system("pip install letterboxdpy --force")
-            print("Installation complete, running script again...")
-            sys.exit(0)
-        print("Exiting...")
-        sys.exit(1)
+from letterboxdpy import user
+from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.utils.utils_terminal import get_input, args_exists
 
 
 class Settings:
