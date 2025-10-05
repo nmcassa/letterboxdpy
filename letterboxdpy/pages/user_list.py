@@ -18,7 +18,7 @@ class UserList:
     LIST_ITEMS_PER_PAGE = 12*5
 
     def __init__(self, username: str, slug: str) -> None:
-        assert re.match("^[A-Za-z0-9_]*$", username), "Invalid author"
+        assert re.match("^[A-Za-z0-9_]+$", username), "Invalid author"
 
         self.username = username
         self.slug = slug
