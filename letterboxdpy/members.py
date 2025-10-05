@@ -25,7 +25,7 @@ class Members:
 
     def self_check_value(self, value: str) -> None:
         """Check if the value contains only valid characters."""
-        if not re.match("^[A-Za-z0-9_]*$", value):
+        if not re.match("^[A-Za-z0-9_]+$", value):
             raise ValueError(f"Invalid {self.__class__.__name__}")
 
     def __str__(self) -> str:

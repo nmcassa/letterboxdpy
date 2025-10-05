@@ -21,7 +21,7 @@ class List:
             self.list = user_list.UserList(username, slug)
 
     def __init__(self, username: str, slug: str = None) -> None:
-        assert re.match("^[A-Za-z0-9_]*$", username), "Invalid author"
+        assert re.match("^[A-Za-z0-9_]+$", username), "Invalid author"
 
         self.username = username.lower()
         self.slug = slug

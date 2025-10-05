@@ -21,7 +21,7 @@ class Watchlist:
             self.watchlist = user_watchlist.UserWatchlist(username)
 
     def __init__(self, username: str) -> None:
-        assert re.match("^[A-Za-z0-9_]*$", username), "Invalid author"
+        assert re.match("^[A-Za-z0-9_]+$", username), "Invalid author"
 
         self.username = username
         self.pages = self.WatchlistPages(self.username)
