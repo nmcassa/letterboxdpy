@@ -1,0 +1,12 @@
+# Examples requirements for letterboxdpy
+
+# Core dependencies (for all examples)
+requests>=2.31.0
+beautifulsoup4>=4.12.3
+lxml>=5.1.0
+validators
+
+# Visualization and plotting (user_rating_plot.py, user_plot_statistics.py)
+matplotlib>=3.5.0
+numpy>=1.21.0
+pillow>=8.0.0  # Required by matplotlib for image processing

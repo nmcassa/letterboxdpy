@@ -1,3 +1,12 @@
+"""
+Letterboxd User Statistics Plotter
+
+Creates visualizations of user movie watching patterns over time.
+- Monthly and daily viewing statistics by year
+- Multi-year comparison charts
+- Letterboxd-inspired styling
+"""
+
 import matplotlib.pyplot as plt
 from letterboxdpy.user import User
 from letterboxdpy.constants.project import Colors, DAY_ABBREVIATIONS, MONTH_ABBREVIATIONS
