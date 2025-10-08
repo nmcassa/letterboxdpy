@@ -49,7 +49,7 @@ def top_users(max:int = 100) -> List:
         url = f"{members_instance.MEMBERS_YEAR_TOP}page/{page}/"
         dom = parse_url(url)
 
-        table = dom.find_all('table', {"class": ["person-table"]})[0]
+        table = dom.find_all('table', {"class": ["member-table"]})[0]
         avatars = table.find_all("a", {"class": ["avatar -a40"]})
 
         for avatar in avatars:
