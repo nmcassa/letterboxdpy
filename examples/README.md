@@ -11,6 +11,12 @@ pip install -r examples/requirements.txt
 
 ## Examples
 
+**`compare_watchlists.py`**
+Compare your watchlist with people you follow. Find films that friends also want to watch!
+```bash
+python examples/compare_watchlists.py --user <username>
+```
+
 **`user_rating_plot.py`**  
 Creates a rating distribution histogram with Letterboxd styling.
 ```bash
