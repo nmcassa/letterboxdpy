@@ -14,3 +14,7 @@ dist/
 
 # Windows
 desktop.ini
+
+# venv
+venv
+.venv
