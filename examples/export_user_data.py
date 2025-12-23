@@ -15,7 +15,8 @@ import os
 from letterboxdpy import user
 from letterboxdpy.utils.utils_string import strip_prefix
 from letterboxdpy.utils.utils_terminal import get_input
-from letterboxdpy.utils.utils_file import build_path, check_and_create_dirs, save_json, build_click_url
+from letterboxdpy.utils.utils_file import build_path, JsonFile, build_click_url
+from letterboxdpy.utils.utils_directory import check_and_create_dirs
 
 # -- MAIN --
 
@@ -36,7 +37,7 @@ start_time = time.time()
 
 # Save user instance data
 user_data_path = build_path(USER_FOLDER, 'user')
-save_json(user_data_path, user_instance.jsonify())
+JsonFile.save(user_data_path, user_instance.jsonify())
 
 # Export data for each method
 # If you want to add a new method, add it here
@@ -80,7 +81,7 @@ for no, method in enumerate(methods, 1):
     data = method(user_instance, **args) if args else method(user_instance)
 
     file_path = build_path(USER_FOLDER, method_name_without_prefix)
-    save_json(file_path, data)
+    JsonFile.save(file_path, data)
 
     print(f'{time.time() - method_start_time:<7.2f} seconds - {method_name:<22} - {build_click_url(file_path)}.json')
 

@@ -15,27 +15,14 @@ import os
 from letterboxdpy import user
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_terminal import get_input, args_exists
+from letterboxdpy.utils.utils_file import BinaryFile
+from letterboxdpy.utils.utils_directory import Directory
 
 
 class Settings:
     def __init__(self, foldering=True, size_check=False):
         self.foldering = foldering # Create folders for each day
         self.size_check = size_check  # Check if file size already exists
-
-class Path:
-    @staticmethod
-    def check_path(*paths):
-        for path in paths:
-            if not os.path.exists(path):
-                os.mkdir(path)
-                print('Directory created:', path)
-            else:
-                print('Directory found:', path)
-
-    @staticmethod
-    def save(file_path, data):
-        with open(file_path, 'wb') as f:
-            f.write(data)
 
 class App:
     EXPORTS_DIR = "exports"
@@ -69,16 +56,16 @@ class App:
 
         print(f'Processing {count} entries..')
 
-        Path.check_path(
+        Directory.check(
             self.EXPORTS_DIR,
             self.EXPORTS_USERS_DIR,
             self.USER_FOLDER,
             self.USER_POSTERS_DIR
-            )
+        )
 
         if self.foldering:
             years_dir = os.path.join(self.USER_POSTERS_DIR, 'years')
-            Path.check_path(years_dir)
+            Directory.check(years_dir)
             previous_year = None
 
         for v in entries.values():
@@ -92,7 +79,7 @@ class App:
                 year_dir = os.path.join(years_dir, current_year)
                 if previous_year != current_year:
                     previous_year = current_year
-                    Path.check_path(year_dir)    
+                    Directory.check(year_dir)    
                 file_path = os.path.join(year_dir, file_dated_name)
             else:
                 file_path = os.path.join(self.USER_POSTERS_DIR, file_dated_name)
@@ -120,7 +107,7 @@ class App:
                     continue
                 print(f'Rewriting {file_path}..')
 
-            Path.save(file_path, response.content)
+            BinaryFile.save(file_path, response.content)
             print(f'{count} - Wrote {file_path}')
             count -= 1
 
