@@ -2,15 +2,10 @@ if __loader__.name == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
-from json import (
-    dump as json_dump,
-    dumps as json_dumps,
-    loads as json_loads
-)
 import re
-from typing import List
 from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.utils.utils_file import JsonFile
 
 
 class Members:
@@ -30,11 +25,11 @@ class Members:
 
     def __str__(self) -> str:
         """Return a JSON string representation of the instance."""
-        return json_dumps(self, indent=2, cls=Encoder)
+        return JsonFile.stringify(self, indent=2, encoder=Encoder)
 
     def jsonify(self) -> dict:
         """Convert the instance to a JSON dictionary."""
-        return json_loads(self.__str__())
+        return JsonFile.parse(self.__str__())
 
 # -- FUNCTIONS --
 
@@ -69,5 +64,4 @@ def top_users(max:int = 100) -> List:
 
 if __name__=="__main__":
     data = top_users(max=200)
-    with open(f'top_members_{len(data)}.json', 'w') as f:
-        json_dump(data, f, indent=2)
+    JsonFile.save(f'top_members_{len(data)}', data, indent=2)

@@ -1,7 +1,8 @@
 import re
-from bs4 import Tag
-from typing import Dict, Literal, Optional, Union
 
+from bs4 import Tag
+
+from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.constants.project import DOMAIN_SHORT
 from letterboxdpy.constants.selectors import PageSelectors
@@ -249,8 +250,6 @@ def extract_json_ld_script(dom):
         >>> script_data = extract_json_ld_script(dom)
         >>> movie_rating = script_data.get('aggregateRating', {}).get('ratingValue')
     """
-    from json import loads as json_loads
-    
     try:
         script_elem = dom.find("script", type="application/ld+json")
         if not script_elem or not script_elem.text:
@@ -265,8 +264,8 @@ def extract_json_ld_script(dom):
             except IndexError:
                 return None
         
-        return json_loads(script_text)
-    except (ValueError, IndexError, Exception):  # ValueError covers JSONDecodeError in older Python
+        return JsonFile.parse(script_text)
+    except Exception:
         return None
 
 def extract_list_id_from_url(url: str) -> Optional[str]:

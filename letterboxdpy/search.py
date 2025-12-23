@@ -1,5 +1,4 @@
-from json import dumps as json_dumps
-
+from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
 from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.avatar import Avatar
@@ -44,7 +43,7 @@ class Search:
       return self._results
 
     def __str__(self):
-      return json_dumps(self.__dict__, indent=2, cls=Encoder)
+      return JsonFile.stringify(self.__dict__, indent=2, encoder=Encoder)
 
     def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=MAX_RESULTS):
       data = {
@@ -558,9 +557,9 @@ if __name__ == "__main__":
   # test: results
   # print(json.dumps(q3.results, indent=2))
   # print(json.dumps(q4.get_results(), indent=2))
-  print(json_dumps(q3.get_results(2), indent=2)) # max 2 page result
+  print(JsonFile.stringify(q3.get_results(2), indent=2)) # max 2 page result
   print("\n- - -\n"*10)
-  print(json_dumps(q4.get_results(max=5), indent=2)) #  max 5 result
+  print(JsonFile.stringify(q4.get_results(max=5), indent=2)) #  max 5 result
 
   # test: slug
   print('slug 1:', get_film_slug_from_title("V for Vendetta"))
