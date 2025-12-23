@@ -1,3 +1,7 @@
+"""
+Watchlist module.
+Provides the Watchlist class for accessing user watchlist data.
+"""
 if __loader__.name == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
@@ -49,7 +53,7 @@ class Watchlist:
         return json_loads(self.__str__())
 
     # Data Retrieval Methods
-    def get_owner(self): ...
+    def get_owner(self) -> str: return self.pages.watchlist.get_owner()
     def get_url(self) -> str: return self.pages.watchlist.url
     def get_count(self) -> int:  return self.pages.watchlist.get_count()
     def get_movies(self) -> dict:  return self.pages.watchlist.get_movies()

@@ -1,3 +1,7 @@
+"""
+Page parser for user watchlist.
+Extracts watchlist data by scraping Letterboxd HTML pages.
+"""
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.pages.user_list import extract_movies
@@ -12,7 +16,7 @@ class UserWatchlist:
     def __str__(self) -> str:
         return f"Not printable object of type: {self.__class__.__name__}"
 
-    def get_owner(self): ...
+    def get_owner(self) -> str: return self.username
     def get_count(self) -> int: return extract_count(self.url)
     def get_movies(self) -> dict: return extract_movies(self.url, self.FILMS_PER_PAGE)
     def get_watchlist(self, filters: dict=None) -> dict: return extract_watchlist(self.username, filters)
