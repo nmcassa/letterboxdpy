@@ -1,6 +1,6 @@
 import re
-from json import loads as json_loads
 
+from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.utils.utils_parser import get_meta_content, get_body_content
 from letterboxdpy.core.scraper import parse_url
@@ -56,7 +56,7 @@ def extract_hq_status(dom) -> bool:
         data = dom.find("div", {'class': 'profile-summary'})
         if data and 'data-profile-summary-options' in data.attrs:
             profile_summary = data['data-profile-summary-options']
-            return json_loads(profile_summary)['isHQ']
+            return JsonFile.parse(profile_summary)['isHQ']
         else:
             return 'profile-hq' in (get_body_content(dom, 'class') or [])
     except Exception as e:

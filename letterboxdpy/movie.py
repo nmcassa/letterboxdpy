@@ -1,8 +1,4 @@
-from json import (
-  dumps as json_dumps,
-  loads as json_loads,
-)
-
+from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.core.encoder import SecretsEncoder
 from letterboxdpy.pages import (
     movie_profile,
@@ -56,10 +52,10 @@ class Movie:
         self.popular_reviews = self.get_popular_reviews()
 
     def __str__(self) -> str:
-        return json_dumps(self, indent=2, cls=SecretsEncoder, secrets=['pages'])
+        return JsonFile.stringify(self, indent=2, encoder=SecretsEncoder, secrets=['pages'])
 
     def jsonify(self) -> dict:
-        return json_loads(self.__str__())
+        return JsonFile.parse(self.__str__())
 
     # PROFILE PAGE
     def get_url(self) -> str: return self.pages.profile.url
@@ -118,10 +114,10 @@ if __name__ == "__main__":
     # Test individual methods without JSON serialization
     print("\n--- Details (from details page) ---")
     details_from_details = movie_instance.get_details_from_details()
-    print(json_dumps(details_from_details, indent=2))
+    print(JsonFile.stringify(details_from_details, indent=2))
     
     print("\n--- Watchers Stats ---") 
     watchers_stats = movie_instance.get_watchers_stats()
-    print(json_dumps(watchers_stats, indent=2))
+    print(JsonFile.stringify(watchers_stats, indent=2))
     
 

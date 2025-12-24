@@ -2,10 +2,10 @@ if __name__ == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
-from json import dumps as json_dumps
 from bs4 import BeautifulSoup
 import requests
 
+from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.exceptions import (
     PageLoadError,
@@ -64,7 +64,7 @@ class Scraper:
     @classmethod
     def _format_error(cls, url: str, response: requests.Response, message: str) -> str:
         """Format the error message for logging or raising exceptions."""
-        return json_dumps({
+        return JsonFile.stringify({
             'code': response.status_code,
             'reason': str(response.reason),
             'url': url,

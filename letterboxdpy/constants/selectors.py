@@ -6,10 +6,9 @@ Letterboxd pages including films, metadata, and error messages.
 """
 
 from dataclasses import dataclass
-from typing import Dict, Tuple, TypeAlias
 
 
-Selector: TypeAlias = Tuple[str, Dict[str, str]]
+Selector = tuple[str, dict[str, str]]
 
 @dataclass
 class FilmSelectors:

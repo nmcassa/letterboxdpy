@@ -10,26 +10,24 @@ Searches for Letterboxd lists and exports them to CSV files.
 
 import sys
 import os
-import csv
 
 from letterboxdpy.search import Search
 from letterboxdpy.list import List
 from letterboxdpy.utils.utils_terminal import get_input, args_exists
+from letterboxdpy.utils.utils_file import CsvFile, build_path
+from letterboxdpy.utils.utils_directory import Directory
 
 def save_results_to_csv(list_instance: List, csv_file: str) -> None:
     """Saves movie list results to a CSV file."""
-    directory = os.path.join(os.getcwd(), 'exports', 'lists')
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    directory = build_path(os.getcwd(), 'exports', 'lists')
+    Directory.create(directory, silent=True)
 
-    file_name = os.path.join(directory, csv_file)
-
-    with open(file_name, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        writer.writerow(['LetterboxdURI', 'Title'])
-        movies = list_instance.movies
-        for movie_data in movies.values():
-            writer.writerow([movie_data['url'], movie_data['name']])
+    filepath = build_path(directory, csv_file.replace('.csv', ''))
+    movies = list_instance.movies
+    
+    rows = [[movie_data['url'], movie_data['name']] for movie_data in movies.values()]
+    CsvFile.save(filepath, rows, headers=['LetterboxdURI', 'Title'])
+    
     print(f"Data successfully saved to {csv_file}. Movies: {len(movies)}")
 
 if __name__ == "__main__":

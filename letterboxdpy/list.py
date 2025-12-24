@@ -3,11 +3,8 @@ if __loader__.name == '__main__':
     sys.path.append(sys.path[0] + '/..')
 
 import re
-from json import (
-    dumps as json_dumps,
-    loads as json_loads
-)
 
+from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.core.encoder import SecretsEncoder
 from letterboxdpy.pages import user_list
 from letterboxdpy.pages.user_list import ListMetaData
@@ -67,10 +64,10 @@ class List:
             raise KeyError(f"'{self.__class__.__name__}' object has no key '{key}'")
 
     def __str__(self) -> str:
-        return json_dumps(self, indent=2, cls=SecretsEncoder, secrets=['pages'])
+        return JsonFile.stringify(self, indent=2, encoder=SecretsEncoder, secrets=['pages'])
 
     def jsonify(self) -> dict:
-        return json_loads(self.__str__())
+        return JsonFile.parse(self.__str__())
 
     # Data Retrieval Methods
     def get_url(self) -> str: return self.pages.list.url

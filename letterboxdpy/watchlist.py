@@ -1,13 +1,14 @@
+"""
+Watchlist module.
+Provides the Watchlist class for accessing user watchlist data.
+"""
 if __loader__.name == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
 import re
-from json import (
-    dumps as json_dumps,
-    loads as json_loads
-)
 
+from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.core.encoder import SecretsEncoder
 from letterboxdpy.pages import user_watchlist
 from letterboxdpy.core.exceptions import PrivateRouteError
@@ -43,13 +44,13 @@ class Watchlist:
         return self.count
 
     def __str__(self) -> str:
-        return json_dumps(self, indent=2, cls=SecretsEncoder, secrets=['pages'])
+        return JsonFile.stringify(self, indent=2, encoder=SecretsEncoder, secrets=['pages'])
 
     def jsonify(self) -> dict:
-        return json_loads(self.__str__())
+        return JsonFile.parse(self.__str__())
 
     # Data Retrieval Methods
-    def get_owner(self): ...
+    def get_owner(self) -> str: return self.pages.watchlist.get_owner()
     def get_url(self) -> str: return self.pages.watchlist.url
     def get_count(self) -> int:  return self.pages.watchlist.get_count()
     def get_movies(self) -> dict:  return self.pages.watchlist.get_movies()
