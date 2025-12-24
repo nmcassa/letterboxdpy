@@ -28,7 +28,7 @@ def extract_and_convert_shorthand(tag) -> int:
         return int(count_str)
     return 0
 
-def extract_numeric_text(text: str) -> Optional[int]:
+def extract_numeric_text(text: str) -> int | None:
     """
     Extracts numeric characters from a string and returns them as an integer.
     Returns None if an error occurs.
@@ -39,7 +39,7 @@ def extract_numeric_text(text: str) -> Optional[int]:
     except ValueError:
         return None
 
-def parse_iso_date(iso_date_str: str) -> Dict[str, int]:
+def parse_iso_date(iso_date_str: str) -> dict[str, int]:
     """Parses an ISO 8601 formatted date string."""
     try:
         # ISO 8601 format example: '2025-01-01T00:00:00Z'
@@ -48,7 +48,7 @@ def parse_iso_date(iso_date_str: str) -> Dict[str, int]:
     except (IndexError, ValueError) as e:
         raise ValueError(f"Error parsing ISO date format: {e}")
 
-def parse_written_date(written_date_str: str) -> Dict[str, int]:
+def parse_written_date(written_date_str: str) -> dict[str, int]:
     """Parses a written date string (e.g., '01 Jan 2025')."""
     try:
         date_parts = written_date_str.split()
@@ -61,14 +61,14 @@ def parse_written_date(written_date_str: str) -> Dict[str, int]:
         raise ValueError(f"Error parsing written date format: {e}")
 
 def parse_review_date(
-        review_log_type: Literal['Rewatched', 'Watched', 'Added'],
-        review_date: Tag) -> Dict[str, int]:
+        review_log_type: str,  # 'Rewatched', 'Watched', or 'Added'
+        review_date: Tag) -> dict[str, int]:
     """Parses the review date based on log type."""
     if review_log_type == 'Added':
         return parse_iso_date(review_date.time['datetime'])
     return parse_written_date(review_date.text)
 
-def get_meta_content(dom, property: str = None, name: str = None) -> Optional[str]:
+def get_meta_content(dom, property: str = None, name: str = None) -> str | None:
     """
     Extract content from meta tag by property or name attribute.
 
@@ -92,7 +92,7 @@ def get_meta_content(dom, property: str = None, name: str = None) -> Optional[st
     except (AttributeError, KeyError):
         return None
 
-def get_body_content(dom, attribute: str) -> Optional[str]:
+def get_body_content(dom, attribute: str) -> str | None:
     """
     Extract attribute value from body tag.
 
@@ -194,7 +194,7 @@ def is_list(dom) -> bool:
         return False
 
 
-def catch_error_message(dom) -> Union[bool, str]:
+def catch_error_message(dom) -> bool | str:
     """
     Checks if the page contains an error message.
     Returns the error message as a string if found, False otherwise.
@@ -268,7 +268,7 @@ def extract_json_ld_script(dom):
     except Exception:
         return None
 
-def extract_list_id_from_url(url: str) -> Optional[str]:
+def extract_list_id_from_url(url: str) -> str | None:
     """
     Extract list ID from a Letterboxd list URL.
     
