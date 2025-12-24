@@ -10,29 +10,21 @@ class Directory:
         return os.path.isdir(path)
     
     @staticmethod
-    def create(path: str, silent: bool = False, verbose: bool = False) -> bool:
-        """Create directory if it doesn't exist. Returns True if created.
-        If verbose=True, prints 'Directory created/found: path' instead of compact format.
-        """
+    def create(path: str, silent: bool = False) -> bool:
+        """Create directory if it doesn't exist. Returns True if created."""
         try:
             if not os.path.exists(path):
                 if not silent:
-                    if verbose:
-                        print(f'Directory created: {path}')
-                    else:
-                        print(f'\tCreating {path}')
+                    print(f'Directory created: {path}')
                 os.makedirs(path, exist_ok=True)
                 return True
-            else:
-                if not silent:
-                    if verbose:
-                        print(f'Directory found: {path}')
-                    else:
-                        print(f'\tFound {path}')
-                return False
+            
+            if not silent:
+                print(f'Directory found: {path}')
+            return False
         except OSError as e:
             if not silent:
-                print(f"\tError creating {path}: {e}")
+                print(f"Error creating {path}: {e}")
             return False
     
     @staticmethod
@@ -69,4 +61,4 @@ def check_and_create_dirs(directories: list | str) -> None:
     print('\nChecking directories...')
     for directory in directories:
         Directory.create(directory)
-    print('\tAll directories checked, continuing...', end='\n\n')
+    print('All directories checked, continuing...', end='\n\n')
