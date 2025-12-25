@@ -9,7 +9,6 @@ Exports comprehensive user data from Letterboxd profiles.
 """
 
 import time
-import sys
 import os
 
 from letterboxdpy import user
