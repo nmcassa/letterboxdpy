@@ -11,6 +11,7 @@ Downloads movie posters from user's diary entries.
 import requests
 import sys
 import os
+from bs4 import Tag
 
 from letterboxdpy import user
 from letterboxdpy.core.scraper import parse_url
@@ -43,37 +44,107 @@ class App:
         self.foldering = self.config.foldering
         self.size_check = self.config.size_check
 
-    def get_poster_url(self, slug):
+    def _extract_from_json_ld(self, page) -> str | None:
+        data = extract_json_ld_script(page)
+        if data and 'image' in data:
+            return data['image']
+        return None
+
+    def _extract_from_meta(self, page) -> str | None:
+        meta = page.find("meta", property="og:image")
+        if isinstance(meta, Tag):
+            content = meta.get('content')
+            if isinstance(content, str):
+                return content
+        return None
+
+    def _extract_from_dom(self, page) -> str | None:
+        poster_div = page.find("div", class_="poster")
+        if isinstance(poster_div, Tag):
+            img = poster_div.find("img")
+            if isinstance(img, Tag):
+                src = img.get("src")
+                if isinstance(src, str):
+                    return src
+        return None
+
+    def _extract_from_ajax(self, slug: str) -> str | None:
+        poster_ajax = f"https://letterboxd.com/ajax/poster/film/{slug}/std/500x750/"
+        poster_page = parse_url(poster_ajax)
+        img = poster_page.find('img')
+        if isinstance(img, Tag):
+            srcset = img.get('srcset')
+            if isinstance(srcset, str):
+                return srcset.split('?')[0]
+        return None
+
+    def get_poster_url(self, slug: str) -> str:
         # Method 1: Scrape film page
         try:
             film_url = f"https://letterboxd.com/film/{slug}/"
             page = parse_url(film_url)
             
-            data = extract_json_ld_script(page)
-            if data and 'image' in data:
-                return data['image']
-                
-            meta = page.find("meta", property="og:image")
-            if meta:
-                return meta['content']
-                
-            poster_div = page.find("div", class_="poster")
-            if poster_div:
-                img = poster_div.find("img")
-                if img:
-                    return img.get("src")
+            if url := self._extract_from_json_ld(page):
+                return url
+            if url := self._extract_from_meta(page):
+                return url
+            if url := self._extract_from_dom(page):
+                return url
         except Exception:
             pass
 
         # Method 2: Legacy AJAX endpoint (fallback)
         try:
-            poster_ajax = f"https://letterboxd.com/ajax/poster/film/{slug}/std/500x750/"
-            poster_page = parse_url(poster_ajax)
-            return poster_page.img['srcset'].split('?')[0]
+            if url := self._extract_from_ajax(slug):
+                return url
         except Exception:
             pass
 
-        raise Exception(f"Poster not found: {slug}")
+        raise LookupError(f"Poster not found: {slug}")
+
+    def _download_poster(self, slug: str, file_path: str, count: int) -> None:
+        """Download poster and save to file with size check."""
+        poster_url = self.get_poster_url(slug)
+        response = requests.get(poster_url)
+
+        if os.path.exists(file_path):
+            if int(os.stat(file_path).st_size) == int(response.headers['Content-Length']):
+                print(f'{count} - File already exists and has same size as new file, skipping..')
+                return
+            print(f'Rewriting {file_path}..')
+
+        BinaryFile.save(file_path, response.content)
+        print(f'{count} - Wrote {file_path}')
+
+    def _resolve_file_path(self, date: dict, slug: str, years_dir: str | None, previous_year: str | None) -> tuple[str, str | None]:
+        """Calculate target file path and handle year directory creation."""
+        file_date = "-".join(map(str, date.values()))
+        filename = f"{file_date}_{slug}.jpg"
+        
+        updated_year = previous_year
+
+        if self.foldering and years_dir:
+            current_year = str(date['year'])
+            year_dir = os.path.join(years_dir, current_year)
+            
+            if previous_year != current_year:
+                Directory.check(year_dir)
+                updated_year = current_year
+                
+            return os.path.join(year_dir, filename), updated_year
+            
+        return os.path.join(self.USER_POSTERS_DIR, filename), previous_year
+
+    def _should_skip_download(self, file_path: str, count: int) -> bool:
+        """Determines if the download should be skipped based on file existence."""
+        if not os.path.exists(file_path):
+            return False
+            
+        if not self.size_check:
+            return True
+            
+        print(f'{count} - Poster file already exists, checking size..')
+        return False
 
     def run(self):
         count = self.data['count']
@@ -93,52 +164,33 @@ class App:
             self.USER_POSTERS_DIR
         )
 
+        years_dir = None
+        previous_year = None
+
         if self.foldering:
             years_dir = os.path.join(self.USER_POSTERS_DIR, 'years')
             Directory.check(years_dir)
-            previous_year = None
 
         for v in entries.values():
-            date = v["date"]
+            file_path, previous_year = self._resolve_file_path(
+                v['date'], v['slug'], years_dir, previous_year
+            )
 
-            file_date = "-".join(map(str, date.values()))
-            file_dated_name = f"{file_date}_{v['slug']}.jpg"
+            if self._should_skip_download(file_path, count):
+                if not already_start:
+                    already_start = count
+                count -= 1
+                continue
 
-            if self.foldering:
-                current_year = str(date['year'])     
-                year_dir = os.path.join(years_dir, current_year)
-                if previous_year != current_year:
-                    previous_year = current_year
-                    Directory.check(year_dir)    
-                file_path = os.path.join(year_dir, file_dated_name)
-            else:
-                file_path = os.path.join(self.USER_POSTERS_DIR, file_dated_name)
-
-            if os.path.exists(file_path):
-                if not self.size_check:
-                    if not already_start:
-                        already_start = count
-                    count -= 1
-                    continue
-
-                print(f'{count} - Poster file already exists, checking size..')
-
-            if (already_start - count) > 1:
+            if already_start and (already_start - count) > 1:
                 print(f'Have already processed {already_start - count} entries, skipping {count}..')
                 already_start = 0
 
-            poster_url = self.get_poster_url(v['slug'])
-            response = requests.get(poster_url)
+            try:
+                self._download_poster(v['slug'], file_path, count)
+            except Exception as e:
+                print(f"Error downloadable {v['slug']}: {e}")
 
-            if os.path.exists(file_path):
-                if int(os.stat(file_path).st_size) == int(response.headers['Content-Length']):
-                    print(f'{count} - File already exists and has same size as new file, skipping..')
-                    count -= 1
-                    continue
-                print(f'Rewriting {file_path}..')
-
-            BinaryFile.save(file_path, response.content)
-            print(f'{count} - Wrote {file_path}')
             count -= 1
 
         print('Processing complete!')
