@@ -40,55 +40,51 @@ class LetterboxdStatisticsPlotter:
                     "daily": stats.get("days")
                 }
                 print("✓")
-            except Exception as error:
-                print(f"✗ (using empty data)")
+            except Exception:
+                print("✗ (using empty data)")
                 self.stats_by_year[year] = {
-                    "monthly": {i: 0 for i in range(1, 13)},  # 12 months with 0
-                    "daily": {i: 0 for i in range(1, 8)}      # 7 days with 0
+                    "monthly": dict.fromkeys(range(1, 13), 0),  # 12 months with 0
+                    "daily": dict.fromkeys(range(1, 8), 0)      # 7 days with 0
                 }
         
-        print(f"Data collection complete. Creating plot...")
+        print("Data collection complete. Creating plot...")
         return self.stats_by_year
     
     def plot_statistics(self) -> None:
         if not self.stats_by_year:
             return
         
-        def setup_figure():
-            num_years = len(self.stats_by_year)
-            if num_years == 1:
-                fig, axes = plt.subplots(1, 2, figsize=(12, 4), facecolor=Colors.BG)
-                return fig, [axes]
-            else:
-                fig, axes = plt.subplots(num_years, 2, figsize=(12, 3 * num_years), facecolor=Colors.BG)
-                return fig, [axes] if num_years == 1 else axes
+        num_years = len(self.stats_by_year)
+        
+        # squeeze=False ensures axes is always a 2D array, simplifying logic
+        fig, axes = plt.subplots(
+            num_years, 2, 
+            figsize=(12, 3 * num_years), 
+            facecolor=Colors.BG, 
+            squeeze=False
+        )
 
-        def configure_figure(fig):
-            years_range = f"{min(self.stats_by_year.keys())}-{max(self.stats_by_year.keys())}"
+        years_range = f"{min(self.stats_by_year.keys())}-{max(self.stats_by_year.keys())}"
+        
+        # Safe window title access
+        if fig.canvas.manager:
             fig.canvas.manager.set_window_title(f'Letterboxd Statistics - {self.username} ({years_range})')
-            fig.suptitle(f'{self.username} - Movies Watched ({years_range})', fontsize=16, color='white')
+            
+        fig.suptitle(f'{self.username} - Movies Watched ({years_range})', fontsize=16, color='white')
 
         def style_axes(ax):
             ax.set_facecolor(Colors.BG)
             ax.tick_params(colors=Colors.TEXT)
-            ax.spines['bottom'].set_color(Colors.TEXT)
+            for spine in ax.spines.values():
+                spine.set_color(Colors.TEXT)
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
             ax.spines['left'].set_color(Colors.TEXT)
-
-        def get_axes_for_year(axes, i, num_years):
-            if num_years == 1:
-                return axes[0][0], axes[0][1]
-            else:
-                return axes[i, 0], axes[i, 1]
+            ax.spines['bottom'].set_color(Colors.TEXT)
 
         days_labels = DAY_ABBREVIATIONS
         months_labels = MONTH_ABBREVIATIONS
         
-        fig, axes = setup_figure()
-        configure_figure(fig)
-        num_years = len(self.stats_by_year)
-
         for i, (year, stats) in enumerate(self.stats_by_year.items()):
             daily_data = stats.get('daily', {})
             monthly_data = stats.get('monthly', {})
@@ -96,7 +92,9 @@ class LetterboxdStatisticsPlotter:
             daily_values = [daily_data.get(day, 0) for day in range(1, 8)]
             monthly_values = [monthly_data.get(month, 0) for month in range(1, 13)]
 
-            ax_daily, ax_monthly = get_axes_for_year(axes, i, num_years)
+            # Access subplots safely from 2D array
+            ax_daily = axes[i, 0]
+            ax_monthly = axes[i, 1]
 
             for ax in [ax_daily, ax_monthly]:
                 style_axes(ax)
@@ -109,11 +107,10 @@ class LetterboxdStatisticsPlotter:
             ax_monthly.set_title(f'{year} - Monthly', color='white')
             ax_monthly.set_ylabel('Movies', color=Colors.TEXT)
 
-        plt.tight_layout(rect=[0, 0, 1, 0.95])
+        plt.tight_layout(rect=(0, 0, 1, 0.95))
         plt.show()
 
-
-    def plot(self, start_year: int = None, end_year: int = None):
+    def plot(self, start_year=None, end_year=None):
         """Gather statistics and create plot"""
         if start_year is None:
             current_year = datetime.now().year
@@ -130,7 +127,11 @@ class LetterboxdStatisticsPlotter:
 
     def run(self):
         """Main program loop"""
-        sys.stdout.reconfigure(encoding="utf-8")
+        try:
+             sys.stdout.reconfigure(encoding="utf-8") # type: ignore
+        except AttributeError:
+             pass
+
         parser = argparse.ArgumentParser(description="Visualize Letterboxd user statistics")
         parser.add_argument("--user", help="Letterboxd username")
         current_year = datetime.now().year
