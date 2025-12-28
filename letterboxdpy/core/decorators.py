@@ -2,7 +2,7 @@ from functools import wraps
 
 # -- DECORATORS --
 
-def assert_instance(expected_class: type) -> callable:
+def assert_instance(expected_class: type):
     """Ensures the argument passed is an instance of a specified class."""
     
     def decorator(func):
@@ -39,6 +39,6 @@ if __name__ == "__main__":
 
     try:
         printint(1)
-        printint("2")
+        printint("2") # type: ignore
     except AssertionError as e:
         print(e)

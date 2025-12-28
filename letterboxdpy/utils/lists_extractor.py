@@ -32,7 +32,7 @@ class ListsExtractor:
     LISTS_PER_PAGE = 12
     
     @classmethod
-    def from_url(cls, base_url: str, max_lists: int = None) -> dict:
+    def from_url(cls, base_url: str, max_lists: int | None = None) -> dict:
         """
         Extract lists collection from URL.
         
@@ -108,6 +108,7 @@ class ListsExtractor:
             if value_elem:
                 count = extract_numeric_text(value_elem.text)
                 return count if count is not None else 0
+            return 0
 
         def get_likes() -> int:
             likes = item.find(*cls.SELECTORS['likes'])

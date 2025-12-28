@@ -2,10 +2,12 @@ if __name__ == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 import requests
+from urllib.parse import quote
 
 from letterboxdpy.utils.utils_file import JsonFile
+from letterboxdpy.utils.utils_terminal import get_input
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.exceptions import (
     PageLoadError,
@@ -59,7 +61,13 @@ class Scraper:
         """Extract the error message from the response, if available."""
         dom = BeautifulSoup(response.text, cls.builder)
         message_section = dom.find("section", {"class": "message"})
-        return message_section.strong.text if message_section else "Unknown error occurred"
+        
+        if isinstance(message_section, Tag):
+            strong = message_section.find("strong")
+            if strong:
+                return strong.get_text()
+                
+        return "Unknown error occurred"
 
     @classmethod
     def _format_error(cls, url: str, response: requests.Response, message: str) -> str:
@@ -77,7 +85,7 @@ class Scraper:
         try:
             return BeautifulSoup(response.text, cls.builder)
         except Exception as e:
-            raise Exception(f"Error parsing response: {e}")
+            raise InvalidResponseError(f"Error parsing response: {e}")
 
 def parse_url(url: str) -> BeautifulSoup:
     """Fetch and parse the HTML content from the specified URL using the Scraper class."""
@@ -85,20 +93,25 @@ def parse_url(url: str) -> BeautifulSoup:
 
 def url_encode(query: str, safe: str = '') -> str:
     """URL encode the given query."""
-    return requests.utils.quote(query, safe=safe)
+    return quote(query, safe=safe)
 
 if __name__ == "__main__":
-    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
     input_domain = ''
     while not len(input_domain.strip()):
-        input_domain = input('Enter url: ')
+        input_domain = get_input('Enter url: ', index=0)
 
     print(f"Parsing {input_domain}...")
 
-    parsed_dom_class_method = parse_url(input_domain)
-    print(f"Title (using class method): {parsed_dom_class_method.title.string}")
+    parsed_dom = parse_url(input_domain)
+    
+    title_text = "No Title"
+    if parsed_dom.title and parsed_dom.title.string:
+        title_text = parsed_dom.title.string
+        
+    print(f"Title: {title_text}")
 
     input("Click Enter to see the DOM...")
-    print(f"HTML: {parsed_dom_class_method.prettify()}")
+    print(f"HTML: {parsed_dom.prettify()}")
     print("*" * 20 + "\nDone!")

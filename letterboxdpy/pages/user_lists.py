@@ -8,7 +8,7 @@ class UserLists:
         self.username = username
         self.url = f"{DOMAIN}/{self.username}/lists"
         
-    def get_lists(self, max_lists: int = None) -> dict: 
+    def get_lists(self, max_lists: int | None = None) -> dict: 
         return ListsExtractor.from_url(self.url, max_lists)
 
 if __name__ == "__main__":
