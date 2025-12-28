@@ -14,6 +14,7 @@ import os
 
 from letterboxdpy import user
 from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.utils.utils_parser import extract_json_ld_script
 from letterboxdpy.utils.utils_terminal import get_input, args_exists
 from letterboxdpy.utils.utils_file import BinaryFile
 from letterboxdpy.utils.utils_directory import Directory
@@ -43,9 +44,36 @@ class App:
         self.size_check = self.config.size_check
 
     def get_poster_url(self, slug):
-        poster_ajax = f"https://letterboxd.com/ajax/poster/film/{slug}/std/500x750/"
-        poster_page = parse_url(poster_ajax)
-        return poster_page.img['srcset'].split('?')[0]
+        # Method 1: Scrape film page
+        try:
+            film_url = f"https://letterboxd.com/film/{slug}/"
+            page = parse_url(film_url)
+            
+            data = extract_json_ld_script(page)
+            if data and 'image' in data:
+                return data['image']
+                
+            meta = page.find("meta", property="og:image")
+            if meta:
+                return meta['content']
+                
+            poster_div = page.find("div", class_="poster")
+            if poster_div:
+                img = poster_div.find("img")
+                if img:
+                    return img.get("src")
+        except Exception:
+            pass
+
+        # Method 2: Legacy AJAX endpoint (fallback)
+        try:
+            poster_ajax = f"https://letterboxd.com/ajax/poster/film/{slug}/std/500x750/"
+            poster_page = parse_url(poster_ajax)
+            return poster_page.img['srcset'].split('?')[0]
+        except Exception:
+            pass
+
+        raise Exception(f"Poster not found: {slug}")
 
     def run(self):
         count = self.data['count']
