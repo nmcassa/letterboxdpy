@@ -13,7 +13,7 @@ pip install -r examples/requirements.txt
 
 | Script | Description | Usage |
 |--------|-------------|-------|
-| [`compare_watchlists.py`](compare_watchlists.py) | Compare your watchlist with people you follow | `python examples/compare_watchlists.py --user <username>` |
+| [`compare_watchlists.py`](compare_watchlists.py) | Compare watchlists from followed users (generates JSON & interactive HTML report) | `python examples/compare_watchlists.py --user <username>` |
 | [`user_rating_plot.py`](user_rating_plot.py) | Creates a rating distribution histogram with Letterboxd styling | `python examples/user_rating_plot.py --user <username>` |
 | [`user_plot_statistics.py`](user_plot_statistics.py) | Visualizes movie watching patterns over time | `python examples/user_plot_statistics.py --user <username> --start-year 2020 --end-year 2024` |
 | [`follow_stats.py`](follow_stats.py) | Analyzes follow relationships and mutual follows | `echo <username> \| python examples/follow_stats.py` |
