@@ -134,6 +134,33 @@ class FollowStatsHtmlRenderer:
     def __init__(self, username):
         self.username = username
 
+    def _calculate_ratio_info(self, section_id, count, stats):
+        total_following = len(stats['details']['all_following'])
+        total_followers = len(stats['details']['all_followers'])
+        
+        if section_id in ['mutual', 'notback']:
+            pct = round(count / total_following * 100, 1) if total_following else 0
+            return f" · <strong>{pct}%</strong> of Following"
+        elif section_id == 'fans':
+            pct = round(count / total_followers * 100, 1) if total_followers else 0
+            return f" · <strong>{pct}%</strong> of Followers"
+        return ""
+
+    def _generate_user_cards(self, users):
+        cards = []
+        for u in users:
+            initial = u[0].upper() if u else "?"
+            cards.append(f"""
+            <a href="https://letterboxd.com/{u}/" target="_blank" class="user-card">
+                <div class="avatar-placeholder">{initial}</div>
+                <div class="user-info">
+                    <span class="user-name">@{u}</span>
+                    <span class="user-meta">View Profile</span>
+                </div>
+            </a>
+            """)
+        return "".join(cards)
+
     def render(self, filepath, stats):
         sections = [
             {'id': 'mutual', 'title': 'Mutual Follows', 'data': stats['details']['followback']},
@@ -148,20 +175,11 @@ class FollowStatsHtmlRenderer:
         
         for i, section in enumerate(sections):
             is_active = "active" if i == 0 else ""
-            
             count = len(section['data'])
             
-            # Calculate Ratio Info
-            total_following = len(stats['details']['all_following'])
-            total_followers = len(stats['details']['all_followers'])
-            
-            ratio_info = ""
-            if section['id'] in ['mutual', 'notback']:
-                pct = round(count / total_following * 100, 1) if total_following else 0
-                ratio_info = f" · <strong>{pct}%</strong> of Following"
-            elif section['id'] == 'fans':
-                pct = round(count / total_followers * 100, 1) if total_followers else 0
-                ratio_info = f" · <strong>{pct}%</strong> of Followers"
+            # Logic extracted to helper
+            ratio_info = self._calculate_ratio_info(section['id'], count, stats)
+            cards_html = self._generate_user_cards(section['data'])
             
             # Tab Button
             tabs_html += f"""
@@ -171,24 +189,11 @@ class FollowStatsHtmlRenderer:
             """
             
             # Tab Content
-            cards = ""
-            for u in section['data']:
-                initial = u[0].upper() if u else "?"
-                cards += f"""
-                <a href="https://letterboxd.com/{u}/" target="_blank" class="user-card">
-                    <div class="avatar-placeholder">{initial}</div>
-                    <div class="user-info">
-                        <span class="user-name">@{u}</span>
-                        <span class="user-meta">View Profile</span>
-                    </div>
-                </a>
-                """
-            
             contents_html += f"""
             <div id="{section['id']}" class="tab-content {is_active}">
                 <div class="sort-info">Ordered by Letterboxd default{ratio_info}</div>
                 <div class="user-grid">
-                    {cards if cards else '<div style="color:var(--text-secondary); padding:20px;">No users found in this category.</div>'}
+                    {cards_html if cards_html else '<div style="color:var(--text-secondary); padding:20px;">No users found in this category.</div>'}
                 </div>
             </div>
             """
@@ -215,8 +220,6 @@ class FollowStatsHtmlRenderer:
                             onkeyup="filterUsers(this.value)">
                     </div>
                 </div>
-                
-
                 
                 <div class="tabs">
                     {tabs_html}
@@ -306,7 +309,7 @@ class FollowStatsAnalyzer:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyze follow stats and generate interactive HTML report")
-    parser.add_argument('--user', '-u', help="Letterboxd username")
+    parser.add_argument("--user", '-u', help="Letterboxd username")
     args = parser.parse_args()
 
     if args.user:
