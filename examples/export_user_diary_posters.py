@@ -25,10 +25,12 @@ class Settings:
         self.size_check = size_check  # Check if file size already exists
 
 class App:
-    EXPORTS_DIR = "exports"
-    EXPORTS_USERS_DIR = os.path.join(EXPORTS_DIR, "users")
-
     def __init__(self, username):
+        # Get the directory where this script is located
+        self.script_dir = os.path.dirname(os.path.abspath(__file__))
+        self.EXPORTS_DIR = os.path.join(self.script_dir, "exports")
+        self.EXPORTS_USERS_DIR = os.path.join(self.EXPORTS_DIR, "users")
+
         self.username = username.lower()
         self.USER_FOLDER = os.path.join(self.EXPORTS_USERS_DIR, self.username)
         self.USER_POSTERS_DIR = os.path.join(self.USER_FOLDER, "posters")
@@ -112,7 +114,7 @@ class App:
             count -= 1
 
         print('Processing complete!')
-        click_url = 'file:///' + os.path.join(os.getcwd(), self.USER_POSTERS_DIR).replace("\\", "/")
+        click_url = 'file:///' + self.USER_POSTERS_DIR.replace("\\", "/")
         print('At', click_url)
 
 

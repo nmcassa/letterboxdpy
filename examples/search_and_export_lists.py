@@ -19,7 +19,9 @@ from letterboxdpy.utils.utils_directory import Directory
 
 def save_results_to_csv(list_instance: List, csv_file: str) -> None:
     """Saves movie list results to a CSV file."""
-    directory = build_path(os.getcwd(), 'exports', 'lists')
+    # Get the directory where this script is located
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    directory = build_path(script_dir, 'exports', 'lists')
     Directory.create(directory, silent=True)
 
     filepath = build_path(directory, csv_file.replace('.csv', ''))

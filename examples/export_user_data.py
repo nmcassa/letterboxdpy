@@ -22,14 +22,14 @@ from letterboxdpy.utils.utils_directory import check_and_create_dirs
 username = get_input('Enter username: ', index=1)
 user_instance = user.User(username)
 
-current_directory = os.getcwd()
+# Get the directory where this script is located (examples folder)
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Export directories
-EXAMPLES_DIR = build_path(current_directory, 'examples')
-EXPORTS_DIR = build_path(EXAMPLES_DIR, 'exports')
+EXPORTS_DIR = build_path(script_dir, 'exports')
 USERS_FOLDER = build_path(EXPORTS_DIR, 'users')
 USER_FOLDER = build_path(USERS_FOLDER, user_instance.username)
-directories = [EXAMPLES_DIR, EXPORTS_DIR, USERS_FOLDER, USER_FOLDER]
+directories = [EXPORTS_DIR, USERS_FOLDER, USER_FOLDER]
 check_and_create_dirs(directories)
 
 start_time = time.time()
