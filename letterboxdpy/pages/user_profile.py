@@ -5,6 +5,7 @@ from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.utils.utils_parser import get_meta_content, get_body_content
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.avatar import Avatar
+from letterboxdpy.utils.utils_url import extract_path_segment
 from letterboxdpy.constants.project import DOMAIN
 
 
@@ -38,7 +39,8 @@ def extract_id(dom) -> int:
         # Alternative method using the report button data attribute
         button_report = dom.find("button", {"data-js-trigger": "report"})
         if button_report:
-            return int(button_report['data-report-url'].split(':')[-1].split('/')[0])
+            report_url = button_report['data-report-url']
+            return int(extract_path_segment(report_url, after='person:', before='/'))
         else:
             # Fallback method using regex if button is not found
             pattern = r"/ajax/person:(\d+)/report-for"
@@ -282,7 +284,7 @@ def extract_diary_recent(dom) -> dict:
 
                 for day, item in zip(days, items):
                     movie_index = day.text
-                    movie_slug = item.a['href'].split('/film/')[1].split('/')[0]
+                    movie_slug = extract_path_segment(item.a['href'], after='/film/')
                     movie_name = item.text 
 
                     if movie_index not in diary_recent['months'][month_index]:
