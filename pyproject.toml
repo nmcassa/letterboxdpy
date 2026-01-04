@@ -36,5 +36,8 @@ Documentation = "https://github.com/nmcassa/letterboxdpy"
 "Bug Tracker" = "https://github.com/nmcassa/letterboxdpy/issues"
 "Source Code" = "https://github.com/nmcassa/letterboxdpy/archive/refs/heads/main.zip"
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.hatch.build.targets.wheel]
 packages = ["letterboxdpy"]
