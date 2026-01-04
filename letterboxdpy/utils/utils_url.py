@@ -1,6 +1,6 @@
 import re
 from pykit.url_utils import extract_path_segment
-from letterboxdpy.constants.project import DOMAIN_SHORT, URL_PROTOCOLS, DOMAIN
+from letterboxdpy.constants.project import DOMAIN_SHORT, URL_PROTOCOLS
 
 
 def extract_boxd_it_id(url: str) -> str | None:
@@ -39,8 +39,3 @@ def parse_list_url(url: str) -> tuple:
     if match:
         return match.group(1), match.group(2)
     raise ValueError(f"Invalid list URL format: {url}")
-
-
-def build_list_url(username: str, slug: str) -> str:
-    """Build list URL from username and slug."""
-    return f"{DOMAIN}/{username}/list/{slug}/"
