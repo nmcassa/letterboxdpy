@@ -11,6 +11,10 @@ def get_popular_lists_url(film_slug: str) -> str:
   # top lists
   return f"https://letterboxd.com/csi/film/{film_slug}/popular-lists/"
 
+def get_film_json_url(film_slug: str) -> str:
+  # movie runtime, release year, etc.
+  return f"https://letterboxd.com/film/{film_slug}/json/"
+
 def get_recent_reviews_url(film_slug: str) -> str:
   # last reviews
   return f"https://letterboxd.com/csi/film/{film_slug}/recent-reviews/"
