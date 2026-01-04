@@ -104,10 +104,10 @@ class User:
     def get_lists(self) -> dict:
         return self.pages.lists.get_lists()
     
-    def get_following(self) -> dict:
-        return self.pages.network.get_following()
-    def get_followers(self) -> dict:
-        return self.pages.network.get_followers()
+    def get_following(self, page: int = 1, limit: int = None) -> dict:
+        return self.pages.network.get_following(page=page, limit=limit)
+    def get_followers(self, page: int = 1, limit: int = None) -> dict:
+        return self.pages.network.get_followers(page=page, limit=limit)
 
     def get_url(self) -> str:
         return self.pages.profile.url
