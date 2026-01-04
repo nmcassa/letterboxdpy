@@ -1,5 +1,5 @@
 import re
-from pykit.url_utils import extract_path_segment, urls_match
+from pykit.url_utils import extract_path_segment
 from letterboxdpy.constants.project import DOMAIN_SHORT, URL_PROTOCOLS
 
 
@@ -16,13 +16,6 @@ def get_list_slug(url: str) -> str | None:
     example: 'https://letterboxd.com/fastfingertips/list/list_name/' -> 'list_name'
     """
     return extract_path_segment(url, after='/list/')
-
-def check_url_match(base_url, target_url) -> bool:
-    """
-    Check if two URLs match (base_url == target_url or base_url/ == target_url).
-    Uses asymmetric comparison via pykit.urls_match.
-    """
-    return urls_match(base_url, target_url, symmetric=False)
 
 def is_short_url(url) -> bool:
     """
