@@ -5,7 +5,6 @@ from bs4 import Tag
 from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_transform import month_to_index
 from pykit.datetime_utils import parse_datetime
-from pykit.string_utils import extract_number_from_text
 from letterboxdpy.constants.project import DOMAIN_SHORT
 from letterboxdpy.constants.selectors import PageSelectors
 
@@ -30,17 +29,6 @@ def extract_and_convert_shorthand(tag) -> int:
         return int(count_str)
     return 0
 
-def extract_numeric_text(text: str) -> int | None:
-    """
-    Extracts numeric characters from a string and returns them as an integer.
-    Returns None if an error occurs.
-    
-    Examples:
-        "1,234 users" -> 1234
-        "Season 1 Ep 2" -> 12
-    """
-    # Use join=True to match original behavior (merging all digits)
-    return extract_number_from_text(text, join=True)
 
 def parse_iso_date(iso_date_str: str) -> dict[str, int]:
     """

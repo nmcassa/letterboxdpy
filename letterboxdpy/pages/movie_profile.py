@@ -1,6 +1,7 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content, extract_numeric_text
+from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content
+from pykit.string_utils import extract_number_from_text
 
 
 class MovieProfile:
@@ -42,10 +43,10 @@ class MovieProfile:
 
 def extract_movie_id(dom):
     """Extract movie ID from DOM."""
-    from letterboxdpy.utils.utils_parser import extract_numeric_text
     elem = dom.find('span', 'block-flag-wrapper')
     elem = elem.find('a')
-    return extract_numeric_text(elem.get('data-report-url'))
+    # join=True: extracts and joins all digits (e.g. data-report-url)
+    return extract_number_from_text(elem.get('data-report-url'), join=True)
 
 def extract_movie_title(dom):
     """Extract movie title from DOM."""
@@ -65,7 +66,8 @@ def extract_movie_original_title(dom):
 def extract_movie_runtime(dom):
     """Extract movie runtime from DOM."""
     elem = dom.find("p", {"class": ["text-footer"]})
-    return extract_numeric_text(elem.text) if elem else None
+    # join=True: extracts and joins all digits (e.g. '124 mins' -> 124)
+    return extract_number_from_text(elem.text, join=True) if elem else None
 
 def extract_movie_rating(dom, script=None):
     """Extract movie rating from DOM."""

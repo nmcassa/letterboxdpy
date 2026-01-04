@@ -1,6 +1,6 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.utils.utils_parser import extract_numeric_text
+from pykit.string_utils import extract_number_from_text
 
 
 class MovieMembers:
@@ -28,7 +28,8 @@ def extract_movie_watchers_stats(dom) -> dict:
             for a in content_nav.find_all("a", title=True):
                 a_text = a.text.strip().lower()
                 a_title = a['title']
-                count = extract_numeric_text(a_title)
+                # join=True: extracts and joins all digits (e.g. '1,902 members' -> 1902)
+                count = extract_number_from_text(a_title, join=True)
                 stats[a_text] = count
         return stats
     except Exception as e:
