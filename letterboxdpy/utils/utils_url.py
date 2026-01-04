@@ -1,5 +1,5 @@
 import re
-from pykit.url_utils import extract_path_segment
+from pykit.url_utils import extract_path_segment, urls_match
 from letterboxdpy.constants.project import DOMAIN_SHORT, URL_PROTOCOLS
 
 
@@ -19,10 +19,10 @@ def get_list_slug(url: str) -> str | None:
 
 def check_url_match(base_url, target_url) -> bool:
     """
-    this function checks if two URLs match,
-    and returns a boolean value as the result.
+    Check if two URLs match (base_url == target_url or base_url/ == target_url).
+    Uses asymmetric comparison via pykit.urls_match.
     """
-    return base_url == target_url or f'{base_url}/' == target_url
+    return urls_match(base_url, target_url, symmetric=False)
 
 def is_short_url(url) -> bool:
     """
