@@ -1,6 +1,7 @@
 """Date utilities for consistent ISO 8601 format across letterboxdpy."""
 
 from datetime import datetime
+from pykit.datetime_utils import parse_datetime
 
 
 class InvalidDateFormatError(Exception):
@@ -44,13 +45,10 @@ class DateUtils:
     @staticmethod
     def _parse_date_string(date_string: str) -> datetime:
         """Parse ISO date string format."""
-        try:
-            return datetime.strptime(date_string, DateUtils.ISO_FORMAT)
-        except ValueError:
-            try:
-                return datetime.strptime(date_string, DateUtils.ISO_FORMAT_NO_MICROSECONDS)
-            except ValueError:
-                raise InvalidDateFormatError(f"Invalid ISO date string: {date_string}")
+        dt = parse_datetime(date_string)
+        if dt:
+            return dt
+        raise InvalidDateFormatError(f"Invalid ISO date string: {date_string}")
     
     @staticmethod
     def format_to_iso(date_obj: datetime | None) -> str | None:
