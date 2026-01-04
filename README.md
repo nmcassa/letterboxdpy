@@ -267,7 +267,7 @@ print(search_instance.get_results(max=5))
 
 ```python
 from letterboxdpy.list import List
-list_instance = List("hepburnluv", "classic-movies-for-beginners")
+list_instance = List("nmcassa", "movies-to-watch-with-priscilla-park")
 print(list_instance)
 ```
 
@@ -277,24 +277,28 @@ print(list_instance)
 ```json
 {
   "scraper": {...},
-  "url": "https://letterboxd.com/hepburnluv/list/classic-movies-for-beginners",
-  "slug": "classic-movies-for-beginners",
-  "username": "hepburnluv",
+  "url": "https://letterboxd.com/nmcassa/list/movies-to-watch-with-priscilla-park",
+  "slug": "movies-to-watch-with-priscilla-park",
+  "username": "nmcassa",
   "list_type": "list",
-  "items_per_page": 60,
-  "title": "classic movies for beginners.",
-  "description": "old hollywood classic movies for you who wanna start watching. \u02d6\u207a\u2027\u208a\u02da \u2661 \u02da\u208a\u2027\u207a\u02d6. \u0741\u208a \u22b9 . \u0741(from easiest to hardest to watch) (these are my personal recommendations only) thank you guys for all the comments and likes <3",
-  "movies": [
-    [
-      "The Wizard of Oz",
-      "the-wizard-of-oz-1939"
-    ],
-    [
-      "Roman Holiday",
-      "roman-holiday"
-    ],...
-  ],
-  "count": 66
+  "items_per_page": 100,
+  "title": "Movies to Watch with Priscilla Park",
+  "description": null,
+  "movies": {
+    "240344": {
+      "slug": "la-la-land",
+      "name": "La La Land",
+      "year": 2016,
+      "url": "https://letterboxd.com/film/la-la-land/"
+    },
+    "48049": {
+      "slug": "carrie-1976",
+      "name": "Carrie",
+      "year": 1976,
+      "url": "https://letterboxd.com/film/carrie-1976/"
+    },...
+  },
+  "count": 19
 }
 ```
 </details>
