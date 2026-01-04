@@ -17,8 +17,8 @@ class TestUser(unittest.TestCase):
         followers = self.user.get_followers()
         following = self.user.get_following()
 
-        self.assertTrue(self.user.stats['followers'] == len(followers))
-        self.assertTrue(self.user.stats['following'] == len(following))
+        self.assertEqual(self.user.stats['followers'], len(followers))
+        self.assertEqual(self.user.stats['following'], len(following))
 
 if __name__ == '__main__':
     unittest.main()
