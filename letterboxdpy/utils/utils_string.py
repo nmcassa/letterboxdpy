@@ -1,3 +1,7 @@
+import re
+
+MOVIE_YEAR_PATTERN = r'\((\d{4})\)'
+
 def remove_prefix(text: str, prefix: str) -> str:
     """Remove a specific prefix from a string if it exists."""
     return text[len(prefix):] if text.startswith(prefix) else text
@@ -13,9 +17,7 @@ def extract_year_from_movie_name(movie_name: str) -> int | None:
         extract_year_from_movie_name("The Matrix (1999)") -> 1999
         extract_year_from_movie_name("Inception") -> None
     """
-    import re
-    YEAR_PATTERN = r'\((\d{4})\)'
-    match = re.search(YEAR_PATTERN, movie_name or '')
+    match = re.search(MOVIE_YEAR_PATTERN, movie_name or '')
     return int(match.group(1)) if match else None
 
 def clean_movie_name(movie_name: str) -> str:
@@ -25,6 +27,4 @@ def clean_movie_name(movie_name: str) -> str:
         clean_movie_name("The Matrix (1999)") -> "The Matrix"
         clean_movie_name("Inception") -> "Inception"
     """
-    import re
-    YEAR_PATTERN = r'\((\d{4})\)'
-    return re.sub(YEAR_PATTERN, '', movie_name or '').strip()
+    return re.sub(MOVIE_YEAR_PATTERN, '', movie_name or '').strip()
