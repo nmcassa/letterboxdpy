@@ -1,58 +1,76 @@
-def get_live_feed_url() -> str:
-  # total watches and last reviews
-  return "https://letterboxd.com/csi/films-live-feed/"
+from typing import TYPE_CHECKING
+import requests
+from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.core.scraper import Scraper
 
-def get_metadata_url() -> str:
-  return "https://letterboxd.com/ajax/letterboxd-metadata/"
+if TYPE_CHECKING:
+    from letterboxdpy.core.models import MovieJSON
 
-# -- FILM --
+class FilmURL:
+    """Endpoints and Factory for movie-related data."""
+    
+    @staticmethod
+    def json_url(slug: str) -> str:
+        return f"{DOMAIN}/film/{slug}/json/"
 
-def get_popular_lists_url(film_slug: str) -> str:
-  # top lists
-  return f"https://letterboxd.com/csi/film/{film_slug}/popular-lists/"
+    @classmethod
+    def json(cls, slug: str) -> 'MovieJSON':
+        """Factory: Returns MovieJSON model from film slug."""
+        from letterboxdpy.core.models import MovieJSON
+        url = cls.json_url(slug)
+        
+        # Standalone fetch to avoid touching other files
+        response = requests.get(url, headers=Scraper.headers)
+        if response.status_code != 200:
+            from letterboxdpy.core.exceptions import InvalidResponseError
+            raise InvalidResponseError(f"Failed to fetch JSON from {url}: {response.status_code}")
+            
+        return MovieJSON.from_dict(response.json())
 
-def get_film_json_url(film_slug: str) -> str:
-  # movie runtime, release year, etc.
-  return f"https://letterboxd.com/film/{film_slug}/json/"
+    # CSI (Client Side Includes) Endpoints
+    @staticmethod
+    def _csi(slug: str, endpoint: str) -> str:
+        return f"{DOMAIN}/csi/film/{slug}/{endpoint}/"
 
-def get_recent_reviews_url(film_slug: str) -> str:
-  # last reviews
-  return f"https://letterboxd.com/csi/film/{film_slug}/recent-reviews/"
+    @classmethod
+    def popular_lists(cls, slug: str) -> str: return cls._csi(slug, "popular-lists")
+    @classmethod
+    def recent_reviews(cls, slug: str) -> str: return cls._csi(slug, "recent-reviews")
+    @classmethod
+    def rating_histogram(cls, slug: str) -> str: return cls._csi(slug, "rating-histogram")
+    @classmethod
+    def user_actions(cls, slug: str) -> str: return cls._csi(slug, "sidebar-user-actions")
+    @classmethod
+    def stats(cls, slug: str) -> str: return cls._csi(slug, "stats")
+    @classmethod
+    def news(cls, slug: str) -> str: return cls._csi(slug, "news")
+    @classmethod
+    def availability(cls, slug: str) -> str: return cls._csi(slug, "availability")
+    @classmethod
+    def friend_reviews(cls, slug: str) -> str: return cls._csi(slug, "friend-reviews")
+    @classmethod
+    def friend_activity(cls, slug: str) -> str: return cls._csi(slug, "friend-activity")
+    @classmethod
+    def own_reviews(cls, slug: str) -> str: return cls._csi(slug, "own-reviews")
+    @classmethod
+    def liked_reviews(cls, slug: str) -> str: return cls._csi(slug, "liked-reviews")
 
-def get_rating_histogram_url(film_slug: str) -> str:
-  # fan count and ratings
-  return f"https://letterboxd.com/csi/film/{film_slug}/rating-histogram/"
 
-def get_user_actions_url(film_slug: str) -> str:
-  return f"https://letterboxd.com/csi/film/{film_slug}/sidebar-user-actions/"
+class UserURL:
+    """Endpoints for user-related data."""
+    
+    @staticmethod
+    def homepage() -> str:
+        return f"{DOMAIN}/ajax/user-homepage/"
 
-def get_stats_url(film_slug: str) -> str:
-  # watches, lists and likes
-  return f"https://letterboxd.com/csi/film/{film_slug}/stats/"
+    @staticmethod
+    def live_feed() -> str:
+        return f"{DOMAIN}/csi/films-live-feed/"
 
-def get_news_url(film_slug: str) -> str:
-  # posts: journal, video, etc.
-  return f"https://letterboxd.com/csi/film/{film_slug}/news/"
 
-def get_availability_url(film_slug: str) -> str:
-  # trailer and services
-  return f"https://letterboxd.com/csi/film/{film_slug}/availability/"
-
-"""
-# -- USER --
-
-def get_user_homepage_url() -> str:
-  return "https://letterboxd.com/ajax/user-homepage/"
-
-def get_friend_reviews_url(film_slug: str) -> str:
-  return f"https://letterboxd.com/csi/film/{film_slug}/friend-reviews/"
-
-def get_friend_activity_url(film_slug: str) -> str:
-  return f"https://letterboxd.com/csi/film/{film_slug}/friend-activity/"
-
-def get_own_reviews_url(film_slug: str) -> str:
-  return f"https://letterboxd.com/csi/film/{film_slug}/own-reviews/"
-
-def get_likes_reviews_url(film_slug: str) -> str:
-  return "https://letterboxd.com/csi/film/{film_slug}/liked-reviews/"
-"""
+class GeneralURL:
+    """General Letterboxd endpoints."""
+    
+    @staticmethod
+    def metadata() -> str:
+        return f"{DOMAIN}/ajax/letterboxd-metadata/"
