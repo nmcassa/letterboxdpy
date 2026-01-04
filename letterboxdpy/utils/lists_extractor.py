@@ -7,6 +7,7 @@ from user lists, movie lists, and individual list pages.
 from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand, extract_numeric_text
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.utils.utils_url import extract_path_segment
 
 
 class ListsExtractor:
@@ -100,8 +101,12 @@ class ListsExtractor:
             title_elem = item.find('h2', {'class': 'name'})
             return DOMAIN + title_elem.a['href']
 
-        def get_slug() -> str:
-            return get_url().split('/')[-2]
+        def get_slug() -> str | None:
+            """
+            extract list slug from url.
+            example: 'https://letterboxd.com/user/list/my-list/' -> 'my-list'
+            """
+            return extract_path_segment(get_url(), after='/list/')
 
         def get_count() -> int:
             value_elem = item.find(*cls.SELECTORS['value'])
