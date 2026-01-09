@@ -23,6 +23,7 @@ class Scraper:
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     }
     builder = "lxml"
+    timeout = (10, 30)  # (connect, read) in seconds; set None to disable
 
     def __init__(self, domain: str = headers['referer'], user_agent: str = headers["user-agent"]):
         """Initialize the scraper with the specified domain and user-agent."""
@@ -42,7 +43,7 @@ class Scraper:
     def _fetch(cls, url: str) -> requests.Response:
         """Fetch the HTML content from the specified URL."""
         try:
-            return requests.get(url, headers=cls.headers)
+            return requests.get(url, headers=cls.headers, timeout=cls.timeout)
         except requests.RequestException as e:
             raise PageLoadError(url, str(e))
 
