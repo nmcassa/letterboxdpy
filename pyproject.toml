@@ -9,7 +9,8 @@ dependencies = [
     "requests>=2.31.0",
     "beautifulsoup4>=4.12.3",
     "lxml>=5.1.0",
-    "validators"
+    "validators",
+    "pykit @ git+https://github.com/fastfingertips/pykit.git"
 ]
 requires-python = ">=3.7"
 authors = [
@@ -34,6 +35,9 @@ Repository = "https://github.com/nmcassa/letterboxdpy"
 Documentation = "https://github.com/nmcassa/letterboxdpy"
 "Bug Tracker" = "https://github.com/nmcassa/letterboxdpy/issues"
 "Source Code" = "https://github.com/nmcassa/letterboxdpy/archive/refs/heads/main.zip"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["letterboxdpy"]

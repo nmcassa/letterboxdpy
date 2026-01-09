@@ -3,7 +3,7 @@ import re
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.utils_parser import get_meta_content, get_movie_count_from_meta, get_body_content
-from letterboxdpy.utils.utils_url import check_url_match
+from pykit.url_utils import urls_match
 from letterboxdpy.utils.movies_extractor import extract_movies_from_vertical_list
 from letterboxdpy.utils.date_utils import DateUtils
 
@@ -186,7 +186,8 @@ def extract_list_meta(dom, url: str) -> ListMetaData:
         list_id = extract_list_id(dom)
 
         # Check for URL redirection
-        if not check_url_match(url, list_url):
+        # symmetric=False: checks if url == list_url or url + "/" == list_url
+        if not urls_match(url, list_url, symmetric=False):
             print(f'Redirected to {list_url}')
 
         # Update metadata

@@ -7,6 +7,7 @@ Helper functions for extracting activity data from Letterboxd DOM elements.
 from datetime import datetime
 from letterboxdpy.utils.utils_parser import parse_review_text
 from letterboxdpy.utils.date_utils import DateUtils
+from letterboxdpy.utils.utils_url import extract_path_segment
 
 def parse_activity_datetime(date_string: str) -> datetime:
     """Parse datetime string from activity feed."""
@@ -110,7 +111,8 @@ def get_film_info(section, item_slug: str = None) -> dict:
 def get_rating(section) -> int:
     """Extract user rating from section."""
     rating = section.find("span", {"class": ["rating"], })
-    return int(rating['class'][-1].split('-')[-1]) / 2 if rating else None
+    rating_val = extract_path_segment(rating['class'][-1], after='rated-') if rating else None
+    return int(rating_val) / 2 if rating_val else None
 
 
 def build_review_title(film: str, log_type: str, rating: int, section) -> str:
@@ -154,7 +156,7 @@ def get_user_info(section) -> dict:
     target = section.find("a", {"class": "target"})
     if target:
         href = target.get('href', '')
-        username = href.replace('/', '') if '/' not in href[1:] else href.split('/')[1]
+        username = extract_path_segment(href, after='/', before='/')
         user_data['username'] = username
         user_data['display_name'] = target.get_text().strip()
         user_data['profile_url'] = f"https://letterboxd.com{href}" if href.startswith('/') else href
@@ -309,7 +311,7 @@ def process_basic_activity(section, title: str, log_type: str, item_slug: str = 
         target = section.find("a", {"class": "target"})
         if target:
             href = target.get('href', '')
-            username = href.replace('/', '') if '/' not in href[1:] else href.split('/')[1]
+            username = extract_path_segment(href, after='/', before='/')
             activity_data['user'] = {
                 'username': username,
                 'display_name': target.get_text().strip(),

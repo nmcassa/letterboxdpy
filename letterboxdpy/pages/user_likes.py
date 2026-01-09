@@ -2,6 +2,7 @@ from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.user_films import extract_user_films
 from letterboxdpy.utils.utils_parser import parse_review_date, parse_iso_date
+from letterboxdpy.utils.utils_url import extract_path_segment
 
 
 class UserLikes:
@@ -74,7 +75,7 @@ def extract_liked_reviews(url: str) -> dict:
             if not movie_name:
                 raise ValueError(f"Movie name is missing for review by user '{username}'")
                 
-            movie_slug = film_link['href'].split('/film/')[-1].rstrip('/')
+            movie_slug = extract_path_segment(film_link['href'], after='/film/')
             if not movie_slug:
                 raise ValueError(f"Movie slug is missing for movie '{movie_name}' by user '{username}'")
                 
@@ -99,7 +100,7 @@ def extract_liked_reviews(url: str) -> dict:
                 raise ValueError(f"Movie release year is missing for '{movie_name}' (ID: {movie_id}) by user '{username}'")
 
             # Extract review data
-            review_id = item.get('data-object-id', '').split(':')[-1]
+            review_id = extract_path_segment(item.get('data-object-id', ''), after=':')
             if not review_id:
                 raise ValueError(f"Review ID is missing for review of '{movie_name}' by user '{username}'")
                 
@@ -114,7 +115,7 @@ def extract_liked_reviews(url: str) -> dict:
                 rating_classes = [cls for cls in classes if 'rated-' in str(cls)]
                 if rating_classes:
                     try:
-                        review_rating = int(rating_classes[0].split('-')[-1])
+                        review_rating = int(extract_path_segment(rating_classes[0], after='rated-'))
                         break
                     except (ValueError, IndexError):
                         pass
@@ -206,7 +207,7 @@ def extract_liked_lists(url: str) -> dict:
         title_link = title_elem.find('a')
         title = title_link.text.strip()
         list_url = DOMAIN + title_link['href']
-        slug = title_link['href'].split('/')[-2]
+        slug = extract_path_segment(title_link['href'], after='/list/')
         
         # Extract description
         description = ""

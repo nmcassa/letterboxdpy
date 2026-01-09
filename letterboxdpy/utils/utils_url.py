@@ -1,20 +1,21 @@
 import re
-from letterboxdpy.constants.project import DOMAIN_SHORT, URL_PROTOCOLS, DOMAIN
+from pykit.url_utils import extract_path_segment
+from letterboxdpy.constants.project import DOMAIN_SHORT, URL_PROTOCOLS
 
 
-def get_list_slug(url) -> str:
+def extract_boxd_it_id(url: str) -> str | None:
     """
-    extract the slug from a URL containing '/list/'.
+    extract the boxd.it id from a short url.
+    example: 'https://boxd.it/7v7X' -> '7v7X'
+    """
+    return extract_path_segment(url, after=f"{DOMAIN_SHORT}/")
+
+def get_list_slug(url: str) -> str | None:
+    """
+    extract the slug from a url containing '/list/'.
     example: 'https://letterboxd.com/fastfingertips/list/list_name/' -> 'list_name'
     """
-    return url[url.index('/list/') + len('/list/'):].replace('/', '')
-
-def check_url_match(base_url, target_url) -> bool:
-    """
-    this function checks if two URLs match,
-    and returns a boolean value as the result.
-    """
-    return base_url == target_url or f'{base_url}/' == target_url
+    return extract_path_segment(url, after='/list/')
 
 def is_short_url(url) -> bool:
     """
@@ -31,8 +32,3 @@ def parse_list_url(url: str) -> tuple:
     if match:
         return match.group(1), match.group(2)
     raise ValueError(f"Invalid list URL format: {url}")
-
-
-def build_list_url(username: str, slug: str) -> str:
-    """Build list URL from username and slug."""
-    return f"{DOMAIN}/{username}/list/{slug}/"

@@ -1,5 +1,6 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.utils.utils_url import extract_path_segment
 
 
 class UserTags:
@@ -30,7 +31,7 @@ def extract_user_tags(url: str) -> dict:
             name = tag.a.text.strip()
             title = tag.a['title']
             link = tag.a['href']
-            slug = link.split('/')[-3]
+            slug = extract_path_segment(link, after='/tag/', before='/')
             count = int(tag.span.text.strip() or 1)
             return {
                 'name': name,

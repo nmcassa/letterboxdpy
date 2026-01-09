@@ -4,6 +4,7 @@ from bs4 import Tag
 
 from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_transform import month_to_index
+from pykit.datetime_utils import parse_datetime
 from letterboxdpy.constants.project import DOMAIN_SHORT
 from letterboxdpy.constants.selectors import PageSelectors
 
@@ -28,25 +29,16 @@ def extract_and_convert_shorthand(tag) -> int:
         return int(count_str)
     return 0
 
-def extract_numeric_text(text: str) -> int | None:
-    """
-    Extracts numeric characters from a string and returns them as an integer.
-    Returns None if an error occurs.
-    """
-    try:
-        numeric_value = int(re.sub(r"[^0-9]", '', text))
-        return numeric_value
-    except ValueError:
-        return None
 
 def parse_iso_date(iso_date_str: str) -> dict[str, int]:
-    """Parses an ISO 8601 formatted date string."""
-    try:
-        # ISO 8601 format example: '2025-01-01T00:00:00Z'
-        date_parts = list(map(int, iso_date_str[:10].split('-')))
-        return {'year': date_parts[0], 'month': date_parts[1], 'day': date_parts[2]}
-    except (IndexError, ValueError) as e:
-        raise ValueError(f"Error parsing ISO date format: {e}")
+    """
+    Parses an ISO 8601 formatted date string.
+    Example: '2025-01-01T00:00:00Z' -> {'year': 2025, 'month': 1, 'day': 1}
+    """
+    dt = parse_datetime(iso_date_str)
+    if dt:
+        return {'year': dt.year, 'month': dt.month, 'day': dt.day}
+    raise ValueError(f"Error parsing ISO date format: {iso_date_str}")
 
 def parse_written_date(written_date_str: str) -> dict[str, int]:
     """Parses a written date string (e.g., '01 Jan 2025')."""

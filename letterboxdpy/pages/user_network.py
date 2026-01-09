@@ -11,12 +11,14 @@ class UserNetwork:
         self.following_url = f"{DOMAIN}/{self.username}/following"
         self.followers_url = f"{DOMAIN}/{self.username}/followers"
 
-    def get_following(self) -> dict: return extract_network(self.username, 'following')
-    def get_followers(self) -> dict: return extract_network(self.username, 'followers')
+    def get_following(self, page: int = 1, limit: int = None) -> dict: return extract_network(self.username, 'following', page=page, limit=limit)
+    def get_followers(self, page: int = 1, limit: int = None) -> dict: return extract_network(self.username, 'followers', page=page, limit=limit)
 
-def extract_network(username: str, section: str) -> dict:
+def extract_network(username: str, section: str, limit: int = None, page: int = 1) -> dict:
     """
     Fetches the specified network section ('followers' or 'following') for the user.
+    limit: Optional maximum number of pages to fetch.
+    page: Optional starting page number.
     """
     assert section in ['followers', 'following'], "Section must be either 'followers' or 'following'"
 
@@ -139,12 +141,18 @@ def extract_network(username: str, section: str) -> dict:
         return persons_dict
 
     users_list = {}
-    page_num = 1
+    page_num = page
+    fetched_count = 0
 
     while True:
+        if limit is not None and fetched_count >= limit:
+            break
+
         dom = fetch_page(page_num)
         persons = extract_persons(dom)
         users_list.update(persons)
+
+        fetched_count += 1
 
         # Break if the number of persons fetched is less than a full page (end of list)
         if len(persons) < PERSONS_PER_PAGE :
