@@ -13,7 +13,7 @@ import os
 
 from letterboxdpy import user
 from letterboxdpy.utils.utils_string import strip_prefix
-from letterboxdpy.utils.utils_terminal import get_input
+from pykit.terminal_utils import get_input
 from letterboxdpy.utils.utils_file import build_path, JsonFile, build_click_url
 from letterboxdpy.utils.utils_directory import check_and_create_dirs
 

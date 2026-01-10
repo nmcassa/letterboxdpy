@@ -15,7 +15,7 @@ from datetime import datetime
 from json import dumps as json_dumps
 
 from letterboxdpy import user
-from letterboxdpy.utils.utils_terminal import get_input
+from pykit.terminal_utils import get_input
 from letterboxdpy.utils.utils_file import build_path
 from letterboxdpy.utils.utils_directory import Directory
 

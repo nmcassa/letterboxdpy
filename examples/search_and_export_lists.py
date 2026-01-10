@@ -13,7 +13,7 @@ import os
 
 from letterboxdpy.search import Search
 from letterboxdpy.list import List
-from letterboxdpy.utils.utils_terminal import get_input, args_exists
+from pykit.terminal_utils import get_input, args_exists
 from letterboxdpy.utils.utils_file import CsvFile, build_path
 from letterboxdpy.utils.utils_directory import Directory
 
