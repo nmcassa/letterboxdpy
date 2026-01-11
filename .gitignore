@@ -21,3 +21,5 @@ venv
 
 # Local Development
 pykit/
+lizard/
+.gitignore

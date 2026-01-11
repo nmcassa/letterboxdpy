@@ -39,3 +39,34 @@ class Colors:
     BLUE = '#456'         # Letterboxd blue
     GREEN = '#00C030'     # Letterboxd green
     TEXT = '#9AB'         # Letterboxd text gray
+
+# CSV Column Definitions
+LIST_COLUMNS = ['Rank', 'Title', 'LetterboxdURI']
+WATCHLIST_COLUMNS = ['Rank', 'Title', 'LetterboxdURI']
+
+# Letterboxd official import format column mappings
+# https://letterboxd.com/about/importing-data/
+LETTERBOXD_COLUMNS = {
+    'letterboxd_uri': 'LetterboxdURI',
+    'tmdb_id': 'tmdbID',
+    'imdb_id': 'imdbID',
+    'title': 'Title',
+    'year': 'Year',
+    'directors': 'Directors',
+    'rating': 'Rating',
+    'rating10': 'Rating10',
+    'watched_date': 'WatchedDate',
+    'rewatch': 'Rewatch',
+    'tags': 'Tags',
+    'review': 'Review',
+    'rank': 'Rank'
+}
+
+REQUIRED_COLUMNS = ['LetterboxdURI', 'tmdbID', 'imdbID', 'Title']
+RATING_RANGE = (0.5, 5.0)
+RATING10_RANGE = (1, 10)
+
+CSV_FORMAT_COLUMNS = {
+    "Letterboxd": {"Title": "Title", "LetterboxdURI": "LetterboxdURI"},
+    "TMDB": {"Title": "Name", "LetterboxdURI": "Letterboxd URI"}
+}
