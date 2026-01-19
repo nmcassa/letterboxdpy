@@ -7,7 +7,7 @@ import requests
 from urllib.parse import quote
 
 from letterboxdpy.utils.utils_file import JsonFile
-from letterboxdpy.utils.utils_terminal import get_input
+from pykit.terminal_utils import get_input
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.exceptions import (
     PageLoadError,

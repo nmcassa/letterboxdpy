@@ -129,7 +129,7 @@ class User:
         return self.pages.profile.get_stats()
     def get_favorites(self) -> dict:
         return self.pages.profile.get_favorites()
-    def get_avatar(self) -> str:
+    def get_avatar(self) -> dict | None:
         return self.pages.profile.get_avatar()
     def get_watchlist_recent(self) -> dict:
         return self.pages.profile.get_watchlist_recent()

@@ -16,7 +16,7 @@ from bs4 import Tag
 from letterboxdpy import user
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_parser import extract_json_ld_script
-from letterboxdpy.utils.utils_terminal import get_input, args_exists
+from pykit.terminal_utils import get_input, args_exists
 from letterboxdpy.utils.utils_file import BinaryFile
 from letterboxdpy.utils.utils_directory import Directory
 

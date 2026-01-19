@@ -28,7 +28,7 @@ class UserProfile:
     def get_watchlist_length(self) -> int | None: return extract_watchlist_length(self.dom)
     def get_stats(self) -> dict: return extract_stats(self.dom)
     def get_favorites(self) -> dict: return extract_favorites(self.dom)
-    def get_avatar(self) -> str | None: return extract_avatar(self.dom)
+    def get_avatar(self) -> dict | None: return extract_avatar(self.dom)
     def get_watchlist_recent(self) -> dict: return extract_watchlist_recent(self.dom)
     def get_diary_recent(self) -> dict: return extract_diary_recent(self.dom)
 
@@ -201,7 +201,7 @@ def extract_favorites(dom) -> dict:
     except Exception as e:
         raise RuntimeError("Failed to extract favorites from DOM") from e
 
-def extract_avatar(dom) -> str | None:
+def extract_avatar(dom) -> dict | None:
     """Extracts the user's avatar URL from the DOM and returns it."""
     try:
         elem_avatar = dom.find("div", {"class": ["profile-avatar"]})

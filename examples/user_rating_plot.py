@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from letterboxdpy.user import User
-from letterboxdpy.utils.utils_terminal import get_input
-from letterboxdpy.utils.utils_validators import is_whitespace_or_empty
+from pykit.terminal_utils import get_input
+from pykit.string_utils import is_whitespace_or_empty
 from letterboxdpy.constants.project import Colors
 
 

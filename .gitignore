@@ -18,3 +18,8 @@ desktop.ini
 # venv
 venv
 .venv
+
+# Local Development
+pykit/
+lizard/
+.gitignore
