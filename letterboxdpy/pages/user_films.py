@@ -29,7 +29,7 @@ def extract_user_films(url: str) -> dict:
 
     def process_page(page_number: int) -> dict:
         """Fetches and processes a page of user films."""
-        dom = parse_url(f"{url}/page/{page_number}/")
+        dom = parse_url(f"{url.rstrip('/')}/page/{page_number}/")
         return extract_movies_from_user_watched(dom)
 
     def calculate_statistics(movies: dict) -> dict:

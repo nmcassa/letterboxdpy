@@ -92,7 +92,7 @@ def extract_movies(list_url: str, items_per_page) -> dict:
 
     page = 1
     while True:
-        dom = parse_url(f'{list_url}/page/{page}/')
+        dom = parse_url(f"{list_url.rstrip('/')}/page/{page}/")
         movies = extract_movies_from_vertical_list(dom)
         data |= movies
 

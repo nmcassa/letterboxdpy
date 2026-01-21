@@ -23,7 +23,7 @@ def extract_user_reviews(url: str) -> dict:
     data = {'reviews': {}}
     while True:
         page += 1
-        dom = parse_url(f"{url}/page/{page}/")
+        dom = parse_url(f"{url.rstrip('/')}/page/{page}/")
 
         container = dom.find("div", {"class": ["viewing-list"]})
 

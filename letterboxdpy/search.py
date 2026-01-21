@@ -56,7 +56,7 @@ class Search:
          }
 
       for current_page in range(1, end_page+1):
-        url = f'{self.url}/page/{current_page}/?adult'
+        url = f"{self.url.rstrip('/')}/page/{current_page}/?adult"
         dom = parse_url(url)
         results = self.get_page_results(dom)
 

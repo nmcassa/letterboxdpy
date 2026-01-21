@@ -77,7 +77,7 @@ class ListsExtractor:
     @classmethod
     def _fetch_page_data(cls, base_url: str, page: int):
         """Fetch and parse page data."""
-        dom = parse_url(f'{base_url}/page/{page}')
+        dom = parse_url(f"{base_url.rstrip('/')}/page/{page}")
         return dom.find_all('article', {'class': 'list-summary'})
 
     @classmethod

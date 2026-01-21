@@ -107,7 +107,7 @@ def extract_watchlist(username: str, filters: dict = None) -> dict:
     page = 1
     no = 1
     while True:
-        dom = parse_url(f'{BASE_URL}/page/{page}')
+        dom = parse_url(f"{BASE_URL.rstrip('/')}/page/{page}")
         containers = dom.find_all("li", {"class": "griditem"}) or dom.find_all("li", {"class": ["poster-container"]})
         
         for container in containers:
