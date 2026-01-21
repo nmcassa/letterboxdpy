@@ -18,6 +18,7 @@ from letterboxdpy.core.exceptions import (
 class Scraper:
     """A class for scraping and parsing web pages."""
 
+    _session = None
     headers = {
         "referer": DOMAIN,
         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
@@ -30,11 +31,17 @@ class Scraper:
 
     def __init__(self, domain: str = headers['referer'], user_agent: str | None = None):
         """Initialize the scraper with the specified domain and user-agent."""
-        self.headers = {
-            "referer": domain
-        }
+        self.headers = self.headers.copy()
+        self.headers["referer"] = domain
         if user_agent:
             self.headers["user-agent"] = user_agent
+
+    @classmethod
+    def instance(cls):
+        """Returns a singleton session instance."""
+        if cls._session is None:
+            cls._session = requests.Session()
+        return cls._session
 
     @classmethod
     def get_page(cls, url: str) -> BeautifulSoup:
@@ -45,9 +52,10 @@ class Scraper:
 
     @classmethod
     def _fetch(cls, url: str) -> requests.Response:
-        """Fetch the HTML content from the specified URL."""
+        """Fetch the HTML content from the specified URL using a session."""
         try:
-            return requests.get(url, headers=cls.headers, timeout=cls.timeout, impersonate="chrome")
+            session = cls.instance()
+            return session.get(url, headers=cls.headers, timeout=cls.timeout, impersonate="chrome")
         except requests.errors.RequestException as e:
             raise PageLoadError(url, str(e))
 
