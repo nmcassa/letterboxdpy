@@ -28,7 +28,7 @@ def extract_network(username: str, section: str, limit: int = None, page: int = 
     def fetch_page(page_num: int):
         """Fetches a single page of the user's network section."""
         try:
-            return parse_url(f"{BASE_URL}/page/{page_num}")
+            return parse_url(f"{BASE_URL.rstrip('/')}/page/{page_num}")
         except Exception as e:
             raise PageFetchError(f"Failed to fetch page {page_num}: {e}") from e
 
