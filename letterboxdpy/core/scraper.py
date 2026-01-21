@@ -5,6 +5,8 @@ if __name__ == '__main__':
 from bs4 import BeautifulSoup, Tag
 from curl_cffi import requests
 from urllib.parse import quote
+import time
+import random
 
 from letterboxdpy.utils.utils_file import JsonFile
 from pykit.terminal_utils import get_input
@@ -52,12 +54,36 @@ class Scraper:
 
     @classmethod
     def _fetch(cls, url: str) -> requests.Response:
-        """Fetch the HTML content from the specified URL using a session."""
-        try:
-            session = cls.instance()
-            return session.get(url, headers=cls.headers, timeout=cls.timeout, impersonate="chrome")
-        except requests.errors.RequestException as e:
-            raise PageLoadError(url, str(e))
+        """Fetch the HTML content from the specified URL using a session with retry logic."""
+        max_retries = 3
+        last_exception = None
+        response = None
+        
+        for attempt in range(max_retries):
+            try:
+                session = cls.instance()
+                response = session.get(url, headers=cls.headers, timeout=cls.timeout, impersonate="chrome")
+                
+                # If we get a 403, it might be a temporary block, try one more time after a short delay
+                if response.status_code == 403 and attempt < max_retries - 1:
+                    time.sleep(1 + random.random())
+                    continue
+                    
+                return response
+            except requests.errors.RequestsError as e:
+                last_exception = e
+                if attempt < max_retries - 1:
+                    time.sleep(1 + attempt + random.random())
+                    continue
+                break
+        
+        if last_exception:
+            raise PageLoadError(url, str(last_exception))
+            
+        if response is not None:
+            return response
+            
+        raise PageLoadError(url, "Failed to fetch page after multiple attempts")
 
     @classmethod
     def _check_for_errors(cls, url: str, response: requests.Response) -> None:
