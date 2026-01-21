@@ -5,6 +5,7 @@ Extracts watchlist data by scraping Letterboxd HTML pages.
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.pages.user_list import extract_movies
+from letterboxdpy.utils.utils_url import get_page_url
 
 class UserWatchlist:
     FILMS_PER_PAGE = 7*4
@@ -107,7 +108,7 @@ def extract_watchlist(username: str, filters: dict = None) -> dict:
     page = 1
     no = 1
     while True:
-        dom = parse_url(f"{BASE_URL.rstrip('/')}/page/{page}/")
+        dom = parse_url(get_page_url(BASE_URL, page))
         containers = dom.find_all("li", {"class": "griditem"}) or dom.find_all("li", {"class": ["poster-container"]})
         
         for container in containers:

@@ -3,6 +3,7 @@ from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
 from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.utils.utils_url import get_page_url
 from letterboxdpy.core.scraper import (
   parse_url,
   url_encode
@@ -56,7 +57,7 @@ class Search:
          }
 
       for current_page in range(1, end_page+1):
-        url = f"{self.url.rstrip('/')}/page/{current_page}/?adult"
+        url = get_page_url(self.url, current_page, params="adult")
         dom = parse_url(url)
         results = self.get_page_results(dom)
 

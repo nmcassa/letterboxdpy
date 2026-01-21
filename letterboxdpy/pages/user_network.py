@@ -2,6 +2,7 @@ from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.exceptions import PageFetchError
 from letterboxdpy.avatar import Avatar
+from letterboxdpy.utils.utils_url import get_page_url
 
 
 class UserNetwork:
@@ -28,7 +29,7 @@ def extract_network(username: str, section: str, limit: int = None, page: int = 
     def fetch_page(page_num: int):
         """Fetches a single page of the user's network section."""
         try:
-            return parse_url(f"{BASE_URL.rstrip('/')}/page/{page_num}/")
+            return parse_url(get_page_url(BASE_URL, page_num))
         except Exception as e:
             raise PageFetchError(f"Failed to fetch page {page_num}: {e}") from e
 

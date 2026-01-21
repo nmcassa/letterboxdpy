@@ -1,5 +1,6 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN, GENRES
+from letterboxdpy.utils.utils_url import get_page_url
 
 
 class UserFilms:
@@ -29,7 +30,7 @@ def extract_user_films(url: str) -> dict:
 
     def process_page(page_number: int) -> dict:
         """Fetches and processes a page of user films."""
-        dom = parse_url(f"{url.rstrip('/')}/page/{page_number}/")
+        dom = parse_url(get_page_url(url, page_number))
         return extract_movies_from_user_watched(dom)
 
     def calculate_statistics(movies: dict) -> dict:
