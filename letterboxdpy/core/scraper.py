@@ -19,18 +19,18 @@ class Scraper:
     """A class for scraping and parsing web pages."""
 
     headers = {
-        "referer": DOMAIN,
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        "referer": DOMAIN
     }
     builder = "lxml"
     timeout = (10, 30)  # (connect, read) in seconds; set None to disable
 
-    def __init__(self, domain: str = headers['referer'], user_agent: str = headers["user-agent"]):
+    def __init__(self, domain: str = headers['referer'], user_agent: str | None = None):
         """Initialize the scraper with the specified domain and user-agent."""
         self.headers = {
-            "referer": domain,
-            "user-agent": user_agent
+            "referer": domain
         }
+        if user_agent:
+            self.headers["user-agent"] = user_agent
 
     @classmethod
     def get_page(cls, url: str) -> BeautifulSoup:
