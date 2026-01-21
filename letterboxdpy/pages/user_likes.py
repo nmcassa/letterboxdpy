@@ -36,7 +36,7 @@ def extract_liked_reviews(url: str) -> dict:
 
     def process_page(page: int) -> list:
         """Process a single page and return list of review items."""
-        page_url = f"{url}/page/{page}" if page > 1 else url
+        page_url = f"{url.rstrip('/')}/page/{page}/" if page > 1 else url
         dom = parse_url(page_url)
         return dom.find_all("article", {"class": ["production-viewing"]})
 
@@ -193,7 +193,7 @@ def extract_liked_lists(url: str) -> dict:
     
     def process_page(page: int) -> list:
         """Process a single page and return list of list summaries."""
-        page_url = f"{url}/page/{page}" if page > 1 else url
+        page_url = f"{url.rstrip('/')}/page/{page}/" if page > 1 else url
         dom = parse_url(page_url)
         return dom.find_all('article', {'class': 'list-summary'})
     
