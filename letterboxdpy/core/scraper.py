@@ -19,7 +19,11 @@ class Scraper:
     """A class for scraping and parsing web pages."""
 
     headers = {
-        "referer": DOMAIN
+        "referer": DOMAIN,
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9",
+        "connection": "keep-alive"
     }
     builder = "lxml"
     timeout = (10, 30)  # (connect, read) in seconds; set None to disable
