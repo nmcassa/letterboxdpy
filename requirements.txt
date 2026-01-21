@@ -1,4 +1,4 @@
-requests>=2.31.0
 beautifulsoup4>=4.12.3
 lxml>=5.1.0
+curl_cffi>=0.14.0
 pykit @ git+https://github.com/fastfingertips/pykit.git

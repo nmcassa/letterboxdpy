@@ -1,8 +1,10 @@
 # letterboxdpy
 
-[![PyPI version](https://badge.fury.io/py/letterboxdpy.svg)](https://badge.fury.io/py/letterboxdpy)
+[![PyPI version](https://img.shields.io/pypi/v/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
+[![Python Version](https://img.shields.io/pypi/pyversions/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
+[![Wheel](https://img.shields.io/pypi/wheel/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
+[![License](https://img.shields.io/pypi/l/letterboxdpy?color=blue)](https://github.com/nmcassa/letterboxdpy/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/letterboxdpy?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads)](https://pepy.tech/project/letterboxdpy)
-![format](https://img.shields.io/pypi/format/letterboxdpy)
 
 ## Installation
 

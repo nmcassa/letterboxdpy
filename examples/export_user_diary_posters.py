@@ -8,7 +8,7 @@ Downloads movie posters from user's diary entries.
 - Skip existing files with size checking
 """
 
-import requests
+from curl_cffi import requests
 import sys
 import os
 from bs4 import Tag

@@ -3,7 +3,7 @@ if __name__ == '__main__':
     sys.path.append(sys.path[0] + '/..')
 
 from bs4 import BeautifulSoup, Tag
-import requests
+from curl_cffi import requests
 from urllib.parse import quote
 
 from letterboxdpy.utils.utils_file import JsonFile
@@ -43,8 +43,8 @@ class Scraper:
     def _fetch(cls, url: str) -> requests.Response:
         """Fetch the HTML content from the specified URL."""
         try:
-            return requests.get(url, headers=cls.headers, timeout=cls.timeout)
-        except requests.RequestException as e:
+            return requests.get(url, headers=cls.headers, timeout=cls.timeout, impersonate="chrome")
+        except requests.errors.RequestException as e:
             raise PageLoadError(url, str(e))
 
     @classmethod
@@ -52,10 +52,10 @@ class Scraper:
         """Check the response for errors and raise an exception if found."""
         if response.status_code != 200:
             error_message = cls._get_error_message(response)
-            formatted_error_messagge = cls._format_error(url, response, error_message)
+            formatted_error_message = cls._format_error(url, response, error_message)
             if response.status_code == 403:
-                raise PrivateRouteError(formatted_error_messagge)
-            raise InvalidResponseError(formatted_error_messagge)
+                raise PrivateRouteError(formatted_error_message)
+            raise InvalidResponseError(formatted_error_message)
 
     @classmethod
     def _get_error_message(cls, response: requests.Response) -> str:
