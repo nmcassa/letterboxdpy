@@ -6,6 +6,7 @@ from letterboxdpy.utils.utils_parser import get_meta_content, get_movie_count_fr
 from pykit.url_utils import urls_match
 from letterboxdpy.utils.movies_extractor import extract_movies_from_vertical_list
 from letterboxdpy.utils.date_utils import DateUtils
+from letterboxdpy.utils.utils_url import get_page_url
 
 
 class ListMetaData(dict):
@@ -92,7 +93,7 @@ def extract_movies(list_url: str, items_per_page) -> dict:
 
     page = 1
     while True:
-        dom = parse_url(f"{list_url.rstrip('/')}/page/{page}/")
+        dom = parse_url(get_page_url(list_url, page))
         movies = extract_movies_from_vertical_list(dom)
         data |= movies
 

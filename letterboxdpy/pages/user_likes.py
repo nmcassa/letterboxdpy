@@ -2,7 +2,7 @@ from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.user_films import extract_user_films
 from letterboxdpy.utils.utils_parser import parse_review_date, parse_iso_date
-from letterboxdpy.utils.utils_url import extract_path_segment
+from letterboxdpy.utils.utils_url import extract_path_segment, get_page_url
 
 
 class UserLikes:
@@ -36,7 +36,7 @@ def extract_liked_reviews(url: str) -> dict:
 
     def process_page(page: int) -> list:
         """Process a single page and return list of review items."""
-        page_url = f"{url.rstrip('/')}/page/{page}/" if page > 1 else url
+        page_url = get_page_url(url, page)
         dom = parse_url(page_url)
         return dom.find_all("article", {"class": ["production-viewing"]})
 
@@ -193,7 +193,7 @@ def extract_liked_lists(url: str) -> dict:
     
     def process_page(page: int) -> list:
         """Process a single page and return list of list summaries."""
-        page_url = f"{url.rstrip('/')}/page/{page}/" if page > 1 else url
+        page_url = get_page_url(url, page)
         dom = parse_url(page_url)
         return dom.find_all('article', {'class': 'list-summary'})
     

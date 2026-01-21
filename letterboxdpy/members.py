@@ -6,6 +6,7 @@ import re
 from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_file import JsonFile
+from letterboxdpy.utils.utils_url import get_page_url
 
 
 class Members:
@@ -41,7 +42,7 @@ def top_users(max:int = 100) -> List:
     data = []
     page = 1
     while True:
-        url = f"{members_instance.MEMBERS_YEAR_TOP}page/{page}/"
+        url = get_page_url(members_instance.MEMBERS_YEAR_TOP, page)
         dom = parse_url(url)
 
         table = dom.find_all('table', {"class": ["member-table"]})[0]

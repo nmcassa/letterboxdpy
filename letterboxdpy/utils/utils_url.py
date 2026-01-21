@@ -32,3 +32,17 @@ def parse_list_url(url: str) -> tuple:
     if match:
         return match.group(1), match.group(2)
     raise ValueError(f"Invalid list URL format: {url}")
+
+def get_page_url(base_url: str, page: int, params: str = "") -> str:
+    """
+    Generate a paginated URL from a base URL and page number.
+    Ensures no double slashes and consistent trailing slashes.
+    """
+    # Remove any trailing slashes from the base URL
+    clean_base = base_url.rstrip('/')
+    # Letterboxd standard pagination format: /page/N/
+    url = f"{clean_base}/page/{page}/"
+    if params:
+        # Append params, ensuring no double '?'
+        url += f"?{params.lstrip('?')}"
+    return url
