@@ -1,7 +1,7 @@
 """Date utilities for consistent ISO 8601 format across letterboxdpy."""
 
 from datetime import datetime
-from pykit.datetime_utils import parse_datetime
+from fastfingertips.datetime_utils import parse_datetime
 
 
 class InvalidDateFormatError(Exception):

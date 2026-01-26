@@ -1,6 +1,6 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
-from pykit.string_utils import extract_number_from_text
+from fastfingertips.string_utils import extract_number_from_text
 
 
 class MovieMembers:

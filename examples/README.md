@@ -24,7 +24,7 @@ pip install -r examples/requirements.txt
 ## Requirements
 
 **letterboxdpy dependencies** (auto-installed with `pip install -e .`):
-- curl_cffi, beautifulsoup4, lxml, pykit
+- curl_cffi, beautifulsoup4, lxml, fastfingertips
 
 **Example-specific dependencies** (install with `pip install -r examples/requirements.txt`):
 - matplotlib, numpy, pillow — *used by visualization scripts*

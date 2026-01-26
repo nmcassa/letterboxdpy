@@ -4,7 +4,7 @@ from bs4 import Tag
 
 from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_transform import month_to_index
-from pykit.datetime_utils import parse_datetime
+from fastfingertips.datetime_utils import parse_datetime
 from letterboxdpy.constants.project import DOMAIN_SHORT
 from letterboxdpy.constants.selectors import PageSelectors
 

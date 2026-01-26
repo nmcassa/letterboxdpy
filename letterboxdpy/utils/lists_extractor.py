@@ -5,7 +5,7 @@ from user lists, movie lists, and individual list pages.
 """
 
 from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
-from pykit.string_utils import extract_number_from_text
+from fastfingertips.string_utils import extract_number_from_text
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.utils_url import extract_path_segment, get_page_url
