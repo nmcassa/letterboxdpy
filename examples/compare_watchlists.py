@@ -10,7 +10,7 @@ Generates:
 
 Exports saved to: exports/users/{username}/watchlist_comparison.*
 
-Usage: python compare_watchlists.py --user <username> [--refresh]
+Usage: python compare_watchlists.py --user <username> [--force]
 """
 
 import argparse
@@ -18,6 +18,7 @@ import os
 import sys
 from collections import Counter
 from datetime import datetime
+import time
 
 sys.path.insert(0, sys.path[0] + '/..')
 
@@ -515,10 +516,12 @@ class WatchlistComparator:
     
     def _fetch_my_watchlist(self) -> bool:
         print(f"Fetching {self.username}'s watchlist...")
+        start_time = time.time()
         data = self._get_watchlist(self.username, force_refresh=True)
         self.my_films = data.get('data', {})
         self.my_film_ids = set(self.my_films.keys())
-        print(f"  {len(self.my_film_ids)} films\n")
+        duration = time.time() - start_time
+        print(f"  {len(self.my_film_ids)} films in {duration:.1f}s\n")
         return bool(self.my_film_ids)
     
     def _fetch_following(self):
@@ -531,19 +534,35 @@ class WatchlistComparator:
         """Iterates through followed users to find common films in their watchlists."""
         print("Analyzing...\n")
         
+        total_following = len(self.following)
+        idx_width = len(str(total_following))
+        
         for i, user in enumerate(self.following, 1):
-            print(f"  [{i}/{len(self.following)}] {user}...", end=" ")
+            start_time = time.time()
+            # Align: [ 1/28] username             
+            prefix = f"  [{i:>{idx_width}}/{total_following}] {user:<20}"
+            print(prefix, end=" ")
             
             their_ids = self._get_film_ids(user)
             common = self.my_film_ids & their_ids
+            duration = time.time() - start_time
             
-            if common:
-                print(f"{len(common)} common")
+            if their_ids:
+                shared_count = len(common)
+                total_count = len(their_ids)
+                
+                # Format: "   0/341  common   [0.1s]"
+                # shared_count (4) + / + total_count (5) + space + common (6) = 16 chars
+                stats_str = f"{shared_count:>4}/{total_count:<5} common"
+                print(f"{stats_str}   [{duration:4.1f}s]")
+                
                 for film_id in common:
                     self.film_popularity[film_id] += 1
                     self.film_users.setdefault(film_id, []).append(user)
             else:
-                print("no common" if their_ids else "private")
+                # Align "private" with the "common" text
+                stats_str = f"{'':>10}private"
+                print(f"{stats_str}   [{duration:4.1f}s]")
     
     def _display(self):
         print(f"\n{'='*60}")
@@ -642,8 +661,8 @@ class WatchlistComparator:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compare watchlists and generate interactive HTML report with filters")
     parser.add_argument('--user', '-u', required=True)
-    parser.add_argument('--refresh', '-r', action='store_true')
+    parser.add_argument('--force', '-f', action='store_true', help="Force refresh cached data")
     args = parser.parse_args()
     
-    WatchlistComparator(args.user, args.refresh).run()
+    WatchlistComparator(args.user, args.force).run()
 
