@@ -9,7 +9,7 @@ import time
 import random
 
 from letterboxdpy.utils.utils_file import JsonFile
-from pykit.terminal_utils import get_input
+from fastfingertips.terminal_utils import get_input
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.exceptions import (
     PageLoadError,

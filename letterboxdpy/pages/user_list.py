@@ -3,7 +3,7 @@ import re
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.utils_parser import get_meta_content, get_movie_count_from_meta, get_body_content
-from pykit.url_utils import urls_match
+from fastfingertips.url_utils import urls_match
 from letterboxdpy.utils.movies_extractor import extract_movies_from_vertical_list
 from letterboxdpy.utils.date_utils import DateUtils
 from letterboxdpy.utils.utils_url import get_page_url

@@ -1,7 +1,7 @@
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content
-from pykit.string_utils import extract_number_from_text
+from fastfingertips.string_utils import extract_number_from_text
 
 
 class MovieProfile:
