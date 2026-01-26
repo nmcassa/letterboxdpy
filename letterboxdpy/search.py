@@ -1,3 +1,4 @@
+from enum import Enum
 from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
 from letterboxdpy.core.encoder import Encoder
@@ -9,27 +10,32 @@ from letterboxdpy.core.scraper import (
   url_encode
 )
 
+class SearchFilter(Enum):
+  ALL = ""
+  FILMS = "films"
+  REVIEWS = "reviews"
+  LISTS = "lists"
+  ORIGINAL_LISTS = "original-lists"
+  STORIES = "stories"
+  CAST_CREW = "cast-crew"
+  MEMBERS = "members"
+  TAGS = "tags"
+  ARTICLES = "articles"
+  EPISODES = "episodes"
+  FULL_TEXT = "full-text"
+
 class Search:
     SEARCH_URL = f"{DOMAIN}/s/search"
     MAX_RESULTS = 20 # 250
     MAX_RESULTS_PER_PAGE = 20
     MAX_RESULTS_PAGE = MAX_RESULTS // MAX_RESULTS_PER_PAGE
-    FILTERS = ['films', 'reviews', 'lists', 'original-lists',
-               'stories', 'cast-crew', 'members', 'tags',
-               'articles', 'episodes', 'full-text']
 
-    def __init__(self, query: str, search_filter: str=None):
-      assert all([
-          isinstance(query, str),
-          not search_filter or search_filter in self.FILTERS
-          ]), " ".join([
-             "query and search_filter must be strings and",
-             "search_filter must be one of the following:",
-             ", ".join(self.FILTERS)
-             ])
+    def __init__(self, query: str, search_filter: SearchFilter | str = SearchFilter.ALL):
+      if not isinstance(query, str):
+        raise TypeError("query must be a string")
 
       self.query = url_encode(query)
-      self.search_filter = search_filter
+      self.search_filter = SearchFilter(search_filter)
       self._results = None # .results
       self.url = "/".join(filter(None, [
           self.SEARCH_URL,
@@ -50,7 +56,7 @@ class Search:
       data = {
          'available': False,
          'query': self.query,
-         'filter': self.search_filter,
+         'filter': self.search_filter.value,
          'end_page': end_page,
          'count': 0,
          'results': []
