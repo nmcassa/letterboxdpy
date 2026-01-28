@@ -1,0 +1,28 @@
+<div class="footer">
+    <div style="margin-bottom: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <a href="https://github.com/nmcassa/letterboxdpy" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+            <img src="https://img.shields.io/badge/Powered%20by-letterboxdpy-58a6ff?style=flat-square&logo=github&labelColor=21262d" alt="Powered by letterboxdpy">
+        </a>
+        <a href="https://letterboxd.com/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+            <img src="https://img.shields.io/badge/Data%20Source-Letterboxd-orange?style=flat-square&logo=letterboxd&labelColor=21262d" alt="Letterboxd">
+        </a>
+    </div>
+    <div style="font-size: 11px; opacity: 0.7; line-height: 1.6;">
+        {% if generated_at %}
+            &copy; {{ generated_at[:4] }} · 
+        {% endif %}
+        Example designed by 
+        {% if metadata.author_url %}
+            <a href="{{ metadata.author_url }}" target="_blank" style="color: inherit; text-decoration: underline;">@{{ metadata.author }}</a>
+        {% else %}
+            <strong>@{{ metadata.author }}</strong>
+        {% endif %}
+        {% if metadata.created_at %}
+            · <span title="When this script was first added to the project">Script Created: {{ metadata.created_at }}</span>
+        {% endif %}
+        <br>
+        <strong>Report Generated:</strong> {{ generated_at or "Template Preview" }} · 
+        <a href="https://github.com/nmcassa/letterboxdpy" target="_blank" style="color: inherit; text-decoration: underline;">GitHub</a> · 
+        <a href="https://github.com/nmcassa/letterboxdpy/issues" target="_blank" style="color: inherit; text-decoration: underline;">Issues</a>
+    </div>
+</div>

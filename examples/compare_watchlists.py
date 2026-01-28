@@ -13,6 +13,13 @@ Exports saved to: exports/users/{username}/watchlist_comparison.*
 Usage: python compare_watchlists.py --user <username> [--force]
 """
 
+__title__ = "Watchlist Comparison"
+__description__ = "Identify films from your watchlist that are also wanted by users you follow."
+__version__ = "0.1.0"
+__author__ = "fastfingertips"
+__author_url__ = "https://github.com/fastfingertips"
+__created_at__ = "2025-12-24"
+
 import argparse
 import os
 import sys
@@ -20,7 +27,7 @@ import time
 from collections import Counter
 from datetime import datetime
 
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 from rich import box
 from rich.console import Console
 from rich.panel import Panel
@@ -44,11 +51,10 @@ from letterboxdpy.utils.utils_file import JsonFile, build_path
 
 
 class WatchlistHtmlRenderer:
-    """
-    Handles HTML report generation using Jinja2 templates.
-    """
-    
-    TEMPLATE_PATH = build_path(os.path.dirname(__file__), 'templates', 'compare_watchlists.html')
+    """Handles HTML report generation for watchlist comparison using Jinja2 templates."""
+
+    TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), 'templates')
+    TEMPLATE_NAME = 'compare_watchlists.html'
 
     def __init__(self, username: str, my_films: dict, film_users: dict, user_totals: dict):
         self.username = username
@@ -63,23 +69,31 @@ class WatchlistHtmlRenderer:
         users_data = self._prepare_users_data()
 
         # Final stats
-        stats['generated_at'] = datetime.now().strftime('%Y-%m-%d %H:%M')
+        generated_at = datetime.now().strftime('%Y-%m-%d %H:%M')
 
         # Load and render template
-        if not os.path.exists(self.TEMPLATE_PATH):
-            print(f"\n[bold red]Error:[/bold red] Template file not found at: [yellow]{self.TEMPLATE_PATH}[/yellow]")
-            print("[dim]Make sure the 'templates' directory exists in the same folder as this script.[/dim]\n")
+        try:
+            env = Environment(loader=FileSystemLoader(self.TEMPLATES_DIR))
+            template = env.get_template(self.TEMPLATE_NAME)
+        except Exception as e:
+            print(f"\n[bold red]Error:[/bold red] Template loading failed: [yellow]{e}[/yellow]")
             sys.exit(1)
-
-        with open(self.TEMPLATE_PATH, 'r', encoding='utf-8') as f:
-            template = Template(f.read())
 
         html_content = template.render(
             username=self.username,
             stats=stats,
             all_users=list(all_included_users),
             films=films_data,
-            users=users_data
+            users=users_data,
+            generated_at=generated_at,
+            metadata={
+                'title': __title__,
+                'description': __description__,
+                'version': __version__,
+                'author': __author__,
+                'author_url': __author_url__,
+                'created_at': __created_at__
+            }
         )
         
         with open(filepath, 'w', encoding='utf-8') as f:

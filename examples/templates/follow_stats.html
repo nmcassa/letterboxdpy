@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Follow Stats - {{ username }}</title>
+    <title>{{ metadata.title }} - {{ username }}</title>
     <style>
         :root { 
             --bg-color: #0d1117;
@@ -156,9 +156,9 @@
         #scrollTopBtn svg { width: 24px; height: 24px; fill: currentColor; }
     </style>
 </head>
-<body {% if not rendered_at %}class="preview-mode"{% endif %}>
+<body {% if not generated_at %}class="preview-mode"{% endif %}>
     <div class="container">
-        {% if not rendered_at %}
+        {% if not generated_at %}
         <div id="template-notice" class="template-notice">
             <div class="template-card">
                 <div class="template-badge">
@@ -178,9 +178,9 @@
         <div class="header">
             <div class="header-top">
                 <div>
-                    <h1>Follow Statistics</h1>
+                    <h1>{{ metadata.title }} <span style="font-size: 12px; font-weight: normal; opacity: 0.5; margin-left: 8px;">v{{ metadata.version }}</span></h1>
                     <div style="margin-top: 4px; color: var(--text-secondary);">
-                        for <span class="username">@{{ username }}</span>
+                        for <span class="username">@{{ username }}</span> · {{ metadata.description }}
                     </div>
                 </div>
                 <div class="search-container">
@@ -239,9 +239,7 @@
         </div>
         {% endfor %}
         
-        <div class="footer">
-            Generated with letterboxdpy · {{ rendered_at or "Template Preview" }}
-        </div>
+        {% include 'partials/_footer.html' %}
     </div>
 
     <button id="scrollTopBtn" onclick="scrollToTop()" title="Go to top">

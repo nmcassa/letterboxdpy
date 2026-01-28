@@ -9,6 +9,13 @@ Analyzes follow relationships (followers/following) and identifies:
 Generates interactive HTML report and JSON data.
 """
 
+__title__ = "Follow Statistics"
+__description__ = "Analyze follow relationships (followers/following) to identify mutuals, fans, and unrequited follows."
+__version__ = "0.1.0"
+__author__ = "fastfingertips"
+__author_url__ = "https://github.com/fastfingertips"
+__created_at__ = "2024-09-06"
+
 import argparse
 import os
 from datetime import datetime
@@ -63,11 +70,20 @@ class FollowStatsHtmlRenderer:
         for section in sections:
             section['ratio_label'] = self._calculate_ratio_info(section['id'], len(section['data']), stats)
 
+        generated_at = datetime.now().strftime('%Y-%m-%d %H:%M')
         rendered_html = template.render(
             username=self.username,
             stats=stats,
             sections=sections,
-            rendered_at=datetime.now().strftime('%Y-%m-%d %H:%M')
+            generated_at=generated_at,
+            metadata={
+                'title': __title__,
+                'description': __description__,
+                'version': __version__,
+                'author': __author__,
+                'author_url': __author_url__,
+                'created_at': __created_at__
+            }
         )
         
         with open(filepath, 'w', encoding='utf-8') as f:
