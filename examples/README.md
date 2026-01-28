@@ -16,7 +16,7 @@ pip install -r examples/requirements.txt
 | [`compare_watchlists.py`](compare_watchlists.py) | Compare watchlists from followed users (generates JSON & interactive HTML report) | `python examples/compare_watchlists.py --user <username>` |
 | [`user_rating_plot.py`](user_rating_plot.py) | Creates a rating distribution histogram with Letterboxd styling | `python examples/user_rating_plot.py --user <username>` |
 | [`user_plot_statistics.py`](user_plot_statistics.py) | Visualizes movie watching patterns over time | `python examples/user_plot_statistics.py --user <username> --start-year 2020 --end-year 2024` |
-| [`follow_stats.py`](follow_stats.py) | Analyzes follow relationships and mutual follows | `echo <username> \| python examples/follow_stats.py` |
+| [`follow_stats.py`](follow_stats.py) | Analyzes follow relationships and mutual follows (generates JSON & interactive HTML report) | `python examples/follow_stats.py --user <username>` |
 | [`export_user_data.py`](export_user_data.py) | Exports all user data to JSON files | `echo <username> \| python examples/export_user_data.py` |
 | [`export_user_diary_posters.py`](export_user_diary_posters.py) | Downloads movie posters from diary entries | `echo <username> \| python examples/export_user_diary_posters.py` |
 | [`search_and_export_lists.py`](search_and_export_lists.py) | Searches for lists and exports to CSV | `python examples/search_and_export_lists.py` |
