@@ -11,7 +11,7 @@ Generates interactive HTML report and JSON data.
 
 __title__ = "Follow Statistics"
 __description__ = "Analyze follow relationships (followers/following) to identify mutuals, fans, and unrequited follows."
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2024-09-06"
@@ -23,6 +23,10 @@ from json import dumps as json_dumps
 
 from fastfingertips.terminal_utils import get_input
 from jinja2 import Environment, FileSystemLoader
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from letterboxdpy import user
 from letterboxdpy.utils.utils_directory import Directory
@@ -82,7 +86,8 @@ class FollowStatsHtmlRenderer:
                 'version': __version__,
                 'author': __author__,
                 'author_url': __author_url__,
-                'created_at': __created_at__
+                'created_at': __created_at__,
+                'file_name': os.path.basename(__file__)
             }
         )
         
@@ -97,17 +102,42 @@ class FollowStatsAnalyzer:
     
     def __init__(self, username: str):
         self.username = username
+        self.console = Console()
         self.user_instance = user.User(username)
         
         # Setup directories
         self.user_dir = build_path(self.EXPORTS_DIR, self.username)
         Directory.create(self.user_dir)
-    
+
+    def print_welcome(self):
+        """Prints a welcome banner."""
+        welcome_text = (
+            f"[bold white]{__description__.split(' to ')[0]} for[/bold white] [bold cyan]@{self.username}[/bold cyan]\n"
+            f"[dim]{__description__.split(' to ')[1] if ' to ' in __description__ else __description__}[/dim]"
+        )
+        self.console.print("\n")
+        self.console.print(Panel(
+            welcome_text,
+            title=f"[bold white] {__title__} v{__version__} [/bold white]",
+            border_style="blue",
+            padding=(1, 2),
+            expand=False
+        ))
+        self.console.print("\n")
+
     def analyze(self):
         """Analyze follow statistics for the user."""
-        print(f"Fetching followers and following for {self.username}...")
-        followers = self.user_instance.get_followers()
-        following = self.user_instance.get_following()
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=self.console,
+            transient=True
+        ) as progress:
+            progress.add_task(description=f"[bold blue]Fetching[/bold blue] followers and following for [cyan]@{self.username}[/cyan]...", total=None)
+            followers = self.user_instance.get_followers()
+            following = self.user_instance.get_following()
+        
+        self.console.print(f"[bold green][OK][/bold green] Data fetched successfully: [white]{len(followers)}[/white] followers, [white]{len(following)}[/white] following")
         
         stats = self._calculate_stats(following, followers)
         self._save(stats)
@@ -149,13 +179,34 @@ class FollowStatsAnalyzer:
         json_path = os.path.join(self.user_dir, 'follow_stats.json')
         with open(json_path, 'w', encoding='utf-8') as f:
             f.write(json_dumps(stats, indent=4))
-        print(f"Saved JSON: {json_path}")
         
         # Save HTML
         html_path = os.path.join(self.user_dir, 'follow_stats.html')
         renderer = FollowStatsHtmlRenderer(self.username)
         renderer.render(html_path, stats)
-        print(f"Saved HTML: {html_path}")
+
+        # FINAL SUMMARY PANEL
+        summary_grid = Table.grid(expand=True)
+        summary_grid.add_column(style="cyan", justify="right", width=20)
+        summary_grid.add_column(style="white")
+        
+        summary_grid.add_row("Mutual Follows:", f" [bold green]{stats['summary']['mutual_follows']}[/bold green]")
+        summary_grid.add_row("Fans (Reviewers):", f" [bold yellow]{stats['summary']['fans_count']}[/bold yellow]")
+        summary_grid.add_row("Not Following Back:", f" [bold red]{stats['summary']['not_followback_count']}[/bold red]")
+        summary_grid.add_row("Success Rate:", f" [bold blue]{stats['summary']['followback_ratio']}%[/bold blue]")
+        summary_grid.add_row("JSON Export:", f" [dim]{json_path}[/dim]")
+        summary_grid.add_row("HTML Report:", f" [bold blue]{html_path}[/bold blue]")
+        
+        self.console.print("\n")
+        self.console.print(Panel(
+            summary_grid,
+            title="[bold green] ANALYSIS COMPLETE [/bold green]",
+            subtitle=f"[dim]letterboxdpy · {__title__.lower()}[/dim]",
+            border_style="green",
+            padding=(1, 2),
+            expand=False
+        ))
+        self.console.print("\n")
 
 if __name__ == "__main__":
     # 1. Parse command line arguments
@@ -163,10 +214,10 @@ if __name__ == "__main__":
     parser.add_argument("--user", "-u", help="Letterboxd username")
     args = parser.parse_args()
 
-    # 2. Identify target user
+    # Identfy target user
     username = args.user if args.user else get_input("Enter username: ", index=1)
         
-    # 3. Run analysis
-    # This will fetch followers/following, calculate stats, and save JSON/HTML
+    # Run analysis
     analyzer = FollowStatsAnalyzer(username)
+    analyzer.print_welcome()
     analyzer.analyze()

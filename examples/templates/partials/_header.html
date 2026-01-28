@@ -1,0 +1,49 @@
+{% if not generated_at %}
+<div id="template-notice" class="template-notice">
+    <div class="template-card">
+        <div class="template-badge">
+            <svg aria-hidden="true" height="14" viewBox="0 0 16 16" width="14" fill="currentColor"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>
+            Template Preview
+        </div>
+        
+        <div class="template-title">{{ metadata.title or "Example Report" }} Template</div>
+        <div class="template-desc">
+            This file is a dynamic template used by the <code>{{ metadata.file_name or "example.py" }}</code> analysis tool. 
+            It requires a live data payload to render correctly.
+        </div>
+
+        <ul class="process-list">
+            <li class="process-item">
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25ZM3.5 6.25a.75.75 0 0 1 .75-.75h7a.75.75 0 0 1 0 1.5h-7a.75.75 0 0 1-.75-.75Zm0 3.5a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z"></path></svg>
+                <span>Script fetches data via <strong>letterboxdpy</strong></span>
+            </li>
+            <li class="process-item">
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M7 6.5C7 5.672 7.672 5 8.5 5s1.5.672 1.5 1.5S9.328 8 8.5 8 7 7.328 7 6.5Zm3 0C10 7.88 8.88 9 7.5 9S5 7.88 5 6.5 6.12 4 7.5 4 10 5.12 10 6.5ZM7 13c0-1.105 1.343-2 3-2s3 .895 3 2c0 .734-.597 1-1 1H8c-.403 0-1-.266-1-1Zm3-3c-2.209 0-4 1.343-4 3 0 1.552 1.343 2 3 2h5c1.657 0 3-.448 3-2 0-1.657-1.791-3-4-3h-3ZM0 12c0-1.105 1.343-2 3-2h1v1.5c0 .285.083.543.226.75H3c-.403 0-1 .266-1 1 0 .734.597 1 1 1h.5a.75.75 0 0 1 0 1.5H3c-1.657 0-3-.448-3-2Zm3-9c1.657 0 3 1.343 3 3S4.657 9 3 9 0 7.657 0 6s1.343-3 3-3Zm0 1.5c-.828 0-1.5.672-1.5 1.5S2.172 7.5 3 7.5 4.5 6.828 4.5 6 3.828 4.5 3 4.5Z"></path></svg>
+                <span>{{ metadata.description or "Analyzing your Letterboxd data." }}</span>
+            </li>
+            <li class="process-item">
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25ZM3.5 7.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1 0-1.5ZM3 5.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5A.75.75 0 0 1 3 5.75Zm0 4a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75Z"></path></svg>
+                <span><strong>Jinja2</strong> renders the final HTML report</span>
+            </li>
+        </ul>
+
+        <div class="terminal-box">
+            <div class="terminal-content">
+                <span style="color: var(--text-secondary);">$</span> python {{ metadata.file_name or 'script.py' }} <span style="color: var(--badge-hover);">-u</span> <span style="color: var(--link-color);">USER_NAME</span>
+            </div>
+        </div>
+        
+        <div class="card-footer">
+            <a href="https://github.com/nmcassa/letterboxdpy" target="_blank">Documentation →</a>
+            <button class="dismiss-btn" onclick="document.getElementById('template-notice').style.display='none'">Dismiss to view layout</button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="header-brand">
+    <h1>{{ metadata.title or "Report" }} <span style="font-size: 12px; font-weight: normal; opacity: 0.5; margin-left: 8px;">v{{ metadata.version or "0.1.0" }}</span></h1>
+    <div class="subtext">
+        for <span class="username">@{{ username or "USER" }}</span> · {{ metadata.description or "Analysis report generated for your account." }}
+    </div>
+</div>

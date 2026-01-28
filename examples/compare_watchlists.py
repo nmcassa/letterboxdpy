@@ -15,7 +15,7 @@ Usage: python compare_watchlists.py --user <username> [--force]
 
 __title__ = "Watchlist Comparison"
 __description__ = "Identify films from your watchlist that are also wanted by users you follow."
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2025-12-24"
@@ -83,8 +83,8 @@ class WatchlistHtmlRenderer:
             username=self.username,
             stats=stats,
             all_users=list(all_included_users),
-            films=films_data,
-            users=users_data,
+            results=films_data,
+            user_rankings=users_data,
             generated_at=generated_at,
             metadata={
                 'title': __title__,
@@ -92,7 +92,8 @@ class WatchlistHtmlRenderer:
                 'version': __version__,
                 'author': __author__,
                 'author_url': __author_url__,
-                'created_at': __created_at__
+                'created_at': __created_at__,
+                'file_name': os.path.basename(__file__)
             }
         )
         
@@ -174,6 +175,7 @@ class WatchlistComparator:
     STYLE_SECONDARY = "bold yellow"
     STYLE_SUCCESS = "bold green"
     STYLE_CACHE = "dim cyan"
+    PROGRESS_COLUMNS = [SpinnerColumn(), TextColumn("[progress.description]{task.description}")]
 
     def __init__(self, username: str, force_refresh: bool = False):
         self.username = username
@@ -187,58 +189,63 @@ class WatchlistComparator:
         self.console = Console()
     
     def print_welcome(self):
-        """Prints the welcome panel."""
+        """Prints a welcome banner."""
+        welcome_text = (
+            f"[bold white]{__description__.split(' that ')[0]} for[/bold white] [bold cyan]@{self.username}[/bold cyan]\n"
+            f"[dim]that {__description__.split(' that ')[1]}[/dim]"
+        )
+        self.console.print("\n")
         self.console.print(Panel(
-            Text.assemble(
-                ("Watchlist Comparison\n", self.STYLE_PRIMARY),
-                ("User: ", "dim"), (f"@{self.username}", self.STYLE_SECONDARY)
-            ),
-            box=box.DOUBLE,
-            border_style="blue"
+            welcome_text,
+            title=f"[bold white] {__title__} v{__version__} [/bold white]",
+            border_style="blue",
+            padding=(1, 2),
+            expand=False
         ))
+        self.console.print("\n")
     
     def fetch_user_watchlist(self) -> bool:
         """Fetches the target user's watchlist."""
-        with self.console.status(f"[bold blue]Fetching {self.username}'s watchlist..."):
-            start_time = time.time()
+        with Progress(
+            *self.PROGRESS_COLUMNS,
+            console=self.console,
+            transient=True
+        ) as progress:
+            progress.add_task(description=f"[bold blue]Fetching[/bold blue] watchlist for [cyan]@{self.username}[/cyan]...", total=None)
             # use self.force_refresh to allow caching the user's own watchlist
             data, cache_info = self._get_watchlist(self.username, force_refresh=self.force_refresh)
             self.my_films = data.get('data', {})
             self.my_film_ids = set(self.my_films.keys())
-            duration = time.time() - start_time
         
-        status_text = Text.assemble(
-            ("  DONE ", self.STYLE_SUCCESS),
-            (f"{len(self.my_film_ids)} films ", "bold"),
-            (f"({duration:.1f}s)", "dim")
-        )
+        status_text = f"[bold green][OK][/bold green] Watchlist fetched: [white]{len(self.my_film_ids)}[/white] films"
         if cache_info:
-            status_text.append(f" [cache: {cache_info}]", style=self.STYLE_CACHE)
+            status_text += f" [dim](cached {cache_info})[/dim]"
         
         self.console.print(status_text)
         return bool(self.my_film_ids)
     
     def fetch_following(self):
         """Fetches the list of users followed by the main user."""
-        with self.console.status("[bold blue]Fetching following list..."):
+        with Progress(
+            *self.PROGRESS_COLUMNS,
+            console=self.console,
+            transient=True
+        ) as progress:
+            progress.add_task(description=f"[bold blue]Fetching[/bold blue] following list for [cyan]@{self.username}[/cyan]...", total=None)
             user = User(self.username)
             self.following = list(user.get_following().keys())
         
-        self.console.print(Text.assemble(
-            ("  DONE ", self.STYLE_SUCCESS),
-            (f"{len(self.following)} following users", "bold")
-        ))
+        self.console.print(f"[bold green][OK][/bold green] Following fetched: [white]{len(self.following)}[/white] users")
     
     def analyze_watchlists(self):
         """Iterates through followed users to find common films in their watchlists."""
-        self.console.print(f"\n[{self.STYLE_PRIMARY}]Analyzing watchlists:[/{self.STYLE_PRIMARY}]")
+        self.console.print(f"\n[bold white]Analyzing {len(self.following)} watchlists for[/bold white] [bold cyan]@{self.username}[/bold cyan]:")
         
         total_following = len(self.following)
         idx_width = len(str(total_following))
         
         with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
+            *self.PROGRESS_COLUMNS,
             BarColumn(bar_width=30),
             TaskProgressColumn(),
             TimeElapsedColumn(),
@@ -384,7 +391,7 @@ class WatchlistComparator:
         self.console.print(Panel(
             summary_grid,
             title="[bold green] ANALYSIS COMPLETE [/bold green]",
-            subtitle="[dim]letterboxdpy · watchlist comparison[/dim]",
+            subtitle=f"[dim]letterboxdpy · {__title__.lower()}[/dim]",
             border_style="green",
             padding=(1, 2),
             expand=False
