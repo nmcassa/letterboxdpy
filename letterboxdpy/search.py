@@ -1,511 +1,389 @@
+from collections.abc import Callable
 from enum import Enum
-from letterboxdpy.utils.utils_file import JsonFile
-from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
-from letterboxdpy.core.encoder import Encoder
+from itertools import islice
+from typing import Any, Iterator
+
+from bs4 import Tag
+from fastfingertips.string_utils import extract_number_from_text
+
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.utils.utils_url import get_page_url
-from letterboxdpy.core.scraper import (
-  parse_url,
-  url_encode
-)
+from letterboxdpy.core.encoder import Encoder
+from letterboxdpy.core.scraper import parse_url, url_encode
+from letterboxdpy.utils.utils_file import JsonFile
+from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
+from letterboxdpy.utils.utils_string import extract_name_year_from_movie_title
+
 
 class SearchFilter(Enum):
-  ALL = ""
-  FILMS = "films"
-  REVIEWS = "reviews"
-  LISTS = "lists"
-  ORIGINAL_LISTS = "original-lists"
-  STORIES = "stories"
-  CAST_CREW = "cast-crew"
-  MEMBERS = "members"
-  TAGS = "tags"
-  ARTICLES = "articles"
-  EPISODES = "episodes"
-  FULL_TEXT = "full-text"
+    ALL = ""
+    FILMS = "films"
+    REVIEWS = "reviews"
+    LISTS = "lists"
+    ORIGINAL_LISTS = "original-lists"
+    STORIES = "stories"
+    CAST_CREW = "cast-crew"
+    MEMBERS = "members"
+    TAGS = "tags"
+    ARTICLES = "articles"
+    EPISODES = "episodes"
+    FULL_TEXT = "full-text"
+
 
 class Search:
     SEARCH_URL = f"{DOMAIN}/s/search"
-    MAX_RESULTS = 20 # 250
-    MAX_RESULTS_PER_PAGE = 20
-    MAX_RESULTS_PAGE = MAX_RESULTS // MAX_RESULTS_PER_PAGE
+    DEFAULT_NUM_RESULTS = 20
+    RESULTS_PER_PAGE = 20
+    DEFAULT_NUM_PAGES = DEFAULT_NUM_RESULTS // RESULTS_PER_PAGE
 
-    def __init__(self, query: str, search_filter: SearchFilter | str = SearchFilter.ALL):
-      if not isinstance(query, str):
-        raise TypeError("query must be a string")
+    def __init__(self, query: str, search_filter: SearchFilter | str = SearchFilter.ALL, adult: bool = True,):
+        if not isinstance(query, str):
+            raise TypeError("query must be a string")
 
-      self.query = url_encode(query)
-      self.search_filter = SearchFilter(search_filter)
-      self._results = None # .results
-      self.url = "/".join(filter(None, [
-          self.SEARCH_URL,
-          search_filter,
-          self.query
-          ]))
+        self.query = url_encode(query)
+        self.search_filter = SearchFilter(search_filter)
+        self._results = None
+        self.url = "/".join(
+            filter(None, [self.SEARCH_URL, self.search_filter.value, self.query])
+        )
+        self.adult = adult
 
     @property
     def results(self):
-      if not self._results:
-          self._results = self.get_results()
-      return self._results
+        if not self._results:
+            self._results = self.get_results()
+        return self._results
 
     def __str__(self):
-      return JsonFile.stringify(self.__dict__, indent=2, encoder=Encoder)
+        return JsonFile.stringify(self.__dict__, indent=2, encoder=Encoder)
 
-    def get_results(self, end_page: int=MAX_RESULTS_PAGE, max: int=MAX_RESULTS):
-      data = {
-         'available': False,
-         'query': self.query,
-         'filter': self.search_filter.value,
-         'end_page': end_page,
-         'count': 0,
-         'results': []
-         }
+    def with_filter(self, search_filter: SearchFilter) -> "Search":
+        return Search(self.query, search_filter, adult=self.adult)
 
-      for current_page in range(1, end_page+1):
-        url = get_page_url(self.url, current_page, params="adult")
-        dom = parse_url(url)
-        results = self.get_page_results(dom)
+    def get_pages(self, num_pages: int = DEFAULT_NUM_PAGES) -> dict[str, Any]:
+        return self.get_results(num_pages * self.RESULTS_PER_PAGE)
 
-        if not results:
-          # no more results
-          break
+    def get_results(self, num_results: int = DEFAULT_NUM_RESULTS) -> dict[str, Any]:
+        result_item_elems = islice(self.extract_search_results(), num_results)
+        result_items = map(self.get_parse_func_from_filter(), result_item_elems)
 
-        for result in results:
-          data['count'] += 1
-      
-          data['results'].append({
-             'no':  data['count'],
-             'page': current_page,
-             **result
-             })
+        results = [{"no": i + 1, "page": (i // self.RESULTS_PER_PAGE) + 1, **result} for i, result in enumerate(result_items)]
 
-          if  data['count'] >= max:
-            break
+        return {
+            "available": len(results) > 0,
+            "query": self.query,
+            "filter": self.search_filter.value,
+            "end_page": (len(results) // self.RESULTS_PER_PAGE) + 1,
+            "count": len(results),
+            "results": results,
+        }
 
-        if  data['count'] >= max:
-          break
+    def extract_search_results(self) -> Iterator[Tag]:
+        cursor: str | None = None
+        while True:
+            url = self.get_search_page_url(cursor)
+            dom = parse_url(url)
+            result_elem = dom.html.body.find("ul", recursive=False)
+            if result_elem is None:
+                break
+            result_item_elems = iter(result_elem.find_all("li", recursive=False))
+            while (result_item := next(result_item_elems, None)) is not None:
+                yield result_item
+            if (cursor := self.get_cursor(result_elem)) is None:
+                break
 
-      data['available'] = data['count'] > 0
+    def get_cursor(self, result_elem: Tag) -> str | None:
+        return None if (cursor := result_elem.get("data-cursor")) == "" else cursor
 
-      return data
+    def get_search_page_url(self, cursor: str | None) -> str:
+        params = {"cursor": cursor, "adult": "" if self.adult else None}
+        return f"{self.url}/?{'&'.join(f'{k}={v}' for k, v in params.items() if v is not None)}"
 
-    def get_page_results(self, dom) -> list:
-      """
-      Parse search results from DOM structure.
-      
-      DOM Structure:
-      <ul class="results">
-        <li class="search-result -production"> <!-- Film -->
-        <li class="search-result -person"> <!-- Member -->
-        <li class="search-result -viewing"> <!-- Review -->
-        <li class="list-set"> <!-- List -->
-        <li class="search-result -tag"> <!-- Tag -->
-        <li class="search-result -contributor -actor"> <!-- Actor -->
-        <li class="search-result -contributor -director"> <!-- Director -->
-      </ul>
-      """
-      result_types = {
-        # More specific types first to avoid false matches
-        # Format: 'type': [class_to_check_on_li, [class_to_check_on_children]]
-        'list': ["search-result", "-list"],  # <li class="search-result -list">
-        'review': ["search-result", "-viewing"],  # <li class="search-result -viewing">
-        'member': ["search-result", "-person"],  # <li class="search-result -person">
-        'tag': ["search-result", "-tag"],  # <li class="search-result -tag">
-        'actor': ["search-result", "-contributor", "-actor"],  # <li class="search-result -contributor -actor">
-        'director': ["search-result", "-contributor", "-director"],  # <li class="search-result -contributor -director">
-        'studio': ["search-result", "-contributor", "-studio"],  # <li class="search-result -contributor -studio">
-        'story': [None, ['card-summary']],  # <li><div class="card-summary">
-        'journal': [None, ["card-summary-journal-article"]],  # <li><div class="card-summary-journal-article">
-        'podcast': [None, ["card-summary", "-graph"]],  # <li><div class="card-summary -graph">
-        # Film - NOTE: Also has classes! search-result -production
-        'film': ["search-result", "-production"],  # <li class="search-result -production">
-      }
+    def get_parse_func_from_filter(self) -> Callable[[Tag], dict]:
+        match self.search_filter:
+            case SearchFilter.FILMS:
+                return self.parse_film
+            case SearchFilter.REVIEWS:
+                return self.parse_review
+            case SearchFilter.LISTS | SearchFilter.ORIGINAL_LISTS:
+                return self.parse_list
+            case SearchFilter.STORIES:
+                return self.parse_story
+            case SearchFilter.CAST_CREW:
+                return self.parse_cast_crew
+            case SearchFilter.MEMBERS:
+                return self.parse_member
+            case SearchFilter.TAGS:
+                return self.parse_tag
+            case SearchFilter.ARTICLES:
+                return self.parse_article
+            case SearchFilter.EPISODES:
+                return self.parse_episode
+            case SearchFilter.ALL | SearchFilter.FULL_TEXT:
+                return self.parse_unknown
+            case _:
+                raise ValueError
 
-      # Find main results container: <ul class="results">
-      elem_results = dom.find("ul", {"class": "results"})
-      data = []
+    def parse_unknown(self, result_item_elem: Tag) -> dict[str, Any]:
+        # Determine the appropriate parsing function by checking the classes on <li> or <article>
+        li_class = result_item_elem.get("class")
+        match li_class:
+            case [_, "-production"]:
+                return self.parse_film(result_item_elem)
+            case [_, "-viewing"]:
+                return self.parse_review(result_item_elem)
+            case [_, "-list"]:
+                return self.parse_list(result_item_elem)
+            case [_, "-contributor", _]:
+                return self.parse_cast_crew(result_item_elem)
+            case [_, "-person"]:
+                return self.parse_member(result_item_elem)
+            case [_, "-tag"]:
+                return self.parse_tag(result_item_elem)
 
-      if not elem_results:
-        return data
+        article_class = li_class.find("article").get("class")
+        match article_class:
+            case ["card-summary-journal-article"]:
+                return self.parse_article(result_item_elem)
+            case ["card-summary", "-graph"]:
+                return self.parse_episode(result_item_elem)
+            case ["card-summary", "js-card-summary"] | [
+                "card-summary",
+                "-graph",
+                "js-card-summary",
+            ]:
+                return self.parse_story(result_item_elem)
+            case _:
+                raise ValueError
 
-      # Get all direct <li> children (recursive=False to avoid nested li elements)
-      results = elem_results.find_all("li", recursive=False)
-      
-      for item in results:
-        item_type = None
+    def parse_film(self, result_item_elem: Tag) -> dict[str, Any]:
+        film_container = result_item_elem.find("div", class_="react-component figure")
+        slug = film_container.get("data-item-slug")
+        name = film_container.get("data-item-name")
+        title, year = extract_name_year_from_movie_title(name)
+        url = f"{DOMAIN}{film_container.get('data-target-link')}"
 
-        # Determine result type by checking classes on <li> or child elements
-        for r_type in result_types:
-          if result_types[r_type][0]:
-            # Check if <li> has specific class (e.g., "search-result -person")
-            if 'class' in item.attrs and result_types[r_type][-1] in item.attrs['class']:
-              item_type = r_type
-              break
-          else:
-            # Check if <li> contains child with specific class (e.g., div.film-poster)
-            keys = result_types[r_type][1][-1]
-            child_elem = item.find(attrs={"class": lambda x: x and keys in x})
-            if child_elem:
-              item_type = r_type
-              break
-          
-          if item_type:
-            break
-            
-        # Parse the result content based on detected type
-        result = self.parse_result(item, item_type)
-        data.append(result)
-
-      return data
-
-    def parse_result(self, result, result_type):
-      """
-      Parse individual search result based on its type.
-      Each type has a different DOM structure that needs specific parsing logic.
-      """
-      data = {'type': result_type}
-      match result_type:
-        case "film":
-          """
-          Letterboxd search result structure:
-          <li class="search-result -production">
-            <div class="react-component figure" data-component-class="LazyPoster" 
-                 data-item-name="Film Title (Year)" data-item-slug="film-slug" 
-                 data-item-link="/film/film-slug/" data-target-link="/film/film-slug/"
-                 data-film-id="12345">
-              <div class="poster film-poster">
-                <img alt="Film Title" class="image" src="..." />
-              </div>
-            </div>
-          </li>
-          """
-          # Find film container div
-          film_container = result.find("div", {"class": "react-component"})
-          
-          if film_container:
-            # Get basic film info from container
-            slug = film_container.get('data-item-slug')
-            name = film_container.get('data-item-name')
-            url = DOMAIN + film_container.get('data-target-link')
-            
-            # Get poster from nested img element
-            poster_img = film_container.find("img", {"class": "image"})
-            poster = poster_img.get('src') if poster_img else None
-            
-            # Extract year from metadata
-            movie_year = result.find("small", {"class": "metadata"})
-            if movie_year and movie_year.a:
-              movie_year = int(movie_year.a.text) if movie_year.a.text.isdigit() else None
-            else:
-              movie_year = None
-          
-          # Extract directors from film-metadata paragraph
-          directors = []
-          film_metadata = result.find("p", {"class": "film-metadata"})
-          if film_metadata:
-            for a in film_metadata.find_all("a"):
-              director_slug = a.get('href', '').split('/')[-2]
-              director_name = a.text.strip()
-              director_url = DOMAIN + a.get('href', '')
-
-              directors.append({
-                'name': director_name,
-                'slug': director_slug,
-                'url': director_url
-              })
-
-          data |= {
-             'slug': slug,
-             'name': name,
-             'year': movie_year,
-             'url': url,
-             'poster': poster,
-             'directors': directors
-             }
-        case "member":
-          """
-          Member DOM Structure:
-          <li class="search-result -person">
-            <div class="person-summary -search">
-              <a class="avatar -a40" href="/username/">
-                <img alt="Display Name" src="avatar_url">
-              </a>
-              <h3 class="title-2">
-                <a class="name" href="/username/">Display Name</a>
-              </h3>
-              <small class="metadata">Username</small>
-            </div>
-          </li>
-          Note: followers/following counts no longer available in search results
-          """
-          # Navigate: li > div.person-summary > h3 > a
-          person_link = result.find("h3", {"class": "title-2"}).a
-          member_username = person_link['href'].split('/')[-2]
-          member_name = person_link.text.strip()
-          
-          # Check for badge (might not exist)
-          member_badge = person_link.find("span")
-          member_badge = member_badge.text if member_badge else None
-          
-          # Get avatar from img tag
-          member_avatar = result.find("img")['src']
-          member_avatar = Avatar(member_avatar).upscaled_data
-
-          # followers, following - no longer available in search results
-          followers, following = None, None
-
-          data |= {
-             'username': member_username,
-             'name': member_name,
-             'badge': member_badge,
-             'avatar': member_avatar,
-             'followers': followers,
-             'following': following
-             }
-        case "review":
-          """
-          Review DOM Structure:
-          <li class="search-result -viewing">
-            <div class="film-poster" data-film-slug="..." data-target-link="/film/...">
-              <img alt="Film Title">
-            </div>
-            <!-- Review content -->
-          </li>
-          """
-          # Review parsing - reviews show the film being reviewed
-          # Get film info from the film-poster
-          film_poster = result.find("div", {"class": lambda x: x and "film-poster" in x})
-          if film_poster:
-            slug = film_poster.get('data-film-slug')
-            name = film_poster.img.get('alt') if film_poster.img else None
-            url = DOMAIN + film_poster.get('data-target-link', '')
-            
-            # Get year from release date if available
-            year = None  # Review search doesn't typically show year
-            
-            data |= {
-               'slug': slug,
-               'name': name,
-               'year': year,
-               'url': url,
-               'poster': None,
-               'directors': []
+        def _parse_director(a: Tag) -> dict[str, str]:
+            href = a.get("href", "")
+            return {
+                "name": a.get_text(strip=True),
+                "slug": href.split("/")[-2],
+                "url": f"{DOMAIN}{href}",
             }
-        case "list":
-          """
-          List DOM Structure:
-          <li class="search-result -list">
-            <article class="list-summary" data-film-list-id="..." data-person="username">
-              <div class="layout">
-                <div class="body">
-                  <div class="masthead">
-                    <h2 class="name prettify">
-                      <a href="/user/list/">List Title</a>
-                    </h2>
-                    <div class="attribution-block">
-                      <div class="body">
-                        <span class="attribution-detail">
-                          <a class="owner" href="/user/">
-                            <strong class="displayname">Owner Name</strong>
-                          </a>
-                        </span>
-                        <span class="content-reactions-strip -filmlist">
-                          <span class="value">X films</span>
-                          <a class="inlineicon icon-like" href="/user/list/likes/">50K</a>
-                          <a class="inlineicon icon-comment" href="/user/list/#comments">256</a>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </li>
-          """
-          # Real DOM structure parsing
-          article = result.find('article', {'class': 'list-summary'})
-          if not article:
-            return data
-          
-          # Basic list info from article attributes
-          list_id = article.get('data-film-list-id')
-          owner_slug = article.get('data-person')
-          
-          # Title and URL from h2 > a
-          title_link = article.find('h2', {'class': 'name'}).find('a')
-          list_url = title_link['href']
-          list_title = title_link.text.strip()
-          list_slug = list_url.split('/')[-2]
-          list_url = DOMAIN + list_url
-          
-          # Extract film count from span.value
-          value_span = article.find('span', {'class': 'value'})
-          item_count = None
-          if value_span:
-            text = value_span.text.strip()
-            if 'film' in text:
-              item_count = int(text.split('film')[0].strip().replace(',', ''))
 
-          # Extract likes count from inlineicon icon-like
-          like_elem = article.find('a', {'class': ['inlineicon', 'icon-like']})
-          like_count = extract_and_convert_shorthand(like_elem)
-          
-          # Extract comments count from inlineicon icon-comment  
-          comment_elem = article.find('a', {'class': ['inlineicon', 'icon-comment']})
-          comment_count = extract_and_convert_shorthand(comment_elem)
+        directors_elem = result_item_elem.find("p", class_="film-metadata")
+        directors = None if directors_elem is None else [_parse_director(dir_elem) for dir_elem in directors_elem.find_all("a")]
 
-          # Extract owner info from strong.displayname
-          owner_strong = article.find('strong', {'class': 'displayname'})
-          owner_name = owner_strong.text.strip() if owner_strong else owner_slug
-          owner_slug = owner_slug.lower() if owner_slug else None
-          owner_url = f"{DOMAIN}/{owner_slug}/" if owner_slug else None
+        return {
+            "type": "film",
+            "slug": slug,
+            "title": title,
+            "year": year,
+            "url": url,
+            "directors": directors,
+        }
 
-          data |= {
-             'id': list_id,
-             'slug': list_slug,
-             'url': list_url,
-             'title': list_title,
-             'count': item_count,
-             'likes': like_count,
-             'comments': comment_count,
-             'owner': {
-               'username': owner_slug,
-               'name': owner_name,
-               'url': owner_url
-             }
-          }
-        case "tag":
-          """
-          Tag DOM Structure:
-          <li class="search-result -tag">
-            <h2><a href="/tag/...">Tag Name</a></h2>
-          </li>
-          """
-          tag_url = DOMAIN + result.h2.a['href']
-          tag_name = result.h2.a.text.strip()
-          data |= {
-             'name': tag_name,
-             'url': tag_url
-          }
-        case "actor":
-          """
-          Actor DOM Structure:
-          <li class="search-result -contributor -actor">
-            <div class="icon-container"></div>
-            <div class="content">
-              <h2 class="title-2"><a href="/actor/...">Actor Name</a></h2>
-              <p class="film-metadata">Star of X films, including...</p>
-            </div>
-          </li>
-          """
-          # Navigate: li > div.content > h2 > a
-          content_div = result.find("div", {"class": "content"})
-          actor_link = content_div.find("h2").a
-          actor_name = actor_link.text.strip()
-          actor_slug = actor_link['href']
-          actor_url = DOMAIN + actor_slug
-          actor_slug = actor_slug.split('/')[-2]
-          data |= {
-             'name': actor_name,
-             'slug': actor_slug,
-             'url': actor_url
-          }
-        case "director":
-          """
-          Director DOM Structure:
-          <li class="search-result -contributor -director">
-            <div class="icon-container"></div>
-            <div class="content">
-              <h2 class="title-2"><a href="/director/...">Director Name</a></h2>
-              <p class="film-metadata">Director of X films, including...</p>
-            </div>
-          </li>
-          """
-          # Navigate: li > div.content > h2 > a
-          content_div = result.find("div", {"class": "content"})
-          director_link = content_div.find("h2").a
-          director_name = director_link.text.strip()
-          director_slug = director_link['href']
-          director_url = DOMAIN + director_slug
-          director_slug = director_slug.split('/')[-2]
-          data |= {
-             'name': director_name,
-             'slug': director_slug,
-             'url': director_url
-          }
-        case "studio":
-          """
-          Studio DOM Structure:
-          <li class="search-result -contributor -studio">
-            <a href="/studio/...">Studio Name</a>
-          </li>
-          """
-          studio_name = result.a.text.strip()
-          studio_url = DOMAIN + result.a['href']
-          data |= {
-             'name': studio_name,
-             'url': studio_url
-          }
-        case "story":
-          """
-          Story DOM Structure:
-          <li>
-            <div class="card-summary">
-              <figure><a href="/story/..."></a></figure>
-              <h3><span>Story Title</span></h3>
-              <p class="attribution"><a href="/user/...">Writer</a></p>
-            </div>
-          </li>
-          """
-          story_title = result.h3.span.text
-          story_writer = result.find("p", {"class": "attribution"})
-          story_writer_url = DOMAIN + story_writer.a['href'] if story_writer else None
-          story_writer = story_writer.text.strip() if story_writer else None
-          story_url = DOMAIN + result.figure.a['href']
-          data |= {
-             'title': story_title,
-             'url': story_url,
-             'writer': {
-                'name': story_writer,
-                'url': story_writer_url
-             }
-          }
-        case "journal":
-          """
-          Journal DOM Structure:
-          <li>
-            <div class="card-summary-journal-article">
-              <figure><a href="/journal/..."></a></figure>
-              <time datetime="..."></time>
-              <h3>Journal Title</h3>
-              <div class="teaser">Journal excerpt...</div>
-              <p class="attribution"><a href="/user/...">Writer</a></p>
-            </div>
-          </li>
-          """
-          journal_url = result.figure.a['href']
-          journal_time = result.time['datetime']
-          journal_title = result.h3.text
-          journal_teaser = result.find("div", {"class": "teaser"})
-          journal_teaser = journal_teaser.text.strip() if journal_teaser else None
-          writer = result.find("p", {"class": "attribution"})
-          writer_url = DOMAIN + writer.a['href'] if writer else None
-          writer_name = writer.text.strip() if writer else None
-          data |= {
-             'title': journal_title,
-             'url': journal_url,
-             'time': journal_time,
-             'writer': {
-                'name': writer_name,
-                'url': writer_url
-             }
-          }
-        case _:
-          # Unknown type or parsing not implemented yet
-          pass
+    def parse_review(self, result_item_elem: Tag) -> dict[str, Any]:
+        article = result_item_elem.find("article")
+        username = article.get("data-owner")
+        user_url = f"{DOMAIN}/{username}"
 
-      return data
+        movie_container = article.find("div", class_="react-component figure")
+        movie_slug = movie_container.get("data-item-slug")
+        movie_name = movie_container.get("data-item-name")
+        movie_title, movie_year = extract_name_year_from_movie_title(movie_name)
+        movie_url = f"{DOMAIN}{movie_container.get('data-item-link')}"
+
+        review_body = article.find("div", class_="body", recursive=False)
+        url = review_body.find("h2", class_="name -primary prettify").find("a").get("href")
+
+        display_name_elem = review_body.find("strong", class_="displayname")
+        display_name = display_name_elem.get_text()
+
+        rating_elem = review_body.find("span", class_="rating")
+        rating = None if rating_elem is None else extract_number_from_text(rating_elem.get("class")[-1]) / 2
+        liked_elem = review_body.find("span", class_="label", string="Liked")
+        liked = False if liked_elem is None else True
+
+        review_text_elem = review_body.find("div", class_="body-text -prose -reset js-review-body js-collapsible-text")
+        full_text = True if review_text_elem.find("div", class_="collapsed-text") is None else False
+        review_text =review_text_elem.get_text(strip=True, separator=" ")
+        
+        review_actions = review_body.find("p", class_="like-link-target react-component")
+        likes = extract_number_from_text(review_actions.get("data-count"), join=True)
+
+        return {
+            "type": "review",
+            "url": url,
+            "rating": rating,
+            "liked": liked,
+            "likes": likes,
+            "text": review_text,
+            'full_text': full_text,
+            "owner": {
+                "username": username,
+                "display_name": display_name,
+                "url": user_url,
+            },
+            "movie": {
+                "title": movie_title,
+                "url": movie_url,
+                "slug": movie_slug,
+                "year": movie_year,
+            },
+        }
+
+    def parse_list(self, result_item_elem: Tag) -> dict[str, Any]:
+        list_body = result_item_elem.find("div", class_="body")
+        href_elem = list_body.find("a")
+        href = href_elem.get("href")
+        url = f"{DOMAIN}{href}"
+        username, _, slug = href.split("/")[1:-1]
+        owner_url = f"{DOMAIN}/{username}"
+        title = href_elem.text
+        display_name_elem = href_elem.find_next("strong", class_="displayname")
+        display_name = display_name_elem.text
+
+        film_count_elem = list_body.find("span", class_="value")
+        film_count = extract_number_from_text(film_count_elem.text)
+
+        like_count_elem = list_body.find("span", class_="label")
+        like_count = 0 if like_count_elem is None else extract_and_convert_shorthand(like_count_elem)
+
+        comment_count_elem = list_body.find("span", class_="label")
+        comment_count = 0 if comment_count_elem is None else extract_and_convert_shorthand(comment_count_elem)
+
+        text_elem = list_body.find("div", class_="notes body-text -reset -prose")
+        text = None if text_elem is None else text_elem.get_text(strip=True)
+
+        return {
+            "type": "review",
+            "url": url,
+            "slug": slug,
+            "title": title,
+            "films": film_count,
+            "likes": like_count,
+            "comments": comment_count,
+            "text": text,
+            "owner": {
+                "username": username,
+                "display_name": display_name,
+                "url": owner_url,
+            },
+        }
+
+    def parse_story(self, result_item_elem: Tag) -> dict[str, Any]:
+        detail_elem = result_item_elem.find("div", class_="detail")
+        author_elem = detail_elem.find("a", class_="owner")
+        author_href = author_elem.get("href")
+        author_url = f"{DOMAIN}{author_href}"
+        author_name = author_elem.text
+
+        href_elem = detail_elem.find("h3").find("a")
+        href = href_elem.get("href")
+        url = f"{DOMAIN}{href}"
+        title = href_elem.text
+
+        description_elem = detail_elem.find("div", class_="description body-text -small")
+        description = None if description_elem is None else description_elem.text
+
+        return {
+            "type": "story",
+            "url": url,
+            "title": title,
+            "description": description,
+            "author": {"url": author_url, "name": author_name},
+        }
+
+    def parse_cast_crew(self, result_item_elem: Tag) -> dict[str, Any]:
+        href_elem = result_item_elem.find("a")
+        href = href_elem.get("href")
+        name = href_elem.text
+        type_, slug = href.split("/")[1:3]
+        url = f"{DOMAIN}{href}"
+
+        def _parse_movie(movie_elem: Tag) -> dict[str, str]:
+            return {
+                "url": f"{DOMAIN}{movie_elem.get('href')}",
+                "title": movie_elem.text,
+            }
+
+        film_metadata = result_item_elem.find("p", class_="film-metadata")
+        movie_list = film_metadata.find_all("a", class_="text-slug")
+        popular_movies = list(map(_parse_movie, movie_list))
+
+        return {
+            "type": type_,
+            "name": name,
+            "slug": slug,
+            "url": url,
+            "popular_movies": popular_movies,
+        }
+
+    def parse_member(self, result_item_elem: Tag) -> dict[str, Any]:
+        avatar_elem, name_elem = result_item_elem.find_all("a")
+        img_elem = avatar_elem.find("img")
+        avatar = Avatar(img_elem.get("src")).upscaled_data
+        href = name_elem.get("href")
+        url = f"{DOMAIN}{href}"
+        username = href.split("/")[1]
+
+        name_elem_strings = name_elem.stripped_strings
+        display_name = next(name_elem_strings)
+        badge = next(name_elem_strings, None)
+
+
+        return {
+            "type": "member",
+            "url": url,
+            "username": username,
+            "display_name": display_name,
+            "badge": badge,
+            "avatar": avatar,
+        }
+
+    def parse_tag(self, result_item_elem: Tag) -> dict[str, str]:
+        tag_elem = result_item_elem.find("a")
+        return {"tag": tag_elem.get_text(), "url": f"{DOMAIN}{tag_elem.get('href')}"}
+
+    def parse_article(self, result_item_elem: Tag) -> dict[str, Any]:
+        detail_elem = result_item_elem.find("div", class_="detail")
+        date_elem = detail_elem.find("time")
+        date = date_elem.get("datetime")
+
+        href_elem = detail_elem.find("a")
+        detail_elem = result_item_elem.find("div", class_="detail")
+        href = href_elem.get("href")
+        url = f"{DOMAIN}{href}"
+        slug = href.split("/")[2]
+
+        title = href_elem.find("h3").get_text()
+        teaser = href_elem.find("div", class_="teaser").get_text(strip=True)
+
+        author_elem = detail_elem.find("a", class_="owner")
+        author_href = author_elem.get("href")
+        author_url = f"{DOMAIN}{author_href}"
+        author = author_elem.get_text()
+
+        return {
+            "type": "article",
+            "url": url,
+            "slug": slug,
+            "date": date,
+            "title": title,
+            "teaser": teaser,
+            "author": {"name": author, "url": author_url},
+        }
+
+    def parse_episode(self, result_item_elem: Tag) -> dict[str, Any]:
+        title_elem = result_item_elem.find("h3")
+        href_elem = title_elem.find("a")
+        href = href_elem.get("href")
+        url = f"{DOMAIN}{href}"
+        title = href_elem.get_text(strip=True)
+
+        return {"type": "episode", "url": url, "title": title}
+
 
 # -- FUNCTIONS --
 
@@ -527,54 +405,54 @@ def get_film_slug_from_title(title: str) -> str:
     try:
       query = Search(title, 'films')
       # return first page first result
-      return query.get_results(max=1)['results'][0]['slug']
+      return query.get_results(1)['results'][0]['slug']
     except IndexError:
       return None
 
 if __name__ == "__main__":
-  import sys
-  sys.stdout.reconfigure(encoding='utf-8')
+    import sys
+    sys.stdout.reconfigure(encoding='utf-8')
 
-  """
-  phrase usage:
-    q1 = Search("MUBI", 'lists')
-    q2 = Search("'MUBI'", 'lists') 
-    q1 searches for lists that contain the word 'MUBI' among other possible words
-    q2 searches for lists that specifically contain the exact phrase 'MUBI' and
-    ... exclude lists that don't contain this phrase
+    """
+    phrase usage:
+        q1 = Search("MUBI", 'lists')
+        q2 = Search("'MUBI'", 'lists') 
+        q1 searches for lists that contain the word 'MUBI' among other possible words
+        q2 searches for lists that specifically contain the exact phrase 'MUBI' and
+        ... exclude lists that don't contain this phrase
 
-  results usage:
-   all page:
-    .results
-    .get_results()
-   filtering:
-    .get_results(2)
-    .get_results(max=10)
+    results usage:
+    all page:
+        .results
+        .get_results()
+    filtering:
+        .get_results(2)
+        .get_results(max=10)
 
-  Note: search pages may sometimes contain previous results. (for now)
-  """
+    Note: search pages may sometimes contain previous results. (for now)
+    """
 
-  q3 = Search("The") # general search
-  q4 = Search("V for Vendetta", 'films')
+    q3 = Search("The") # general search
+    q4 = Search("V for Vendetta", 'films')
 
-  # test: instance printing
-  print(q3)
-  print(q4)
+    # test: instance printing
+    print(q3)
+    print(q4)
 
-  # test: results
-  # print(json.dumps(q3.results, indent=2))
-  # print(json.dumps(q4.get_results(), indent=2))
-  print(JsonFile.stringify(q3.get_results(2), indent=2)) # max 2 page result
-  print("\n- - -\n"*10)
-  print(JsonFile.stringify(q4.get_results(max=5), indent=2)) #  max 5 result
+    # test: results
+    # print(json.dumps(q3.results, indent=2))
+    # print(json.dumps(q4.get_results(), indent=2))
+    print(JsonFile.stringify(q3.get_pages(2), indent=2)) # max 2 page result
+    print("\n- - -\n"*10)
+    print(JsonFile.stringify(q4.get_results(5), indent=2)) #  max 5 result
 
-  # test: slug
-  print('slug 1:', get_film_slug_from_title("V for Vendetta"))
-  print('slug 2:', get_film_slug_from_title("v for"))
-  print('slug 3:', get_film_slug_from_title("VENDETTA"))
+    # test: slug
+    print('slug 1:', get_film_slug_from_title("V for Vendetta"))
+    print('slug 2:', get_film_slug_from_title("v for"))
+    print('slug 3:', get_film_slug_from_title("VENDETTA"))
 
-  # test: combined
-  from letterboxdpy.movie import Movie
-  movie_slug = get_film_slug_from_title("V for Vendetta")
-  movie_instance = Movie(movie_slug)
-  print(movie_instance.description)
+    # test: combined
+    from letterboxdpy.movie import Movie
+    movie_slug = get_film_slug_from_title("V for Vendetta")
+    movie_instance = Movie(movie_slug)
+    print(movie_instance.description)
