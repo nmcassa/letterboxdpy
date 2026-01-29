@@ -24,7 +24,7 @@ print(user.user_reviews(user_instance))
             "type": "Watched",
             "no": 0,
             "link": "https://letterboxd.com/nmcassa/film/poor-things-2023/",
-            "rating": 6,
+            "rating": 3.0,
             "review": {
                 "content": "It looks like AI art and weird movie",
                 "spoiler": false
@@ -47,7 +47,7 @@ print(user.user_reviews(user_instance))
             "type": "Watched",
             "no": 0,
             "link": "https://letterboxd.com/nmcassa/film/im-thinking-of-ending-things/",
-            "rating": 8,
+            "rating": 4.0,
             "review": {
                 "content": "yeah i dont get it",
                 "spoiler": false

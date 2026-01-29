@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ metadata.title }} - {{ username }}</title>
+    <style>
+        {% include 'partials/_common_styles.css' %}
+
+        /* Script Specific Styles */
+        .filter-bar {
+            display: flex; gap: 12px; align-items: center;
+            padding-top: 12px; border-top: 1px solid var(--border-color);
+        }
+        
+        .toggle-group {
+            display: flex; background: var(--input-bg);
+            border: 1px solid var(--border-color); border-radius: 6px; padding: 2px;
+        }
+        .toggle-btn {
+            border: none; background: transparent; padding: 4px 12px;
+            cursor: pointer; color: var(--text-secondary); border-radius: 4px;
+            font-size: 12px;
+        }
+        .toggle-btn.active { background: var(--badge-bg); color: var(--badge-text); font-weight: 600; }
+        
+        .rank { color: var(--text-secondary); width: 40px; font-family: monospace; font-size: 12px; text-align: center; }
+        .count { white-space: nowrap; width: 80px; }
+        .year { font-size: 12px; color: var(--text-secondary); font-weight: normal; margin-left: 6px; }
+        
+        .users-cell { width: 50%; vertical-align: top; padding-top: 12px; }
+        .users-wrapper { display: flex; flex-wrap: wrap; gap: 4px; }
+        
+        #match-count { 
+            color: var(--text-secondary); 
+            font-size: 12px;
+            margin-left: auto; 
+        }
+        
+        .films-cell { padding: 12px; vertical-align: top; }
+        .films-wrapper { 
+            display: flex; flex-wrap: wrap; gap: 4px; 
+            max-width: 100%;
+        }
+        .extra-film { display: none; }
+        .films-wrapper.expanded .extra-film { display: inline-block; }
+
+        .more-badge {
+            background: var(--hover-bg); border: 1px dashed var(--border-color);
+            color: var(--link-color); cursor: pointer; font-weight: 600;
+        }
+        .more-badge:hover { background: var(--badge-bg); border-style: solid; }
+        .films-wrapper.expanded .more-badge { display: none; }
+        
+        .show-less-btn {
+            display: none; background: none; border: none; color: var(--text-secondary);
+            font-size: 10px; text-decoration: underline; cursor: pointer; margin-top: 4px;
+            width: 100%; text-align: left; padding: 0;
+        }
+        .films-wrapper.expanded + .show-less-btn { display: block; }
+        
+        .user-link { color: var(--text-primary); font-weight: 600; text-decoration: none; }
+        .user-link:hover { color: var(--link-color); text-decoration: underline; }
+    </style>
+</head>
+<body {% if not generated_at %}class="preview-mode"{% endif %}>
+
+    <div class="container">
+        <!-- Dashboard Header Card -->
+        <div class="header" style="margin-bottom: 12px;">
+            {% include 'partials/_header.html' %}
+        </div>
+
+        <!-- Controls & Stats Card -->
+        <div class="header">
+            <div class="stats" style="margin-bottom: 4px;">
+                <div class="stat-item"><strong>{{ stats.watchlist }}</strong> in watchlist</div>
+                <div class="stat-item"><strong>{{ stats.following }}</strong> scanned</div>
+                <div class="stat-item"><strong>{{ stats.matches }}</strong> matches</div>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="tab-films" onclick="switchTab('tab-films')">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"><path d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25Z"></path><path d="M3.5 6.5a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM8 5.75a.75.75 0 0 0-.75.75v1c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1a.75.75 0 0 0-.75-.75h-1Zm2.75.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM3.5 9.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM8 9a.75.75 0 0 0-.75.75v1c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1A.75.75 0 0 0 9 9h-1Zm2.75.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1Z"></path></svg>
+                    Films
+                </button>
+                <button class="tab-btn" data-tab="tab-users" onclick="switchTab('tab-users')">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 2.5.75.75 0 0 1 11 1h.5a3 3 0 0 1-.5 3Zm-5.5 1.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path></svg>
+                    Users
+                </button>
+            </div>
+            
+            <div class="filter-bar">
+                <span style="color: var(--text-secondary); font-weight: 600;">Filter by User:</span>
+                <select id="userSelect" onchange="applyFilter()">
+                    <option value="">All Users</option>
+                    {% for user in all_users|sort %}
+                    <option value="{{ user }}">{{ user }}</option>
+                    {% endfor %}
+                </select>
+                
+                <div class="toggle-group">
+                    <button id="btnInclude" class="toggle-btn active" onclick="setMode('include')">Must have</button>
+                    <button id="btnExclude" class="toggle-btn" onclick="setMode('exclude')">Must NOT have</button>
+                </div>
+                
+                <div id="match-count">Showing all films</div>
+            </div>
+        </div>
+
+        <div id="tab-films" class="tab-content active">
+            <div class="table-container">
+                <table id="filmsTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <button class="sort-btn" onclick="sortTable('filmsTable', 0, 'num')">
+                                    # <span class="sort-icon"></span>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="sort-btn" onclick="sortTable('filmsTable', 1, 'num')">
+                                    Matches <span class="sort-icon"></span>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="sort-btn" onclick="sortTable('filmsTable', 2, 'str')">
+                                    Film <span class="sort-icon"></span>
+                                </button>
+                            </th>
+                            <th style="padding: 12px;">Wanted by (Following)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for film in results %}
+                        <tr data-users="{{ film.users|join(',') }}">
+                            <td class="rank">#{{ loop.index }}</td>
+                            <td class="count">
+                                <span class="count-badge">
+                                    {{ film.count }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ film.url }}" target="_blank" class="film-link">
+                                    {{ film.name }}
+                                </a>
+                                <span class="year">({{ film.year }})</span>
+                            </td>
+                            <td class="users-cell">
+                                <div class="users-wrapper">
+                                    {% for user in film.users|sort %}
+                                    <a href="https://letterboxd.com/{{ user }}/" target="_blank" class="user-badge">{{ user }}</a>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-users" class="tab-content">
+            <div class="table-container">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <button class="sort-btn" onclick="sortTable('usersTable', 0, 'num')">
+                                    # <span class="sort-icon"></span>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="sort-btn" onclick="sortTable('usersTable', 1, 'str')">
+                                    User <span class="sort-icon"></span>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="sort-btn" onclick="sortTable('usersTable', 2, 'num')">
+                                    Matches <span class="sort-icon"></span>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="sort-btn" onclick="sortTable('usersTable', 3, 'num')">
+                                    Taste Match <span class="sort-icon"></span>
+                                </button>
+                            </th>
+                            <th style="padding: 12px;">Common Films in Watchlist</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in user_rankings %}
+                        <tr>
+                            <td class="rank">#{{ loop.index }}</td>
+                            <td>
+                                <a href="https://letterboxd.com/{{ user.name }}/" target="_blank" class="user-link">
+                                    @{{ user.name }}
+                                </a>
+                            </td>
+                            <td class="count">
+                                <span class="count-badge">{{ user.matches_count }}</span>
+                                <span style="font-size: 10px; opacity: 0.5; margin-left: 4px;">/ {{ user.total_count }}</span>
+                            </td>
+                            <td class="percentage">
+                                <span class="count-badge" style="background: rgba(110, 118, 129, 0.15);">
+                                    {{ user.percentage }}%
+                                </span>
+                            </td>
+                            <td class="films-cell">
+                                <div class="films-wrapper" id="films-{{ user.name }}">
+                                    {% for film in user.shared_films %}
+                                    <a href="{{ film.url }}" target="_blank" 
+                                       class="film-badge {% if loop.index > 8 %}extra-film{% endif %}" 
+                                       title="{{ film.name }} ({{ film.year }})">
+                                        {{ film.name }}
+                                    </a>
+                                    {% endfor %}
+                                    {% if user.shared_films|length > 8 %}
+                                    <button type="button" class="film-badge more-badge" onclick="toggleFilms(this)">
+                                        +{{ user.shared_films|length - 8 }} more
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                {% if user.shared_films|length > 8 %}
+                                <button class="show-less-btn" onclick="toggleFilms(this)">Show less</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="margin-bottom: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <a href="https://github.com/nmcassa/letterboxdpy" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                    <img src="https://img.shields.io/badge/Powered%20by-letterboxdpy-58a6ff?style=flat-square&logo=github&labelColor=21262d" alt="Powered by letterboxdpy">
+                </a>
+                <a href="https://letterboxd.com/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                    <img src="https://img.shields.io/badge/Data%20Source-Letterboxd-orange?style=flat-square&logo=letterboxd&labelColor=21262d" alt="Letterboxd">
+                </a>
+            </div>
+            <div style="font-size: 11px; opacity: 0.7; line-height: 1.6;">
+                {% if metadata %}
+                    &copy; {{ generated_at[:4] }} · 
+                {% endif %}
+                Example designed by 
+                {% if metadata.author_url %}
+                    <a href="{{ metadata.author_url }}" target="_blank" style="color: inherit; text-decoration: underline;">@{{ metadata.author }}</a>
+                {% else %}
+                    @{{ metadata.author or 'community' }}
+                {% endif %}
+                {% if metadata.created_at %}
+                    · <span title="When this script was first added to the project">Script Created: {{ metadata.created_at }}</span>
+                {% endif %}
+                <br>
+                <strong>Report Generated:</strong> {{ generated_at }} · 
+                <a href="https://github.com/nmcassa/letterboxdpy" target="_blank" style="color: inherit; text-decoration: underline;">GitHub</a> · 
+                <a href="https://github.com/nmcassa/letterboxdpy/issues" target="_blank" style="color: inherit; text-decoration: underline;">Issues</a>
+            </div>
+        </div>
+    </div>
+
+    <button id="scrollTopBtn" title="Go to top">
+        <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>
+    </button>
+
+    <script>
+        let filterMode = 'include';
+        
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            const filterBar = document.querySelector('.filter-bar');
+            if (tabId === 'tab-films') {
+                filterBar.style.display = 'flex';
+            } else {
+                filterBar.style.display = 'none';
+            }
+        }
+        
+        const sortStates = {};
+        function sortTable(tableId, n, type) {
+            const table = document.getElementById(tableId);
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+            const stateKey = `${tableId}-${n}`;
+            const dir = sortStates[stateKey] === 'asc' ? 'desc' : 'asc';
+            sortStates[stateKey] = dir;
+            
+            table.querySelectorAll('.sort-btn').forEach(btn => btn.closest('th').classList.remove('sort-asc', 'sort-desc'));
+            table.querySelectorAll('thead th')[n].classList.add(dir === 'asc' ? 'sort-asc' : 'sort-desc');
+
+            rows.sort((a, b) => {
+                let x = a.cells[n].innerText.replace('#', '').trim();
+                let y = b.cells[n].innerText.replace('#', '').trim();
+                
+                if (type === 'num') {
+                    if (x.includes('/')) x = x.split('/')[0].trim();
+                    if (y.includes('/')) y = y.split('/')[0].trim();
+                    x = Number.parseFloat(x.replaceAll(/[^\d.-]/g, '')) || 0;
+                    y = Number.parseFloat(y.replaceAll(/[^\d.-]/g, '')) || 0;
+                } else {
+                    x = x.toLowerCase();
+                    y = y.toLowerCase();
+                }
+                
+                if (dir === 'asc') return x > y ? 1 : -1;
+                return x < y ? 1 : -1;
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+        
+        function setMode(mode) {
+            filterMode = mode;
+            document.getElementById('btnInclude').classList.toggle('active', mode === 'include');
+            document.getElementById('btnExclude').classList.toggle('active', mode === 'exclude');
+            applyFilter();
+        }
+        
+        function applyFilter() {
+            const selectedUser = document.getElementById('userSelect').value;
+            const rows = document.querySelectorAll('#filmsTable tbody tr');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const users = row.dataset.users.split(',');
+                let show = true;
+                
+                if (selectedUser) {
+                    const hasUser = users.includes(selectedUser);
+                    if (filterMode === 'include') {
+                        show = hasUser;
+                    } else {
+                        show = !hasUser;
+                    }
+                }
+                
+                if (show) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            let countText = '';
+            if (selectedUser) {
+                if (filterMode === 'include') {
+                    countText = `Found ${visibleCount} films wanted by ${selectedUser}`;
+                } else {
+                    countText = `Found ${visibleCount} films NOT wanted by ${selectedUser}`;
+                }
+            } else {
+                countText = `Showing all ${visibleCount} films`;
+            }
+                
+            document.getElementById('match-count').textContent = countText;
+        }
+
+        function toggleFilms(btn) {
+            const wrapper = btn.closest('.films-wrapper') || btn.nextElementSibling;
+            const isExpanding = !wrapper.classList.contains('expanded');
+            
+            // Close all other expanded rows
+            document.querySelectorAll('.films-wrapper.expanded').forEach(w => {
+                if (w !== wrapper) {
+                    w.classList.remove('expanded');
+                }
+            });
+
+            // Toggle current
+            wrapper.classList.toggle('expanded', isExpanding);
+        }
+
+        // Scroll to Top logic
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add("visible");
+            } else {
+                scrollTopBtn.classList.remove("visible");
+            }
+        });
+
+        scrollTopBtn.onclick = function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    </script>
+</body>
+</html>

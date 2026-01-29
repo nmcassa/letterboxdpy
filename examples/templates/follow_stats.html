@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ metadata.title or "Follow Stats" }} - {{ username }}</title>
+    <style>
+        {% include 'partials/_common_styles.css' %}
+
+        /* Script Specific Styles */
+        .search-container { position: relative; margin-bottom: 20px; }
+        .search-input { width: 100%; box-sizing: border-box; }
+        .sort-info { margin-bottom: 12px; color: var(--text-secondary); font-size: 11px; font-style: italic; }
+    </style>
+</head>
+<body {% if not generated_at %}class="preview-mode"{% endif %}>
+    <div class="container">
+        <!-- Dashboard Header Card -->
+        <div class="header" style="margin-bottom: 12px;">
+            {% include 'partials/_header.html' %}
+        </div>
+
+        <!-- Controls & Stats Card -->
+        <div class="header">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-val">{{ stats.summary.mutual_follows }}</span>
+                    <span class="stat-label">Mutuals</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-val">{{ stats.summary.fans_count }}</span>
+                    <span class="stat-label">Fans</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-val">{{ stats.summary.not_followback_count }}</span>
+                    <span class="stat-label">Unrequited</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-val">{{ stats.summary.followback_ratio }}%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+            </div>
+
+            <div class="search-container" style="margin-top: 15px; margin-bottom: 0;">
+                <input type="text" class="search-input" placeholder="Search users in current tab..." onkeyup="filterUsers(this.value)">
+            </div>
+
+            <div class="tabs" style="margin-bottom: 0;">
+                {% for section in sections %}
+                <button class="tab-btn {% if loop.first %}active{% endif %}" data-tab="{{ section.id }}" onclick="switchTab('{{ section.id }}')">
+                    {{ section.title }} <span class="count-badge" style="margin-left: 6px;">{{ section.data|length }}</span>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% for section in sections %}
+        <div id="{{ section.id }}" class="tab-content {% if loop.first %}active{% endif %}">
+            <div class="sort-info">Sorted by Letterboxd default (recency) {% if section.ratio_label %}· {{ section.ratio_label|safe }}{% endif %}</div>
+            <div class="user-grid">
+                {% for user in section.data %}
+                <a href="https://letterboxd.com/{{ user }}/" target="_blank" class="user-card" data-username="{{ user }}">
+                    <div class="avatar-placeholder">
+                        {{ user[0]|upper }}
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">@{{ user }}</span>
+                        <span class="user-meta">View Profile →</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        {% include 'partials/_footer.html' %}
+    </div>
+
+    <button id="scrollTopBtn" title="Go to top">
+        <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>
+    </button>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function filterUsers(query) {
+            const activeTab = document.querySelector('.tab-content.active');
+            const cards = activeTab.querySelectorAll('.user-card');
+            const q = query.toLowerCase();
+            
+            cards.forEach(card => {
+                const username = card.dataset.username.toLowerCase();
+                if (username.includes(q)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                scrollTopBtn.classList.add("visible");
+            } else {
+                scrollTopBtn.classList.remove("visible");
+            }
+        };
+
+        scrollTopBtn.onclick = function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    </script>
+</body>
+</html>

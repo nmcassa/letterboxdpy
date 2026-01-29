@@ -157,15 +157,28 @@ def extract_movie_popular_reviews(dom) -> list:
         href = context_link.get("href") if context_link else None
         return (DOMAIN + href) if href else None
 
-    def extract_rating(article):
-        rating_span = article.find("span", {"class": ["rating"]})
-        if not (rating_span and rating_span.text):
-            for span in article.find_all("span"):
-                classes = span.get("class") or []
-                if any((cls == "rating") or cls.startswith("rating") for cls in classes):
-                    rating_span = span
-                    break
-        return get_text_or_none(rating_span)
+    def extract_rating(article) -> float | None:
+        """Extracts the rating element from a review and converts it to a numerical value (float)."""
+
+        rating_span = article.find("span", class_="rating")
+
+        # [LEGACY NOTE]: Original robust finding logic (kept as reference)
+        # rating_span = article.find("span", {"class": ["rating"]})
+        # if not (rating_span and rating_span.text):
+        #     for span in article.find_all("span"):
+        #         classes = span.get("class") or []
+        #         if any((cls == "rating") or cls.startswith("rating") for cls in classes):
+        #             rating_span = span
+        #             break
+        
+        if rating_span:
+            for cls in rating_span.get('class', []):
+                if cls.startswith('rated-'):
+                    try:
+                        return int(cls.split('-')[-1]) / 2.0
+                    except (ValueError, IndexError):
+                        continue
+        return None
 
     def extract_review_text(article):
         body_div = article.find("div", {"class": ["body-text"]})

@@ -147,7 +147,7 @@
           "slug": "f1",
           "url": "https://letterboxd.com/film/f1/"
         },
-        "rating": 8,
+        "rating": 4.0,
         "review": {
           "content": "Major epicness",
           "contains_spoilers": false
@@ -166,7 +166,7 @@
           "slug": "its-a-mad-mad-mad-mad-world",
           "url": "https://letterboxd.com/film/its-a-mad-mad-mad-mad-world/"
         },
-        "rating": 7,
+        "rating": 3.5,
         "review": {
           "content": "some advice for those who don’t enjoy this: LIGHTEN UP",
           "contains_spoilers": false
@@ -245,7 +245,7 @@
           "slug": "caught-stealing",
           "url": "https://letterboxd.com/film/caught-stealing/"
         },
-        "rating": 7,
+        "rating": 3.5,
         "review": {
           "content": "Pulp Fiction vibes, Austin Butler has the most valid crash out of 2025.",
           "contains_spoilers": false

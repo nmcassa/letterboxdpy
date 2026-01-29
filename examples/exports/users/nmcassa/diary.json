@@ -30,7 +30,7 @@
       "runtime": 107,
       "actions": {
         "rewatched": true,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": true
       },
@@ -52,7 +52,7 @@
       "runtime": 110,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": true
       },
@@ -74,7 +74,7 @@
       "runtime": 111,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": true
       },
@@ -96,7 +96,7 @@
       "runtime": 105,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": true
       },
@@ -118,7 +118,7 @@
       "runtime": 92,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": true
       },
@@ -140,7 +140,7 @@
       "runtime": 103,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": true
       },
@@ -162,7 +162,7 @@
       "runtime": 99,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": true
       },
@@ -206,7 +206,7 @@
       "runtime": 117,
       "actions": {
         "rewatched": true,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": true
       },
@@ -228,7 +228,7 @@
       "runtime": 119,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": true
       },
@@ -294,7 +294,7 @@
       "runtime": 105,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": true
       },
@@ -316,7 +316,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": true,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -338,7 +338,7 @@
       "runtime": 129,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": true
       },
@@ -360,7 +360,7 @@
       "runtime": 123,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": true
       },
@@ -382,7 +382,7 @@
       "runtime": 120,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -404,7 +404,7 @@
       "runtime": 95,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": true
       },
@@ -426,7 +426,7 @@
       "runtime": 123,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -448,7 +448,7 @@
       "runtime": 104,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -470,7 +470,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": true
       },
@@ -492,7 +492,7 @@
       "runtime": 164,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": true
       },
@@ -514,7 +514,7 @@
       "runtime": 135,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": true
       },
@@ -536,7 +536,7 @@
       "runtime": 164,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": true
       },
@@ -558,7 +558,7 @@
       "runtime": 122,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": true
       },
@@ -573,14 +573,14 @@
       }
     },
     "612416628": {
-      "name": "L\u00e9on: The Professional",
+      "name": "Léon: The Professional",
       "slug": "leon-the-professional",
       "id": "51949",
       "release": 1994,
       "runtime": 111,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": true
       },
@@ -602,7 +602,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": true
       },
@@ -624,7 +624,7 @@
       "runtime": 148,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": true
       },
@@ -646,7 +646,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": true
       },
@@ -668,7 +668,7 @@
       "runtime": 149,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": true
       },
@@ -690,7 +690,7 @@
       "runtime": 121,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": true
       },
@@ -712,7 +712,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": true
       },
@@ -734,7 +734,7 @@
       "runtime": 130,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -756,7 +756,7 @@
       "runtime": 136,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -778,7 +778,7 @@
       "runtime": 126,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -800,7 +800,7 @@
       "runtime": 237,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -822,7 +822,7 @@
       "runtime": 110,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -844,7 +844,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": true
       },
@@ -866,7 +866,7 @@
       "runtime": 113,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -910,7 +910,7 @@
       "runtime": 121,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": true
       },
@@ -932,7 +932,7 @@
       "runtime": 167,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": false,
         "reviewed": false
       },
@@ -954,7 +954,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -976,7 +976,7 @@
       "runtime": 96,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -998,7 +998,7 @@
       "runtime": 155,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -1020,7 +1020,7 @@
       "runtime": 93,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -1042,7 +1042,7 @@
       "runtime": 113,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -1064,7 +1064,7 @@
       "runtime": 154,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -1108,7 +1108,7 @@
       "runtime": 101,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -1130,7 +1130,7 @@
       "runtime": 111,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -1152,7 +1152,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -1174,7 +1174,7 @@
       "runtime": 85,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -1196,7 +1196,7 @@
       "runtime": 86,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -1218,7 +1218,7 @@
       "runtime": 111,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -1240,7 +1240,7 @@
       "runtime": 135,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -1262,7 +1262,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -1284,7 +1284,7 @@
       "runtime": 139,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -1306,7 +1306,7 @@
       "runtime": 81,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -1328,7 +1328,7 @@
       "runtime": 151,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -1350,7 +1350,7 @@
       "runtime": 84,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -1372,7 +1372,7 @@
       "runtime": 115,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -1394,7 +1394,7 @@
       "runtime": 105,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -1416,7 +1416,7 @@
       "runtime": 129,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -1438,7 +1438,7 @@
       "runtime": 144,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -1460,7 +1460,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -1482,7 +1482,7 @@
       "runtime": 91,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -1504,7 +1504,7 @@
       "runtime": 80,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -1526,7 +1526,7 @@
       "runtime": 114,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -1548,7 +1548,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -1570,7 +1570,7 @@
       "runtime": 66,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -1592,7 +1592,7 @@
       "runtime": 97,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -1614,7 +1614,7 @@
       "runtime": 88,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -1636,7 +1636,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -1658,7 +1658,7 @@
       "runtime": 142,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": true
       },
@@ -1680,7 +1680,7 @@
       "runtime": 97,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -1702,7 +1702,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": true,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -1724,7 +1724,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -1746,7 +1746,7 @@
       "runtime": 117,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -1768,7 +1768,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -1790,7 +1790,7 @@
       "runtime": 113,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -1812,7 +1812,7 @@
       "runtime": 87,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -1834,7 +1834,7 @@
       "runtime": 94,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -1856,7 +1856,7 @@
       "runtime": 93,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -1878,7 +1878,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -1900,7 +1900,7 @@
       "runtime": 131,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -1922,7 +1922,7 @@
       "runtime": 127,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -1944,7 +1944,7 @@
       "runtime": 133,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -1966,7 +1966,7 @@
       "runtime": 157,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -1988,7 +1988,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2010,7 +2010,7 @@
       "runtime": 97,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -2032,7 +2032,7 @@
       "runtime": 107,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -2054,7 +2054,7 @@
       "runtime": 97,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -2076,7 +2076,7 @@
       "runtime": 110,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -2098,7 +2098,7 @@
       "runtime": 116,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -2120,7 +2120,7 @@
       "runtime": 87,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -2142,7 +2142,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -2164,7 +2164,7 @@
       "runtime": 91,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2230,7 +2230,7 @@
       "runtime": 39,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2252,7 +2252,7 @@
       "runtime": 77,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -2274,7 +2274,7 @@
       "runtime": 87,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -2296,7 +2296,7 @@
       "runtime": 104,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -2318,7 +2318,7 @@
       "runtime": 104,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -2340,7 +2340,7 @@
       "runtime": 131,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -2362,7 +2362,7 @@
       "runtime": 179,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2406,7 +2406,7 @@
       "runtime": 101,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -2428,7 +2428,7 @@
       "runtime": 95,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2472,7 +2472,7 @@
       "runtime": 120,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2494,7 +2494,7 @@
       "runtime": 127,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -2516,7 +2516,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -2538,7 +2538,7 @@
       "runtime": 127,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2560,7 +2560,7 @@
       "runtime": 119,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2604,7 +2604,7 @@
       "runtime": 162,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2626,7 +2626,7 @@
       "runtime": 114,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2648,7 +2648,7 @@
       "runtime": 120,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -2670,7 +2670,7 @@
       "runtime": 123,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2685,14 +2685,14 @@
       }
     },
     "419018444": {
-      "name": "Mission: Impossible \u2013 Fallout",
+      "name": "Mission: Impossible – Fallout",
       "slug": "mission-impossible-fallout",
       "id": "283273",
       "release": 2018,
       "runtime": 147,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2714,7 +2714,7 @@
       "runtime": 181,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2736,7 +2736,7 @@
       "runtime": 78,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2758,7 +2758,7 @@
       "runtime": 58,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2773,14 +2773,14 @@
       }
     },
     "412844218": {
-      "name": "Nausica\u00e4 of the Valley of the Wind",
+      "name": "Nausicaä of the Valley of the Wind",
       "slug": "nausicaa-of-the-valley-of-the-wind",
       "id": "51969",
       "release": 1984,
       "runtime": 117,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -2802,7 +2802,7 @@
       "runtime": 153,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -2824,7 +2824,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -2846,7 +2846,7 @@
       "runtime": 88,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": false,
         "reviewed": false
       },
@@ -2868,7 +2868,7 @@
       "runtime": 115,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -2890,7 +2890,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -2912,7 +2912,7 @@
       "runtime": 122,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -2934,7 +2934,7 @@
       "runtime": 155,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2956,7 +2956,7 @@
       "runtime": 113,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -2978,7 +2978,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -3000,7 +3000,7 @@
       "runtime": 105,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3022,7 +3022,7 @@
       "runtime": 135,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -3044,7 +3044,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3066,7 +3066,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -3088,7 +3088,7 @@
       "runtime": 84,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -3110,7 +3110,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -3132,7 +3132,7 @@
       "runtime": 140,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -3154,7 +3154,7 @@
       "runtime": 115,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -3176,7 +3176,7 @@
       "runtime": 101,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -3198,7 +3198,7 @@
       "runtime": 134,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3220,7 +3220,7 @@
       "runtime": 117,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -3242,7 +3242,7 @@
       "runtime": 99,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -3264,7 +3264,7 @@
       "runtime": 167,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3286,7 +3286,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -3308,7 +3308,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -3330,7 +3330,7 @@
       "runtime": 91,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": true
       },
@@ -3352,7 +3352,7 @@
       "runtime": 110,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3374,7 +3374,7 @@
       "runtime": 179,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3396,7 +3396,7 @@
       "runtime": 96,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -3418,7 +3418,7 @@
       "runtime": 105,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3440,7 +3440,7 @@
       "runtime": 93,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -3462,7 +3462,7 @@
       "runtime": 102,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3484,7 +3484,7 @@
       "runtime": 111,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3506,7 +3506,7 @@
       "runtime": 95,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -3528,7 +3528,7 @@
       "runtime": 170,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -3550,7 +3550,7 @@
       "runtime": 86,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -3572,7 +3572,7 @@
       "runtime": 106,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -3594,7 +3594,7 @@
       "runtime": 92,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -3616,7 +3616,7 @@
       "runtime": 113,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -3638,7 +3638,7 @@
       "runtime": 139,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -3660,7 +3660,7 @@
       "runtime": 116,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -3682,7 +3682,7 @@
       "runtime": 95,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -3704,7 +3704,7 @@
       "runtime": 115,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -3748,7 +3748,7 @@
       "runtime": 106,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -3770,7 +3770,7 @@
       "runtime": 97,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -3792,7 +3792,7 @@
       "runtime": 117,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -3814,7 +3814,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -3836,7 +3836,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -3858,7 +3858,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -3880,7 +3880,7 @@
       "runtime": 129,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -3902,7 +3902,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -3924,7 +3924,7 @@
       "runtime": 99,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -3946,7 +3946,7 @@
       "runtime": 115,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -3968,7 +3968,7 @@
       "runtime": 129,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -3990,7 +3990,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4012,7 +4012,7 @@
       "runtime": 103,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -4034,7 +4034,7 @@
       "runtime": 140,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -4056,7 +4056,7 @@
       "runtime": 90,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4078,7 +4078,7 @@
       "runtime": 119,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -4100,7 +4100,7 @@
       "runtime": 94,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -4122,7 +4122,7 @@
       "runtime": 101,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -4144,7 +4144,7 @@
       "runtime": 88,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4166,7 +4166,7 @@
       "runtime": 55,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -4188,7 +4188,7 @@
       "runtime": 99,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4210,7 +4210,7 @@
       "runtime": 120,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -4232,7 +4232,7 @@
       "runtime": 189,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4254,7 +4254,7 @@
       "runtime": 103,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4276,7 +4276,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4298,7 +4298,7 @@
       "runtime": 136,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -4320,7 +4320,7 @@
       "runtime": 159,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -4342,7 +4342,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4364,7 +4364,7 @@
       "runtime": 132,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -4386,7 +4386,7 @@
       "runtime": 116,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4408,7 +4408,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4430,7 +4430,7 @@
       "runtime": 94,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4452,7 +4452,7 @@
       "runtime": 97,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4474,7 +4474,7 @@
       "runtime": 17,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -4496,7 +4496,7 @@
       "runtime": 153,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -4518,7 +4518,7 @@
       "runtime": 111,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4562,7 +4562,7 @@
       "runtime": 126,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4584,7 +4584,7 @@
       "runtime": 120,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4606,7 +4606,7 @@
       "runtime": 117,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -4628,7 +4628,7 @@
       "runtime": 96,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4650,7 +4650,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4672,7 +4672,7 @@
       "runtime": 106,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -4694,7 +4694,7 @@
       "runtime": 140,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4716,7 +4716,7 @@
       "runtime": 115,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4738,7 +4738,7 @@
       "runtime": 136,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4760,7 +4760,7 @@
       "runtime": 138,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4782,7 +4782,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": false,
         "reviewed": false
       },
@@ -4804,7 +4804,7 @@
       "runtime": 107,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -4826,7 +4826,7 @@
       "runtime": 126,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -4848,7 +4848,7 @@
       "runtime": 111,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -4870,7 +4870,7 @@
       "runtime": 55,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -4892,7 +4892,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -4914,7 +4914,7 @@
       "runtime": 125,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -4936,7 +4936,7 @@
       "runtime": 147,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -4958,7 +4958,7 @@
       "runtime": 120,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -4980,7 +4980,7 @@
       "runtime": 90,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -5002,7 +5002,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5024,7 +5024,7 @@
       "runtime": 103,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -5046,7 +5046,7 @@
       "runtime": 125,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -5068,7 +5068,7 @@
       "runtime": 134,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5090,7 +5090,7 @@
       "runtime": 92,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -5112,7 +5112,7 @@
       "runtime": 106,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -5134,7 +5134,7 @@
       "runtime": 101,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -5156,7 +5156,7 @@
       "runtime": 141,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -5178,7 +5178,7 @@
       "runtime": 99,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -5200,7 +5200,7 @@
       "runtime": 114,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -5222,7 +5222,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -5244,7 +5244,7 @@
       "runtime": 114,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5266,7 +5266,7 @@
       "runtime": 121,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -5288,7 +5288,7 @@
       "runtime": 119,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5310,7 +5310,7 @@
       "runtime": 93,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": true
       },
@@ -5332,7 +5332,7 @@
       "runtime": 97,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5354,7 +5354,7 @@
       "runtime": 94,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5376,7 +5376,7 @@
       "runtime": 103,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -5398,7 +5398,7 @@
       "runtime": 102,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -5420,7 +5420,7 @@
       "runtime": 82,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -5442,7 +5442,7 @@
       "runtime": 105,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -5486,7 +5486,7 @@
       "runtime": 122,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5508,7 +5508,7 @@
       "runtime": 65,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5530,7 +5530,7 @@
       "runtime": 130,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -5552,7 +5552,7 @@
       "runtime": 90,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -5574,7 +5574,7 @@
       "runtime": 67,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5596,7 +5596,7 @@
       "runtime": 156,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -5618,7 +5618,7 @@
       "runtime": 119,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -5640,7 +5640,7 @@
       "runtime": 82,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5662,7 +5662,7 @@
       "runtime": 112,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -5684,7 +5684,7 @@
       "runtime": 107,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -5706,7 +5706,7 @@
       "runtime": 95,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -5728,7 +5728,7 @@
       "runtime": 117,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -5750,7 +5750,7 @@
       "runtime": 95,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -5772,7 +5772,7 @@
       "runtime": 114,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -5794,7 +5794,7 @@
       "runtime": 90,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -5816,7 +5816,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": true
       },
@@ -5838,7 +5838,7 @@
       "runtime": 99,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -5860,7 +5860,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -5882,7 +5882,7 @@
       "runtime": 130,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -5904,7 +5904,7 @@
       "runtime": 111,
       "actions": {
         "rewatched": true,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -5926,7 +5926,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": true
       },
@@ -5948,7 +5948,7 @@
       "runtime": 102,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -5970,7 +5970,7 @@
       "runtime": 72,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -5992,7 +5992,7 @@
       "runtime": 133,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -6014,7 +6014,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -6036,7 +6036,7 @@
       "runtime": 118,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6058,7 +6058,7 @@
       "runtime": 220,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6080,7 +6080,7 @@
       "runtime": 140,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -6102,7 +6102,7 @@
       "runtime": 96,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -6124,7 +6124,7 @@
       "runtime": 126,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6146,7 +6146,7 @@
       "runtime": 126,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6168,7 +6168,7 @@
       "runtime": 103,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6190,7 +6190,7 @@
       "runtime": 130,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6212,7 +6212,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6234,7 +6234,7 @@
       "runtime": 146,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6256,7 +6256,7 @@
       "runtime": 153,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6278,7 +6278,7 @@
       "runtime": 138,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -6300,7 +6300,7 @@
       "runtime": 157,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6322,7 +6322,7 @@
       "runtime": 141,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6344,7 +6344,7 @@
       "runtime": 161,
       "actions": {
         "rewatched": true,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6366,7 +6366,7 @@
       "runtime": 177,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -6388,7 +6388,7 @@
       "runtime": 152,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6410,7 +6410,7 @@
       "runtime": 123,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6432,7 +6432,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6454,7 +6454,7 @@
       "runtime": 83,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -6476,7 +6476,7 @@
       "runtime": 270,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -6498,7 +6498,7 @@
       "runtime": 96,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6520,7 +6520,7 @@
       "runtime": 116,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6542,7 +6542,7 @@
       "runtime": 109,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -6564,7 +6564,7 @@
       "runtime": 102,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6586,7 +6586,7 @@
       "runtime": 102,
       "actions": {
         "rewatched": true,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6608,7 +6608,7 @@
       "runtime": 87,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -6630,7 +6630,7 @@
       "runtime": 110,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6652,7 +6652,7 @@
       "runtime": 112,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -6674,7 +6674,7 @@
       "runtime": 83,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6696,7 +6696,7 @@
       "runtime": 69,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6718,7 +6718,7 @@
       "runtime": 139,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6740,7 +6740,7 @@
       "runtime": 95,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6762,7 +6762,7 @@
       "runtime": 105,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6784,7 +6784,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6806,7 +6806,7 @@
       "runtime": 110,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -6828,7 +6828,7 @@
       "runtime": 94,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -6850,7 +6850,7 @@
       "runtime": 179,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6872,7 +6872,7 @@
       "runtime": 92,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -6894,7 +6894,7 @@
       "runtime": 106,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": true
       },
@@ -6916,7 +6916,7 @@
       "runtime": 83,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -6938,7 +6938,7 @@
       "runtime": 132,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -6960,7 +6960,7 @@
       "runtime": 101,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -6982,7 +6982,7 @@
       "runtime": 104,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -7004,7 +7004,7 @@
       "runtime": 119,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7026,7 +7026,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7048,7 +7048,7 @@
       "runtime": 154,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7070,7 +7070,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": true,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7092,7 +7092,7 @@
       "runtime": 117,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -7114,7 +7114,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": true,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7136,7 +7136,7 @@
       "runtime": 93,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -7158,7 +7158,7 @@
       "runtime": 92,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -7180,7 +7180,7 @@
       "runtime": 132,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7202,7 +7202,7 @@
       "runtime": 83,
       "actions": {
         "rewatched": false,
-        "rating": 2,
+        "rating": 1.0,
         "liked": false,
         "reviewed": false
       },
@@ -7224,7 +7224,7 @@
       "runtime": 90,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -7246,7 +7246,7 @@
       "runtime": 138,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -7268,7 +7268,7 @@
       "runtime": 133,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7290,7 +7290,7 @@
       "runtime": 112,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -7312,7 +7312,7 @@
       "runtime": 205,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -7334,7 +7334,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": true,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -7356,7 +7356,7 @@
       "runtime": 115,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -7378,7 +7378,7 @@
       "runtime": 165,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7400,7 +7400,7 @@
       "runtime": 51,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -7422,7 +7422,7 @@
       "runtime": 51,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -7444,7 +7444,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -7466,7 +7466,7 @@
       "runtime": 148,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7488,7 +7488,7 @@
       "runtime": 60,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7510,7 +7510,7 @@
       "runtime": 61,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -7532,7 +7532,7 @@
       "runtime": 158,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -7554,7 +7554,7 @@
       "runtime": 67,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7576,7 +7576,7 @@
       "runtime": 75,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -7598,7 +7598,7 @@
       "runtime": 102,
       "actions": {
         "rewatched": true,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -7620,7 +7620,7 @@
       "runtime": 86,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": true,
         "reviewed": false
       },
@@ -7642,7 +7642,7 @@
       "runtime": 131,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -7664,7 +7664,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7686,7 +7686,7 @@
       "runtime": 116,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -7708,7 +7708,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -7730,7 +7730,7 @@
       "runtime": 124,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7752,7 +7752,7 @@
       "runtime": 101,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -7774,7 +7774,7 @@
       "runtime": 121,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -7789,14 +7789,14 @@
       }
     },
     "202159101": {
-      "name": "Star Wars: Episode III \u2013\u00a0Revenge of the Sith",
+      "name": "Star Wars: Episode III – Revenge of the Sith",
       "slug": "star-wars-episode-iii-revenge-of-the-sith",
       "id": "50709",
       "release": 2005,
       "runtime": 140,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7818,7 +7818,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7840,7 +7840,7 @@
       "runtime": 400,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -7862,7 +7862,7 @@
       "runtime": 121,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7884,7 +7884,7 @@
       "runtime": 88,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -7906,7 +7906,7 @@
       "runtime": 495,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -7921,14 +7921,14 @@
       }
     },
     "199406486": {
-      "name": "Star Wars: Episode II \u2013\u00a0Attack of the Clones",
+      "name": "Star Wars: Episode II – Attack of the Clones",
       "slug": "star-wars-episode-ii-attack-of-the-clones",
       "id": "50710",
       "release": 2002,
       "runtime": 142,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -7943,14 +7943,14 @@
       }
     },
     "198198939": {
-      "name": "Star Wars: Episode I \u2013 The Phantom Menace",
+      "name": "Star Wars: Episode I – The Phantom Menace",
       "slug": "star-wars-episode-i-the-phantom-menace",
       "id": "50711",
       "release": 1999,
       "runtime": 136,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -7972,7 +7972,7 @@
       "runtime": 90,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -7994,7 +7994,7 @@
       "runtime": 70,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -8016,7 +8016,7 @@
       "runtime": 132,
       "actions": {
         "rewatched": false,
-        "rating": 4,
+        "rating": 2.0,
         "liked": false,
         "reviewed": false
       },
@@ -8038,7 +8038,7 @@
       "runtime": 110,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -8082,7 +8082,7 @@
       "runtime": 49,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -8104,7 +8104,7 @@
       "runtime": 65,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -8126,7 +8126,7 @@
       "runtime": 98,
       "actions": {
         "rewatched": false,
-        "rating": 5,
+        "rating": 2.5,
         "liked": false,
         "reviewed": false
       },
@@ -8148,7 +8148,7 @@
       "runtime": 91,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -8170,7 +8170,7 @@
       "runtime": 90,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -8192,7 +8192,7 @@
       "runtime": 121,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -8214,7 +8214,7 @@
       "runtime": 91,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": true,
         "reviewed": false
       },
@@ -8236,7 +8236,7 @@
       "runtime": 88,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -8258,7 +8258,7 @@
       "runtime": 125,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -8280,7 +8280,7 @@
       "runtime": 87,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": false,
         "reviewed": false
       },
@@ -8302,7 +8302,7 @@
       "runtime": 62,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -8324,7 +8324,7 @@
       "runtime": 60,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -8346,7 +8346,7 @@
       "runtime": 110,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -8368,7 +8368,7 @@
       "runtime": 151,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -8390,7 +8390,7 @@
       "runtime": 83,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -8412,7 +8412,7 @@
       "runtime": 95,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -8434,7 +8434,7 @@
       "runtime": 102,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -8456,7 +8456,7 @@
       "runtime": 94,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -8478,7 +8478,7 @@
       "runtime": 87,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -8500,7 +8500,7 @@
       "runtime": 94,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -8522,7 +8522,7 @@
       "runtime": 90,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -8544,7 +8544,7 @@
       "runtime": 103,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -8566,7 +8566,7 @@
       "runtime": 103,
       "actions": {
         "rewatched": false,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -8588,7 +8588,7 @@
       "runtime": 91,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -8610,7 +8610,7 @@
       "runtime": 135,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": true
       },
@@ -8632,7 +8632,7 @@
       "runtime": 116,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -8654,7 +8654,7 @@
       "runtime": 101,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -8676,7 +8676,7 @@
       "runtime": 104,
       "actions": {
         "rewatched": false,
-        "rating": 6,
+        "rating": 3.0,
         "liked": false,
         "reviewed": false
       },
@@ -8698,7 +8698,7 @@
       "runtime": 85,
       "actions": {
         "rewatched": false,
-        "rating": 3,
+        "rating": 1.5,
         "liked": false,
         "reviewed": false
       },
@@ -8720,7 +8720,7 @@
       "runtime": 100,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -8742,7 +8742,7 @@
       "runtime": 26,
       "actions": {
         "rewatched": true,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },
@@ -8764,7 +8764,7 @@
       "runtime": 25,
       "actions": {
         "rewatched": true,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -8786,7 +8786,7 @@
       "runtime": 117,
       "actions": {
         "rewatched": true,
-        "rating": 10,
+        "rating": 5.0,
         "liked": true,
         "reviewed": false
       },
@@ -8808,7 +8808,7 @@
       "runtime": 112,
       "actions": {
         "rewatched": false,
-        "rating": 7,
+        "rating": 3.5,
         "liked": false,
         "reviewed": false
       },
@@ -8830,7 +8830,7 @@
       "runtime": 108,
       "actions": {
         "rewatched": false,
-        "rating": 9,
+        "rating": 4.5,
         "liked": true,
         "reviewed": false
       },
@@ -8852,7 +8852,7 @@
       "runtime": 86,
       "actions": {
         "rewatched": false,
-        "rating": 8,
+        "rating": 4.0,
         "liked": false,
         "reviewed": false
       },

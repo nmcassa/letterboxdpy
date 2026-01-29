@@ -132,7 +132,7 @@ class LetterboxdRatingPlotter:
         for movie in movies.values():
             if rating := movie.get("rating"):
                 try:
-                    ratings[float(rating)/2] += 1
+                    ratings[float(rating)] += 1
                 except KeyError:
                     pass
         

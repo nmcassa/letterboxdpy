@@ -1,6 +1,11 @@
+import warnings
 from datetime import datetime
-from letterboxdpy.core.scraper import parse_url
+from functools import lru_cache
+from typing import Optional
+from concurrent.futures import ThreadPoolExecutor
+
 from letterboxdpy.constants.project import DOMAIN, CURRENT_YEAR, CURRENT_MONTH, CURRENT_DAY
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_url import get_page_url
 
 
@@ -10,27 +15,85 @@ class UserDiary:
         self.username = username
         self.url = f"{DOMAIN}/{username}/diary"
         
-    def get_diary(self, year: int=None, month: int=None, day: int=None, page: int=None) -> dict:
-        return extract_user_diary(self.username, year, month, day, page)
+    def get_diary(
+        self,
+        year: int=None,
+        month: int=None,
+        day: int=None,
+        page: int=None,
+        fetch_runtime: bool=False,
+        max_workers: int=None
+    ) -> dict:
+        return extract_user_diary(self.username, year, month, day, page, fetch_runtime, max_workers)
 
-    def get_year(self, year: int=CURRENT_YEAR) -> dict:
-        return extract_user_diary(self.username, year)
+    def get_year(self, year: int=CURRENT_YEAR, fetch_runtime: bool=False, max_workers: int=None) -> dict:
+        return extract_user_diary(self.username, year, fetch_runtime=fetch_runtime, max_workers=max_workers)
 
-    def get_month(self, year: int=CURRENT_YEAR, month: int=CURRENT_MONTH) -> dict:
-        return extract_user_diary(self.username, year, month)
+    def get_month(self, year: int=CURRENT_YEAR, month: int=CURRENT_MONTH, fetch_runtime: bool=False, max_workers: int=None) -> dict:
+        return extract_user_diary(self.username, year, month, fetch_runtime=fetch_runtime, max_workers=max_workers)
 
-    def get_day(self, year: int=CURRENT_YEAR, month: int=CURRENT_MONTH, day: int=CURRENT_DAY) -> dict:
-        return extract_user_diary(self.username, year, month, day)
+    def get_day(self, year: int=CURRENT_YEAR, month: int=CURRENT_MONTH, day: int=CURRENT_DAY, fetch_runtime: bool=False, max_workers: int=None) -> dict:
+        return extract_user_diary(self.username, year, month, day, fetch_runtime=fetch_runtime, max_workers=max_workers)
 
-    def get_wrapped(self, year: int=CURRENT_YEAR) -> dict:
-        return extract_user_wrapped(self.username, year)
+    def get_wrapped(self, year: int=CURRENT_YEAR, fetch_runtime: bool=False, max_workers: int=None) -> dict:
+        return extract_user_wrapped(self.username, year, fetch_runtime, max_workers)
+
+@lru_cache(maxsize=1024)
+def _get_runtime(slug: str) -> Optional[int]:
+    """Internal cached function to fetch runtime from Letterboxd JSON endpoint."""
+    try:
+        from letterboxdpy.url import FilmURL
+        movie_json = FilmURL.json(slug)
+        return movie_json.run_time if movie_json.run_time else None
+    except Exception:
+        return None
+
+def clear_runtime_cache():
+    """Clears the internal movie runtime cache."""
+    _get_runtime.cache_clear()
+
+def get_runtime_cache_info():
+    """Returns information about the runtime cache (hits, misses, etc)."""
+    return _get_runtime.cache_info()
+
+def _fetch_missing_runtimes(entries: dict, pagination: int, max_workers: int = None) -> None:
+    """
+    Fetches missing runtime data for diary entries.
+    
+    Args:
+        entries: Dictionary of diary entries to update (mutated in place).
+        pagination: Current page number to filter entries.
+        max_workers: Max threads for parallel fetching. None = sequential.
+    """
+    entries_to_update = [
+        (log_id, entry["slug"]) 
+        for log_id, entry in entries.items() 
+        if entry["runtime"] is None and entry["slug"] and entry["page"]["no"] == pagination
+    ]
+    
+    if not entries_to_update:
+        return
+    
+    slugs = [str(slug) for _, slug in entries_to_update]
+    
+    if max_workers and max_workers > 1:
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            results = list(executor.map(_get_runtime, slugs))
+    else:
+        results = [_get_runtime(slug) for slug in slugs]
+    
+    for (log_id, _), fetched_runtime in zip(entries_to_update, results):
+        if fetched_runtime:
+            entries[log_id]["runtime"] = fetched_runtime
 
 def extract_user_diary(
         username: str,
         year: int=None,
         month: int=None,
         day: int=None,
-        page: int=None) -> dict:
+        page: int=None,
+        fetch_runtime: bool=False,
+        max_workers: int=None) -> dict:
     """
     Extracts the user's diary entries, optionally filtering by year, month, and day.
 
@@ -40,6 +103,9 @@ def extract_user_diary(
         month (int, optional): The month of diary entries.
         day (int, optional): The day of diary entries.
         page (int, optional): The page number for pagination.
+        fetch_runtime (bool, optional): If True, fetches runtime for each film.
+        max_workers (int, optional): Max threads for parallel runtime fetching. 
+                                     If None, runs sequentially (safer).
 
     Returns:
         dict: A dictionary with diary entries, each containing movie details, rewatch status, rating, like status, review status, and entry date.
@@ -117,7 +183,7 @@ def extract_user_diary(
                 # rating column
                 rating = cols["rating"].span
                 is_rating = 'rated-' in ''.join(rating["class"])
-                rating = int(rating["class"][-1].split("-")[-1]) if is_rating else None
+                rating = int(rating["class"][-1].split("-")[-1]) / 2.0 if is_rating else None
                 # like column
                 liked = bool(cols["like"].find("span", attrs={"class": "icon-liked"}))
                 # review column
@@ -135,7 +201,7 @@ def extract_user_diary(
                 runtime = int(runtime) if runtime else None
 
                 # create entry
-                ret["entries"][log_id] = {
+                entry = {
                     "name": name,
                     "slug": slug,
                     "id":  id,
@@ -153,6 +219,12 @@ def extract_user_diary(
                         'no': pagination
                         }
                 }
+                ret["entries"][log_id] = entry
+
+            # Fetch runtime data if requested
+            if fetch_runtime:
+                _fetch_missing_runtimes(ret["entries"], pagination, max_workers)
+
             if len(rows) < 50 or pagination == page:
                     # no more entries
                     # or reached the requested page
@@ -164,16 +236,30 @@ def extract_user_diary(
     ret['count'] = len(ret['entries'])
     ret['last_page'] = pagination
 
+    if not fetch_runtime and any(entry['runtime'] is None for entry in ret['entries'].values()):
+        warnings.warn(
+            "Runtime data is missing for some entries. "
+            "Pass `fetch_runtime=True` to retrieve it (may require extra network requests).",
+            UserWarning
+        )
+
     return ret
 
 # dependency: extract_user_diary()
-def extract_user_wrapped(username: str, year: int=CURRENT_YEAR) -> dict:
-    """Wraps user diary data for the specified year and calculates statistics."""
+def extract_user_wrapped(username: str, year: int=CURRENT_YEAR, fetch_runtime: bool=False, max_workers: int=None) -> dict:
+    """Wraps user diary data for the specified year and calculates statistics.
+    
+    Args:
+        username (str): The Letterboxd username.
+        year (int, optional): The year to wrap. Defaults to current year.
+        fetch_runtime (bool, optional): If True, fetches runtime for each film.
+        max_workers (int, optional): Max threads for parallel runtime fetching.
+    """
 
     def retrieve_diary() -> dict:
         """Retrieves the diary for the given user and year."""
         try:
-            diary = extract_user_diary(username, year)
+            diary = extract_user_diary(username, year, fetch_runtime=fetch_runtime, max_workers=max_workers)
         except Exception as e:
             raise ValueError(f"Failed to retrieve diary for user {username}: {e}") from e
         
