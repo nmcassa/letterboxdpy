@@ -33,11 +33,14 @@ def extract_name_year_from_movie_title(movie_name: str) -> tuple[str, int | None
     """Extract title and year from movie name if it's in parentheses format, else returns title and None.
 
     Example:
-        extract_title_year_from_movie_name("The Matrix (1999)") -> ("The Matrix", 1999)
-        extract_title_year_from_movie_name("The Matrix") -> ("The Matrix", None)
+        extract_name_year_from_movie_title("The Matrix (1999)") -> ("The Matrix", 1999)
+        extract_name_year_from_movie_title("The Matrix") -> ("The Matrix", None)
     """
+    if movie_name is None:
+        return "", None
+
     if (match := re.match(MOVIE_TITLE_YEAR_PATTERN, movie_name)) is not None:
         title, year = match.groups()
         return title, year if year is None else int(year)
-    else:
-        raise ValueError
+
+    return movie_name, None
