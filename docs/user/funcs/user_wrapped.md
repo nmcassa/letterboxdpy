@@ -25,7 +25,7 @@ print(user.user_wrapped(user_instance, 2023))
             "runtime": 108,
             "actions": {
                 "rewatched": false,
-                "rating": 6,
+                "rating": 3.0,
                 "liked": false,
                 "reviewed": false
             },
@@ -52,7 +52,7 @@ print(user.user_wrapped(user_instance, 2023))
             "runtime": 141,
             "actions": {
                 "rewatched": false,
-                "rating": 6,
+                "rating": 3.0,
                 "liked": false,
                 "reviewed": true
             },
@@ -100,7 +100,7 @@ print(user.user_wrapped(user_instance, 2023))
                 "runtime": 78,
                 "actions": {
                     "rewatched": false,
-                    "rating": 7,
+                    "rating": 3.5,
                     "liked": false,
                     "reviewed": false
                 },

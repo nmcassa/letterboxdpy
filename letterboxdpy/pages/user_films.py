@@ -98,7 +98,7 @@ def extract_movies_from_user_watched(dom, max=12*6) -> dict:
                     try:
                         rating_str = pattern(cls)
                         if rating_str and rating_str.isdigit():
-                            return int(rating_str)
+                            return int(rating_str) / 2.0
                     except (ValueError, IndexError, AttributeError):
                         continue
                         

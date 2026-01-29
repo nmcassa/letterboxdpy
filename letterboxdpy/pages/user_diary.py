@@ -183,7 +183,7 @@ def extract_user_diary(
                 # rating column
                 rating = cols["rating"].span
                 is_rating = 'rated-' in ''.join(rating["class"])
-                rating = int(rating["class"][-1].split("-")[-1]) if is_rating else None
+                rating = int(rating["class"][-1].split("-")[-1]) / 2.0 if is_rating else None
                 # like column
                 liked = bool(cols["like"].find("span", attrs={"class": "icon-liked"}))
                 # review column

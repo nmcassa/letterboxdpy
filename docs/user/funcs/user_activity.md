@@ -29,7 +29,7 @@ print(user_instance.get_activity())
           "slug": "the-matrix",
           "url": "https://letterboxd.com/film/the-matrix/"
         },
-        "rating": 5.0
+        "rating": 2.5
       }
     },
     "9624102431": {

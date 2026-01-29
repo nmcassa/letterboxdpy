@@ -115,7 +115,7 @@ def extract_liked_reviews(url: str) -> dict:
                 rating_classes = [cls for cls in classes if 'rated-' in str(cls)]
                 if rating_classes:
                     try:
-                        review_rating = int(extract_path_segment(rating_classes[0], after='rated-'))
+                        review_rating = int(extract_path_segment(rating_classes[0], after='rated-')) / 2.0
                         break
                     except (ValueError, IndexError):
                         pass

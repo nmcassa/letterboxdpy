@@ -16,7 +16,7 @@ print(user.user_liked_reviews(user_instance))
             "type": "Rewatched",
             "no": 0,
             "url": "https://letterboxd.com/ppark/film/mean-girls/",
-            "rating": 8,
+            "rating": 4.0,
             "review": {
                 "content": "Refreshing",
                 "spoiler": false,
@@ -45,7 +45,7 @@ print(user.user_liked_reviews(user_instance))
             "type": "Added",
             "no": 0,
             "url": "https://letterboxd.com/kurstboy/film/the-departed/",
-            "rating": 9,
+            "rating": 4.5,
             "review": {
                 "content": "Great way to end my Scorsese binge!That final shot is perfect and the whole third act feels tight as hell. The entire film is rich with interesting approaches to the subject matter which is fitting for a plot that grabs your attention within the first 5 minutes. Scorsese is just spitballing here and throwing every idea at the wall, his love for filmmaking shines brighter here than in something like Hugo. Don't know what to add to the table\u2026",
                 "spoiler": false,

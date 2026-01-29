@@ -194,7 +194,7 @@ print(movie_instance)
   "popular_reviews": [
     {
       "reviewer": "zoey luke",
-      "rating": " \u2605\u2605\u2605\u2605\u00bd ",
+      "rating": 4.5,
       "review": "I love natalie Portman and I hate the government"
     },...
   ]

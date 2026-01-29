@@ -3,210 +3,210 @@
     "caught-stealing": {
       "name": "Caught Stealing",
       "id": "1129199",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2025,
       "liked": false
     },
     "weapons-2025": {
       "name": "Weapons",
       "id": "972109",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2025,
       "liked": false
     },
     "happy-gilmore-2": {
       "name": "Happy Gilmore 2",
       "id": "1147371",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2025,
       "liked": false
     },
     "superman-2025": {
       "name": "Superman",
       "id": "957050",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2025,
       "liked": false
     },
     "f1": {
       "name": "F1",
       "id": "817977",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2025,
       "liked": true
     },
     "warfare": {
       "name": "Warfare",
       "id": "1124701",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2025,
       "liked": false
     },
     "novocaine-2025": {
       "name": "Novocaine",
       "id": "1081017",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2025,
       "liked": false
     },
     "drop-2025": {
       "name": "Drop",
       "id": "1133530",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2025,
       "liked": false
     },
     "black-bag-2025": {
       "name": "Black Bag",
       "id": "1116755",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2025,
       "liked": false
     },
     "death-of-a-unicorn": {
       "name": "Death of a Unicorn",
       "id": "1039736",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2025,
       "liked": false
     },
     "mickey-17": {
       "name": "Mickey 17",
       "id": "620281",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2025,
       "liked": false
     },
     "the-monkey-2025": {
       "name": "The Monkey",
       "id": "1013393",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2025,
       "liked": false
     },
     "heart-eyes": {
       "name": "Heart Eyes",
       "id": "1184651",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2025,
       "liked": false
     },
     "companion-2025": {
       "name": "Companion",
       "id": "977172",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2025,
       "liked": true
     },
     "a-complete-unknown": {
       "name": "A Complete Unknown",
       "id": "586583",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2024,
       "liked": false
     },
     "carry-on-2024": {
       "name": "Carry-On",
       "id": "905876",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2024,
       "liked": false
     },
     "gladiator-ii": {
       "name": "Gladiator II",
       "id": "486978",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2024,
       "liked": false
     },
     "friendship-2024": {
       "name": "Friendship",
       "id": "1122691",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2024,
       "liked": false
     },
     "the-wild-robot": {
       "name": "The Wild Robot",
       "id": "1071196",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2024,
       "liked": false
     },
     "heretic-2024": {
       "name": "Heretic",
       "id": "1025331",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2024,
       "liked": false
     },
     "speak-no-evil-2024": {
       "name": "Speak No Evil",
       "id": "1004531",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2024,
       "liked": false
     },
     "the-brutalist": {
       "name": "The Brutalist",
       "id": "478428",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2024,
       "liked": false
     },
     "saturday-night-2024": {
       "name": "Saturday Night",
       "id": "1010683",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2024,
       "liked": false
     },
     "nickel-boys": {
       "name": "Nickel Boys",
       "id": "926589",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2024,
       "liked": false
     },
     "conclave": {
       "name": "Conclave",
       "id": "877253",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2024,
       "liked": false
     },
     "alien-romulus": {
       "name": "Alien: Romulus",
       "id": "850459",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2024,
       "liked": false
     },
     "blink-twice": {
       "name": "Blink Twice",
       "id": "756042",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2024,
       "liked": false
     },
     "trap-2024": {
       "name": "Trap",
       "id": "931164",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2024,
       "liked": false
     },
     "twisters": {
       "name": "Twisters",
       "id": "641608",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2024,
       "liked": false
     },
     "maxxxine": {
       "name": "MaXXXine",
       "id": "922858",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2024,
       "liked": false
     },
@@ -220,49 +220,49 @@
     "kinds-of-kindness": {
       "name": "Kinds of Kindness",
       "id": "928261",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2024,
       "liked": false
     },
     "furiosa-a-mad-max-saga": {
       "name": "Furiosa: A Mad Max Saga",
       "id": "705221",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2024,
       "liked": false
     },
     "baby-reindeer": {
       "name": "Baby Reindeer",
       "id": "1156611",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2024,
       "liked": false
     },
     "civil-war-2024": {
       "name": "Civil War",
       "id": "834656",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2024,
       "liked": false
     },
     "the-fall-guy-2024": {
       "name": "The Fall Guy",
       "id": "667550",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2024,
       "liked": false
     },
     "monkey-man": {
       "name": "Monkey Man",
       "id": "488751",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2024,
       "liked": true
     },
     "drive-away-dolls": {
       "name": "Drive-Away Dolls",
       "id": "861250",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2024,
       "liked": false
     },
@@ -276,35 +276,35 @@
     "dune-part-two": {
       "name": "Dune: Part Two",
       "id": "617443",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2024,
       "liked": false
     },
     "argylle": {
       "name": "Argylle",
       "id": "763160",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2024,
       "liked": false
     },
     "i-saw-the-tv-glow": {
       "name": "I Saw the TV Glow",
       "id": "772230",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2024,
       "liked": false
     },
     "spy-x-family-code-white": {
       "name": "SPY x FAMILY CODE: White",
       "id": "958439",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2023,
       "liked": false
     },
     "wonka": {
       "name": "Wonka",
       "id": "706083",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2023,
       "liked": false
     },
@@ -318,301 +318,301 @@
     "the-hunger-games-the-ballad-of-songbirds-snakes": {
       "name": "The Hunger Games: The Ballad of Songbirds & Snakes",
       "id": "619510",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2023,
       "liked": false
     },
     "godzilla-minus-one": {
       "name": "Godzilla Minus One",
       "id": "845706",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2023,
       "liked": true
     },
     "five-nights-at-freddys": {
       "name": "Five Nights at Freddy's",
       "id": "436948",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2023,
       "liked": false
     },
     "society-of-the-snow": {
       "name": "Society of the Snow",
       "id": "813840",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2023,
       "liked": true
     },
     "the-contestant-2023": {
       "name": "The Contestant",
       "id": "1042841",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2023,
       "liked": false
     },
     "dumb-money": {
       "name": "Dumb Money",
       "id": "710073",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2023,
       "liked": false
     },
     "the-killer-2023": {
       "name": "The Killer",
       "id": "717654",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2023,
       "liked": false
     },
     "maestro-2023": {
       "name": "Maestro",
       "id": "453069",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2023,
       "liked": false
     },
     "poor-things-2023": {
       "name": "Poor Things",
       "id": "710352",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2023,
       "liked": false
     },
     "the-wonderful-story-of-henry-sugar": {
       "name": "The Wonderful Story of Henry Sugar",
       "id": "829364",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2023,
       "liked": false
     },
     "saltburn": {
       "name": "Saltburn",
       "id": "835774",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2023,
       "liked": false
     },
     "the-holdovers": {
       "name": "The Holdovers",
       "id": "755564",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2023,
       "liked": false
     },
     "teenage-mutant-ninja-turtles-mutant-mayhem": {
       "name": "Teenage Mutant Ninja Turtles: Mutant Mayhem",
       "id": "542005",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2023,
       "liked": false
     },
     "the-boy-and-the-heron": {
       "name": "The Boy and the Heron",
       "id": "438692",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2023,
       "liked": false
     },
     "oppenheimer-2023": {
       "name": "Oppenheimer",
       "id": "784328",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2023,
       "liked": false
     },
     "barbie": {
       "name": "Barbie",
       "id": "277064",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2023,
       "liked": false
     },
     "they-cloned-tyrone": {
       "name": "They Cloned Tyrone",
       "id": "658906",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2023,
       "liked": false
     },
     "spider-man-across-the-spider-verse": {
       "name": "Spider-Man: Across the Spider-Verse",
       "id": "497631",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2023,
       "liked": false
     },
     "perfect-days-2023": {
       "name": "Perfect Days",
       "id": "879229",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2023,
       "liked": true
     },
     "fallen-leaves-2023": {
       "name": "Fallen Leaves",
       "id": "888054",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2023,
       "liked": true
     },
     "asteroid-city": {
       "name": "Asteroid City",
       "id": "668555",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2023,
       "liked": false
     },
     "anatomy-of-a-fall": {
       "name": "Anatomy of a Fall",
       "id": "822093",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2023,
       "liked": true
     },
     "robot-dreams": {
       "name": "Robot Dreams",
       "id": "753420",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2023,
       "liked": true
     },
     "the-zone-of-interest": {
       "name": "The Zone of Interest",
       "id": "398800",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2023,
       "liked": false
     },
     "indiana-jones-and-the-dial-of-destiny": {
       "name": "Indiana Jones and the Dial of Destiny",
       "id": "265433",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2023,
       "liked": false
     },
     "fools-paradise-2023": {
       "name": "Fool's Paradise",
       "id": "481889",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2023,
       "liked": false
     },
     "white-men-cant-jump-2023": {
       "name": "White Men Can't Jump",
       "id": "825993",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2023,
       "liked": false
     },
     "the-little-mermaid-2023": {
       "name": "The Little Mermaid",
       "id": "379591",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2023,
       "liked": false
     },
     "beau-is-afraid": {
       "name": "Beau Is Afraid",
       "id": "715856",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2023,
       "liked": false
     },
     "the-super-mario-bros-movie": {
       "name": "The Super Mario Bros. Movie",
       "id": "432302",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2023,
       "liked": false
     },
     "air-2023": {
       "name": "Air",
       "id": "868491",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2023,
       "liked": false
     },
     "late-night-with-the-devil": {
       "name": "Late Night with the Devil",
       "id": "843415",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2023,
       "liked": false
     },
     "john-wick-chapter-4": {
       "name": "John Wick: Chapter 4",
       "id": "530882",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2023,
       "liked": false
     },
     "65": {
       "name": "65",
       "id": "624070",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2023,
       "liked": false
     },
     "cocaine-bear": {
       "name": "Cocaine Bear",
       "id": "721333",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2023,
       "liked": false
     },
     "inside-2023": {
       "name": "Inside",
       "id": "861930",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2023,
       "liked": false
     },
     "blackberry-2023": {
       "name": "BlackBerry",
       "id": "915230",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2023,
       "liked": false
     },
     "creed-iii": {
       "name": "Creed III",
       "id": "601624",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2023,
       "liked": false
     },
     "knock-at-the-cabin": {
       "name": "Knock at the Cabin",
       "id": "558056",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2023,
       "liked": false
     },
     "you-people-2023": {
       "name": "You People",
       "id": "780321",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2023,
       "liked": false
     },
     "babylon-2022": {
       "name": "Babylon",
       "id": "542773",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2022,
       "liked": false
     },
     "violent-night": {
       "name": "Violent Night",
       "id": "809395",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "puss-in-boots-the-last-wish": {
       "name": "Puss in Boots: The Last Wish",
       "id": "242285",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2022,
       "liked": false
     },
@@ -626,231 +626,231 @@
     "the-redeem-team": {
       "name": "The Redeem Team",
       "id": "917780",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "entergalactic": {
       "name": "Entergalactic",
       "id": "925555",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "werewolf-by-night": {
       "name": "Werewolf by Night",
       "id": "805106",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "amsterdam-2022": {
       "name": "Amsterdam",
       "id": "589317",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2022,
       "liked": false
     },
     "the-greatest-beer-run-ever": {
       "name": "The Greatest Beer Run Ever",
       "id": "525274",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2022,
       "liked": false
     },
     "glass-onion": {
       "name": "Glass Onion",
       "id": "586723",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2022,
       "liked": false
     },
     "the-menu-2022": {
       "name": "The Menu",
       "id": "521323",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2022,
       "liked": false
     },
     "sisu-2022": {
       "name": "Sisu",
       "id": "755504",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2022,
       "liked": false
     },
     "see-how-they-run-2022": {
       "name": "See How They Run",
       "id": "686510",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2022,
       "liked": true
     },
     "pearl-2022": {
       "name": "Pearl",
       "id": "853822",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "white-noise-2022": {
       "name": "White Noise",
       "id": "666269",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2022,
       "liked": false
     },
     "barbarian-2022": {
       "name": "Barbarian",
       "id": "819648",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2022,
       "liked": false
     },
     "beast-2022-1": {
       "name": "Beast",
       "id": "681132",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2022,
       "liked": false
     },
     "bullet-train": {
       "name": "Bullet Train",
       "id": "641961",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2022,
       "liked": false
     },
     "nope": {
       "name": "Nope",
       "id": "682547",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2022,
       "liked": true
     },
     "the-gray-man-2022": {
       "name": "The Gray Man",
       "id": "647760",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2022,
       "liked": false
     },
     "thor-love-and-thunder": {
       "name": "Thor: Love and Thunder",
       "id": "543002",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2022,
       "liked": false
     },
     "spiderhead": {
       "name": "Spiderhead",
       "id": "542567",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "hustle-2022": {
       "name": "Hustle",
       "id": "629376",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "broker-2022": {
       "name": "Broker",
       "id": "658830",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2022,
       "liked": false
     },
     "decision-to-leave": {
       "name": "Decision to Leave",
       "id": "629320",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2022,
       "liked": false
     },
     "triangle-of-sadness": {
       "name": "Triangle of Sadness",
       "id": "427970",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2022,
       "liked": true
     },
     "three-thousand-years-of-longing": {
       "name": "Three Thousand Years of Longing",
       "id": "485265",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2022,
       "liked": false
     },
     "men-2022": {
       "name": "Men",
       "id": "699298",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2022,
       "liked": false
     },
     "chip-n-dale-rescue-rangers": {
       "name": "Chip 'n Dale: Rescue Rangers",
       "id": "354541",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "jerrod-carmichael-rothaniel": {
       "name": "Jerrod Carmichael: Rothaniel",
       "id": "856484",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2022,
       "liked": false
     },
     "bodies-bodies-bodies": {
       "name": "Bodies Bodies Bodies",
       "id": "449442",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2022,
       "liked": false
     },
     "x-2022": {
       "name": "X",
       "id": "680358",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2022,
       "liked": false
     },
     "everything-everywhere-all-at-once": {
       "name": "Everything Everywhere All at Once",
       "id": "474474",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2022,
       "liked": true
     },
     "the-batman": {
       "name": "The Batman",
       "id": "348914",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2022,
       "liked": true
     },
     "texas-chainsaw-massacre": {
       "name": "Texas Chainsaw Massacre",
       "id": "558956",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2022,
       "liked": false
     },
     "jeen-yuhs-a-kanye-trilogy": {
       "name": "jeen-yuhs: A Kanye Trilogy",
       "id": "836998",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2022,
       "liked": false
     },
     "marry-me-2022": {
       "name": "Marry Me",
       "id": "542727",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2022,
       "liked": false
     },
@@ -864,42 +864,42 @@
     "harry-potter-20th-anniversary-return-to-hogwarts": {
       "name": "Harry Potter 20th Anniversary: Return to Hogwarts",
       "id": "809443",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2022,
       "liked": false
     },
     "spider-man-no-way-home": {
       "name": "Spider-Man: No Way Home",
       "id": "560787",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2021,
       "liked": false
     },
     "dont-look-up-2021": {
       "name": "Don't Look Up",
       "id": "572255",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2021,
       "liked": false
     },
     "licorice-pizza": {
       "name": "Licorice Pizza",
       "id": "641086",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2021,
       "liked": false
     },
     "squid-game": {
       "name": "Squid Game",
       "id": "787181",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2021,
       "liked": true
     },
     "the-guilty-2021": {
       "name": "The Guilty",
       "id": "496198",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2021,
       "liked": false
     },
@@ -913,280 +913,280 @@
     "last-night-in-soho": {
       "name": "Last Night in Soho",
       "id": "505000",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2021,
       "liked": false
     },
     "dune-2021": {
       "name": "Dune",
       "id": "371378",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2021,
       "liked": false
     },
     "marcel-the-shell-with-shoes-on-2021": {
       "name": "Marcel the Shell with Shoes On",
       "id": "781326",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2021,
       "liked": false
     },
     "the-power-of-the-dog": {
       "name": "The Power of the Dog",
       "id": "527841",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2021,
       "liked": false
     },
     "untold-malice-at-the-palace": {
       "name": "Untold: Malice at the Palace",
       "id": "771839",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2021,
       "liked": false
     },
     "old-2021": {
       "name": "Old",
       "id": "558054",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2021,
       "liked": false
     },
     "the-french-dispatch": {
       "name": "The French Dispatch",
       "id": "471207",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2021,
       "liked": true
     },
     "the-summit-of-the-gods": {
       "name": "The Summit of the Gods",
       "id": "635689",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2021,
       "liked": false
     },
     "luca-2021": {
       "name": "Luca",
       "id": "438722",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2021,
       "liked": false
     },
     "bo-burnham-inside": {
       "name": "Bo Burnham: Inside",
       "id": "739775",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2021,
       "liked": false
     },
     "the-mitchells-vs-the-machines": {
       "name": "The Mitchells vs. the Machines",
       "id": "431888",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2021,
       "liked": false
     },
     "bad-trip-2021": {
       "name": "Bad Trip",
       "id": "506972",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2021,
       "liked": false
     },
     "the-colony-2021": {
       "name": "The Colony",
       "id": "681177",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2021,
       "liked": false
     },
     "the-alpinist": {
       "name": "The Alpinist",
       "id": "606836",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2021,
       "liked": true
     },
     "taming-the-garden": {
       "name": "Taming the Garden",
       "id": "695509",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2021,
       "liked": true
     },
     "luzzu": {
       "name": "Luzzu",
       "id": "695499",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2021,
       "liked": true
     },
     "soul-2020": {
       "name": "Soul",
       "id": "438511",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2020,
       "liked": true
     },
     "another-round": {
       "name": "Another Round",
       "id": "508246",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2020,
       "liked": true
     },
     "the-babysitter-killer-queen": {
       "name": "The Babysitter: Killer Queen",
       "id": "550049",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2020,
       "liked": false
     },
     "im-thinking-of-ending-things": {
       "name": "I'm Thinking of Ending Things",
       "id": "430806",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2020,
       "liked": false
     },
     "middleditch-schwartz": {
       "name": "Middleditch & Schwartz",
       "id": "617744",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2020,
       "liked": false
     },
     "the-last-dance-2020": {
       "name": "The Last Dance",
       "id": "617825",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2020,
       "liked": true
     },
     "all-hands-on-deck-2020": {
       "name": "All Hands on Deck!",
       "id": "590589",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2020,
       "liked": false
     },
     "pete-davidson-alive-from-new-york": {
       "name": "Pete Davidson: Alive from New York",
       "id": "598308",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2020,
       "liked": false
     },
     "some-kind-of-heaven": {
       "name": "Some Kind of Heaven",
       "id": "564733",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2020,
       "liked": false
     },
     "palm-springs-2020": {
       "name": "Palm Springs",
       "id": "515467",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2020,
       "liked": false
     },
     "kajillionaire": {
       "name": "Kajillionaire",
       "id": "470369",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2020,
       "liked": false
     },
     "john-mulaney-the-sack-lunch-bunch": {
       "name": "John Mulaney & The Sack Lunch Bunch",
       "id": "575704",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2019,
       "liked": false
     },
     "6-underground": {
       "name": "6 Underground",
       "id": "439717",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2019,
       "liked": false
     },
     "jumanji-the-next-level": {
       "name": "Jumanji: The Next Level",
       "id": "441862",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2019,
       "liked": false
     },
     "seth-meyers-lobby-baby": {
       "name": "Seth Meyers: Lobby Baby",
       "id": "568129",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2019,
       "liked": false
     },
     "klaus": {
       "name": "Klaus",
       "id": "438751",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2019,
       "liked": false
     },
     "labyrinth-of-cinema": {
       "name": "Labyrinth of Cinema",
       "id": "543380",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2019,
       "liked": false
     },
     "moving-on-2020": {
       "name": "Moving On",
       "id": "562602",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2019,
       "liked": false
     },
     "bill-burr-paper-tiger": {
       "name": "Bill Burr: Paper Tiger",
       "id": "551637",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2019,
       "liked": false
     },
     "jojo-rabbit": {
       "name": "Jojo Rabbit",
       "id": "444600",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2019,
       "liked": true
     },
     "knives-out-2019": {
       "name": "Knives Out",
       "id": "475370",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2019,
       "liked": true
     },
     "the-platform": {
       "name": "The Platform",
       "id": "545985",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2019,
       "liked": false
     },
     "joker-2019": {
       "name": "Joker",
       "id": "406775",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2019,
       "liked": false
     },
     "uncut-gems": {
       "name": "Uncut Gems",
       "id": "404266",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2019,
       "liked": true
     },
@@ -1200,7 +1200,7 @@
     "ready-or-not-2019": {
       "name": "Ready or Not",
       "id": "495969",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2019,
       "liked": false
     },
@@ -1214,35 +1214,35 @@
     "parasite-2019": {
       "name": "Parasite",
       "id": "426406",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2019,
       "liked": true
     },
     "once-upon-a-time-in-hollywood": {
       "name": "Once Upon a Time... in Hollywood",
       "id": "397859",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2019,
       "liked": false
     },
     "the-lighthouse-2019": {
       "name": "The Lighthouse",
       "id": "433863",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2019,
       "liked": false
     },
     "vivarium": {
       "name": "Vivarium",
       "id": "390139",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2019,
       "liked": false
     },
     "john-wick-chapter-3-parabellum": {
-      "name": "John Wick: Chapter 3 \u2013 Parabellum",
+      "name": "John Wick: Chapter 3 – Parabellum",
       "id": "390039",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2019,
       "liked": false
     },
@@ -1256,140 +1256,140 @@
     "booksmart": {
       "name": "Booksmart",
       "id": "435450",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2019,
       "liked": false
     },
     "us-2019": {
       "name": "Us",
       "id": "390520",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2019,
       "liked": false
     },
     "happy-death-day-2u": {
       "name": "Happy Death Day 2U",
       "id": "441856",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2019,
       "liked": false
     },
     "big-time-adolescence": {
       "name": "Big Time Adolescence",
       "id": "468709",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2019,
       "liked": false
     },
     "honey-boy": {
       "name": "Honey Boy",
       "id": "441870",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2019,
       "liked": true
     },
     "beats-2019": {
       "name": "Beats",
       "id": "423722",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2019,
       "liked": false
     },
     "fyre-2019": {
       "name": "Fyre",
       "id": "496262",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2019,
       "liked": false
     },
     "black-mirror-bandersnatch": {
       "name": "Black Mirror: Bandersnatch",
       "id": "498044",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2018,
       "liked": false
     },
     "vice-2018": {
       "name": "Vice",
       "id": "362365",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2018,
       "liked": false
     },
     "spider-man-into-the-spider-verse": {
       "name": "Spider-Man: Into the Spider-Verse",
       "id": "251943",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2018,
       "liked": true
     },
     "the-christmas-chronicles": {
       "name": "The Christmas Chronicles",
       "id": "456712",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2018,
       "liked": false
     },
     "the-grinch": {
       "name": "The Grinch",
       "id": "292688",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2018,
       "liked": false
     },
     "ralph-breaks-the-internet": {
       "name": "Ralph Breaks the Internet",
       "id": "338883",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2018,
       "liked": false
     },
     "mid90s": {
       "name": "mid90s",
       "id": "370451",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2018,
       "liked": false
     },
     "if-beale-street-could-talk": {
       "name": "If Beale Street Could Talk",
       "id": "397578",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2018,
       "liked": false
     },
     "sierra-burgess-is-a-loser": {
       "name": "Sierra Burgess Is a Loser",
       "id": "394711",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2018,
       "liked": false
     },
     "the-ballad-of-buster-scruggs": {
       "name": "The Ballad of Buster Scruggs",
       "id": "467061",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2018,
       "liked": false
     },
     "to-all-the-boys-ive-loved-before": {
       "name": "To All the Boys I've Loved Before",
       "id": "397942",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2018,
       "liked": false
     },
     "mission-impossible-fallout": {
-      "name": "Mission: Impossible \u2013 Fallout",
+      "name": "Mission: Impossible – Fallout",
       "id": "283273",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2018,
       "liked": false
     },
     "cam": {
       "name": "Cam",
       "id": "451482",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2018,
       "liked": false
     },
@@ -1410,28 +1410,28 @@
     "incredibles-2": {
       "name": "Incredibles 2",
       "id": "184061",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2018,
       "liked": false
     },
     "tag-2018": {
       "name": "Tag",
       "id": "387909",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2018,
       "liked": false
     },
     "burning-2018": {
       "name": "Burning",
       "id": "422035",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2018,
       "liked": false
     },
     "john-mulaney-kid-gorgeous-at-radio-city": {
       "name": "John Mulaney: Kid Gorgeous at Radio City",
       "id": "450315",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2018,
       "liked": false
     },
@@ -1445,28 +1445,28 @@
     "amateur-2018": {
       "name": "Amateur",
       "id": "445039",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2018,
       "liked": false
     },
     "james-acaster-repertoire": {
       "name": "James Acaster: Repertoire",
       "id": "445120",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2018,
       "liked": true
     },
     "wild-wild-country": {
       "name": "Wild Wild Country",
       "id": "453524",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2018,
       "liked": true
     },
     "ready-player-one": {
       "name": "Ready Player One",
       "id": "261866",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2018,
       "liked": false
     },
@@ -1480,112 +1480,112 @@
     "a-quiet-place-2018": {
       "name": "A Quiet Place",
       "id": "379687",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2018,
       "liked": false
     },
     "the-strangers-prey-at-night": {
       "name": "The Strangers: Prey at Night",
       "id": "307230",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2018,
       "liked": false
     },
     "game-night": {
       "name": "Game Night",
       "id": "378048",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2018,
       "liked": false
     },
     "isle-of-dogs-2018": {
       "name": "Isle of Dogs",
       "id": "333448",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2018,
       "liked": true
     },
     "annihilation": {
       "name": "Annihilation",
       "id": "227784",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2018,
       "liked": false
     },
     "black-panther": {
       "name": "Black Panther",
       "id": "209383",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2018,
       "liked": false
     },
     "sorry-to-bother-you": {
       "name": "Sorry to Bother You",
       "id": "358271",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2018,
       "liked": true
     },
     "eighth-grade": {
       "name": "Eighth Grade",
       "id": "420451",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2018,
       "liked": true
     },
     "den-of-thieves": {
       "name": "Den of Thieves",
       "id": "381754",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2018,
       "liked": false
     },
     "phantom-thread": {
       "name": "Phantom Thread",
       "id": "335384",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2017,
       "liked": false
     },
     "jumanji-welcome-to-the-jungle": {
       "name": "Jumanji: Welcome to the Jungle",
       "id": "283778",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2017,
       "liked": false
     },
     "coco-2017": {
       "name": "Coco",
       "id": "285509",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2017,
       "liked": false
     },
     "perfect-bid-the-contestant-who-knew-too-much": {
       "name": "Perfect Bid: The Contestant Who Knew Too Much",
       "id": "422385",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2017,
       "liked": false
     },
     "the-babysitter-2017": {
       "name": "The Babysitter",
       "id": "353273",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2017,
       "liked": false
     },
     "happy-death-day": {
       "name": "Happy Death Day",
       "id": "372701",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2017,
       "liked": false
     },
     "blade-runner-2049": {
       "name": "Blade Runner 2049",
       "id": "265439",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2017,
       "liked": false
     },
@@ -1606,56 +1606,56 @@
     "mother-2017": {
       "name": "mother!",
       "id": "316311",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2017,
       "liked": false
     },
     "three-billboards-outside-ebbing-missouri": {
       "name": "Three Billboards Outside Ebbing, Missouri",
       "id": "291610",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2017,
       "liked": false
     },
     "lady-bird": {
       "name": "Lady Bird",
       "id": "326279",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2017,
       "liked": false
     },
     "the-shape-of-water": {
       "name": "The Shape of Water",
       "id": "333308",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2017,
       "liked": false
     },
     "logan-lucky": {
       "name": "Logan Lucky",
       "id": "333445",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2017,
       "liked": false
     },
     "the-emoji-movie": {
       "name": "The Emoji Movie",
       "id": "313491",
-      "rating": 1,
+      "rating": 0.5,
       "year": 2017,
       "liked": false
     },
     "good-time": {
       "name": "Good Time",
       "id": "362362",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2017,
       "liked": true
     },
     "the-florida-project": {
       "name": "The Florida Project",
       "id": "328538",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2017,
       "liked": false
     },
@@ -1669,112 +1669,112 @@
     "the-circle-2017": {
       "name": "The Circle",
       "id": "269475",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2017,
       "liked": false
     },
     "alphago": {
       "name": "AlphaGo",
       "id": "387051",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2017,
       "liked": true
     },
     "dave-chappelle-the-age-of-spin": {
       "name": "Dave Chappelle: The Age of Spin",
       "id": "377211",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2017,
       "liked": false
     },
     "baby-driver": {
       "name": "Baby Driver",
       "id": "268950",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2017,
       "liked": true
     },
     "get-out-2017": {
       "name": "Get Out",
       "id": "353117",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2017,
       "liked": true
     },
     "lemon-2017": {
       "name": "Lemon",
       "id": "361916",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2017,
       "liked": false
     },
     "the-big-sick": {
       "name": "The Big Sick",
       "id": "350384",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2017,
       "liked": false
     },
     "icarus-2017": {
       "name": "Icarus",
       "id": "366068",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2017,
       "liked": false
     },
     "hidden-figures": {
       "name": "Hidden Figures",
       "id": "316312",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2016,
       "liked": false
     },
     "the-edge-of-seventeen": {
       "name": "The Edge of Seventeen",
       "id": "311894",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2016,
       "liked": false
     },
     "arrival-2016": {
       "name": "Arrival",
       "id": "257426",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2016,
       "liked": false
     },
     "war-dogs-2016": {
       "name": "War Dogs",
       "id": "235388",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2016,
       "liked": false
     },
     "nerve-2016": {
       "name": "Nerve",
       "id": "255900",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2016,
       "liked": false
     },
     "the-secret-life-of-pets": {
       "name": "The Secret Life of Pets",
       "id": "255661",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2016,
       "liked": false
     },
     "finding-dory": {
       "name": "Finding Dory",
       "id": "99402",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2016,
       "liked": false
     },
     "bo-burnham-make-happy": {
       "name": "Bo Burnham: Make Happy",
       "id": "335216",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2016,
       "liked": true
     },
@@ -1788,42 +1788,42 @@
     "the-do-over": {
       "name": "The Do-Over",
       "id": "323681",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2016,
       "liked": false
     },
     "my-life-as-a-zucchini": {
       "name": "My Life as a Zucchini",
       "id": "327909",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2016,
       "liked": false
     },
     "train-to-busan": {
       "name": "Train to Busan",
       "id": "330912",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2016,
       "liked": false
     },
     "the-nice-guys": {
       "name": "The Nice Guys",
       "id": "216301",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2016,
       "liked": false
     },
     "the-belko-experiment": {
       "name": "The Belko Experiment",
       "id": "270472",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2016,
       "liked": false
     },
     "sausage-party": {
       "name": "Sausage Party",
       "id": "157841",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2016,
       "liked": false
     },
@@ -1837,203 +1837,203 @@
     "10-cloverfield-lane": {
       "name": "10 Cloverfield Lane",
       "id": "261891",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2016,
       "liked": false
     },
     "zootopia": {
       "name": "Zootopia",
       "id": "192410",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2016,
       "liked": false
     },
     "blue-mountain-state-the-rise-of-thadland": {
       "name": "Blue Mountain State: The Rise of Thadland",
       "id": "213939",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2016,
       "liked": false
     },
     "swiss-army-man": {
       "name": "Swiss Army Man",
       "id": "277413",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2016,
       "liked": false
     },
     "the-boy-2016": {
       "name": "The Boy",
       "id": "248318",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2016,
       "liked": false
     },
     "daddys-home": {
       "name": "Daddy's Home",
       "id": "198302",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2015,
       "liked": false
     },
     "john-mulaney-the-comeback-kid": {
       "name": "John Mulaney: The Comeback Kid",
       "id": "303704",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2015,
       "liked": false
     },
     "the-big-short": {
       "name": "The Big Short",
       "id": "246013",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2015,
       "liked": false
     },
     "the-martian": {
       "name": "The Martian",
       "id": "211511",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2015,
       "liked": false
     },
     "the-gift-2015-1": {
       "name": "The Gift",
       "id": "255927",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2015,
       "liked": false
     },
     "the-boy-and-the-beast": {
       "name": "The Boy and the Beast",
       "id": "242502",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2015,
       "liked": true
     },
     "ant-man": {
       "name": "Ant-Man",
       "id": "83557",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2015,
       "liked": false
     },
     "circle-2015": {
       "name": "Circle",
       "id": "264420",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2015,
       "liked": false
     },
     "sicario-2015": {
       "name": "Sicario",
       "id": "197628",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2015,
       "liked": false
     },
     "inside-out-2015": {
       "name": "Inside Out",
       "id": "113284",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2015,
       "liked": false
     },
     "mad-max-fury-road": {
       "name": "Mad Max: Fury Road",
       "id": "62780",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2015,
       "liked": false
     },
     "focus-2015": {
       "name": "Focus",
       "id": "180414",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2015,
       "liked": false
     },
     "the-stanford-prison-experiment": {
       "name": "The Stanford Prison Experiment",
       "id": "234811",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2015,
       "liked": true
     },
     "dope-2015": {
       "name": "Dope",
       "id": "235745",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2015,
       "liked": false
     },
     "world-of-tomorrow": {
       "name": "World of Tomorrow",
       "id": "230808",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2015,
       "liked": true
     },
     "the-interview-2014": {
       "name": "The Interview",
       "id": "161002",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2014,
       "liked": false
     },
     "night-at-the-museum-secret-of-the-tomb": {
       "name": "Night at the Museum: Secret of the Tomb",
       "id": "131870",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2014,
       "liked": false
     },
     "over-the-garden-wall-2014": {
       "name": "Over the Garden Wall",
       "id": "343911",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2014,
       "liked": true
     },
     "interstellar": {
       "name": "Interstellar",
       "id": "117621",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2014,
       "liked": false
     },
     "john-wick": {
       "name": "John Wick",
       "id": "172076",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2014,
       "liked": false
     },
     "the-maze-runner": {
       "name": "The Maze Runner",
       "id": "142549",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2014,
       "liked": false
     },
     "nightcrawler": {
       "name": "Nightcrawler",
       "id": "169907",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2014,
       "liked": false
     },
     "birdman-or-the-unexpected-virtue-of-ignorance": {
       "name": "Birdman or (The Unexpected Virtue of Ignorance)",
       "id": "139795",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2014,
       "liked": false
     },
     "teenage-mutant-ninja-turtles-2014": {
       "name": "Teenage Mutant Ninja Turtles",
       "id": "80950",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2014,
       "liked": false
     },
@@ -2047,112 +2047,112 @@
     "it-follows": {
       "name": "It Follows",
       "id": "193554",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2014,
       "liked": false
     },
     "kid-cannabis": {
       "name": "Kid Cannabis",
       "id": "150932",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2014,
       "liked": false
     },
     "divergent": {
       "name": "Divergent",
       "id": "117583",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2014,
       "liked": false
     },
     "neighbors-2014": {
       "name": "Neighbors",
       "id": "140512",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2014,
       "liked": false
     },
     "mr-peabody-sherman": {
       "name": "Mr. Peabody & Sherman",
       "id": "69141",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2014,
       "liked": false
     },
     "the-grand-budapest-hotel": {
       "name": "The Grand Budapest Hotel",
       "id": "95113",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2014,
       "liked": true
     },
     "the-lego-movie": {
       "name": "The Lego Movie",
       "id": "105188",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2014,
       "liked": false
     },
     "whiplash-2014": {
       "name": "Whiplash",
       "id": "171384",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2014,
       "liked": true
     },
     "bo-burnham-what": {
       "name": "Bo Burnham: What.",
       "id": "170860",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2013,
       "liked": false
     },
     "the-wolf-of-wall-street": {
       "name": "The Wolf of Wall Street",
       "id": "86114",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2013,
       "liked": true
     },
     "frozen-2013": {
       "name": "Frozen",
       "id": "87948",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2013,
       "liked": false
     },
     "her": {
       "name": "Her",
       "id": "114564",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2013,
       "liked": false
     },
     "coherence": {
       "name": "Coherence",
       "id": "155900",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2013,
       "liked": true
     },
     "oculus": {
       "name": "Oculus",
       "id": "117687",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2013,
       "liked": false
     },
     "prisoners": {
       "name": "Prisoners",
       "id": "110740",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2013,
       "liked": false
     },
     "gravity-2013": {
       "name": "Gravity",
       "id": "16529",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2013,
       "liked": false
     },
@@ -2166,7 +2166,7 @@
     "snowpiercer": {
       "name": "Snowpiercer",
       "id": "88488",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2013,
       "liked": false
     },
@@ -2180,175 +2180,175 @@
     "the-worlds-end": {
       "name": "The World's End",
       "id": "86991",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2013,
       "liked": false
     },
     "monsters-university": {
       "name": "Monsters University",
       "id": "4553",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2013,
       "liked": false
     },
     "this-is-the-end": {
       "name": "This Is the End",
       "id": "87873",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2013,
       "liked": false
     },
     "the-bling-ring": {
       "name": "The Bling Ring",
       "id": "79893",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2013,
       "liked": false
     },
     "the-great-gatsby-2013": {
       "name": "The Great Gatsby",
       "id": "285",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2013,
       "liked": false
     },
     "django-unchained": {
       "name": "Django Unchained",
       "id": "52516",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2012,
       "liked": false
     },
     "amber-alert": {
       "name": "Amber Alert",
       "id": "104316",
-      "rating": 1,
+      "rating": 0.5,
       "year": 2012,
       "liked": false
     },
     "wreck-it-ralph": {
       "name": "Wreck-It Ralph",
       "id": "69154",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2012,
       "liked": false
     },
     "skyfall": {
       "name": "Skyfall",
       "id": "26779",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2012,
       "liked": false
     },
     "looper": {
       "name": "Looper",
       "id": "6599",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2012,
       "liked": false
     },
     "the-perks-of-being-a-wallflower": {
       "name": "The Perks of Being a Wallflower",
       "id": "71338",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2012,
       "liked": false
     },
     "total-recall-2012": {
       "name": "Total Recall",
       "id": "331",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2012,
       "liked": false
     },
     "brave-2012": {
       "name": "Brave",
       "id": "4586",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2012,
       "liked": false
     },
     "let-it-shine": {
       "name": "Let It Shine",
       "id": "91396",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2012,
       "liked": false
     },
     "the-hunt-2012": {
       "name": "The Hunt",
       "id": "84051",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2012,
       "liked": false
     },
     "moonrise-kingdom": {
       "name": "Moonrise Kingdom",
       "id": "70105",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2012,
       "liked": true
     },
     "the-hunger-games": {
       "name": "The Hunger Games",
       "id": "59281",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2012,
       "liked": false
     },
     "21-jump-street": {
       "name": "21 Jump Street",
       "id": "279",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2012,
       "liked": false
     },
     "project-x-2012": {
       "name": "Project X",
       "id": "8933",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2012,
       "liked": false
     },
     "the-lorax-2012": {
       "name": "The Lorax",
       "id": "60027",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2012,
       "liked": false
     },
     "radio-rebel": {
       "name": "Radio Rebel",
       "id": "75097",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2012,
       "liked": false
     },
     "donald-glover-weirdo": {
       "name": "Donald Glover: Weirdo",
       "id": "70616",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2012,
       "liked": false
     },
     "a-very-harold-kumar-christmas": {
       "name": "A Very Harold & Kumar Christmas",
       "id": "10675",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2011,
       "liked": false
     },
     "moneyball": {
       "name": "Moneyball",
       "id": "6286",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2011,
       "liked": false
     },
     "30-minutes-or-less": {
       "name": "30 Minutes or Less",
       "id": "4558",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2011,
       "liked": false
     },
@@ -2362,28 +2362,28 @@
     "crazy-stupid-love": {
       "name": "Crazy, Stupid, Love.",
       "id": "15051",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2011,
       "liked": false
     },
     "harry-potter-and-the-deathly-hallows-part-2": {
       "name": "Harry Potter and the Deathly Hallows: Part 2",
       "id": "44580",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2011,
       "liked": false
     },
     "horrible-bosses": {
       "name": "Horrible Bosses",
       "id": "14285",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2011,
       "liked": false
     },
     "jiro-dreams-of-sushi": {
       "name": "Jiro Dreams of Sushi",
       "id": "67195",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2011,
       "liked": false
     },
@@ -2397,98 +2397,98 @@
     "cars-2": {
       "name": "Cars 2",
       "id": "16560",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2011,
       "liked": false
     },
     "bad-teacher": {
       "name": "Bad Teacher",
       "id": "13439",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2011,
       "liked": false
     },
     "we-need-to-talk-about-kevin": {
       "name": "We Need to Talk About Kevin",
       "id": "57622",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2011,
       "liked": false
     },
     "lemonade-mouth": {
       "name": "Lemonade Mouth",
       "id": "1610",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2011,
       "liked": false
     },
     "rio-2011": {
       "name": "Rio",
       "id": "19122",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2011,
       "liked": false
     },
     "rango": {
       "name": "Rango",
       "id": "20307",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2011,
       "liked": false
     },
     "gullivers-travels-2010": {
       "name": "Gulliver's Travels",
       "id": "25871",
-      "rating": 1,
+      "rating": 0.5,
       "year": 2010,
       "liked": false
     },
     "tangled-2010": {
       "name": "Tangled",
       "id": "25859",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2010,
       "liked": false
     },
     "harry-potter-and-the-deathly-hallows-part-1": {
       "name": "Harry Potter and the Deathly Hallows: Part 1",
       "id": "44581",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2010,
       "liked": false
     },
     "megamind": {
       "name": "Megamind",
       "id": "26476",
-      "rating": 1,
+      "rating": 0.5,
       "year": 2010,
       "liked": false
     },
     "senna": {
       "name": "Senna",
       "id": "7785",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2010,
       "liked": true
     },
     "the-social-network": {
       "name": "The Social Network",
       "id": "26711",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2010,
       "liked": false
     },
     "black-swan": {
       "name": "Black Swan",
       "id": "20956",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2010,
       "liked": true
     },
     "the-other-guys": {
       "name": "The Other Guys",
       "id": "34394",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2010,
       "liked": false
     },
@@ -2502,70 +2502,70 @@
     "scott-pilgrim-vs-the-world": {
       "name": "Scott Pilgrim vs. the World",
       "id": "37833",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2010,
       "liked": true
     },
     "the-secret-world-of-arrietty": {
       "name": "The Secret World of Arrietty",
       "id": "14093",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2010,
       "liked": false
     },
     "inception": {
       "name": "Inception",
       "id": "34722",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2010,
       "liked": false
     },
     "toy-story-3": {
       "name": "Toy Story 3",
       "id": "46458",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2010,
       "liked": false
     },
     "despicable-me": {
       "name": "Despicable Me",
       "id": "39067",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2010,
       "liked": false
     },
     "shrek-forever-after": {
       "name": "Shrek Forever After",
       "id": "46459",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2010,
       "liked": false
     },
     "how-to-train-your-dragon": {
       "name": "How to Train Your Dragon",
       "id": "46460",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2010,
       "liked": false
     },
     "shutter-island": {
       "name": "Shutter Island",
       "id": "45409",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2010,
       "liked": false
     },
     "percy-jackson-the-olympians-the-lightning-thief": {
       "name": "Percy Jackson & the Olympians: The Lightning Thief",
       "id": "30264",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2010,
       "liked": false
     },
     "the-princess-and-the-frog": {
       "name": "The Princess and the Frog",
       "id": "46453",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2009,
       "liked": false
     },
@@ -2586,182 +2586,182 @@
     "fantastic-mr-fox": {
       "name": "Fantastic Mr. Fox",
       "id": "46344",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2009,
       "liked": false
     },
     "zombieland": {
       "name": "Zombieland",
       "id": "39352",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2009,
       "liked": false
     },
     "cloudy-with-a-chance-of-meatballs": {
       "name": "Cloudy with a Chance of Meatballs",
       "id": "37696",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2009,
       "liked": false
     },
     "jennifers-body": {
       "name": "Jennifer's Body",
       "id": "39305",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2009,
       "liked": false
     },
     "harry-potter-and-the-half-blood-prince": {
       "name": "Harry Potter and the Half-Blood Prince",
       "id": "51385",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2009,
       "liked": false
     },
     "ice-age-dawn-of-the-dinosaurs": {
       "name": "Ice Age: Dawn of the Dinosaurs",
       "id": "47781",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2009,
       "liked": false
     },
     "inglourious-basterds": {
       "name": "Inglourious Basterds",
       "id": "41352",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2009,
       "liked": true
     },
     "night-at-the-museum-battle-of-the-smithsonian": {
       "name": "Night at the Museum: Battle of the Smithsonian",
       "id": "40411",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2009,
       "liked": false
     },
     "up": {
       "name": "Up",
       "id": "43302",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2009,
       "liked": false
     },
     "monsters-vs-aliens": {
       "name": "Monsters vs Aliens",
       "id": "42315",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2009,
       "liked": false
     },
     "mystery-team": {
       "name": "Mystery Team",
       "id": "26446",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2009,
       "liked": false
     },
     "500-days-of-summer": {
       "name": "(500) Days of Summer",
       "id": "39350",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2009,
       "liked": true
     },
     "bolt": {
       "name": "Bolt",
       "id": "44189",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2008,
       "liked": false
     },
     "madagascar-escape-2-africa": {
       "name": "Madagascar: Escape 2 Africa",
       "id": "46145",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2008,
       "liked": false
     },
     "high-school-musical-3-senior-year": {
       "name": "High School Musical 3: Senior Year",
       "id": "44919",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2008,
       "liked": false
     },
     "burn-after-reading": {
       "name": "Burn After Reading",
       "id": "49054",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2008,
       "liked": false
     },
     "step-brothers": {
       "name": "Step Brothers",
       "id": "44768",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2008,
       "liked": false
     },
     "ponyo": {
       "name": "Ponyo",
       "id": "44594",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2008,
       "liked": true
     },
     "walle": {
-      "name": "WALL\u00b7E",
+      "name": "WALL·E",
       "id": "45994",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2008,
       "liked": true
     },
     "get-smart": {
       "name": "Get Smart",
       "id": "45088",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2008,
       "liked": false
     },
     "the-strangers": {
       "name": "The Strangers",
       "id": "46010",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2008,
       "liked": false
     },
     "synecdoche-new-york": {
       "name": "Synecdoche, New York",
       "id": "49039",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2008,
       "liked": false
     },
     "indiana-jones-and-the-kingdom-of-the-crystal-skull": {
       "name": "Indiana Jones and the Kingdom of the Crystal Skull",
       "id": "51839",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2008,
       "liked": false
     },
     "liverpool": {
       "name": "Liverpool",
       "id": "82344",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2008,
       "liked": false
     },
     "kung-fu-panda": {
       "name": "Kung Fu Panda",
       "id": "47098",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2008,
       "liked": false
     },
     "speed-racer": {
       "name": "Speed Racer",
       "id": "48018",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2008,
       "liked": true
     },
@@ -2775,28 +2775,28 @@
     "horton-hears-a-who-2008": {
       "name": "Horton Hears a Who!",
       "id": "44687",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2008,
       "liked": false
     },
     "taken": {
       "name": "Taken",
       "id": "47648",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2008,
       "liked": false
     },
     "in-bruges": {
       "name": "In Bruges",
       "id": "47809",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2008,
       "liked": false
     },
     "alvin-and-the-chipmunks": {
       "name": "Alvin and the Chipmunks",
       "id": "48298",
-      "rating": 1,
+      "rating": 0.5,
       "year": 2007,
       "liked": false
     },
@@ -2817,35 +2817,35 @@
     "bee-movie": {
       "name": "Bee Movie",
       "id": "48791",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2007,
       "liked": false
     },
     "there-will-be-blood": {
       "name": "There Will Be Blood",
       "id": "48044",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2007,
       "liked": false
     },
     "juno": {
       "name": "Juno",
       "id": "48051",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2007,
       "liked": false
     },
     "high-school-musical-2": {
       "name": "High School Musical 2",
       "id": "43713",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2007,
       "liked": false
     },
     "superbad": {
       "name": "Superbad",
       "id": "47776",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2007,
       "liked": true
     },
@@ -2859,56 +2859,56 @@
     "harry-potter-and-the-order-of-the-phoenix": {
       "name": "Harry Potter and the Order of the Phoenix",
       "id": "51449",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2007,
       "liked": false
     },
     "ratatouille": {
       "name": "Ratatouille",
       "id": "50558",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2007,
       "liked": true
     },
     "surfs-up": {
       "name": "Surf's Up",
       "id": "47188",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2007,
       "liked": false
     },
     "no-country-for-old-men": {
       "name": "No Country for Old Men",
       "id": "48140",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2007,
       "liked": false
     },
     "meet-the-robinsons": {
       "name": "Meet the Robinsons",
       "id": "51115",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2007,
       "liked": false
     },
     "5-centimeters-per-second": {
       "name": "5 Centimeters per Second",
       "id": "26400",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2007,
       "liked": false
     },
     "zodiac": {
       "name": "Zodiac",
       "id": "50659",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2007,
       "liked": false
     },
     "hot-fuzz": {
       "name": "Hot Fuzz",
       "id": "49210",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2007,
       "liked": true
     },
@@ -2922,84 +2922,84 @@
     "smiley-face": {
       "name": "Smiley Face",
       "id": "44082",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2007,
       "liked": false
     },
     "night-at-the-museum": {
       "name": "Night at the Museum",
       "id": "50941",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2006,
       "liked": false
     },
     "300": {
       "name": "300",
       "id": "51111",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2006,
       "liked": false
     },
     "casino-royale-2006": {
       "name": "Casino Royale",
       "id": "27809",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2006,
       "liked": false
     },
     "flushed-away": {
       "name": "Flushed Away",
       "id": "45132",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2006,
       "liked": false
     },
     "open-season": {
       "name": "Open Season",
       "id": "48013",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2006,
       "liked": false
     },
     "the-departed": {
       "name": "The Departed",
       "id": "51042",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2006,
       "liked": true
     },
     "stranger-than-fiction-2006": {
       "name": "Stranger Than Fiction",
       "id": "51120",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2006,
       "liked": false
     },
     "children-of-men": {
       "name": "Children of Men",
       "id": "46911",
-      "rating": 10,
+      "rating": 5.0,
       "year": 2006,
       "liked": true
     },
     "paprika-2006": {
       "name": "Paprika",
       "id": "49023",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2006,
       "liked": false
     },
     "borat-cultural-learnings-of-america-for-make-benefit-glorious-nation-of-kazakhstan": {
       "name": "Borat: Cultural Learnings of America for Make Benefit Glorious Nation of Kazakhstan",
       "id": "51614",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2006,
       "liked": true
     },
     "talladega-nights-the-ballad-of-ricky-bobby": {
       "name": "Talladega Nights: The Ballad of Ricky Bobby",
       "id": "46887",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2006,
       "liked": false
     },
@@ -3013,7 +3013,7 @@
     "monster-house": {
       "name": "Monster House",
       "id": "47295",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2006,
       "liked": false
     },
@@ -3027,147 +3027,147 @@
     "the-fast-and-the-furious-tokyo-drift": {
       "name": "The Fast and the Furious: Tokyo Drift",
       "id": "46986",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2006,
       "liked": false
     },
     "a-scanner-darkly": {
       "name": "A Scanner Darkly",
       "id": "49710",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2006,
       "liked": false
     },
     "over-the-hedge": {
       "name": "Over the Hedge",
       "id": "47994",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2006,
       "liked": false
     },
     "scary-movie-4": {
       "name": "Scary Movie 4",
       "id": "49433",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2006,
       "liked": false
     },
     "the-benchwarmers": {
       "name": "The Benchwarmers",
       "id": "46680",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2006,
       "liked": false
     },
     "cars": {
       "name": "Cars",
       "id": "51233",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2006,
       "liked": false
     },
     "little-miss-sunshine": {
       "name": "Little Miss Sunshine",
       "id": "51379",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2006,
       "liked": false
     },
     "high-school-musical": {
       "name": "High School Musical",
       "id": "45747",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2006,
       "liked": false
     },
     "hoodwinked": {
       "name": "Hoodwinked!",
       "id": "45718",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2005,
       "liked": false
     },
     "harry-potter-and-the-goblet-of-fire": {
       "name": "Harry Potter and the Goblet of Fire",
       "id": "51450",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2005,
       "liked": false
     },
     "chicken-little-2005": {
       "name": "Chicken Little",
       "id": "46658",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2005,
       "liked": false
     },
     "jarhead": {
       "name": "Jarhead",
       "id": "2693",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2005,
       "liked": false
     },
     "doom": {
       "name": "Doom",
       "id": "47597",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2005,
       "liked": false
     },
     "red-eye": {
       "name": "Red Eye",
       "id": "45282",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2005,
       "liked": false
     },
     "sky-high-2005": {
       "name": "Sky High",
       "id": "45283",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2005,
       "liked": false
     },
     "charlie-and-the-chocolate-factory": {
       "name": "Charlie and the Chocolate Factory",
       "id": "51932",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2005,
       "liked": false
     },
     "the-adventures-of-sharkboy-and-lavagirl": {
       "name": "The Adventures of Sharkboy and Lavagirl",
       "id": "43272",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2005,
       "liked": false
     },
     "zathura-a-space-adventure": {
       "name": "Zathura: A Space Adventure",
       "id": "48189",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2005,
       "liked": false
     },
     "madagascar": {
       "name": "Madagascar",
       "id": "51207",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2005,
       "liked": false
     },
     "star-wars-episode-iii-revenge-of-the-sith": {
-      "name": "Star Wars: Episode III \u2013\u00a0Revenge of the Sith",
+      "name": "Star Wars: Episode III – Revenge of the Sith",
       "id": "50709",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2005,
       "liked": false
     },
     "the-hitchhikers-guide-to-the-galaxy-2005": {
       "name": "The Hitchhiker's Guide to the Galaxy",
       "id": "48023",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2005,
       "liked": false
     },
@@ -3188,70 +3188,70 @@
     "national-treasure": {
       "name": "National Treasure",
       "id": "50561",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2004,
       "liked": false
     },
     "the-incredibles": {
       "name": "The Incredibles",
       "id": "46806",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2004,
       "liked": false
     },
     "the-polar-express": {
       "name": "The Polar Express",
       "id": "48883",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2004,
       "liked": false
     },
     "howls-moving-castle": {
       "name": "Howl's Moving Castle",
       "id": "49062",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2004,
       "liked": false
     },
     "collateral": {
       "name": "Collateral",
       "id": "50995",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2004,
       "liked": false
     },
     "anchorman-the-legend-of-ron-burgundy": {
       "name": "Anchorman: The Legend of Ron Burgundy",
       "id": "47637",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2004,
       "liked": false
     },
     "spider-man-2": {
       "name": "Spider-Man 2",
       "id": "51560",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2004,
       "liked": false
     },
     "white-chicks": {
       "name": "White Chicks",
       "id": "44750",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2004,
       "liked": false
     },
     "dodgeball-a-true-underdog-story": {
       "name": "DodgeBall: A True Underdog Story",
       "id": "47126",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2004,
       "liked": false
     },
     "harry-potter-and-the-prisoner-of-azkaban": {
       "name": "Harry Potter and the Prisoner of Azkaban",
       "id": "51451",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2004,
       "liked": false
     },
@@ -3265,49 +3265,49 @@
     "the-day-after-tomorrow": {
       "name": "The Day After Tomorrow",
       "id": "51660",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2004,
       "liked": false
     },
     "mean-girls": {
       "name": "Mean Girls",
       "id": "46049",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2004,
       "liked": false
     },
     "kill-bill-vol-2": {
       "name": "Kill Bill: Vol. 2",
       "id": "51696",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2004,
       "liked": false
     },
     "shaun-of-the-dead": {
       "name": "Shaun of the Dead",
       "id": "51405",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2004,
       "liked": true
     },
     "eternal-sunshine-of-the-spotless-mind": {
       "name": "Eternal Sunshine of the Spotless Mind",
       "id": "2683",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2004,
       "liked": false
     },
     "the-passion-of-the-christ": {
       "name": "The Passion of the Christ",
       "id": "51508",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2004,
       "liked": false
     },
     "50-first-dates": {
       "name": "50 First Dates",
       "id": "50773",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2004,
       "liked": false
     },
@@ -3321,196 +3321,196 @@
     "the-butterfly-effect": {
       "name": "The Butterfly Effect",
       "id": "50654",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2004,
       "liked": false
     },
     "napoleon-dynamite": {
       "name": "Napoleon Dynamite",
       "id": "47867",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2004,
       "liked": false
     },
     "primer": {
       "name": "Primer",
       "id": "2682",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2004,
       "liked": false
     },
     "oldboy": {
       "name": "Oldboy",
       "id": "51454",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2003,
       "liked": false
     },
     "elf": {
       "name": "Elf",
       "id": "45959",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2003,
       "liked": false
     },
     "kill-bill-vol-1": {
       "name": "Kill Bill: Vol. 1",
       "id": "2694",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2003,
       "liked": false
     },
     "tokyo-godfathers": {
       "name": "Tokyo Godfathers",
       "id": "43921",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2003,
       "liked": false
     },
     "lost-in-translation": {
       "name": "Lost in Translation",
       "id": "51898",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2003,
       "liked": false
     },
     "spy-kids-3-d-game-over": {
       "name": "Spy Kids 3-D: Game Over",
       "id": "44637",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2003,
       "liked": false
     },
     "2-fast-2-furious": {
       "name": "2 Fast 2 Furious",
       "id": "51536",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2003,
       "liked": false
     },
     "finding-nemo": {
       "name": "Finding Nemo",
       "id": "2705",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2003,
       "liked": false
     },
     "memories-of-murder": {
       "name": "Memories of Murder",
       "id": "45312",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2003,
       "liked": false
     },
     "catch-me-if-you-can-2002": {
       "name": "Catch Me If You Can",
       "id": "51484",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2002,
       "liked": false
     },
     "harry-potter-and-the-chamber-of-secrets": {
       "name": "Harry Potter and the Chamber of Secrets",
       "id": "51452",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2002,
       "liked": false
     },
     "spy-kids-2-the-island-of-lost-dreams": {
       "name": "Spy Kids 2: The Island of Lost Dreams",
       "id": "47110",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2002,
       "liked": false
     },
     "like-mike": {
       "name": "Like Mike",
       "id": "38145",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2002,
       "liked": false
     },
     "scooby-doo": {
       "name": "Scooby-Doo",
       "id": "46964",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2002,
       "liked": false
     },
     "punch-drunk-love": {
       "name": "Punch-Drunk Love",
       "id": "47914",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2002,
       "liked": false
     },
     "star-wars-episode-ii-attack-of-the-clones": {
-      "name": "Star Wars: Episode II \u2013\u00a0Attack of the Clones",
+      "name": "Star Wars: Episode II – Attack of the Clones",
       "id": "50710",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2002,
       "liked": false
     },
     "spider-man": {
       "name": "Spider-Man",
       "id": "51561",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2002,
       "liked": false
     },
     "a-beautiful-mind": {
       "name": "A Beautiful Mind",
       "id": "51648",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2001,
       "liked": false
     },
     "the-lord-of-the-rings-the-fellowship-of-the-ring": {
       "name": "The Lord of the Rings: The Fellowship of the Ring",
       "id": "51930",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2001,
       "liked": false
     },
     "oceans-eleven-2001": {
       "name": "Ocean's Eleven",
       "id": "51890",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2001,
       "liked": false
     },
     "harry-potter-and-the-philosophers-stone": {
       "name": "Harry Potter and the Philosopher's Stone",
       "id": "51453",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2001,
       "liked": false
     },
     "monsters-inc": {
       "name": "Monsters, Inc.",
       "id": "51535",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2001,
       "liked": true
     },
     "the-royal-tenenbaums": {
       "name": "The Royal Tenenbaums",
       "id": "47169",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2001,
       "liked": false
     },
     "zoolander": {
       "name": "Zoolander",
       "id": "47198",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2001,
       "liked": false
     },
     "cowboy-bebop-the-movie": {
       "name": "Cowboy Bebop: The Movie",
       "id": "45434",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2001,
       "liked": false
     },
@@ -3524,35 +3524,35 @@
     "spirited-away": {
       "name": "Spirited Away",
       "id": "51921",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2001,
       "liked": true
     },
     "jurassic-park-iii": {
       "name": "Jurassic Park III",
       "id": "51731",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2001,
       "liked": false
     },
     "the-fast-and-the-furious-2001": {
       "name": "The Fast and the Furious",
       "id": "46813",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2001,
       "liked": false
     },
     "shrek": {
       "name": "Shrek",
       "id": "51344",
-      "rating": 2,
+      "rating": 1.0,
       "year": 2001,
       "liked": false
     },
     "spy-kids": {
       "name": "Spy Kids",
       "id": "46590",
-      "rating": 5,
+      "rating": 2.5,
       "year": 2001,
       "liked": false
     },
@@ -3566,56 +3566,56 @@
     "donnie-darko": {
       "name": "Donnie Darko",
       "id": "51910",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2001,
       "liked": false
     },
     "battle-royale": {
       "name": "Battle Royale",
       "id": "49810",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2000,
       "liked": false
     },
     "dude-wheres-my-car": {
       "name": "Dude, Where's My Car?",
       "id": "47562",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2000,
       "liked": false
     },
     "how-the-grinch-stole-christmas-2000": {
       "name": "How the Grinch Stole Christmas",
       "id": "47553",
-      "rating": 6,
+      "rating": 3.0,
       "year": 2000,
       "liked": false
     },
     "grandma-got-run-over-by-a-reindeer": {
       "name": "Grandma Got Run Over by a Reindeer",
       "id": "14294",
-      "rating": 3,
+      "rating": 1.5,
       "year": 2000,
       "liked": false
     },
     "best-in-show": {
       "name": "Best in Show",
       "id": "43601",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2000,
       "liked": true
     },
     "memento": {
       "name": "Memento",
       "id": "51973",
-      "rating": 9,
+      "rating": 4.5,
       "year": 2000,
       "liked": false
     },
     "gladiator-2000": {
       "name": "Gladiator",
       "id": "51952",
-      "rating": 7,
+      "rating": 3.5,
       "year": 2000,
       "liked": false
     },
@@ -3636,28 +3636,28 @@
     "an-extremely-goofy-movie": {
       "name": "An Extremely Goofy Movie",
       "id": "42212",
-      "rating": 4,
+      "rating": 2.0,
       "year": 2000,
       "liked": false
     },
     "american-psycho": {
       "name": "American Psycho",
       "id": "51097",
-      "rating": 8,
+      "rating": 4.0,
       "year": 2000,
       "liked": false
     },
     "galaxy-quest": {
       "name": "Galaxy Quest",
       "id": "51227",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1999,
       "liked": true
     },
     "man-on-the-moon": {
       "name": "Man on the Moon",
       "id": "50749",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1999,
       "liked": false
     },
@@ -3671,7 +3671,7 @@
     "toy-story-2": {
       "name": "Toy Story 2",
       "id": "51289",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1999,
       "liked": false
     },
@@ -3685,63 +3685,63 @@
     "fight-club": {
       "name": "Fight Club",
       "id": "51568",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1999,
       "liked": false
     },
     "being-john-malkovich": {
       "name": "Being John Malkovich",
       "id": "51618",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1999,
       "liked": false
     },
     "the-iron-giant": {
       "name": "The Iron Giant",
       "id": "46280",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1999,
       "liked": true
     },
     "eyes-wide-shut": {
       "name": "Eyes Wide Shut",
       "id": "51717",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1999,
       "liked": false
     },
     "star-wars-episode-i-the-phantom-menace": {
-      "name": "Star Wars: Episode I \u2013 The Phantom Menace",
+      "name": "Star Wars: Episode I – The Phantom Menace",
       "id": "50711",
-      "rating": 4,
+      "rating": 2.0,
       "year": 1999,
       "liked": false
     },
     "the-matrix": {
       "name": "The Matrix",
       "id": "51518",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1999,
       "liked": false
     },
     "office-space": {
       "name": "Office Space",
       "id": "50991",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1999,
       "liked": false
     },
     "enemy-of-the-state": {
       "name": "Enemy of the State",
       "id": "46814",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1998,
       "liked": false
     },
     "a-bugs-life": {
       "name": "A Bug's Life",
       "id": "47111",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1998,
       "liked": false
     },
@@ -3755,14 +3755,14 @@
     "rush-hour": {
       "name": "Rush Hour",
       "id": "50517",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1998,
       "liked": false
     },
     "jerry-seinfeld-im-telling-you-for-the-last-time": {
       "name": "Jerry Seinfeld: I'm Telling You for the Last Time",
       "id": "37436",
-      "rating": 4,
+      "rating": 2.0,
       "year": 1998,
       "liked": false
     },
@@ -3776,84 +3776,84 @@
     "the-truman-show": {
       "name": "The Truman Show",
       "id": "27256",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1998,
       "liked": true
     },
     "fear-and-loathing-in-las-vegas": {
       "name": "Fear and Loathing in Las Vegas",
       "id": "50725",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1998,
       "liked": false
     },
     "cowboy-bebop": {
       "name": "Cowboy Bebop",
       "id": "607221",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1998,
       "liked": false
     },
     "buffalo-66": {
       "name": "Buffalo '66",
       "id": "47133",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1998,
       "liked": false
     },
     "the-big-lebowski": {
       "name": "The Big Lebowski",
       "id": "51935",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1998,
       "liked": true
     },
     "jackie-brown": {
       "name": "Jackie Brown",
       "id": "51868",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1997,
       "liked": false
     },
     "cure": {
       "name": "Cure",
       "id": "28195",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1997,
       "liked": true
     },
     "starship-troopers": {
       "name": "Starship Troopers",
       "id": "51555",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1997,
       "liked": true
     },
     "titanic-1997": {
       "name": "Titanic",
       "id": "51524",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1997,
       "liked": false
     },
     "boogie-nights": {
       "name": "Boogie Nights",
       "id": "49007",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1997,
       "liked": false
     },
     "cube": {
       "name": "Cube",
       "id": "51664",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1997,
       "liked": false
     },
     "the-game": {
       "name": "The Game",
       "id": "50168",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1997,
       "liked": true
     },
@@ -3867,70 +3867,70 @@
     "good-burger": {
       "name": "Good Burger",
       "id": "42794",
-      "rating": 3,
+      "rating": 1.5,
       "year": 1997,
       "liked": false
     },
     "neon-genesis-evangelion-the-end-of-evangelion": {
       "name": "Neon Genesis Evangelion: The End of Evangelion",
       "id": "40311",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1997,
       "liked": false
     },
     "perfect-blue": {
       "name": "Perfect Blue",
       "id": "46175",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1997,
       "liked": true
     },
     "men-in-black": {
       "name": "Men in Black",
       "id": "51514",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1997,
       "liked": false
     },
     "hands-on-a-hardbody-the-documentary": {
       "name": "Hands on a Hardbody: The Documentary",
       "id": "40224",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1997,
       "liked": false
     },
     "funny-games": {
       "name": "Funny Games",
       "id": "46418",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1997,
       "liked": false
     },
     "mars-attacks": {
       "name": "Mars Attacks!",
       "id": "51975",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1996,
       "liked": false
     },
     "jerry-maguire": {
       "name": "Jerry Maguire",
       "id": "47206",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1996,
       "liked": false
     },
     "space-jam": {
       "name": "Space Jam",
       "id": "50349",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1996,
       "liked": false
     },
     "the-hunchback-of-notre-dame-1996": {
       "name": "The Hunchback of Notre Dame",
       "id": "46127",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1996,
       "liked": false
     },
@@ -3944,7 +3944,7 @@
     "chris-rock-bring-the-pain": {
       "name": "Chris Rock: Bring the Pain",
       "id": "40565",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1996,
       "liked": false
     },
@@ -3958,28 +3958,28 @@
     "fargo": {
       "name": "Fargo",
       "id": "51781",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1996,
       "liked": false
     },
     "happy-gilmore": {
       "name": "Happy Gilmore",
       "id": "46987",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1996,
       "liked": false
     },
     "toy-story": {
       "name": "Toy Story",
       "id": "51290",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1995,
       "liked": false
     },
     "casino": {
       "name": "Casino",
       "id": "51593",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1995,
       "liked": false
     },
@@ -3993,56 +3993,56 @@
     "se7en": {
       "name": "Se7en",
       "id": "51345",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1995,
       "liked": false
     },
     "clueless": {
       "name": "Clueless",
       "id": "46998",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1995,
       "liked": false
     },
     "la-haine": {
       "name": "La Haine",
       "id": "51684",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1995,
       "liked": false
     },
     "a-goofy-movie": {
       "name": "A Goofy Movie",
       "id": "42101",
-      "rating": 4,
+      "rating": 2.0,
       "year": 1995,
       "liked": false
     },
     "leon-the-professional": {
-      "name": "L\u00e9on: The Professional",
+      "name": "Léon: The Professional",
       "id": "51949",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1994,
       "liked": false
     },
     "forrest-gump": {
       "name": "Forrest Gump",
       "id": "2704",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1994,
       "liked": true
     },
     "the-lion-king": {
       "name": "The Lion King",
       "id": "47677",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1994,
       "liked": false
     },
     "clerks": {
       "name": "Clerks",
       "id": "50357",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1994,
       "liked": false
     },
@@ -4056,14 +4056,14 @@
     "jurassic-park": {
       "name": "Jurassic Park",
       "id": "51733",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1993,
       "liked": false
     },
     "dazed-and-confused": {
       "name": "Dazed and Confused",
       "id": "47029",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1993,
       "liked": false
     },
@@ -4077,105 +4077,105 @@
     "home-alone-2-lost-in-new-york": {
       "name": "Home Alone 2: Lost in New York",
       "id": "51380",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1992,
       "liked": false
     },
     "army-of-darkness": {
       "name": "Army of Darkness",
       "id": "51386",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1992,
       "liked": true
     },
     "the-mighty-ducks": {
       "name": "The Mighty Ducks",
       "id": "46253",
-      "rating": 4,
+      "rating": 2.0,
       "year": 1992,
       "liked": false
     },
     "white-men-cant-jump": {
       "name": "White Men Can't Jump",
       "id": "46491",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1992,
       "liked": false
     },
     "reservoir-dogs": {
       "name": "Reservoir Dogs",
       "id": "51610",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1992,
       "liked": false
     },
     "only-yesterday": {
       "name": "Only Yesterday",
       "id": "42613",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1991,
       "liked": false
     },
     "thelma-louise": {
       "name": "Thelma & Louise",
       "id": "50992",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1991,
       "liked": false
     },
     "kindergarten-cop": {
       "name": "Kindergarten Cop",
       "id": "51208",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1990,
       "liked": false
     },
     "home-alone": {
       "name": "Home Alone",
       "id": "51381",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1990,
       "liked": false
     },
     "goodfellas": {
       "name": "GoodFellas",
       "id": "51383",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1990,
       "liked": true
     },
     "national-lampoons-christmas-vacation": {
       "name": "National Lampoon's Christmas Vacation",
       "id": "48638",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1989,
       "liked": false
     },
     "back-to-the-future-part-ii": {
       "name": "Back to the Future Part II",
       "id": "51886",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1989,
       "liked": false
     },
     "kikis-delivery-service": {
       "name": "Kiki's Delivery Service",
       "id": "41360",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1989,
       "liked": true
     },
     "do-the-right-thing": {
       "name": "Do the Right Thing",
       "id": "51228",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1989,
       "liked": true
     },
     "childs-play": {
       "name": "Child's Play",
       "id": "46087",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1988,
       "liked": false
     },
@@ -4189,21 +4189,21 @@
     "die-hard": {
       "name": "Die Hard",
       "id": "51556",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1988,
       "liked": true
     },
     "akira": {
       "name": "Akira",
       "id": "51902",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1988,
       "liked": false
     },
     "my-neighbor-totoro": {
       "name": "My Neighbor Totoro",
       "id": "47756",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1988,
       "liked": false
     },
@@ -4217,77 +4217,77 @@
     "the-running-man": {
       "name": "The Running Man",
       "id": "51287",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1987,
       "liked": false
     },
     "the-princess-bride": {
       "name": "The Princess Bride",
       "id": "50226",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1987,
       "liked": false
     },
     "robocop": {
       "name": "RoboCop",
       "id": "48797",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1987,
       "liked": false
     },
     "full-metal-jacket": {
       "name": "Full Metal Jacket",
       "id": "51521",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1987,
       "liked": false
     },
     "predator": {
       "name": "Predator",
       "id": "51944",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1987,
       "liked": false
     },
     "ferris-buellers-day-off": {
       "name": "Ferris Bueller's Day Off",
       "id": "47219",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1986,
       "liked": true
     },
     "police-story": {
       "name": "Police Story",
       "id": "47388",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1985,
       "liked": true
     },
     "clue": {
       "name": "Clue",
       "id": "42531",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1985,
       "liked": true
     },
     "tampopo": {
       "name": "Tampopo",
       "id": "44970",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1985,
       "liked": false
     },
     "after-hours": {
       "name": "After Hours",
       "id": "45842",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1985,
       "liked": false
     },
     "back-to-the-future": {
       "name": "Back to the Future",
       "id": "51945",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1985,
       "liked": false
     },
@@ -4308,63 +4308,63 @@
     "the-breakfast-club": {
       "name": "The Breakfast Club",
       "id": "50518",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1985,
       "liked": false
     },
     "the-terminator": {
       "name": "The Terminator",
       "id": "51838",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1984,
       "liked": false
     },
     "ghostbusters": {
       "name": "Ghostbusters",
       "id": "6166",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1984,
       "liked": false
     },
     "indiana-jones-and-the-temple-of-doom": {
       "name": "Indiana Jones and the Temple of Doom",
       "id": "51963",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1984,
       "liked": false
     },
     "nausicaa-of-the-valley-of-the-wind": {
-      "name": "Nausica\u00e4 of the Valley of the Wind",
+      "name": "Nausicaä of the Valley of the Wind",
       "id": "51969",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1984,
       "liked": true
     },
     "risky-business": {
       "name": "Risky Business",
       "id": "47248",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1983,
       "liked": false
     },
     "return-of-the-jedi": {
       "name": "Return of the Jedi",
       "id": "50712",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1983,
       "liked": false
     },
     "wargames": {
       "name": "WarGames",
       "id": "51292",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1983,
       "liked": false
     },
     "the-king-of-comedy": {
       "name": "The King of Comedy",
       "id": "51794",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1982,
       "liked": true
     },
@@ -4378,266 +4378,266 @@
     "the-thing": {
       "name": "The Thing",
       "id": "51155",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1982,
       "liked": false
     },
     "blade-runner": {
       "name": "Blade Runner",
       "id": "51972",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1982,
       "liked": false
     },
     "rocky-iii": {
       "name": "Rocky III",
       "id": "51085",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1982,
       "liked": false
     },
     "et-the-extra-terrestrial": {
       "name": "E.T. the Extra-Terrestrial",
       "id": "51520",
-      "rating": 4,
+      "rating": 2.0,
       "year": 1982,
       "liked": false
     },
     "an-american-werewolf-in-london": {
       "name": "An American Werewolf in London",
       "id": "51338",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1981,
       "liked": false
     },
     "raiders-of-the-lost-ark": {
       "name": "Raiders of the Lost Ark",
       "id": "51965",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1981,
       "liked": false
     },
     "caddyshack": {
       "name": "Caddyshack",
       "id": "44831",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1980,
       "liked": false
     },
     "airplane": {
       "name": "Airplane!",
       "id": "51339",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1980,
       "liked": true
     },
     "the-shining": {
       "name": "The Shining",
       "id": "51432",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1980,
       "liked": true
     },
     "the-empire-strikes-back": {
       "name": "The Empire Strikes Back",
       "id": "50713",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1980,
       "liked": false
     },
     "all-that-jazz": {
       "name": "All That Jazz",
       "id": "41361",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1979,
       "liked": false
     },
     "rocky-ii": {
       "name": "Rocky II",
       "id": "51089",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1979,
       "liked": false
     },
     "alien": {
       "name": "Alien",
       "id": "51714",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1979,
       "liked": true
     },
     "stalker": {
       "name": "Stalker",
       "id": "51062",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1979,
       "liked": false
     },
     "richard-pryor-live-in-concert": {
       "name": "Richard Pryor: Live in Concert",
       "id": "37594",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1979,
       "liked": false
     },
     "halloween-1978": {
       "name": "Halloween",
       "id": "60298",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1978,
       "liked": false
     },
     "animal-house": {
       "name": "Animal House",
       "id": "47703",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1978,
       "liked": false
     },
     "jaws-2": {
       "name": "Jaws 2",
       "id": "51541",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1978,
       "liked": false
     },
     "grease": {
       "name": "Grease",
       "id": "51503",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1978,
       "liked": false
     },
     "close-encounters-of-the-third-kind": {
       "name": "Close Encounters of the Third Kind",
       "id": "51312",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1977,
       "liked": false
     },
     "house": {
       "name": "House",
       "id": "35925",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1977,
       "liked": false
     },
     "smokey-and-the-bandit": {
       "name": "Smokey and the Bandit",
       "id": "45696",
-      "rating": 6,
+      "rating": 3.0,
       "year": 1977,
       "liked": false
     },
     "star-wars": {
       "name": "Star Wars",
       "id": "2706",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1977,
       "liked": false
     },
     "the-ascent": {
       "name": "The Ascent",
       "id": "15466",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1977,
       "liked": false
     },
     "pumping-iron": {
       "name": "Pumping Iron",
       "id": "48903",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1977,
       "liked": true
     },
     "rocky": {
       "name": "Rocky",
       "id": "51090",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1976,
       "liked": true
     },
     "carrie-1976": {
       "name": "Carrie",
       "id": "48049",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1976,
       "liked": false
     },
     "taxi-driver": {
       "name": "Taxi Driver",
       "id": "51947",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1976,
       "liked": false
     },
     "jaws": {
       "name": "Jaws",
       "id": "51542",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1975,
       "liked": false
     },
     "death-race-2000": {
       "name": "Death Race 2000",
       "id": "44012",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1975,
       "liked": false
     },
     "monty-python-and-the-holy-grail": {
       "name": "Monty Python and the Holy Grail",
       "id": "51390",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1975,
       "liked": true
     },
     "be-my-valentine-charlie-brown": {
       "name": "Be My Valentine, Charlie Brown",
       "id": "30928",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1975,
       "liked": false
     },
     "the-conversation": {
       "name": "The Conversation",
       "id": "51529",
-      "rating": 10,
+      "rating": 5.0,
       "year": 1974,
       "liked": true
     },
     "the-sting": {
       "name": "The Sting",
       "id": "47315",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1973,
       "liked": false
     },
     "a-charlie-brown-thanksgiving": {
       "name": "A Charlie Brown Thanksgiving",
       "id": "43857",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1973,
       "liked": false
     },
     "the-holy-mountain": {
       "name": "The Holy Mountain",
       "id": "47805",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1973,
       "liked": false
     },
     "fist-of-fury": {
       "name": "Fist of Fury",
       "id": "45041",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1972,
       "liked": false
     },
     "solaris": {
       "name": "Solaris",
       "id": "51528",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1972,
       "liked": false
     },
@@ -4651,70 +4651,70 @@
     "santa-claus-is-comin-to-town": {
       "name": "Santa Claus Is Comin' to Town",
       "id": "43919",
-      "rating": 5,
+      "rating": 2.5,
       "year": 1970,
       "liked": false
     },
     "2001-a-space-odyssey": {
       "name": "2001: A Space Odyssey",
       "id": "51987",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1968,
       "liked": false
     },
     "the-graduate": {
       "name": "The Graduate",
       "id": "27183",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1967,
       "liked": true
     },
     "playtime": {
       "name": "PlayTime",
       "id": "46424",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1967,
       "liked": false
     },
     "how-the-grinch-stole-christmas": {
       "name": "How the Grinch Stole Christmas!",
       "id": "43940",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1966,
       "liked": false
     },
     "its-the-great-pumpkin-charlie-brown": {
       "name": "It's the Great Pumpkin, Charlie Brown",
       "id": "43961",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1966,
       "liked": false
     },
     "a-charlie-brown-christmas": {
       "name": "A Charlie Brown Christmas",
       "id": "44066",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1965,
       "liked": false
     },
     "pierrot-le-fou": {
       "name": "Pierrot le Fou",
       "id": "50090",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1965,
       "liked": false
     },
     "dr-strangelove-or-how-i-learned-to-stop-worrying-and-love-the-bomb": {
       "name": "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
       "id": "51218",
-      "rating": 9,
+      "rating": 4.5,
       "year": 1964,
       "liked": true
     },
     "paths-of-glory": {
       "name": "Paths of Glory",
       "id": "51194",
-      "rating": 8,
+      "rating": 4.0,
       "year": 1957,
       "liked": false
     },
@@ -4728,14 +4728,14 @@
     "the-ten-commandments-1956": {
       "name": "The Ten Commandments",
       "id": "48188",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1956,
       "liked": false
     },
     "the-wizard-of-oz-1939": {
       "name": "The Wizard of Oz",
       "id": "51494",
-      "rating": 7,
+      "rating": 3.5,
       "year": 1939,
       "liked": false
     }
