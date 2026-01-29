@@ -66,7 +66,7 @@ def extract_user_reviews(url: str) -> dict:
             #            example for second review: /username/film/movie_name/1/
             #                the number is specified at the end of the url ---^
             rating = log.find("span", {"class": ["rating"], })
-            rating = int(rating['class'][-1].split('-')[-1]) if rating else None
+            rating = int(rating['class'][-1].split('-')[-1]) / 2 if rating else None
             # int ^^^--- rating: the numerical value of the rating given in the review (1-10)
             review, spoiler = parse_review_text(log)
             # str ^^^--- review: the text content of the review.
