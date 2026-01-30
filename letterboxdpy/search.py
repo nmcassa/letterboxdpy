@@ -66,7 +66,6 @@ class Search:
     def get_results(self, num_results: int = DEFAULT_NUM_RESULTS) -> dict[str, Any]:
         result_item_elems = islice(self.extract_search_results(), num_results)
         result_items = map(self.get_parse_func_from_filter(), result_item_elems)
-
         results = [{"no": i + 1, "page": (i // self.RESULTS_PER_PAGE) + 1, **result} for i, result in enumerate(result_items)]
 
         return {
@@ -141,7 +140,11 @@ class Search:
             case [_, "-tag"]:
                 return self.parse_tag(result_item_elem)
 
-        article_class = li_class.find("article").get("class")
+        article_elem = result_item_elem.find("article")
+        if article_elem is None:
+             raise ValueError("Unknown search result type: no identifiable classes or article element")
+
+        article_class = article_elem.get("class")
         match article_class:
             case ["card-summary-journal-article"]:
                 return self.parse_article(result_item_elem)
@@ -208,7 +211,7 @@ class Search:
         review_text_elem = review_body.find("div", class_="body-text -prose -reset js-review-body js-collapsible-text")
         full_text = True if review_text_elem.find("div", class_="collapsed-text") is None else False
         review_text =review_text_elem.get_text(strip=True, separator=" ")
-        
+
         review_actions = review_body.find("p", class_="like-link-target react-component")
         likes = extract_number_from_text(review_actions.get("data-count"), join=True)
 
@@ -257,7 +260,7 @@ class Search:
         text = None if text_elem is None else text_elem.get_text(strip=True)
 
         return {
-            "type": "review",
+            "type": "list",
             "url": url,
             "slug": slug,
             "title": title,
@@ -344,7 +347,11 @@ class Search:
 
     def parse_tag(self, result_item_elem: Tag) -> dict[str, str]:
         tag_elem = result_item_elem.find("a")
-        return {"tag": tag_elem.get_text(), "url": f"{DOMAIN}{tag_elem.get('href')}"}
+        return {
+            "type": "tag",
+            "tag": tag_elem.get_text(),
+            "url": f"{DOMAIN}{tag_elem.get('href')}",
+        }
 
     def parse_article(self, result_item_elem: Tag) -> dict[str, Any]:
         detail_elem = result_item_elem.find("div", class_="detail")
@@ -382,22 +389,26 @@ class Search:
         url = f"{DOMAIN}{href}"
         title = href_elem.get_text(strip=True)
 
-        return {"type": "episode", "url": url, "title": title}
+        return {
+            "type": "episode",
+            "url": url,
+            "title": title,
+        }
 
 
 # -- FUNCTIONS --
 
-def get_film_slug_from_title(title: str) -> str:
+def get_film_slug_from_title(title: str) -> str | None:
     """
     Helper function to get a film's slug from its title.
     Uses film search to find the best match and returns the slug of the first result.
-    
+
     Args:
         title (str): The film title to search for
-        
+
     Returns:
         str: The film slug if found, None if no results
-        
+
     Example:
         >>> get_film_slug_from_title("The Matrix")
         'the-matrix'
@@ -414,45 +425,42 @@ if __name__ == "__main__":
     sys.stdout.reconfigure(encoding='utf-8')
 
     """
-    phrase usage:
+    Phrase usage:
         q1 = Search("MUBI", 'lists')
-        q2 = Search("'MUBI'", 'lists') 
-        q1 searches for lists that contain the word 'MUBI' among other possible words
-        q2 searches for lists that specifically contain the exact phrase 'MUBI' and
-        ... exclude lists that don't contain this phrase
+        q2 = Search("'MUBI'", 'lists')
+        q1 searches for lists that contain the word 'MUBI' among other words
+        q2 searches for lists that specifically contain the exact phrase 'MUBI'
 
-    results usage:
-    all page:
-        .results
-        .get_results()
-    filtering:
-        .get_results(2)
-        .get_results(max=10)
+    Results usage:
+        .results              -> cached results (auto-fetches on first access)
+        .get_results()        -> fetch default (20) results
+        .get_results(5)       -> fetch max 5 results
+        .get_pages(2)         -> fetch 2 pages worth of results (40 items)
 
-    Note: search pages may sometimes contain previous results. (for now)
+    Filter usage:
+        Search("query", SearchFilter.FILMS)
+        Search("query", "films")  # string also works
     """
 
-    q3 = Search("The") # general search
-    q4 = Search("V for Vendetta", 'films')
+    # Example: General search (mixed types)
+    q1 = Search("The")
+    print("General search instance:")
+    print(q1)
 
-    # test: instance printing
-    print(q3)
-    print(q4)
+    # Example: Film search
+    q2 = Search("V for Vendetta", SearchFilter.FILMS)
+    print("\nFilm search results (max 3):")
+    print(JsonFile.stringify(q2.get_results(3), indent=2))
 
-    # test: results
-    # print(json.dumps(q3.results, indent=2))
-    # print(json.dumps(q4.get_results(), indent=2))
-    print(JsonFile.stringify(q3.get_pages(2), indent=2)) # max 2 page result
-    print("\n- - -\n"*10)
-    print(JsonFile.stringify(q4.get_results(5), indent=2)) #  max 5 result
-
-    # test: slug
+    # Example: Get film slug from title
+    print("\n--- Slug Examples ---")
     print('slug 1:', get_film_slug_from_title("V for Vendetta"))
     print('slug 2:', get_film_slug_from_title("v for"))
     print('slug 3:', get_film_slug_from_title("VENDETTA"))
 
-    # test: combined
+    # Example: Combined usage with Movie class
     from letterboxdpy.movie import Movie
     movie_slug = get_film_slug_from_title("V for Vendetta")
-    movie_instance = Movie(movie_slug)
-    print(movie_instance.description)
+    if movie_slug:
+        movie = Movie(movie_slug)
+        print(f"\nMovie description: {movie.description}")
