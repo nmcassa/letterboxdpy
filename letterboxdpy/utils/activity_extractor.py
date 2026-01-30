@@ -8,6 +8,7 @@ from datetime import datetime
 from letterboxdpy.utils.utils_parser import parse_review_text
 from letterboxdpy.utils.date_utils import DateUtils
 from letterboxdpy.utils.utils_url import extract_path_segment
+from letterboxdpy.constants.project import DOMAIN
 
 def parse_activity_datetime(date_string: str) -> datetime:
     """Parse datetime string from activity feed."""
@@ -103,7 +104,7 @@ def get_film_info(section, item_slug: str = None) -> dict:
     
     # Build URL from slug if available
     if item_slug:
-        film_data['url'] = f"https://letterboxd.com/film/{item_slug}/"
+        film_data['url'] = f"{DOMAIN}/film/{item_slug}/"
     
     return film_data
 
@@ -344,9 +345,9 @@ def process_basic_activity(section, title: str, log_type: str, item_slug: str = 
             item_data['slug'] = item_slug
             if is_list:
                 # Use the href from the target for the full list URL
-                item_data['url'] = f"https://letterboxd.com{href}"
+                item_data['url'] = f"{DOMAIN}{href}"
             else:
-                item_data['url'] = f"https://letterboxd.com/film/{item_slug}/"
+                item_data['url'] = f"{DOMAIN}/film/{item_slug}/"
                 # Restore year extraction for movies
                 film_info = get_film_info(section, item_slug)
                 if film_info.get('year'):
