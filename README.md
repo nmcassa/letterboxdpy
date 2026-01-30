@@ -210,7 +210,7 @@ print(movie_instance)
 ```python
 from letterboxdpy.search import Search
 search_instance = Search("V for Vendetta", 'films')
-print(search_instance.get_results(max=5))
+print(search_instance.get_results(5))
 ```
 
 <details>
@@ -221,7 +221,7 @@ print(search_instance.get_results(max=5))
   "available": true,
   "query": "V%20for%20Vendetta",
   "filter": "films",
-  "end_page": 13,
+  "end_page": 1,
   "count": 5,
   "results": [
     {
