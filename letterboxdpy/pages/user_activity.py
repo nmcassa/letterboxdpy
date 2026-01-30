@@ -2,9 +2,7 @@ from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.date_utils import DateUtils
 from letterboxdpy.utils.activity_extractor import (
-    parse_activity_datetime, build_time_data, get_event_type, get_log_title, 
-    get_log_type, process_review_activity, process_basic_activity, 
-    process_newlist_activity, get_log_item_slug
+    parse_activity_datetime, build_time_data, ActivityProcessor
 )
 
 
@@ -23,58 +21,66 @@ class UserActivity:
 
 def extract_activity(ajax_url: str) -> dict:
 
-   def _process_log(section, event_type) -> dict:
-       """Process activity log and extract data."""
-       log_id = section["data-activity-id"]
-       date = parse_activity_datetime(section.find("time")['datetime'])
-       log_title = get_log_title(section)
-       log_type = get_log_type(event_type, section)
-       log_item_slug = get_log_item_slug(event_type, section)
+    def _process_log(section, event_type) -> dict:
+        """Process activity log and extract data."""
+        # Initialize processor with section
+        processor = ActivityProcessor(section)
+        
+        log_id = section["data-activity-id"]
+        date = parse_activity_datetime(section.find("time")['datetime'])
+        log_title = processor.get_log_title()
+        log_type = processor.get_log_type()
+        log_item_slug = processor.get_log_item_slug()
 
-       # Build activity data structure
-       log_data = {
-           'activity_type': event_type,
-           'timestamp': build_time_data(date),
-           'content': {}
-       }
+        # Build activity data structure
+        log_data = {
+            'activity_type': event_type,
+            'timestamp': build_time_data(date),
+            'content': {}
+        }
+        
+        # Process content by activity type
+        if event_type == 'review':
+            content_data = processor.process_review(log_type, log_item_slug)
+            log_data['content'] = content_data
+        elif event_type == 'basic':
+            content_data = processor.process_basic(log_title, log_type, log_item_slug)
+            log_data['content'] = content_data
+        elif event_type == 'newlist':
+            content_data = processor.process_newlist(log_title, log_type)
+            log_data['content'] = content_data
 
-       # Process content by activity type
-       if event_type == 'review':
-           content_data = process_review_activity(section, log_type, log_item_slug)
-           log_data['content'] = content_data
-       elif event_type == 'basic':
-           content_data = process_basic_activity(section, log_title, log_type, log_item_slug)
-           log_data['content'] = content_data
-       elif event_type == 'newlist':
-           content_data = process_newlist_activity(section, log_title, log_type)
-           log_data['content'] = content_data
+        return {log_id: log_data}
 
-       return {log_id: log_data}
+    from datetime import datetime
+    
+    data = {
+        'metadata': {
+            'export_timestamp': DateUtils.format_to_iso(datetime.now()),
+            'source_url': ajax_url,
+            'total_activities': 0
+        },
+        'activities': {}
+    }
 
-   from datetime import datetime
-   
-   data = {
-       'metadata': {
-           'export_timestamp': DateUtils.format_to_iso(datetime.now()),
-           'source_url': ajax_url,
-           'total_activities': 0
-       },
-       'activities': {}
-   }
+    dom = parse_url(ajax_url)
+    sections = dom.find_all("section")
 
-   dom = parse_url(ajax_url)
-   sections = dom.find_all("section")
+    if not sections:
+        return data
 
-   if not sections:
-       return data
+    for section in sections:
+        # Create a temporary processor just to get event type
+        # Or better, make get_event_type a static method or keep it outside?
+        # Let's instantiate it, as it's designed to wrap the section.
+        temp_processor = ActivityProcessor(section)
+        event_type = temp_processor.get_event_type()
+        
+        if event_type in ('review', 'basic', 'newlist'):
+            log_data = _process_log(section, event_type)
+            data['activities'].update(log_data)
+            data['metadata']['total_activities'] = len(data['activities'])
+        elif 'no-activity-message' in section['class']:
+            break
 
-   for section in sections:
-       event_type = get_event_type(section)
-       if event_type in ('review', 'basic', 'newlist'):
-           log_data = _process_log(section, event_type)
-           data['activities'].update(log_data)
-           data['metadata']['total_activities'] = len(data['activities'])
-       elif 'no-activity-message' in section['class']:
-           break
-
-   return data
+    return data
