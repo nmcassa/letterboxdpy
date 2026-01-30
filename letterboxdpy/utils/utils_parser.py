@@ -1,7 +1,4 @@
-import re
-
 from bs4 import Tag
-
 from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_transform import month_to_index
 from fastfingertips.datetime_utils import parse_datetime
@@ -194,38 +191,41 @@ def catch_error_message(dom) -> bool | str:
     error_body = dom.find(*PageSelectors.ERROR_BODY)
     if error_body:
         error_section = dom.find(*PageSelectors.ERROR_MESSAGE)
-        if error_section:
+        if error_section and error_section.p:
             err = error_section.p.get_text()
             return err.split('\n')[0].strip()
     return False
 
 def parse_review_text(dom_element):
-    """
-    Parse review text from a DOM element, handling spoiler warnings.
-    
-    Args:
-        dom_element: DOM element containing the review (BeautifulSoup element)
-        
-    Returns:
-        tuple: (review_text, has_spoiler)
-            - review_text (str): Parsed review text with spoiler warnings properly handled.
-                                Returns empty string if no review content found.
-            - has_spoiler (bool): True if spoiler warning is present, False otherwise.
-             
-    Note:
-        If spoiler warning is present, skips the first paragraph.
-        Otherwise includes all paragraphs starting from the first one.
-    """
+    """Parse review text from a DOM element, handling spoiler warnings."""
     if not dom_element:
         return "", False
         
-    review = dom_element.find("div", {"class": ["body-text"]})
+    # Check for container-level spoiler flag
+    container_spoiler = bool(dom_element.find("p", {"class": "js-spoiler-container"}))
+    
+    review = dom_element.find("div", {"class": ["body-text", "js-review-body", "activity-list-description"]})
+    
     if not review:
-        return "", False
-        
-    spoiler = bool(review.find("p", {"class": ["contains-spoilers"]}))
-    review_paragraphs = review.find_all('p')[1 if spoiler else 0:]
-    review_text = '\n'.join([p.text for p in review_paragraphs])
+        return "", container_spoiler
+
+    # Check for inline spoiler flag (old style or specific pages)
+    inline_spoiler = bool(review.find("p", {"class": ["contains-spoilers"]}))
+    spoiler = container_spoiler or inline_spoiler
+
+    review_paragraphs = review.find_all('p')
+    
+    # Filter out spoiler warning paragraph if it exists inside the review body
+    if inline_spoiler and review_paragraphs:
+        # Check if the first paragraph actually is the spoiler warning
+        if "contains spoilers" in review_paragraphs[0].text.lower():
+             review_paragraphs = review_paragraphs[1:]
+    elif container_spoiler:
+        # If container says spoiler, make sure we don't include a warning text if it leaked into p
+        # Review content is typically clean in js-review-body, so no split needed usually
+        pass
+
+    review_text = '\n'.join([p.text.strip() for p in review_paragraphs if p.text.strip()])
     return review_text, spoiler
 
 def extract_json_ld_script(dom):
