@@ -22,6 +22,14 @@ DOMAIN = f'https://{DOMAIN_FULL}'
 SITE = f'{DOMAIN}/'
 SITE_SHORT = f'https://{DOMAIN_SHORT}/'
 
+SIGNIN_URL = f"{DOMAIN}/sign-in/"
+LOGIN_POST_URL = f"{DOMAIN}/user/login.do"
+
+# Authentication & Cookies
+CSRF_COOKIE = "com.xk72.webparts.csrf"
+USER_COOKIE = "letterboxd.signed.in.as"
+DEFAULT_IMPERSONATE = "chrome120"
+
 DOMAIN_MATCHES = [f'{DOMAIN_FULL}/', f'{DOMAIN_SHORT}/']
 
 # Movie-Related Constants

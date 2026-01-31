@@ -18,14 +18,15 @@ import json
 import getpass
 from curl_cffi import requests
 
-IMPERSONATE = "chrome120"
+from letterboxdpy.constants.project import (
+    DOMAIN as BASE_URL,
+    SIGNIN_URL,
+    LOGIN_POST_URL,
+    CSRF_COOKIE,
+    USER_COOKIE,
+    DEFAULT_IMPERSONATE as IMPERSONATE
+)
 
-BASE_URL = "https://letterboxd.com"
-SIGNIN_URL = f"{BASE_URL}/sign-in/"
-LOGIN_POST_URL = f"{BASE_URL}/user/login.do"
-
-CSRF_COOKIE = "com.xk72.webparts.csrf"
-USER_COOKIE = "letterboxd.signed.in.as"
 # Or whatever we decide to have as a cookie path
 DEFAULT_COOKIE_PATH = Path(".lb_cookies.json")
 
