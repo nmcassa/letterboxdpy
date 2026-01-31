@@ -15,7 +15,8 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 import getpass
-from curl_cffi import requests
+
+from letterboxdpy.core.scraper import Scraper, requests
 from letterboxdpy.utils.utils_file import JsonFile
 
 from letterboxdpy.constants.project import (
@@ -216,6 +217,10 @@ def _scan_cookies_for(name_substr: str, session):
 @dataclass
 class UserSession:
     session: requests.Session
+
+    def __post_init__(self):
+        # Synchronize this session with the global Scraper instance
+        Scraper.set_instance(self.session)
 
     @cached_property
     def csrf(self) -> str:
