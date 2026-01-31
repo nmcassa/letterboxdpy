@@ -14,9 +14,9 @@ No speculative headers.
 from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
-import json
 import getpass
 from curl_cffi import requests
+from letterboxdpy.utils.utils_file import JsonFile
 
 from letterboxdpy.constants.project import (
     DOMAIN as BASE_URL,
@@ -133,16 +133,15 @@ def save_cookies(session, path: Path):
             "path": c.path,
             "secure": bool(c.secure),
         })
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(cookies, f, indent=2)
+    JsonFile.save(str(path), cookies)
 
 
 def load_session_from_cookies(path: Path):
     s = requests.Session(impersonate=IMPERSONATE)
-    with open(path, "r", encoding="utf-8") as f:
-        cookies = json.load(f)
-    for c in cookies:
-        s.cookies.set(**c)
+    cookies = JsonFile.load(str(path))
+    if cookies:
+        for c in cookies:
+            s.cookies.set(**c)
     return s
 
 

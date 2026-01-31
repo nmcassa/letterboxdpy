@@ -46,7 +46,7 @@ class JsonFile(File):
     EXTENSION = '.json'
     
     @classmethod
-    def save(cls, path: str, data: dict, indent: int = 2) -> None:
+    def save(cls, path: str, data: dict | list, indent: int = 2) -> None:
         """Save data to a JSON file."""
         with open(cls._get_path(path), 'w') as f:
             json_dump(data, f, indent=indent)
