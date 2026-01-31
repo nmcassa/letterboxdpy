@@ -9,6 +9,11 @@ All behavior is derived ONLY from captured requests:
 No undocumented endpoints.
 No HTML parsing.
 No speculative headers.
+
+SECURITY NOTE:
+  - Cookies are stored in JSON (plaintext) by default.
+  - File permissions are restricted (chmod 600) where supported.
+  - Keep your cookie files private and never commit them to public repos.
 """
 
 from dataclasses import dataclass
@@ -135,6 +140,11 @@ def save_cookies(session, path: Path):
             "secure": bool(c.secure),
         })
     JsonFile.save(str(path), cookies)
+    try:
+        path.chmod(0o600)
+    except OSError:
+        # Some systems/filesystems might not support chmod
+        pass
 
 
 def load_session_from_cookies(path: Path):
