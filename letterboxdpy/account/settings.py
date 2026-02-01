@@ -7,8 +7,13 @@ on Letterboxd. Requires authenticated session.
 
 from typing import Dict, List, Any, Optional
 from letterboxdpy.core.scraper import Scraper
-from letterboxdpy.constants.project import SETTINGS_URL, PROFILE_UPDATE_URL
-from letterboxdpy.constants.forms import PROFILE_FORM, FAVORITE_ATTRS
+from letterboxdpy.constants.project import (
+    SETTINGS_URL, PROFILE_UPDATE_URL, 
+    NOTIFICATIONS_URL, COMMUNICATION_AJAX_URL
+)
+from letterboxdpy.constants.forms.profile import PROFILE_FORM
+from letterboxdpy.constants.forms.notifications import NOTIFICATIONS_FORM
+from letterboxdpy.constants.forms.favorites import FAVORITE_ATTRS
 
 
 class UserSettings:
@@ -18,7 +23,8 @@ class UserSettings:
         self.session = session
         self._dom: Optional[Any] = None
         self._form: Optional[Any] = None
-        self._payload: Optional[Dict[str, Any]] = None
+        self._profile_payload: Optional[Dict[str, Any]] = None
+        self._notification_payload: Optional[Dict[str, bool]] = None
     
     def _fetch(self):
         """Fetch and parse settings page."""
@@ -99,9 +105,23 @@ class UserSettings:
         payload["favouriteFilms"] = fav_films
         payload[PROFILE_FORM.FAVORITE_FILMS_FIELD] = [f["id"] for f in fav_films]
         
-        self._payload = payload
+        self._profile_payload = payload
         return payload
     
+    def _ajax_post(self, url: str, data: Any, referer: str) -> dict:
+        """Internal helper for AJAX POST requests."""
+        headers = {
+            "Referer": referer,
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        }
+        resp = self.session.api.post(url, data=data, headers=headers)
+        return {
+            "success": resp.status_code == 200,
+            "status_code": resp.status_code,
+            "response": resp
+        }
+
     def update_profile(self, payload: Dict[str, Any]) -> dict:
         """Submit profile updates."""
         form_data = []
@@ -113,34 +133,66 @@ class UserSettings:
             elif key != "favouriteFilms":
                 form_data.append((key, str(value)))
         
-        headers = {
-            "Referer": SETTINGS_URL,
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-        }
-        
-        resp = self.session.api.post(PROFILE_UPDATE_URL, data=form_data, headers=headers)
-        
-        return {
-            "success": resp.status_code == 200,
-            "status_code": resp.status_code,
-            "response": resp
-        }
+        return self._ajax_post(PROFILE_UPDATE_URL, form_data, SETTINGS_URL)
     
     def get_favorite_films(self) -> List[Dict[str, str]]:
-        if not self._payload:
+        if not self._profile_payload:
             self.get_profile()
             
-        if self._payload:
-            return self._payload.get("favouriteFilms", []) # type: ignore
+        if self._profile_payload:
+            return self._profile_payload.get("favouriteFilms", []) # type: ignore
         return []
 
     def set_favorite_films_order(self, new_order: List[str]) -> dict:
-        if not self._payload:
+        if not self._profile_payload:
             self.get_profile()
         
-        if self._payload:
-            self._payload[PROFILE_FORM.FAVORITE_FILMS_FIELD] = new_order
-            return self.update_profile(self._payload)
+        if self._profile_payload:
+            self._profile_payload[PROFILE_FORM.FAVORITE_FILMS_FIELD] = new_order
+            return self.update_profile(self._profile_payload)
         
         raise RuntimeError("Failed to load profile settings")
+
+    # --- Notifications ---
+
+    def get_notifications(self) -> Dict[str, bool]:
+        """Fetch current notification settings (Email & Push)."""
+        dom = Scraper.get_page(NOTIFICATIONS_URL)
+        checkboxes = dom.find_all("input", {"class": "ajax-action", "type": "checkbox"})
+        
+        states = {}
+        # Parse all toggleable settings from the DOM
+        for cb in checkboxes:
+            name = cb.get("name")
+            if name:
+                states[str(name)] = cb.has_attr("checked") # type: ignore
+        
+        self._notification_payload = states
+        return states
+
+    def update_notifications(self, settings: Dict[str, bool]) -> List[dict]:
+        """Update notification settings via AJAX."""
+        results = []
+        for key, value in settings.items():
+            payload = {
+                key: "true" if value else "false",
+                "__csrf": self.session.csrf
+            }
+            res = self._ajax_post(COMMUNICATION_AJAX_URL, payload, NOTIFICATIONS_URL)
+            
+            # Safe JSON parsing
+            response_data = res["response"].text
+            if res["success"]:
+                try:
+                    response_data = res["response"].json()
+                except Exception:
+                    # Fallback to raw text if JSON parsing fails
+                    pass
+
+            results.append({
+                "field": key,
+                "success": res["success"],
+                "response": response_data
+            })
+            
+        return results

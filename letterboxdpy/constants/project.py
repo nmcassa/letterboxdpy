@@ -26,8 +26,10 @@ SITE_SHORT = f'https://{DOMAIN_SHORT}/'
 SIGNIN_URL = f"{DOMAIN}/sign-in/"
 LOGIN_POST_URL = f"{DOMAIN}/user/login.do"
 SETTINGS_URL = f"{DOMAIN}/settings/"
+NOTIFICATIONS_URL = f"{DOMAIN}/settings/notifications/"
 ACTIVITY_URL = f"{DOMAIN}/activity/"
 PROFILE_UPDATE_URL = f"{DOMAIN}/user/update.do"
+COMMUNICATION_AJAX_URL = f"{DOMAIN}/ajax/communication/"
 
 # Authentication & Cookies
 CSRF_COOKIE = "com.xk72.webparts.csrf"
@@ -39,7 +41,7 @@ DEFAULT_COOKIE_DIR = Path(".cookie")
 DEFAULT_COOKIE_PATH = DEFAULT_COOKIE_DIR / "session.json"
 COOKIE_SET_SUPPORTED = {"name", "value", "domain", "path", "secure"}
 COOKIE_FILE_CHMOD = 0o600
-LOGOUT_INDICATORS = ["letterboxd.user=;", "max-age=0"]
+LOGOUT_INDICATORS = ["letterboxd.user=;", "letterboxd.signed.in.as=;"]
 REMEMBER_ME = "true"
 
 DOMAIN_MATCHES = [f'{DOMAIN_FULL}/', f'{DOMAIN_SHORT}/']
