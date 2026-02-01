@@ -81,29 +81,8 @@ def get_signed_in_user(session) -> str:
     return c.value
 
 # ----------------------------
-# Cookie persistence
+# Internal Utilities
 # ----------------------------
-
-def save_cookies(session, path: Path):
-    """Save session cookies to disk with expiry info."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    
-    cookies = []
-    for c in session.cookies.jar:
-        cookies.append({
-        "name": c.name,
-        "value": c.value,
-        "domain": c.domain,
-        "path": c.path,
-        "secure": bool(c.secure),
-        "expires": c.expires,
-        })
-    JsonFile.save(str(path), cookies)
-    try:
-        path.chmod(COOKIE_FILE_CHMOD)
-    except OSError:
-        # Some systems/filesystems might not support chmod
-        pass
 
 def _apply_cookie_extras(jar, name, domain, fields):
     """Apply extended fields (like expires) to matching cookie."""
@@ -168,7 +147,7 @@ def lb_login(username: str, password: str, cookie_path: Path):
     if not is_logged_in_by_cookie(s):
         raise RuntimeError("Login failed")
 
-    save_cookies(s, cookie_path)
+    UserSession(s).save(cookie_path)
     return s
 
 def _scan_cookies_for(name_substr: str, session):
@@ -193,6 +172,25 @@ class UserSession:
     def __post_init__(self):
         # Synchronize this session with the global Scraper instance
         Scraper.set_instance(self.session)
+
+    def save(self, path: Path = DEFAULT_COOKIE_PATH):
+        """Save current session to disk."""
+        path.parent.mkdir(parents=True, exist_ok=True)
+        
+        cookies = [{
+            "name": c.name,
+            "value": c.value,
+            "domain": c.domain,
+            "path": c.path,
+            "secure": bool(c.secure),
+            "expires": c.expires,
+        } for c in self.session.cookies.jar]
+        
+        JsonFile.save(str(path), cookies)
+        try:
+            path.chmod(COOKIE_FILE_CHMOD)
+        except OSError:
+            pass
 
     def validate(self) -> bool:
         """Return False only when session is CERTAINLY invalid."""
