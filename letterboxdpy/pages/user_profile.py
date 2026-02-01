@@ -7,7 +7,7 @@ from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.utils.utils_url import extract_path_segment
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.constants.forms import FAVORITE_ATTRS
+from letterboxdpy.constants.forms.favorites import FAVORITE_ATTRS
 
 
 class UserProfile:
