@@ -35,11 +35,15 @@ from letterboxdpy.constants.project import (
     LOGIN_POST_URL,
     CSRF_COOKIE,
     USER_COOKIE,
-    DEFAULT_IMPERSONATE as IMPERSONATE
+    DEFAULT_IMPERSONATE as IMPERSONATE,
+    DEFAULT_COOKIE_PATH,
+    COOKIE_SET_SUPPORTED,
+    SETTINGS_URL,
+    ACTIVITY_URL,
+    LOGOUT_INDICATORS,
+    COOKIE_FILE_CHMOD,
+    REMEMBER_ME
 )
-
-# Or whatever we decide to have as a cookie path
-DEFAULT_COOKIE_PATH = Path(".lb_cookies.json")
 
 def is_logged_in_by_cookie(session) -> bool:
     """Check if the session has valid Letterboxd user cookies."""
@@ -63,7 +67,6 @@ def get_csrf(session) -> str:
     c = _scan_cookies_for("csrf", session)
     return c.value
 
-
 def get_signed_in_user(session) -> str:
     """Extract currently signed-in username from session cookies."""
     # 1) Fast path
@@ -77,37 +80,55 @@ def get_signed_in_user(session) -> str:
     c = _scan_cookies_for("signed.in", session)
     return c.value
 
-
 # ----------------------------
 # Cookie persistence
 # ----------------------------
 
 def save_cookies(session, path: Path):
+    """Save session cookies to disk with expiry info."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    
     cookies = []
     for c in session.cookies.jar:
         cookies.append({
-            "name": c.name,
-            "value": c.value,
-            "domain": c.domain,
-            "path": c.path,
-            "secure": bool(c.secure),
+        "name": c.name,
+        "value": c.value,
+        "domain": c.domain,
+        "path": c.path,
+        "secure": bool(c.secure),
+        "expires": c.expires,
         })
     JsonFile.save(str(path), cookies)
     try:
-        path.chmod(0o600)
+        path.chmod(COOKIE_FILE_CHMOD)
     except OSError:
         # Some systems/filesystems might not support chmod
         pass
 
+def _apply_cookie_extras(jar, name, domain, fields):
+    """Apply extended fields (like expires) to matching cookie."""
+    for cookie in jar:
+        if cookie.name == name and cookie.domain == domain:
+            for key, val in fields.items():
+                if val is not None:
+                    setattr(cookie, key, val)
+            return
 
 def load_session_from_cookies(path: Path):
+    """Load cookies from file and restore session with expiry info."""
     s = requests.Session(impersonate=IMPERSONATE)
     cookies = JsonFile.load(str(path))
-    if cookies:
-        for c in cookies:
-            s.cookies.set(**c)
+    
+    for c in cookies or []:
+        set_kwargs = {k: v for k, v in c.items() if k in COOKIE_SET_SUPPORTED}
+        extra = {k: v for k, v in c.items() if k not in COOKIE_SET_SUPPORTED}
+        
+        s.cookies.set(**set_kwargs)
+        
+        if extra:
+            _apply_cookie_extras(s.cookies.jar, c["name"], c["domain"], extra)
+    
     return s
-
 
 # ----------------------------
 # Login
@@ -129,7 +150,7 @@ def lb_login(username: str, password: str, cookie_path: Path):
         "__csrf": csrf,
         "username": username,
         "password": password,
-        "remember": "true",
+        "remember": REMEMBER_ME,
     }
 
     headers = {
@@ -141,7 +162,7 @@ def lb_login(username: str, password: str, cookie_path: Path):
     pr.raise_for_status()
 
     # STEP 3 — Validate
-    act = s.get(f"{BASE_URL}/activity/", allow_redirects=True)
+    act = s.get(ACTIVITY_URL, allow_redirects=True)
     act.raise_for_status()
 
     if not is_logged_in_by_cookie(s):
@@ -154,13 +175,12 @@ def _scan_cookies_for(name_substr: str, session):
     jar = getattr(getattr(session, "cookies", None), "jar", None)
     if not jar:
         raise RuntimeError("No cookie jar present")
-
+    
     matches = [c for c in jar if name_substr in c.name.lower() and c.value]
     if matches:
         return matches[0]
 
     raise RuntimeError(f"No cookie containing '{name_substr}' found")
-
 
 # ----------------------------
 # UserSession
@@ -173,6 +193,51 @@ class UserSession:
     def __post_init__(self):
         # Synchronize this session with the global Scraper instance
         Scraper.set_instance(self.session)
+
+    def validate(self) -> bool:
+        """Return False only when session is CERTAINLY invalid."""
+        import time
+        
+        def is_cookie_expired() -> bool:
+            """Check if the session cookie has passed its expiry date."""
+            for c in self.session.cookies.jar:
+                if c.name == USER_COOKIE and c.expires:
+                    return time.time() > c.expires
+            return False  # No expiry info = assume valid
+        
+        def has_logout_signal(headers) -> bool:
+            """Check if server is telling us to clear cookies."""
+            set_cookie = headers.get("Set-Cookie", "").lower()
+            return any(sig in set_cookie for sig in LOGOUT_INDICATORS)
+
+        def is_cookie_causing_error() -> bool:
+            """When we got a server error, check if a clean session works."""
+            clean = requests.Session(impersonate=IMPERSONATE)
+            clean_resp = clean.get(BASE_URL, allow_redirects=True)
+            return clean_resp.status_code == 200
+
+        # NOTE: Body check can be added for stricter validation:
+        # def has_identity(text) -> bool:
+        #     return self.username in text
+
+        # Fast path: Check local cookie expiry (no network needed)
+        if is_cookie_expired():
+            return False
+
+        try:
+            # Letterboxd serves login content on the same URL instead of redirecting (302),
+            # making simple status code checks unreliable.
+            resp = self.session.get(SETTINGS_URL, allow_redirects=True)
+            
+            if resp.status_code == 200:
+                return not has_logout_signal(resp.headers)
+            
+            if resp.status_code >= 500:
+                return not is_cookie_causing_error()
+            
+            return True  # Uncertain cases
+        except Exception:
+            return True
 
     @cached_property
     def csrf(self) -> str:
@@ -190,9 +255,9 @@ class UserSession:
         password: str | None = None
     ) -> "UserSession":
         if cookie_path.exists():
-            s = load_session_from_cookies(cookie_path)
-            if is_logged_in_by_cookie(s):
-                return cls(s)
+            instance = cls(load_session_from_cookies(cookie_path))
+            if instance.validate():
+                return instance
 
         if username is None:
             username = input("Letterboxd username: ").strip()

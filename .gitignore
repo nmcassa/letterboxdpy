@@ -22,7 +22,6 @@ venv
 # Local Development
 pykit/
 lizard/
-.gitignore
 
-# Cookies
-.lb_cookies*.json
+# Cookies and Session
+.cookie/
