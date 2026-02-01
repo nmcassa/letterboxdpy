@@ -34,7 +34,7 @@ class Members:
 
 # -- FUNCTIONS --
 
-def top_users(max:int = 100) -> List:
+def top_users(max:int = 100) -> list:
     """Fetch the top n members from the Letterboxd popular members page."""
     # max 256 page?
     members_instance = Members()

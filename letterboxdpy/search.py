@@ -1,5 +1,6 @@
 from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_parser import extract_and_convert_shorthand
+from letterboxdpy.utils.utils_string import extract_year_from_movie_name, clean_movie_name
 from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
@@ -180,19 +181,20 @@ class Search:
           if film_container:
             # Get basic film info from container
             slug = film_container.get('data-item-slug')
-            name = film_container.get('data-item-name')
+            fullname = film_container.get('data-item-name')
+            name = clean_movie_name(fullname)
             url = DOMAIN + film_container.get('data-target-link')
             
             # Get poster from nested img element
             poster_img = film_container.find("img", {"class": "image"})
             poster = poster_img.get('src') if poster_img else None
             
-            # Extract year from metadata
+            # Extract year from metadata or name
             movie_year = result.find("small", {"class": "metadata"})
             if movie_year and movie_year.a:
               movie_year = int(movie_year.a.text) if movie_year.a.text.isdigit() else None
             else:
-              movie_year = None
+              movie_year = extract_year_from_movie_name(fullname)
           
           # Extract directors from film-metadata paragraph
           directors = []

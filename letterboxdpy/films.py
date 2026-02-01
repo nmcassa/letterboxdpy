@@ -13,9 +13,10 @@ class Films:
     VERTICAL_MAX = 20*5
     HORIZONTAL_MAX = 12*6
 
-    def __init__(self, url: str):
+    def __init__(self, url: str, max: int = None):
         """Initialize Films class with a URL."""
         self.url = url
+        self.max = max
         self.ajax_url = get_ajax_url(url)
         self._movies = None
 
@@ -61,7 +62,13 @@ class Films:
                 if len(new_movies) < self.VERTICAL_MAX:
                     break
 
+            if self.max and len(movies) >= self.max:
+                break
+
             page += 1
+
+        if self.max:
+            movies = dict(list(movies.items())[:self.max])
 
         return movies
 
@@ -91,53 +98,53 @@ class Future:
     def get_with_writer(writer: str):
         pass
 
-def get_upcoming_movies() -> dict:
+def get_upcoming_movies(max: int = None) -> dict:
     BASE_URL = "https://letterboxd.com/films/popular/this/week/upcoming/"
-    return Films(BASE_URL).movies
+    return Films(BASE_URL, max).movies
 
 @assert_instance(int)
-def get_movies_by_decade(decade: int) -> dict:
+def get_movies_by_decade(decade: int, max: int = None) -> dict:
     BASE_URL = f"https://letterboxd.com/films/ajax/popular/this/week/decade/{decade}s/"
-    return Films(BASE_URL).movies
+    return Films(BASE_URL, max).movies
 
 @assert_instance(int)
-def get_movies_by_year(year: int) -> dict:
+def get_movies_by_year(year: int, max: int = None) -> dict:
     BASE_URL = f"https://letterboxd.com/films/ajax/popular/this/week/year/{year}/"
-    return Films(BASE_URL).movies
+    return Films(BASE_URL, max).movies
 
 @assert_instance(str)
-def get_movies_by_genre(genre: str) -> dict:
+def get_movies_by_genre(genre: str, max: int = None) -> dict:
     """
     action, adventure, animation, comedy, crime, documentary,
     drama, family, fantasy, history, horror, music, mystery,
     romance, science-fiction, thriller, tv-movie, war, western
     """
     BASE_URL = f"https://letterboxd.com/films/ajax/genre/{genre}"
-    return Films(BASE_URL).movies
+    return Films(BASE_URL, max).movies
 
 @assert_instance(str)
-def get_movies_by_service(service: str) -> dict:
+def get_movies_by_service(service: str, max: int = None) -> dict:
     """
     netflix, hulu, prime-video, disney-plus, itv-play, apple-tv, 
     youtube-premium, amazon-prime-video, hbo-max, peacock, ...
     """
     BASE_URL = f"https://letterboxd.com/films/popular/this/week/on/{service}/"
-    return Films(BASE_URL).movies
+    return Films(BASE_URL, max).movies
 
 @assert_instance(str)
-def get_movies_by_theme(theme: str) -> dict:
+def get_movies_by_theme(theme: str, max: int = None) -> dict:
     BASE_URL = f"https://letterboxd.com/films/ajax/theme/{theme}"
-    return Films(BASE_URL).movies
+    return Films(BASE_URL, max).movies
 
 @assert_instance(str)
-def get_movies_by_nanogenre(nanogenre: str) -> dict:
+def get_movies_by_nanogenre(nanogenre: str, max: int = None) -> dict:
     BASE_URL = f"https://letterboxd.com/films/ajax/nanogenre/{nanogenre}/"
-    return Films(BASE_URL).movies
+    return Films(BASE_URL, max).movies
 
 @assert_instance(str)
-def get_movies_by_mini_theme(theme: str) -> dict:
+def get_movies_by_mini_theme(theme: str, max: int = None) -> dict:
     BASE_URL = f"https://letterboxd.com/films/ajax/mini-theme/{theme}"
-    return Films(BASE_URL).movies
+    return Films(BASE_URL, max).movies
 
 def print_movies(movies, title=None, max_count=None):
     """Print movies in a formatted list."""
