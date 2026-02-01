@@ -31,7 +31,8 @@ from letterboxdpy.core.scraper import Scraper, requests
 from letterboxdpy.core.exceptions import (
     LoginFailedError,
     SessionError,
-    MissingCredentialsError
+    MissingCredentialsError,
+    PageFetchError
 )
 from letterboxdpy.utils.utils_file import JsonFile
 
@@ -76,6 +77,29 @@ def _scan_cookies_for(name_substr: str, session):
 
     raise SessionError(f"No cookie containing '{name_substr}' found")
 
+class API:
+    """Stateful HTTP client wrapper for authentication requests."""
+    
+    def __init__(self, session: requests.Session):
+        self.session = session
+
+    def request(self, method: str, url: str, **kwargs) -> requests.Response:
+        """Wrapper for network requests with uniform error handling and timeouts."""
+        kwargs.setdefault("timeout", 15)
+        try:
+            resp = self.session.request(method, url, **kwargs) # type: ignore
+            resp.raise_for_status()
+            return resp
+        except Exception as e:
+            raise PageFetchError(f"Network error during {method} {url}: {e}", url)
+
+    def get(self, url: str, **kwargs) -> requests.Response:
+        return self.request("GET", url, **kwargs)
+
+    def post(self, url: str, **kwargs) -> requests.Response:
+        return self.request("POST", url, **kwargs)
+
+
 # ----------------------------
 # UserSession
 # ----------------------------
@@ -87,6 +111,7 @@ class UserSession:
     def __post_init__(self):
         # Synchronize this session with the global Scraper instance
         Scraper.set_instance(self.session)
+        self.api = API(self.session)
 
     @property
     def is_logged_in(self) -> bool:
@@ -113,6 +138,7 @@ class UserSession:
             path.chmod(COOKIE_FILE_CHMOD)
         except OSError:
             pass
+        return self
 
     @classmethod
     def load(cls, path: Path = DEFAULT_COOKIE_PATH) -> "UserSession":
@@ -146,15 +172,13 @@ class UserSession:
         cls._submit_login_form(s, csrf, username, password)
 
         # STEP 3 — Initial Validation
-        act = s.get(ACTIVITY_URL, allow_redirects=True)
-        act.raise_for_status()
+        API(s).get(ACTIVITY_URL, allow_redirects=True)
 
         instance = cls(s)
         if not instance.is_logged_in:
              raise LoginFailedError("Login failed: Session not active")
 
-        instance.save(path)
-        return instance
+        return instance.save(path)
 
     def validate(self) -> bool:
         """Return False only when session is CERTAINLY invalid."""
@@ -174,9 +198,10 @@ class UserSession:
 
         def is_cookie_causing_error() -> bool:
             """When we got a server error, check if a clean session works."""
-            clean = requests.Session(impersonate=IMPERSONATE)
-            clean_resp = clean.get(BASE_URL, allow_redirects=True)
-            return clean_resp.status_code == 200
+            clean_session = requests.Session(impersonate=IMPERSONATE)
+            clean_api = API(clean_session)
+            resp = clean_api.get(BASE_URL, allow_redirects=True)
+            return resp.status_code == 200
 
         # NOTE: Body check can be added for stricter validation:
         # def has_identity(text) -> bool:
@@ -189,7 +214,7 @@ class UserSession:
         try:
             # Letterboxd serves login content on the same URL instead of redirecting (302),
             # making simple status code checks unreliable.
-            resp = self.session.get(SETTINGS_URL, allow_redirects=True)
+            resp = self.api.get(SETTINGS_URL, allow_redirects=True)
             
             if resp.status_code == 200:
                 return not has_logout_signal(resp.headers)
@@ -247,8 +272,7 @@ class UserSession:
     @staticmethod
     def _fetch_signin_page(session: requests.Session) -> str:
         """Fetch sign-in page and extract CSRF token."""
-        r = session.get(SIGNIN_URL, allow_redirects=True)
-        r.raise_for_status()
+        API(session).get(SIGNIN_URL, allow_redirects=True)
         
         csrf = session.cookies.get(CSRF_COOKIE)
         if not csrf:
@@ -265,9 +289,8 @@ class UserSession:
             "remember": REMEMBER_ME,
         }
         headers = {"Referer": SIGNIN_URL, "Origin": BASE_URL}
-        
-        pr = session.post(LOGIN_POST_URL, data=form, headers=headers, allow_redirects=True)
-        pr.raise_for_status()
+        API(session).post(LOGIN_POST_URL, data=form, headers=headers, allow_redirects=True)
+
 
 # ----------------------------
 # CLI Entry Point
