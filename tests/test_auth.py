@@ -1,49 +1,43 @@
 #!/usr/bin/env python3
 """
-Minimal smoke test for user_list.UserSession
+Unit test for UserSession class.
 
-No HTML parsing
-No undocumented endpoints
-No special headers
-Only behavior already used in user_list
+Tests cookie loading, username/csrf resolution, and session validity.
+For library-wide integration tests, see test_auth_integration.py
 """
 
-from pathlib import Path
 from letterboxdpy.auth import UserSession, BASE_URL, DEFAULT_COOKIE_PATH
+import unittest
 
 
-def _summarize_auth_state(us: UserSession):
-    print("\n=== UserSession smoke check ===")
+class TestUserSession(unittest.TestCase):
+    """Unit tests for UserSession cookie and identity resolution."""
 
-    # These lines validate cached_property + cookie scan fallback.
-    u = us.username
-    c = us.csrf
+    @classmethod
+    def setUpClass(cls):
+        cls.us = UserSession.ensure(DEFAULT_COOKIE_PATH)
 
-    c_prev = (c[:10] + "…") if c else "(missing)"
-    print(f"[OK] username resolved from cookies: {u!r}")
-    print(f"[OK] csrf resolved from cookies:     {c_prev} (len={len(c)})")
+    def test_username_resolution(self):
+        """Username must be resolved from cookies."""
+        self.assertTrue(self.us.username)
 
-    # Reuse ONLY an endpoint already present in the module
-    url = f"{BASE_URL}/activity/"
-    r = us.session.get(url, allow_redirects=True)
+    def test_csrf_resolution(self):
+        """CSRF token must be resolved and valid."""
+        csrf = self.us.csrf
+        self.assertIsNotNone(csrf)
+        self.assertGreater(len(csrf), 10)
 
-    print(f"\n[CHECK] GET {url}")
-    print(f"  status: {r.status_code}")
-    print(f"  final:  {r.url}")
-
-    if r.history:
-        print("  redirects:")
-        for h in r.history:
-            print(f"    {h.status_code} → {h.url}")
-    else:
-        print("  redirects: (none)")
-
-    if "/sign-in" in r.url or "/user/login" in r.url:
-        print("[WARN] Looks unauthenticated (ended at sign-in/login). Cookies may be stale/expired.")
-    else:
-        print("[OK] Looks authenticated (did not end at sign-in/login).")
+    def test_session_validity(self):
+        """Session must not redirect to login page."""
+        url = f"{BASE_URL}/activity/"
+        response = self.us.session.get(url, allow_redirects=True)
+        
+        self.assertEqual(response.status_code, 200)
+        
+        final_url = str(response.url)
+        self.assertNotIn("/sign-in", final_url)
+        self.assertNotIn("/user/login", final_url)
 
 
-if __name__ == "__main__":
-    us = UserSession.ensure(DEFAULT_COOKIE_PATH)
-    _summarize_auth_state(us)
+if __name__ == '__main__':
+    unittest.main()
