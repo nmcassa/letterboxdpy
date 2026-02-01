@@ -45,15 +45,6 @@ from letterboxdpy.constants.project import (
     REMEMBER_ME
 )
 
-def is_logged_in_by_cookie(session) -> bool:
-    """Check if the session has valid Letterboxd user cookies."""
-    cookies = getattr(session, "cookies", None)
-    jar = getattr(cookies, "jar", None)
-    if jar is None:
-        return False
-        
-    names = {c.name for c in jar}
-    return any(n.startswith("letterboxd.user") for n in names) or (USER_COOKIE in names)
 
 def get_csrf(session) -> str:
     """Extract CSRF token from session cookies."""
@@ -129,10 +120,11 @@ def lb_login(username: str, password: str, cookie_path: Path):
     act = s.get(ACTIVITY_URL, allow_redirects=True)
     act.raise_for_status()
 
-    if not is_logged_in_by_cookie(s):
+    instance = UserSession(s)
+    if not instance.is_logged_in:
         raise RuntimeError("Login failed")
 
-    UserSession(s).save(cookie_path)
+    instance.save(cookie_path)
     return s
 
 def _scan_cookies_for(name_substr: str, session):
@@ -157,6 +149,13 @@ class UserSession:
     def __post_init__(self):
         # Synchronize this session with the global Scraper instance
         Scraper.set_instance(self.session)
+
+    @property
+    def is_logged_in(self) -> bool:
+        """Lightweight local check for authentication cookies."""
+        jar = getattr(self.session.cookies, "jar", [])
+        names = {c.name for c in jar}
+        return any(n.startswith("letterboxd.user") for n in names) or (USER_COOKIE in names)
 
     def save(self, path: Path = DEFAULT_COOKIE_PATH):
         """Save current session to disk."""
