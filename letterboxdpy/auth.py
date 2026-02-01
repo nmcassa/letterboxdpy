@@ -93,21 +93,6 @@ def _apply_cookie_extras(jar, name, domain, fields):
                     setattr(cookie, key, val)
             return
 
-def load_session_from_cookies(path: Path):
-    """Load cookies from file and restore session with expiry info."""
-    s = requests.Session(impersonate=IMPERSONATE)
-    cookies = JsonFile.load(str(path))
-    
-    for c in cookies or []:
-        set_kwargs = {k: v for k, v in c.items() if k in COOKIE_SET_SUPPORTED}
-        extra = {k: v for k, v in c.items() if k not in COOKIE_SET_SUPPORTED}
-        
-        s.cookies.set(**set_kwargs)
-        
-        if extra:
-            _apply_cookie_extras(s.cookies.jar, c["name"], c["domain"], extra)
-    
-    return s
 
 # ----------------------------
 # Login
@@ -192,6 +177,23 @@ class UserSession:
         except OSError:
             pass
 
+    @classmethod
+    def load(cls, path: Path = DEFAULT_COOKIE_PATH) -> "UserSession":
+        """Load session from disk and return a UserSession instance."""
+        s = requests.Session(impersonate=IMPERSONATE)
+        cookies = JsonFile.load(str(path))
+        
+        for c in cookies or []:
+            set_kwargs = {k: v for k, v in c.items() if k in COOKIE_SET_SUPPORTED}
+            extra = {k: v for k, v in c.items() if k not in COOKIE_SET_SUPPORTED}
+            
+            s.cookies.set(**set_kwargs)
+            
+            if extra:
+                _apply_cookie_extras(s.cookies.jar, c["name"], c["domain"], extra)
+        
+        return cls(s)
+
     def validate(self) -> bool:
         """Return False only when session is CERTAINLY invalid."""
         import time
@@ -253,7 +255,7 @@ class UserSession:
         password: str | None = None
     ) -> "UserSession":
         if cookie_path.exists():
-            instance = cls(load_session_from_cookies(cookie_path))
+            instance = cls.load(cookie_path)
             if instance.validate():
                 return instance
 
