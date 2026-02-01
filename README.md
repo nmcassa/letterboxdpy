@@ -50,19 +50,23 @@ print(user_instance)
   "bio": null,
   "location": null,
   "website": null,
-  "watchlist_length": 74,
+  "watchlist_length": 76,
   "stats": {
-    "films": 594,
-    "this_year": 74,
+    "films": 702,
+    "this_year": 7,
     "lists": 2,
-    "following": 7,
-    "followers": 7
+    "following": 8,
+    "followers": 8
   },
   "favorites": {
-    "95113": {
-      "slug": "the-grand-budapest-hotel",
-      "name": "The Grand Budapest Hotel"
-    },...
+    "51794": {
+      "slug": "the-king-of-comedy",
+      "name": "The King of Comedy",
+      "url": "https://letterboxd.com/film/the-king-of-comedy/",
+      "year": 1982,
+      "log_url": "https://letterboxd.com/nmcassa/film/the-king-of-comedy/activity/"
+    },
+    "...": "..."
   },
   "avatar": {
     "exists": true,
@@ -71,39 +75,24 @@ print(user_instance)
   },
   "recent": {
     "watchlist": {
-      "1042841": {
-        "id": "1042841",
-        "slug": "the-contestant-2023",
-        "name": "The Contestant"
-      },...
+      "703077": {
+        "id": "703077",
+        "slug": "magazine-dreams",
+        "name": "Magazine Dreams",
+        "year": 2023
+      },
+      "...": "..."
     },
     "diary": {
       "months": {
-        "9": {
-          "22": [
+        "1": {
+          "31": [
             {
-              "name": "The Substance",
-              "slug": "the-substance"
-            },
-            {
-              "name": "Whiplash",
-              "slug": "1"
+              "name": "If I Had Legs I'd Kick You",
+              "slug": "if-i-had-legs-id-kick-you"
             }
           ],
-          "13": [
-            {
-              "name": "Speak No Evil",
-              "slug": "speak-no-evil-2024"
-            }
-          ],...
-        },
-        "8": {
-          "30": [
-            {
-              "name": "Shaun of the Dead",
-              "slug": "shaun-of-the-dead"
-            }
-          ],...
+          "...": "..."
         }
       }
     }
@@ -127,7 +116,6 @@ print(movie_instance)
 
 ```json
 {
-  "scraper": {...},
   "url": "https://letterboxd.com/film/v-for-vendetta",
   "slug": "v-for-vendetta",
   "letterboxd_id": 51400,
@@ -141,11 +129,11 @@ print(movie_instance)
   "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-230-0-345-crop.jpg",
   "banner": "https://a.ltrbxd.com/resized/sm/upload/mx/jg/tz/ni/v-for-vendetta-1920-1920-1080-1080-crop-000000.jpg",
   "tagline": "People should not be afraid of their governments. Governments should be afraid of their people.",
-  "description": "In a world in which Great Britain has become a fascist state, a masked vigilante known only as \u201cV\u201d conducts guerrilla warfare against the oppressive British government. When V rescues a young woman from the secret police, he finds in her an ally with whom he can continue his fight to free the people of Britain.",
+  "description": "In a world in which Great Britain has become a fascist state...",
   "trailer": {
-    "id": "V5VGq23aZ-g",
-    "link": "https://www.youtube.com/watch?v=V5VGq23aZ-g",
-    "embed_url": "https://www.youtube.com/embed/V5VGq23aZ-g"
+    "id": "3ge0navn9E0",
+    "link": "https://www.youtube.com/watch?v=3ge0navn9E0",
+    "embed_url": "https://www.youtube.com/embed/3ge0navn9E0"
   },
   "alternative_titles": [
     "Vendetta \u00fc\u00e7\u00fcn V",
@@ -157,7 +145,8 @@ print(movie_instance)
       "name": "Virtual Studios",
       "slug": "virtual-studios",
       "url": "https://letterboxd.com/studio/virtual-studios/"
-    },...
+    },
+    "..."
   ],
   "genres": [
     {
@@ -165,7 +154,8 @@ print(movie_instance)
       "name": "Thriller",
       "slug": "thriller",
       "url": "https://letterboxd.com/films/genre/thriller/"
-    },...
+    },
+    "..."
   ],
   "cast": [
     {
@@ -173,7 +163,8 @@ print(movie_instance)
       "role_name": "Evey Hammond",
       "slug": "natalie-portman",
       "url": "https://letterboxd.com/actor/natalie-portman/"
-    },...
+    },
+    "..."
   ],
   "crew": {
     "director": [
@@ -183,22 +174,20 @@ print(movie_instance)
         "url": "https://letterboxd.com/director/james-mcteigue/"
       }
     ],
-    "producer": [
-      {
-        "name": "Grant Hill",
-        "slug": "grant-hill",
-        "url": "https://letterboxd.com/producer/grant-hill/"
-      },...
-    ],...
+    "...": "..."
   },
   "popular_reviews": [
     {
-      "reviewer": "zoey luke",
+      "user": {
+        "username": "zoeyluke",
+        "display_name": "zoey luke"
+      },
+      "link": "https://letterboxd.com/zoeyluke/film/v-for-vendetta/3/",
       "rating": 4.5,
       "review": "I love natalie Portman and I hate the government"
-    },...
+    },
+    "...": "..."
   ]
-}
 }
 ```
 </details>
@@ -221,7 +210,7 @@ print(search_instance.get_results(max=5))
   "available": true,
   "query": "V%20for%20Vendetta",
   "filter": "films",
-  "end_page": 13,
+  "end_page": 1,
   "count": 5,
   "results": [
     {
@@ -232,7 +221,7 @@ print(search_instance.get_results(max=5))
       "name": "V for Vendetta",
       "year": 2005,
       "url": "https://letterboxd.com/film/v-for-vendetta/",
-      "poster": null,
+      "poster": "https://s.ltrbxd.com/static/img/empty-poster-70-BSf-Pjrh.png",
       "directors": [
         {
           "name": "James McTeigue",
@@ -278,30 +267,50 @@ print(list_instance)
 
 ```json
 {
-  "scraper": {...},
-  "url": "https://letterboxd.com/nmcassa/list/movies-to-watch-with-priscilla-park",
-  "slug": "movies-to-watch-with-priscilla-park",
   "username": "nmcassa",
-  "list_type": "list",
-  "items_per_page": 100,
-  "title": "Movies to Watch with Priscilla Park",
-  "description": null,
-  "movies": {
+  "slug": "movies-to-watch-with-priscilla-park",
+  "_movies": {
     "240344": {
       "slug": "la-la-land",
       "name": "La La Land",
       "year": 2016,
       "url": "https://letterboxd.com/film/la-la-land/"
     },
-    "48049": {
-      "slug": "carrie-1976",
-      "name": "Carrie",
-      "year": 1976,
-      "url": "https://letterboxd.com/film/carrie-1976/"
-    },...
+    "...": "..."
   },
-  "count": 19
+  "url": "https://letterboxd.com/nmcassa/list/movies-to-watch-with-priscilla-park",
+  "title": "Movies to Watch with Priscilla Park",
+  "author": "nmcassa",
+  "description": null,
+  "date_created": "2024-05-18T16:44:57.013000Z",
+  "date_updated": "2024-05-20T14:58:06.486000Z",
+  "tags": [],
+  "count": 19,
+  "list_id": "46710824"
 }
+```
+</details>
+
+<h1 id="Members">Members Object</h1>
+
+[Explore the file](letterboxdpy/members.py) | [Functions Documentation](/docs/members/funcs/)
+
+```python
+from letterboxdpy.members import top_users
+print(top_users(max=5))
+```
+
+<details>
+  <summary>Click to expand <code>Members</code> object response</summary>
+
+```json
+[
+  "schaffrillas",
+  "kurstboy",
+  "demiadejuyigbe",
+  "zoerosebryant",
+  "jaragon23"
+]
 ```
 </details>
 
@@ -311,14 +320,115 @@ print(list_instance)
 
 ```python
 from letterboxdpy.films import Films
+films_instance = Films("https://letterboxd.com/films/popular/", max=3)
+print(films_instance.movies)
 ```
 
-<h1 id="Members">Members Object</h1>
+<details>
+  <summary>Click to expand <code>Films</code> object response</summary>
 
-[Explore the file](letterboxdpy/members.py) | [Functions Documentation](/docs/members/funcs/)
+```json
+{
+  "1197499": {
+    "slug": "marty-supreme",
+    "name": "Marty Supreme",
+    "rating": 4.21,
+    "url": "https://letterboxd.com/film/marty-supreme/"
+  },
+  "772232": {
+    "slug": "hamnet",
+    "name": "Hamnet",
+    "rating": 4.22,
+    "url": "https://letterboxd.com/film/hamnet/"
+  },
+  "1116600": {
+    "slug": "sinners-2025",
+    "name": "Sinners",
+    "rating": 4.11,
+    "url": "https://letterboxd.com/film/sinners-2025/"
+  }
+}
+```
+</details>
+
+<h1 id="Watchlist">Watchlist Object</h1>
+
+[Explore the file](letterboxdpy/watchlist.py)
 
 ```python
-from letterboxdpy.members import Members
+from letterboxdpy.watchlist import Watchlist
+watchlist = Watchlist("nmcassa")
+# movies loaded when accessed
+print(watchlist)
+```
+
+<details>
+  <summary>Click to expand <code>Watchlist</code> object response</summary>
+
+```json
+{
+  "username": "nmcassa",
+  "url": "https://letterboxd.com/nmcassa/watchlist",
+  "count": 134,
+  "movies": {
+    "51315": {
+      "slug": "videodrome",
+      "name": "Videodrome",
+      "year": 1983,
+      "url": "https://letterboxd.com/film/videodrome/"
+    },
+    "...": "..."
+  }
+}
+```
+</details>
+
+<h1 id="Authentication">Authentication & Sessions</h1>
+
+[Explore the file](letterboxdpy/auth.py)
+
+The `UserSession` module unlocks account-specific features like **profile customization** and **settings management**. It handles login securely and persists your session, so you don't have to sign in every time.
+
+```python
+from letterboxdpy.auth import UserSession
+
+# Logs in if no session exists, or loads the saved session automatically
+session = UserSession.ensure()
+
+# 2. Programmatic login
+# session = UserSession.login("username", "password")
+
+# 3. Manual load from custom path
+# session = UserSession.load(Path(".cookie/session.json"))
+
+print(f"Authenticated as: {session.username}")
+```
+
+<h1 id="Settings">User Settings</h1>
+
+[Explore the file](letterboxdpy/account/settings.py)
+
+The `UserSettings` module allows reading and updating user profile and notification settings. **Requires an authenticated session.**
+
+```python
+from letterboxdpy.account.settings import UserSettings
+
+settings = UserSettings(session)
+
+# Get current profile data
+profile = settings.get_profile()
+print(f"Current Bio: {profile['bio']}")
+
+# Update specific profile fields
+settings.update_profile({
+    "location": "New York, USA",
+    "website": "https://example.com",
+    "bio": "Just another movie lover."
+})
+
+# Manage notifications
+notifs = settings.get_notifications()
+settings.update_notifications({"emailEditorial": True, "pushFollowers": False})
 ```
 
 <h1 id="Examples">Examples</h1>
