@@ -45,6 +45,9 @@ from letterboxdpy.constants.project import (
     REMEMBER_ME
 )
 
+# ----------------------------
+# Helpers
+# ----------------------------
 
 def get_csrf(session) -> str:
     """Extract CSRF token from session cookies."""
@@ -83,49 +86,6 @@ def _apply_cookie_extras(jar, name, domain, fields):
                 if val is not None:
                     setattr(cookie, key, val)
             return
-
-
-# ----------------------------
-# Login
-# ----------------------------
-
-def lb_login(username: str, password: str, cookie_path: Path):
-    s = requests.Session(impersonate=IMPERSONATE)
-
-    # STEP 1 — GET sign-in
-    r = s.get(SIGNIN_URL, allow_redirects=True)
-    r.raise_for_status()
-
-    csrf = s.cookies.get(CSRF_COOKIE)
-    if not csrf:
-        raise RuntimeError("Missing CSRF cookie")
-
-    # STEP 2 — POST login
-    form = {
-        "__csrf": csrf,
-        "username": username,
-        "password": password,
-        "remember": REMEMBER_ME,
-    }
-
-    headers = {
-        "Referer": SIGNIN_URL,
-        "Origin": BASE_URL,
-    }
-
-    pr = s.post(LOGIN_POST_URL, data=form, headers=headers, allow_redirects=True)
-    pr.raise_for_status()
-
-    # STEP 3 — Validate
-    act = s.get(ACTIVITY_URL, allow_redirects=True)
-    act.raise_for_status()
-
-    instance = UserSession(s)
-    if not instance.is_logged_in:
-        raise RuntimeError("Login failed")
-
-    instance.save(cookie_path)
-    return s
 
 def _scan_cookies_for(name_substr: str, session):
     jar = getattr(getattr(session, "cookies", None), "jar", None)
@@ -192,6 +152,42 @@ class UserSession:
                 _apply_cookie_extras(s.cookies.jar, c["name"], c["domain"], extra)
         
         return cls(s)
+
+    @classmethod
+    def login(cls, username: str, password: str, path: Path = DEFAULT_COOKIE_PATH) -> "UserSession":
+        """Perform a fresh login and return a UserSession instance."""
+        s = requests.Session(impersonate=IMPERSONATE)
+
+        # STEP 1 — GET sign-in
+        r = s.get(SIGNIN_URL, allow_redirects=True)
+        r.raise_for_status()
+
+        csrf = s.cookies.get(CSRF_COOKIE)
+        if not csrf:
+            raise RuntimeError("Missing CSRF cookie")
+
+        # STEP 2 — POST login
+        form = {
+            "__csrf": csrf,
+            "username": username,
+            "password": password,
+            "remember": REMEMBER_ME,
+        }
+        headers = {"Referer": SIGNIN_URL, "Origin": BASE_URL}
+
+        pr = s.post(LOGIN_POST_URL, data=form, headers=headers, allow_redirects=True)
+        pr.raise_for_status()
+
+        # STEP 3 — Initial Validation
+        act = s.get(ACTIVITY_URL, allow_redirects=True)
+        act.raise_for_status()
+
+        instance = cls(s)
+        if not instance.is_logged_in:
+             raise RuntimeError("Login failed: Session not active")
+
+        instance.save(path)
+        return instance
 
     def validate(self) -> bool:
         """Return False only when session is CERTAINLY invalid."""
@@ -263,5 +259,4 @@ class UserSession:
         if password is None:
             password = getpass.getpass("Letterboxd password: ")
 
-        s = lb_login(username, password, cookie_path)
-        return cls(s)
+        return cls.login(username, password, cookie_path)
