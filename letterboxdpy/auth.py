@@ -45,34 +45,6 @@ from letterboxdpy.constants.project import (
     REMEMBER_ME
 )
 
-# ----------------------------
-# Helpers
-# ----------------------------
-
-def get_csrf(session) -> str:
-    """Extract CSRF token from session cookies."""
-    # 1) Fast path
-    cookies = getattr(session, "cookies", None)
-    if cookies is not None:
-        val = getattr(cookies, "get", lambda x: None)(CSRF_COOKIE)
-        if val:
-            return val
-
-    c = _scan_cookies_for("csrf", session)
-    return c.value
-
-def get_signed_in_user(session) -> str:
-    """Extract currently signed-in username from session cookies."""
-    # 1) Fast path
-    cookies = getattr(session, "cookies", None)
-    if cookies is not None:
-        val = getattr(cookies, "get", lambda x: None)(USER_COOKIE)
-        if val:
-            return val
-
-    # 2) Fallback scan
-    c = _scan_cookies_for("signed.in", session)
-    return c.value
 
 # ----------------------------
 # Internal Utilities
@@ -236,11 +208,23 @@ class UserSession:
 
     @cached_property
     def csrf(self) -> str:
-        return get_csrf(self.session)
+        """Extract CSRF token from session cookies."""
+        # 1) Fast path
+        val = self.session.cookies.get(CSRF_COOKIE)
+        if val:
+            return val
+        # 2) Fallback scan
+        return _scan_cookies_for("csrf", self.session).value
 
     @cached_property
     def username(self) -> str:
-        return get_signed_in_user(self.session)
+        """Extract currently signed-in username from session cookies."""
+        # 1) Fast path
+        val = self.session.cookies.get(USER_COOKIE)
+        if val:
+            return val
+        # 2) Fallback scan
+        return _scan_cookies_for("signed.in", self.session).value
 
     @classmethod
     def ensure(
