@@ -9,6 +9,7 @@ All behavior is derived ONLY from captured requests:
 FEATURES:
   - Automatic session synchronization with global Scraper instance.
   - Interactive and programmatic authentication support via UserSession.ensure().
+  - CLI usage: python -m letterboxdpy.auth --login
 
 No undocumented endpoints.
 No HTML parsing.
@@ -244,3 +245,38 @@ class UserSession:
             password = getpass.getpass("Letterboxd password: ")
 
         return cls.login(username, password, cookie_path)
+
+
+# ----------------------------
+# CLI Entry Point
+# ----------------------------
+
+if __name__ == "__main__":
+    import argparse
+    import sys
+
+    parser = argparse.ArgumentParser(description="Letterboxd Session Manager")
+    parser.add_argument("--login", action="store_true", help="Force login prompts")
+    parser.add_argument("--path", type=Path, default=DEFAULT_COOKIE_PATH, help="Cookie storage path")
+    parser.add_argument("-u", "--username", help="Letterboxd username or email")
+    
+    args = parser.parse_args()
+
+    try:
+        if args.login:
+            # Force re-authentication
+            username = args.username or input("Letterboxd username: ").strip()
+            password = getpass.getpass("Letterboxd password: ")
+            
+            print(f"Logging in as {username}...")
+            session = UserSession.login(username, password, args.path)
+            print(f"[OK] Session saved to {args.path}")
+        else:
+            # Normal ensure check (load if exists, else prompt)
+            print(f"Checking session at {args.path}...")
+            session = UserSession.ensure(args.path, username=args.username)
+            print(f"[OK] Authenticated as {session.username}")
+            
+    except Exception as e:
+        print(f"[ERROR] {e}", file=sys.stderr)
+        sys.exit(1)
