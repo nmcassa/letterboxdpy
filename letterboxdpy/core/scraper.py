@@ -46,6 +46,11 @@ class Scraper:
         return cls._session
 
     @classmethod
+    def set_instance(cls, session: requests.Session):
+        """Sets the singleton session instance."""
+        cls._session = session
+
+    @classmethod
     def get_page(cls, url: str) -> BeautifulSoup:
         """Fetch, check, and parse the HTML content from the specified URL."""
         response = cls._fetch(url)
