@@ -257,7 +257,12 @@ class UserSession:
         return c.value
 
     @classmethod
-    def ensure(cls, cookie_path: Path = DEFAULT_COOKIE_PATH) -> "UserSession":
+    def ensure(
+        cls,
+        cookie_path: Path = DEFAULT_COOKIE_PATH,
+        username: str | None = None,
+        password: str | None = None
+    ) -> "UserSession":
         if cookie_path.exists():
             s = load_session_from_cookies(cookie_path)
             if is_logged_in_by_cookie(s):
@@ -266,7 +271,10 @@ class UserSession:
             print("[WARN] Cookie jar invalid or expired")
 
         print("[ACTION] Login required")
-        username = input("Letterboxd username: ").strip()
-        password = getpass.getpass("Letterboxd password: ")
+        if username is None:
+            username = input("Letterboxd username: ").strip()
+        if password is None:
+            password = getpass.getpass("Letterboxd password: ")
+
         s = lb_login(username, password, cookie_path)
         return cls(s)
