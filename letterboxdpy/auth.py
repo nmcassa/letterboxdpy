@@ -140,24 +140,10 @@ class UserSession:
         s = requests.Session(impersonate=IMPERSONATE)
 
         # STEP 1 — GET sign-in
-        r = s.get(SIGNIN_URL, allow_redirects=True)
-        r.raise_for_status()
-
-        csrf = s.cookies.get(CSRF_COOKIE)
-        if not csrf:
-            raise SessionError("Missing CSRF cookie")
+        csrf = cls._fetch_signin_page(s)
 
         # STEP 2 — POST login
-        form = {
-            "__csrf": csrf,
-            "username": username,
-            "password": password,
-            "remember": REMEMBER_ME,
-        }
-        headers = {"Referer": SIGNIN_URL, "Origin": BASE_URL}
-
-        pr = s.post(LOGIN_POST_URL, data=form, headers=headers, allow_redirects=True)
-        pr.raise_for_status()
+        cls._submit_login_form(s, csrf, username, password)
 
         # STEP 3 — Initial Validation
         act = s.get(ACTIVITY_URL, allow_redirects=True)
@@ -254,6 +240,34 @@ class UserSession:
 
         return cls.login(username, password, cookie_path)
 
+    # ----------------------------
+    # Login Helpers (Private)
+    # ----------------------------
+
+    @staticmethod
+    def _fetch_signin_page(session: requests.Session) -> str:
+        """Fetch sign-in page and extract CSRF token."""
+        r = session.get(SIGNIN_URL, allow_redirects=True)
+        r.raise_for_status()
+        
+        csrf = session.cookies.get(CSRF_COOKIE)
+        if not csrf:
+            raise SessionError("Missing CSRF cookie")
+        return csrf
+
+    @staticmethod
+    def _submit_login_form(session: requests.Session, csrf: str, username: str, password: str):
+        """Submit login credentials."""
+        form = {
+            "__csrf": csrf,
+            "username": username,
+            "password": password,
+            "remember": REMEMBER_ME,
+        }
+        headers = {"Referer": SIGNIN_URL, "Origin": BASE_URL}
+        
+        pr = session.post(LOGIN_POST_URL, data=form, headers=headers, allow_redirects=True)
+        pr.raise_for_status()
 
 # ----------------------------
 # CLI Entry Point
