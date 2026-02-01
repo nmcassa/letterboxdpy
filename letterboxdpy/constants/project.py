@@ -27,6 +27,7 @@ SIGNIN_URL = f"{DOMAIN}/sign-in/"
 LOGIN_POST_URL = f"{DOMAIN}/user/login.do"
 SETTINGS_URL = f"{DOMAIN}/settings/"
 ACTIVITY_URL = f"{DOMAIN}/activity/"
+PROFILE_UPDATE_URL = f"{DOMAIN}/user/update.do"
 
 # Authentication & Cookies
 CSRF_COOKIE = "com.xk72.webparts.csrf"

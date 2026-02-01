@@ -7,6 +7,7 @@ from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.utils.utils_url import extract_path_segment
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.constants.forms import FAVORITE_ATTRS
 
 
 class UserProfile:
@@ -162,14 +163,14 @@ def extract_favorites(dom) -> dict:
         items = poster_list.find_all("li")
         
         for item in items:
-            react_div = item.find("div", class_="react-component")
+            react_div = item.find("div", class_=FAVORITE_ATTRS.COMPONENT_CLASS)
             if not react_div:
                 continue
                 
             # Extract data from react component attributes
-            movie_id = react_div.get('data-film-id')
-            movie_slug = react_div.get('data-item-slug')
-            movie_name = react_div.get('data-item-name')
+            movie_id = react_div.get(FAVORITE_ATTRS.FILM_ID_ATTR)
+            movie_slug = react_div.get(FAVORITE_ATTRS.FILM_SLUG_ATTR)
+            movie_name = react_div.get(FAVORITE_ATTRS.FILM_NAME_ATTR)
             
             # Clean movie name (remove year) like we did in diary
             if movie_name and ' (' in movie_name and movie_name.endswith(')'):
@@ -219,12 +220,12 @@ def extract_watchlist_recent(dom) -> dict:
         from letterboxdpy.utils.utils_string import extract_year_from_movie_name, clean_movie_name
         
         # Look for data attributes in the nested react-component div
-        react_div = item.find('div', {'class': 'react-component'})
+        react_div = item.find('div', {'class': FAVORITE_ATTRS.COMPONENT_CLASS})
         
         if react_div:
-            film_id = react_div.get('data-film-id')
-            film_slug = react_div.get('data-item-slug')
-            raw_name = react_div.get('data-item-name', "Unknown")
+            film_id = react_div.get(FAVORITE_ATTRS.FILM_ID_ATTR)
+            film_slug = react_div.get(FAVORITE_ATTRS.FILM_SLUG_ATTR)
+            raw_name = react_div.get(FAVORITE_ATTRS.FILM_NAME_ATTR, "Unknown")
             film_name = clean_movie_name(raw_name)
             year = extract_year_from_movie_name(raw_name)
         else:
