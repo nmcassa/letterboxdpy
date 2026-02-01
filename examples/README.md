@@ -14,6 +14,7 @@ pip install -r examples/requirements.txt
 | Script | Description | Usage |
 |--------|-------------|-------|
 | [`profile_editor.py`](profile_editor.py) | Interactive CLI tool to edit profile settings and manage favorites | `python examples/profile_editor.py` |
+| [`notification_manager.py`](notification_manager.py) | Full-featured CLI to manage Letterboxd notification settings | `python examples/notification_manager.py` |
 | [`compare_watchlists.py`](compare_watchlists.py) | Compare watchlists from followed users (generates interactive HTML) | `python examples/compare_watchlists.py --user <username>` |
 | [`follow_stats.py`](follow_stats.py) | Analyzes follow relationships and mutuals (generates interactive HTML) | `python examples/follow_stats.py --user <username>` |
 | [`user_rating_plot.py`](user_rating_plot.py) | Creates a rating distribution histogram with Letterboxd styling | `python examples/user_rating_plot.py --user <username>` |

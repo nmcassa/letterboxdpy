@@ -15,6 +15,7 @@ import argparse
 import random
 import copy
 from pathlib import Path
+
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -22,7 +23,7 @@ from rich.prompt import Prompt, Confirm
 
 from letterboxdpy.auth import UserSession
 from letterboxdpy.account.settings import UserSettings
-from letterboxdpy.constants.forms import PROFILE_FORM, PROFILE_EDITABLE_FIELDS
+from letterboxdpy.constants.forms.profile import PROFILE_FORM, PROFILE_EDITABLE_FIELDS
 
 
 def display_summary(payload: dict, original: dict, console: Console):
@@ -128,6 +129,48 @@ def edit_favorites(payload: dict, console: Console) -> bool:
     
     return False
 
+def has_modified_fields(payload: dict, original: dict) -> bool:
+    """Compare current payload with original state."""
+    # Check standard fields
+    for field in PROFILE_EDITABLE_FIELDS:
+        if payload.get(field.key) != original.get(field.key):
+            return True
+            
+    # Check favorites
+    current_fav_ids = [f["id"] for f in payload.get("favouriteFilms", [])]
+    orig_fav_ids = [f["id"] for f in original.get("favouriteFilms", [])]
+    return current_fav_ids != orig_fav_ids
+
+def handle_editor_choice(choice: str, payload: dict, original_payload: dict, settings: UserSettings, console: Console) -> bool:
+    """Handles user editor selection. Returns False to exit the loop."""
+    if choice == "Q":
+        if has_modified_fields(payload, original_payload) and not Confirm.ask("[yellow]Discard unsaved changes?[/yellow]"):
+            return True
+        return False
+    
+    if choice == "S":
+        if not has_modified_fields(payload, original_payload):
+            console.print("[dim]No changes to save.[/dim]")
+            return True
+
+        result = settings.update_profile(payload)
+        if result["success"]:
+            console.print("\n[bold green][SUCCESS] Profile saved![/bold green]")
+            original_payload.clear()
+            original_payload.update(copy.deepcopy(payload))
+        else:
+            console.print(f"\n[bold red][FAILED] ({result['status_code']})[/bold red]")
+        return True
+
+    if choice == "F":
+        edit_favorites(payload, console)
+        return True
+    
+    # Direct field edit
+    idx = int(choice) - 1
+    edit_field(PROFILE_EDITABLE_FIELDS[idx], payload, console)
+    return True
+
 def run_editor(session: UserSession):
     """Main editor loop using UserSettings module."""
     console = Console()
@@ -144,11 +187,8 @@ def run_editor(session: UserSession):
     payload = settings.get_profile()
     original_payload = copy.deepcopy(payload)
     
-    changes_made = False
-    
     num_fields = len(PROFILE_EDITABLE_FIELDS)
-    # Allow both upper and lower case in the prompt validation
-    valid_choices = [str(i) for i in range(1, num_fields + 1)] + ["F", "S", "Q", "f", "s", "q"]
+    valid_choices = [str(i) for i in range(1, num_fields + 1)] + ["F", "S", "Q"]
     
     while True:
         display_summary(payload, original_payload, console)
@@ -156,32 +196,8 @@ def run_editor(session: UserSession):
         console.print("\n[dim]Enter field # to edit, [bold]F[/bold] for favorites, [bold]S[/bold] to save, [bold]Q[/bold] to quit[/dim]")
         choice = Prompt.ask("→", choices=valid_choices, default="Q").upper()
         
-        if choice == "Q":
-            if changes_made and not Confirm.ask("[yellow]Discard unsaved changes?[/yellow]"):
-                continue
+        if not handle_editor_choice(choice, payload, original_payload, settings, console):
             break
-        
-        elif choice == "S":
-            if not changes_made:
-                console.print("[dim]No changes to save.[/dim]")
-            else:
-                result = settings.update_profile(payload)
-                if result["success"]:
-                    console.print("\n[bold green][SUCCESS] Profile saved![/bold green]")
-                    # Update original state to match current saved state
-                    original_payload = copy.deepcopy(payload)
-                    changes_made = False
-                else:
-                    console.print(f"\n[bold red][FAILED] ({result['status_code']})[/bold red]")
-        
-        elif choice == "F":
-            if edit_favorites(payload, console):
-                changes_made = True
-        
-        else:
-            idx = int(choice) - 1
-            if edit_field(PROFILE_EDITABLE_FIELDS[idx], payload, console):
-                changes_made = True
 
 
 def main():
