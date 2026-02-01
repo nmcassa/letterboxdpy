@@ -28,6 +28,11 @@ from pathlib import Path
 import getpass
 
 from letterboxdpy.core.scraper import Scraper, requests
+from letterboxdpy.core.exceptions import (
+    LoginFailedError,
+    SessionError,
+    MissingCredentialsError
+)
 from letterboxdpy.utils.utils_file import JsonFile
 
 from letterboxdpy.constants.project import (
@@ -63,13 +68,13 @@ def _apply_cookie_extras(jar, name, domain, fields):
 def _scan_cookies_for(name_substr: str, session):
     jar = getattr(getattr(session, "cookies", None), "jar", None)
     if not jar:
-        raise RuntimeError("No cookie jar present")
+        raise SessionError("No cookie jar present")
     
     matches = [c for c in jar if name_substr in c.name.lower() and c.value]
     if matches:
         return matches[0]
 
-    raise RuntimeError(f"No cookie containing '{name_substr}' found")
+    raise SessionError(f"No cookie containing '{name_substr}' found")
 
 # ----------------------------
 # UserSession
@@ -129,6 +134,9 @@ class UserSession:
     @classmethod
     def login(cls, username: str, password: str, path: Path = DEFAULT_COOKIE_PATH) -> "UserSession":
         """Perform a fresh login and return a UserSession instance."""
+        if not username or not password:
+             raise MissingCredentialsError("Username and password are required")
+
         s = requests.Session(impersonate=IMPERSONATE)
 
         # STEP 1 — GET sign-in
@@ -137,7 +145,7 @@ class UserSession:
 
         csrf = s.cookies.get(CSRF_COOKIE)
         if not csrf:
-            raise RuntimeError("Missing CSRF cookie")
+            raise SessionError("Missing CSRF cookie")
 
         # STEP 2 — POST login
         form = {
@@ -157,7 +165,7 @@ class UserSession:
 
         instance = cls(s)
         if not instance.is_logged_in:
-             raise RuntimeError("Login failed: Session not active")
+             raise LoginFailedError("Login failed: Session not active")
 
         instance.save(path)
         return instance

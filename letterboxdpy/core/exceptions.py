@@ -25,3 +25,23 @@ class CustomEncoderError(Exception):
 class PrivateRouteError(Exception):
     """Exception raised when a private route is accessed."""
     pass
+
+# ----------------
+# Auth Exceptions
+# ----------------
+
+class AuthError(Exception):
+    """Base class for all authentication-related errors."""
+    pass
+
+class LoginFailedError(AuthError):
+    """Raised when login attempt fails (e.g. invalid credentials)."""
+    pass
+
+class SessionError(AuthError):
+    """Raised when session is invalid, expired, or missing required cookies."""
+    pass
+
+class MissingCredentialsError(AuthError):
+    """Raised when username/password are required but not provided."""
+    pass
