@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from curl_cffi import requests
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import Scraper
 
@@ -19,8 +18,8 @@ class FilmURL:
         from letterboxdpy.core.models import MovieJSON
         url = cls.json_url(slug)
         
-        # Standalone fetch to avoid touching other files
-        response = requests.get(url, headers=Scraper.headers, impersonate="chrome")
+        # Use shared scraper session
+        response = Scraper.instance().get(url, headers=Scraper.headers, impersonate="chrome")
         if response.status_code != 200:
             from letterboxdpy.core.exceptions import InvalidResponseError
             raise InvalidResponseError(f"Failed to fetch JSON from {url}: {response.status_code}")
