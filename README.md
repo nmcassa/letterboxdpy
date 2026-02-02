@@ -6,7 +6,24 @@
 [![License](https://img.shields.io/pypi/l/letterboxdpy?color=blue)](https://github.com/nmcassa/letterboxdpy/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/letterboxdpy?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads)](https://pepy.tech/project/letterboxdpy)
 
-## Installation
+## Table of Contents
+- [Installation](#installation)
+- [Core Objects](#core-objects)
+  - [User](#user)
+  - [Movie](#movie)
+  - [Search](#search)
+  - [List](#list)
+  - [Members](#members)
+  - [Films](#films)
+  - [Watchlist](#watchlist)
+- [Advanced Features](#advanced-features)
+  - [Authentication](#authentication)
+  - [Settings](#settings)
+- [Development](#development)
+  - [Examples](#examples)
+  - [Testing](#testing)
+
+<h1 id="installation">Installation</h1>
 
 ### From PyPI
 
@@ -27,7 +44,9 @@ pip install git+https://github.com/nmcassa/letterboxdpy.git
 > [!WARNING]
 > Please be aware that installing directly from the GitHub repository might give you access to the most recent features and bug fixes, but it could also include changes that haven't been thoroughly tested and may not be stable for production use.
 
-<h1 id="User">User Object</h1>
+<h1 id="core-objects">Core Objects</h1>
+
+<h2 id="user">User Object</h2>
 
 [Explore the file](letterboxdpy/user.py) | [Functions Documentation](/docs/user/funcs/)
 
@@ -101,7 +120,7 @@ print(user_instance)
 ```
 </details>
 
-<h1 id="Movie">Movie Object</h1>
+<h2 id="movie">Movie Object</h2>
 
 [Explore the file](letterboxdpy/movie.py) | [Functions Documentation](/docs/movie/funcs/)
 
@@ -192,7 +211,7 @@ print(movie_instance)
 ```
 </details>
 
-<h1 id="Search">Search Object</h1>
+<h2 id="search">Search Object</h2>
 
 [Explore the file](letterboxdpy/search.py) | [Functions Documentation](/docs/search/funcs/)
 
@@ -252,7 +271,7 @@ print(search_instance.get_results(max=5))
 ```
 </details>
 
-<h1 id="List">List Object</h1>
+<h2 id="list">List Object</h2>
 
 [Explore the file](letterboxdpy/list.py)
 
@@ -291,13 +310,14 @@ print(list_instance)
 ```
 </details>
 
-<h1 id="Members">Members Object</h1>
+<h2 id="members">Members Object</h2>
 
 [Explore the file](letterboxdpy/members.py) | [Functions Documentation](/docs/members/funcs/)
 
 ```python
-from letterboxdpy.members import top_users
-print(top_users(max=5))
+from letterboxdpy.members import Members
+members_instance = Members(max=5)
+print(members_instance.members)
 ```
 
 <details>
@@ -314,7 +334,7 @@ print(top_users(max=5))
 ```
 </details>
 
-<h1 id="Films">Films Object</h1>
+<h2 id="films">Films Object</h2>
 
 [Explore the file](letterboxdpy/films.py) | [Functions Documentation](/docs/films/funcs/)
 
@@ -351,7 +371,7 @@ print(films_instance.movies)
 ```
 </details>
 
-<h1 id="Watchlist">Watchlist Object</h1>
+<h2 id="watchlist">Watchlist Object</h2>
 
 [Explore the file](letterboxdpy/watchlist.py)
 
@@ -383,7 +403,9 @@ print(watchlist)
 ```
 </details>
 
-<h1 id="Authentication">Authentication & Sessions</h1>
+<h1 id="advanced-features">Advanced Features</h1>
+
+<h2 id="authentication">Authentication & Sessions</h2>
 
 [Explore the file](letterboxdpy/auth.py)
 
@@ -404,7 +426,7 @@ session = UserSession.ensure()
 print(f"Authenticated as: {session.username}")
 ```
 
-<h1 id="Settings">User Settings</h1>
+<h2 id="settings">User Settings</h2>
 
 [Explore the file](letterboxdpy/account/settings.py)
 
@@ -431,13 +453,15 @@ notifs = settings.get_notifications()
 settings.update_notifications({"emailEditorial": True, "pushFollowers": False})
 ```
 
-<h1 id="Examples">Examples</h1>
+<h1 id="development">Development</h1>
+
+<h2 id="examples">Examples</h2>
 
 Example scripts demonstrating various features are available in the [`examples/`](examples/) directory.
 
 See [`examples/README.md`](examples/README.md) for detailed usage instructions.
 
-<h1 id="Testing">Testing</h1>
+<h2 id="testing">Testing</h2>
 
 You may test the plugin by using the built-in `unittest` package through the CLI:
 
