@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "letterboxdpy"
-version = "6.3.0"
+version = "6.4.0"
 dependencies = [
     "beautifulsoup4>=4.12.3",
     "lxml>=5.1.0",
