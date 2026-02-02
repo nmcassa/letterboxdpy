@@ -28,13 +28,13 @@ class Members:
         """Return a JSON string representation of the instance."""
         return JsonFile.stringify(self, indent=2, encoder=Encoder)
 
-    def jsonify(self) -> dict:
+    def jsonify(self) -> dict | None:
         """Convert the instance to a JSON dictionary."""
         return JsonFile.parse(self.__str__())
 
 # -- FUNCTIONS --
 
-def top_users(max:int = 100) -> List:
+def top_users(max:int = 100) -> list:
     """Fetch the top n members from the Letterboxd popular members page."""
     # max 256 page?
     members_instance = Members()

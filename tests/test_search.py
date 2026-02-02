@@ -13,7 +13,7 @@ class TestSearch(unittest.TestCase):
         self.assertGreater(len(data['results']), 0)
 
     def test_film_search_with_max(self):
-        data = self.q.get_results(max=1)
+        data = self.q.get_results(1)
         self.assertEqual(data['count'], 1)
         self.assertEqual(len(data['results']), 1)
 

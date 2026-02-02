@@ -1,4 +1,5 @@
 from json import JSONEncoder
+from enum import Enum
 from letterboxdpy.core.exceptions import CustomEncoderError
 
 
@@ -9,13 +10,15 @@ class Encoder(JSONEncoder):
     .. logic to return the object's namespace dictionary.
     """
     def default(self, o):
-        if not hasattr(o, '__dict__'):
-            raise CustomEncoderError(f"Object of type {type(o).__name__} has no __dict__ attribute")
+        if isinstance(o, Enum):
+            return o.value
         
         try:
             return o.__dict__
+        except AttributeError:
+            return super().default(o)
         except Exception as e:
-            raise CustomEncoderError("An error occurred during encoding") from e
+            raise CustomEncoderError(f"An error occurred during encoding: {e}") from e
 
 class SecretsEncoder(JSONEncoder):
     """JSON encoder that excludes specified attributes from the output."""
@@ -33,6 +36,12 @@ class SecretsEncoder(JSONEncoder):
 
     def default(self, o):
         """Encodes the object to JSON format excluding specified attributes."""
-        if not hasattr(o, '__dict__'):
-            raise CustomEncoderError(f"Object of type {type(o).__name__} has no __dict__ attribute")
-        return {k: v for k, v in o.__dict__.items() if k not in self.secrets}
+        if isinstance(o, Enum):
+            return o.value
+        
+        try:
+            return {k: v for k, v in o.__dict__.items() if k not in self.secrets}
+        except AttributeError:
+            return super().default(o)
+        except Exception as e:
+            raise CustomEncoderError(f"An error occurred during encoding: {e}") from e
