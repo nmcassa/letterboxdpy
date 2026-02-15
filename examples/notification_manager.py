@@ -3,13 +3,16 @@ import sys
 from pathlib import Path
 
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
-from rich.prompt import Prompt, Confirm
+from rich.prompt import Confirm, Prompt
+from rich.table import Table
 
-from letterboxdpy.auth import UserSession
 from letterboxdpy.account.settings import UserSettings
-from letterboxdpy.constants.forms.notifications import NOTIFICATIONS_FORM, NOTIFICATION_GROUPS
+from letterboxdpy.auth import UserSession
+from letterboxdpy.constants.forms.notifications import (
+    NOTIFICATION_GROUPS,
+    NOTIFICATIONS_FORM,
+)
 
 __title__ = "Notification Manager"
 __description__ = "CLI tool to manage Letterboxd notification settings"

@@ -38,13 +38,12 @@ from rich.progress import (
     SpinnerColumn,
     TaskProgressColumn,
     TextColumn,
-    TimeElapsedColumn
+    TimeElapsedColumn,
 )
 from rich.table import Table
 from rich.text import Text
 
 # Add parent directory to path for local letterboxdpy
-
 from letterboxdpy.pages.user_watchlist import UserWatchlist
 from letterboxdpy.user import User
 from letterboxdpy.utils.utils_directory import Directory

@@ -8,17 +8,18 @@ Downloads movie posters from user's diary entries.
 - Skip existing files with size checking
 """
 
-from curl_cffi import requests
-import sys
 import os
+import sys
+
 from bs4 import Tag
+from curl_cffi import requests
+from fastfingertips.terminal_utils import args_exists, get_input
 
 from letterboxdpy import user
 from letterboxdpy.core.scraper import parse_url
-from letterboxdpy.utils.utils_parser import extract_json_ld_script
-from fastfingertips.terminal_utils import get_input, args_exists
-from letterboxdpy.utils.utils_file import BinaryFile
 from letterboxdpy.utils.utils_directory import Directory
+from letterboxdpy.utils.utils_file import BinaryFile
+from letterboxdpy.utils.utils_parser import extract_json_ld_script
 
 
 class Settings:

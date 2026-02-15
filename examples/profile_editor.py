@@ -12,18 +12,18 @@ __author__ = "fastfingertips"
 __created_at__ = "2026-02-01"
 
 import argparse
-import random
 import copy
+import random
 from pathlib import Path
 
 from rich.console import Console
 from rich.panel import Panel
+from rich.prompt import Confirm, Prompt
 from rich.table import Table
-from rich.prompt import Prompt, Confirm
 
-from letterboxdpy.auth import UserSession
 from letterboxdpy.account.settings import UserSettings
-from letterboxdpy.constants.forms.profile import PROFILE_FORM, PROFILE_EDITABLE_FIELDS
+from letterboxdpy.auth import UserSession
+from letterboxdpy.constants.forms.profile import PROFILE_EDITABLE_FIELDS, PROFILE_FORM
 
 
 def display_summary(payload: dict, original: dict, console: Console):

@@ -8,14 +8,15 @@ Exports comprehensive user data from Letterboxd profiles.
 - Progress tracking and timing
 """
 
-import time
 import os
+import time
+
+from fastfingertips.terminal_utils import get_input
 
 from letterboxdpy import user
-from letterboxdpy.utils.utils_string import strip_prefix
-from fastfingertips.terminal_utils import get_input
-from letterboxdpy.utils.utils_file import build_path, JsonFile, build_click_url
 from letterboxdpy.utils.utils_directory import check_and_create_dirs
+from letterboxdpy.utils.utils_file import JsonFile, build_click_url, build_path
+from letterboxdpy.utils.utils_string import strip_prefix
 
 # -- MAIN --
 

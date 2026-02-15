@@ -25,8 +25,8 @@ from fastfingertips.terminal_utils import get_input
 from jinja2 import Environment, FileSystemLoader
 from rich.console import Console
 from rich.panel import Panel
-from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.table import Table
 
 from letterboxdpy import user
 from letterboxdpy.utils.utils_directory import Directory

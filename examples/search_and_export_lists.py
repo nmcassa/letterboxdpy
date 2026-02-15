@@ -8,14 +8,16 @@ Searches for Letterboxd lists and exports them to CSV files.
 - Batch processing support
 """
 
-import sys
 import os
+import sys
 
-from letterboxdpy.search import Search
+from fastfingertips.terminal_utils import args_exists, get_input
+
 from letterboxdpy.list import List
-from fastfingertips.terminal_utils import get_input, args_exists
-from letterboxdpy.utils.utils_file import CsvFile, build_path
+from letterboxdpy.search import Search
 from letterboxdpy.utils.utils_directory import Directory
+from letterboxdpy.utils.utils_file import CsvFile, build_path
+
 
 def save_results_to_csv(list_instance: List, csv_file: str) -> None:
     """Saves movie list results to a CSV file."""
