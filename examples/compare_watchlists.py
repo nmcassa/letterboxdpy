@@ -27,6 +27,7 @@ import time
 from collections import Counter
 from datetime import datetime
 
+from fastfingertips.terminal_utils import get_input
 from jinja2 import Environment, FileSystemLoader
 from rich import box
 from rich.console import Console
@@ -439,11 +440,13 @@ class WatchlistComparator:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compare watchlists and generate interactive HTML report with filters")
-    parser.add_argument('--user', '-u', required=True)
+    parser.add_argument('--user', '-u', help="Letterboxd username")
     parser.add_argument('--force', '-f', action='store_true', help="Force refresh cached data")
     args = parser.parse_args()
+
+    username = args.user if args.user else get_input("Enter username: ", index=1)
     
-    comparator = WatchlistComparator(args.user, args.force)
+    comparator = WatchlistComparator(username, args.force)
     
     # Visual workflow exposed in main
     comparator.print_welcome()
