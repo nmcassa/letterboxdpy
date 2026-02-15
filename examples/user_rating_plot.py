@@ -8,15 +8,15 @@ Recreates the ratings distribution section of a Letterboxd profile with a clean,
 """
 
 import argparse
-import sys
 import math
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
-
-from letterboxdpy.user import User
 from fastfingertips.terminal_utils import get_input
-from fastfingertips.string_utils import is_whitespace_or_empty
+
 from letterboxdpy.constants.project import Colors
+from letterboxdpy.user import User
 
 
 class LetterboxdRatingPlotter:
@@ -166,10 +166,7 @@ class LetterboxdRatingPlotter:
 
         args = parser.parse_args()
         
-        username = args.user if not is_whitespace_or_empty(args.user) else None
-        
-        if not username:
-            username = get_input("Enter Letterboxd username: ")
+        username = args.user if args.user else get_input("Enter Letterboxd username: ", index=1)
             
         self.plot(username)
 

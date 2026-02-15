@@ -7,12 +7,19 @@ Creates visualizations of user movie watching patterns over time.
 - Letterboxd-inspired styling
 """
 
-import matplotlib.pyplot as plt
-from letterboxdpy.user import User
-from letterboxdpy.constants.project import Colors, DAY_ABBREVIATIONS, MONTH_ABBREVIATIONS
 import argparse
 import sys
 from datetime import datetime
+
+import matplotlib.pyplot as plt
+from fastfingertips.terminal_utils import get_input
+
+from letterboxdpy.constants.project import (
+    DAY_ABBREVIATIONS,
+    MONTH_ABBREVIATIONS,
+    Colors,
+)
+from letterboxdpy.user import User
 
 
 class LetterboxdStatisticsPlotter:
@@ -139,9 +146,7 @@ class LetterboxdStatisticsPlotter:
         parser.add_argument("--end-year", type=int, default=current_year, help=f"End year (default: {current_year})")
         args = parser.parse_args()
 
-        username = args.user
-        if not username or not username.strip():
-            username = input("Enter a Letterboxd username: ").strip()
+        username = args.user if args.user else get_input("Enter Letterboxd username: ", index=1)
             
         self.username = username
         self.plot(args.start_year, args.end_year)
