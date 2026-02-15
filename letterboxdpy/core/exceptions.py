@@ -26,6 +26,13 @@ class PrivateRouteError(Exception):
     """Exception raised when a private route is accessed."""
     pass
 
+class AccessDeniedError(Exception):
+    """Exception raised when access is denied by the server (e.g. IP/VPN block)."""
+    def __init__(self, message: str = "Access Denied"):
+        self.message = message
+        hint = "\nHint: If you are using a VPN or Proxy, Letterboxd might be blocking your connection. Try disabling it."
+        super().__init__(f"{message}{hint}")
+
 # ----------------
 # Auth Exceptions
 # ----------------

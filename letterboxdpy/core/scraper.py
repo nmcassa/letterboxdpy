@@ -2,23 +2,39 @@ if __name__ == '__main__':
     import sys
     sys.path.append(sys.path[0] + '/..')
 
+import random
+import time
+from typing import Optional, Tuple
+from urllib.parse import quote
+
 from bs4 import BeautifulSoup, Tag
 from curl_cffi import requests
-from urllib.parse import quote
-import time
-import random
-
-from letterboxdpy.utils.utils_file import JsonFile
 from fastfingertips.terminal_utils import get_input
+
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.exceptions import (
-    PageLoadError,
+    AccessDeniedError,
     InvalidResponseError,
-    PrivateRouteError
+    PageLoadError,
+    PrivateRouteError,
 )
+from letterboxdpy.utils.utils_file import JsonFile
+
 
 class Scraper:
     """A class for scraping and parsing web pages."""
+
+    # Error Detection Patterns
+    BLOCK_KEYWORDS = [
+        "cloudflare", "permission denied", "security challenge", 
+        "captcha", "verify you are human", "checking your browser",
+        "access denied", "ddos protection"
+    ]
+    
+    # Standard Error Messages
+    ERR_VPN_BLOCK = "IP or VPN Blocked: Letterboxd is blocking this request. Try disabling your VPN/Proxy."
+    ERR_FORBIDDEN_FALLBACK = "Forbidden: Access denied. Your network might be restricted or IP is flagged."
+    ERR_UNKNOWN = "Unknown error occurred"
 
     _session = None
     headers = {
@@ -31,7 +47,7 @@ class Scraper:
     builder = "lxml"
     timeout = (10, 30)  # (connect, read) in seconds; set None to disable
 
-    def __init__(self, domain: str = headers['referer'], user_agent: str | None = None):
+    def __init__(self, domain: str = headers['referer'], user_agent: Optional[str] = None):
         """Initialize the scraper with the specified domain and user-agent."""
         self.headers = self.headers.copy()
         self.headers["referer"] = domain
@@ -39,14 +55,14 @@ class Scraper:
             self.headers["user-agent"] = user_agent
 
     @classmethod
-    def instance(cls):
+    def instance(cls) -> requests.Session:
         """Returns a singleton session instance."""
         if cls._session is None:
             cls._session = requests.Session()
         return cls._session
 
     @classmethod
-    def set_instance(cls, session: requests.Session):
+    def set_instance(cls, session: requests.Session) -> None:
         """Sets the singleton session instance."""
         cls._session = session
 
@@ -59,31 +75,46 @@ class Scraper:
 
     @classmethod
     def _fetch(cls, url: str) -> requests.Response:
-        """Fetch the HTML content from the specified URL using a session with retry logic."""
-        max_retries = 3
+        """Fetch the HTML content from the specified URL using a session with robust retry logic."""
+        max_retries = 5
         last_exception = None
         response = None
         
         for attempt in range(max_retries):
             try:
                 session = cls.instance()
-                response = session.get(url, headers=cls.headers, timeout=cls.timeout, impersonate="chrome")
+                # Progressive timeout: increase timeout on each attempt
+                current_timeout: Tuple[int, int] = (cls.timeout[0] + attempt * 2, cls.timeout[1] + attempt * 5)
                 
-                # If we get a 403, it might be a temporary block, try one more time after a short delay
-                if response.status_code == 403 and attempt < max_retries - 1:
-                    time.sleep(1 + random.random())
-                    continue
-                    
+                response = session.get(url, headers=cls.headers, timeout=current_timeout, impersonate="chrome")
+                
+                # Success
+                if response.status_code == 200:
+                    return response
+
+                # Cloudflare or temporary block (403)
+                if response.status_code == 403:
+                    # If it's the first few attempts, might be a transient block, let's wait longer
+                    if attempt < max_retries - 1:
+                        wait = 2 * (attempt + 1) + random.random()
+                        time.sleep(wait)
+                        continue
+                
+                # Other status codes (404, 500 etc.) handled in _check_for_errors after loop
                 return response
+
             except requests.errors.RequestsError as e:
                 last_exception = e
                 if attempt < max_retries - 1:
-                    time.sleep(1 + attempt + random.random())
+                    # Network instability (like VPN switching) needs longer waits
+                    # Attempt 0: ~3s, 1: ~6s, 2: ~9s... etc.
+                    wait = 3 * (attempt + 1) + random.random()
+                    time.sleep(wait)
                     continue
                 break
         
         if last_exception:
-            raise PageLoadError(url, str(last_exception))
+            raise PageLoadError(url, f"Network error ({type(last_exception).__name__}): {str(last_exception)}")
             
         if response is not None:
             return response
@@ -96,13 +127,34 @@ class Scraper:
         if response.status_code != 200:
             error_message = cls._get_error_message(response)
             formatted_error_message = cls._format_error(url, response, error_message)
+            
             if response.status_code == 403:
+                # Differentiate between VPN/IP blocks and private profiles
+                is_blocked = (error_message == cls.ERR_VPN_BLOCK or 
+                             error_message.startswith("Forbidden:"))
+                
+                if is_blocked:
+                    raise AccessDeniedError(formatted_error_message)
+                
                 raise PrivateRouteError(formatted_error_message)
+                
             raise InvalidResponseError(formatted_error_message)
 
     @classmethod
     def _get_error_message(cls, response: requests.Response) -> str:
         """Extract the error message from the response, if available."""
+        # 1. Header-based detection (More reliable than text-matching)
+        server_header = response.headers.get("Server", "").lower()
+        has_cf_header = any(h in response.headers for h in ["cf-ray", "cf-cache-status"])
+        
+        if response.status_code == 403 and (server_header == "cloudflare" or has_cf_header):
+            return cls.ERR_VPN_BLOCK
+
+        # 2. Text-based detection (Fallback)
+        if response.status_code == 403 and any(kw in response.text.lower() for kw in cls.BLOCK_KEYWORDS):
+            return cls.ERR_VPN_BLOCK
+
+        # 3. Try to find Letterboxd's official error message in the DOM
         dom = BeautifulSoup(response.text, cls.builder)
         message_section = dom.find("section", {"class": "message"})
         
@@ -111,7 +163,10 @@ class Scraper:
             if strong:
                 return strong.get_text()
                 
-        return "Unknown error occurred"
+        if response.status_code == 403:
+             return f"{cls.ERR_FORBIDDEN_FALLBACK} URL: {response.url}"
+
+        return cls.ERR_UNKNOWN
 
     @classmethod
     def _format_error(cls, url: str, response: requests.Response, message: str) -> str:
