@@ -20,6 +20,14 @@ class UserActivity:
     def get_activity_following(self) -> dict: return extract_activity(self.activity_following_url)
 
 def extract_activity(ajax_url: str) -> dict:
+    """Extracts activity data with ISO 8601 strings for consistency across endpoints.
+
+    Args:
+        ajax_url (str): The URL for the activity AJAX endpoint.
+
+    Returns:
+        dict: A dictionary containing metadata and a list of activities.
+    """
 
     def _process_log(section, event_type) -> dict:
         """Process activity log and extract data."""
@@ -35,7 +43,7 @@ def extract_activity(ajax_url: str) -> dict:
         # Build activity data structure
         log_data = {
             'activity_type': event_type,
-            'timestamp': build_time_data(date),
+            'date': build_time_data(date),
             'content': {}
         }
         

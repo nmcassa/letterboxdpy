@@ -22,7 +22,7 @@ class UserLikes:
         return extract_user_films(self.films_url)
     
     def get_liked_reviews(self): 
-        """Get user's liked reviews with detailed structure."""
+        """Get user's liked reviews with ISO 8601 formatted dates."""
         return extract_liked_reviews(self.reviews_url)
     
     def get_liked_lists(self): 

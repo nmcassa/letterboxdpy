@@ -4,6 +4,7 @@ from letterboxdpy.utils.utils_transform import month_to_index
 from fastfingertips.datetime_utils import parse_datetime
 from letterboxdpy.constants.project import DOMAIN_SHORT
 from letterboxdpy.constants.selectors import PageSelectors
+from letterboxdpy.utils.date_utils import DateUtils
 
 
 def try_parse(value, target_type):
@@ -27,32 +28,30 @@ def extract_and_convert_shorthand(tag) -> int:
     return 0
 
 
-def parse_iso_date(iso_date_str: str) -> dict[str, int]:
+def parse_iso_date(iso_date_str: str) -> str:
     """
-    Parses an ISO 8601 formatted date string.
-    Example: '2025-01-01T00:00:00Z' -> {'year': 2025, 'month': 1, 'day': 1}
+    Parses an ISO 8601 formatted date string and returns a consistent ISO format.
+    Example: '2025-01-01T00:00:00Z' -> '2025-01-01T00:00:00.000000Z'
     """
-    dt = parse_datetime(iso_date_str)
-    if dt:
-        return {'year': dt.year, 'month': dt.month, 'day': dt.day}
-    raise ValueError(f"Error parsing ISO date format: {iso_date_str}")
+    return DateUtils.to_iso(iso_date_str)
 
-def parse_written_date(written_date_str: str) -> dict[str, int]:
-    """Parses a written date string (e.g., '01 Jan 2025')."""
+def parse_written_date(written_date_str: str) -> str:
+    """Parses a written date string (e.g., '01 Jan 2025') into ISO format."""
     try:
         date_parts = written_date_str.split()
-        return {
+        date_dict = {
             'year': int(date_parts[2]),
             'month': month_to_index(date_parts[1]),
             'day': int(date_parts[0])
         }
+        return DateUtils.to_iso(date_dict)
     except (IndexError, ValueError) as e:
         raise ValueError(f"Error parsing written date format: {e}")
 
 def parse_review_date(
         review_log_type: str,  # 'Rewatched', 'Watched', or 'Added'
-        review_date: Tag) -> dict[str, int]:
-    """Parses the review date based on log type."""
+        review_date: Tag) -> str:
+    """Parses the review date based on log type and returns ISO string."""
     if review_log_type == 'Added':
         return parse_iso_date(review_date.time['datetime'])
     return parse_written_date(review_date.text)

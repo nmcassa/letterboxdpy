@@ -7,6 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from letterboxdpy.constants.project import DOMAIN, CURRENT_YEAR, CURRENT_MONTH, CURRENT_DAY
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_url import get_page_url
+from letterboxdpy.utils.date_utils import DateUtils
 
 
 class UserDiary:
@@ -108,7 +109,7 @@ def extract_user_diary(
                                      If None, runs sequentially (safer).
 
     Returns:
-        dict: A dictionary with diary entries, each containing movie details, rewatch status, rating, like status, review status, and entry date.
+        dict: A dictionary with diary entries, each containing movie details, rewatch status, rating, like status, review status, and entry date (ISO 8601 string).
     """
     
     def extract_movie_name(react_div, default="Unknown"):
@@ -151,18 +152,17 @@ def extract_user_diary(
 
                 # day column (updated for new HTML structure)
                 if 'daydate' in cols:
-                    date = dict(zip(
+                    date = DateUtils.to_iso(dict(zip(
                             ["year", "month", "day"],
                             map(int, cols['daydate'].a['href'].split('/')[-4:])
-                        ))
+                        )))
                 elif 'day' in cols:  # fallback for old structure
-                    date = dict(zip(
+                    date = DateUtils.to_iso(dict(zip(
                             ["year", "month", "day"],
                             map(int, cols['day'].a['href'].split('/')[-4:])
-                        ))
+                        )))
                 else:
-                    # Extract from monthdate if available
-                    date = {"year": None, "month": None, "day": None}
+                    date = None
                 # Extract film data from react-component
                 production_col = cols.get('production')
                 react_div = production_col.find('div', {'class': 'react-component'}) if production_col else None
@@ -267,11 +267,11 @@ def extract_user_wrapped(username: str, year: int=CURRENT_YEAR, fetch_runtime: b
             raise KeyError("Diary data does not contain 'entries' key.")
         return diary
 
-    def update_counters(date_info: dict, day_counter: dict, month_counter: dict) -> tuple:
+    def update_counters(date_info: str, day_counter: dict, month_counter: dict) -> tuple:
         """Updates the day and month counters based on the watched date."""
-        weekday = datetime(**date_info).isoweekday()
-        day_counter[weekday] += 1
-        month_counter[date_info['month']] += 1
+        dt = DateUtils.parse_letterboxd_date(date_info)
+        day_counter[dt.isoweekday()] += 1
+        month_counter[dt.month] += 1
         return day_counter, month_counter
 
     def process_entry(data: dict, total_runtime: int, total_review: int) -> tuple:
@@ -309,9 +309,10 @@ def extract_user_wrapped(username: str, year: int=CURRENT_YEAR, fetch_runtime: b
 
     no = 0
     for log_id, data in diary['entries'].items():
-        watched_date = data['date']
+        watched_date_str = data['date']
+        watched_date = DateUtils.parse_letterboxd_date(watched_date_str)
 
-        if watched_date['year'] == year:
+        if watched_date.year == year:
             no += 1
 
             movies[log_id] = data

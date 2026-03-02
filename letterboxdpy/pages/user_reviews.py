@@ -16,7 +16,7 @@ def extract_user_reviews(url: str) -> dict:
     '''
     Returns a dictionary containing user reviews. The keys are unique log IDs,
     and each value is a dictionary with details about the review,
-    including movie information, review type, rating, review content, date, etc.
+    including movie information, review type, rating, review content, date (ISO string), etc.
     '''
     LOGS_PER_PAGE = 12
 
@@ -78,8 +78,8 @@ def extract_user_reviews(url: str) -> dict:
             #              'Watched':   (in diary) review and watched
             #              'Added': (not in diary) review 
             date = parse_review_date(log_type, date)
-            # dict ^^^--- date: the date of the review.
-            #             example: {'year': 2024, 'month': 1, 'day': 1}
+            # str ^^^--- date: the date of the review (ISO 8601 format).
+            #             example: '2024-01-01T00:00:00.000000Z'
 
             data['reviews'][log_id] = {
                 # static
