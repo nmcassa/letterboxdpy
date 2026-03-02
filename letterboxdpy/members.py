@@ -65,7 +65,7 @@ class Members:
         """Return a JSON string representation of the instance."""
         return JsonFile.stringify(self, indent=2, encoder=Encoder)
 
-    def jsonify(self) -> dict:
+    def jsonify(self) -> dict | None:
         """Convert the instance to a JSON dictionary."""
         return JsonFile.parse(self.__str__())
 

@@ -218,7 +218,7 @@ print(movie_instance)
 ```python
 from letterboxdpy.search import Search
 search_instance = Search("V for Vendetta", 'films')
-print(search_instance.get_results(max=5))
+print(search_instance.get_results(5))
 ```
 
 <details>
