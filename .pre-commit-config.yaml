@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: tests
+        name: Run tests
+        entry: python -m pytest tests
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
