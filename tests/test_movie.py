@@ -1,14 +1,14 @@
-from letterboxdpy.movie import Movie
 import unittest
+
+from letterboxdpy.movie import Movie
 
 
 class TestMovie(unittest.TestCase):
-
     def setUp(self):
         self.movie = Movie("v-for-vendetta")
 
     def test_get_not_exists_banner_movie(self):
-        instance = Movie("avatar-4") # upcoming 2029
+        instance = Movie("avatar-4")  # upcoming 2029
         data = instance.banner
         self.assertIsNone(data)
 
@@ -27,7 +27,7 @@ class TestMovie(unittest.TestCase):
     def test_movie_original_title_nullable(self):
         data = self.movie.original_title
         self.assertIsNone(data)
-    
+
     def test_non_english_movie_original_title(self):
         movie = Movie("parasite-2019")
         self.assertEqual(movie.title, "Parasite")
@@ -35,6 +35,6 @@ class TestMovie(unittest.TestCase):
         self.assertNotEqual(movie.title, movie.original_title)
         self.assertEqual(movie.original_title, "기생충")
 
-    
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

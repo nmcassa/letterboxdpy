@@ -20,8 +20,12 @@
   - [Authentication](#authentication)
   - [Settings](#settings)
 - [Development](#development)
+  - [Requirements](#requirements)
   - [Examples](#examples)
+  - [Linting](#linting)
   - [Testing](#testing)
+  - [Pre-commit Hooks](#pre-commit-hooks)
+  - [CI Pipeline](#ci-pipeline)
 
 <h1 id="installation">Installation</h1>
 
@@ -455,24 +459,69 @@ settings.update_notifications({"emailEditorial": True, "pushFollowers": False})
 
 <h1 id="development">Development</h1>
 
+<h2 id="requirements">Requirements</h2>
+
+This project requires **Python 3.10 or higher**. All dependencies are listed in [`requirements.txt`](requirements.txt).
+
+```bash
+pip install -r requirements.txt
+```
+
 <h2 id="examples">Examples</h2>
 
 Example scripts demonstrating various features are available in the [`examples/`](examples/) directory.
 
 See [`examples/README.md`](examples/README.md) for detailed usage instructions.
 
+<h2 id="linting">Linting</h2>
+
+This project uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting, configured in [`pyproject.toml`](pyproject.toml).
+
+```bash
+# Check for issues
+ruff check .
+
+# Auto-fix issues
+ruff check --fix .
+
+# Format code
+ruff format .
+```
+
 <h2 id="testing">Testing</h2>
 
-You may test the plugin by using the built-in `unittest` package through the CLI:
+Run the full test suite using `pytest`:
 
-```zsh
-python -m unittest <TEST_FILE_LINK>
+```bash
+python -m pytest tests
 ```
 
-**Example**
-```zsh
-python -m unittest tests/test_movie.py
+Or run a specific test file:
+
+```bash
+python -m pytest tests/test_movie.py
 ```
+
+> [!NOTE]
+> Tests that require an authenticated Letterboxd session (e.g. `test_auth.py`) are automatically skipped if no valid `.cookie` file is present. This ensures the suite runs cleanly in CI environments without credentials.
+
+<h2 id="pre-commit-hooks">Pre-commit Hooks</h2>
+
+Pre-commit hooks automatically run Ruff and the test suite before every commit, ensuring no broken or non-compliant code enters the repository.
+
+```bash
+# Install hooks (one-time setup)
+pre-commit install
+
+# Run manually against all files
+pre-commit run --all-files
+```
+
+<h2 id="ci-pipeline">CI Pipeline</h2>
+
+GitHub Actions automatically runs linting and tests on every push and pull request against the `main` branch, across **Python 3.10, 3.11, and 3.12**.
+
+See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the full pipeline configuration.
 
 ## Stargazers over time
 [![Stargazers over time](https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636)](https://starchart.cc/nmcassa/letterboxdpy)

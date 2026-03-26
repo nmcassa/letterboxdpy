@@ -2,9 +2,10 @@ from functools import wraps
 
 # -- DECORATORS --
 
+
 def assert_instance(expected_class: type):
     """Ensures the argument passed is an instance of a specified class."""
-    
+
     def decorator(func):
         @wraps(func)
         def wrapper(instance, *args, **kwargs):
@@ -23,7 +24,9 @@ def assert_instance(expected_class: type):
                 AssertionError: If the instance is not of the expected class.
             """
             if not isinstance(instance, expected_class):
-                raise AssertionError(f"Argument {instance} is not an instance of {expected_class.__name__}")
+                raise AssertionError(
+                    f"Argument {instance} is not an instance of {expected_class.__name__}"
+                )
             return func(instance, *args, **kwargs)
 
         return wrapper
@@ -39,6 +42,6 @@ if __name__ == "__main__":
 
     try:
         printint(1)
-        printint("2") # type: ignore
+        printint("2")  # type: ignore
     except AssertionError as e:
         print(e)

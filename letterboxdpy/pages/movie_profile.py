@@ -1,52 +1,92 @@
-from letterboxdpy.core.scraper import parse_url
-from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content
 from fastfingertips.string_utils import extract_number_from_text
+
+from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content
 
 
 class MovieProfile:
     """Movie profile page operations - main movie details."""
-    
+
     def __init__(self, slug: str):
         """Initialize MovieProfile with a movie slug."""
         self.slug = slug
         self.url = f"{DOMAIN}/film/{slug}"
         self.dom = parse_url(self.url)
-        
+
         # Get script data for some fields
         self.script = extract_json_ld_script(self.dom)
-    
+
     # one line contents
-    def get_id(self) -> str: return extract_movie_id(self.dom)
-    def get_title(self) -> str: return extract_movie_title(self.dom)
-    def get_original_title(self) -> str: return extract_movie_original_title(self.dom)
-    def get_runtime(self) -> int: return extract_movie_runtime(self.dom)
-    def get_rating(self) -> float: return extract_movie_rating(self.dom, self.script)
-    def get_year(self) -> int: return extract_movie_year(self.dom, self.script)
-    def get_tmdb_link(self) -> str: return extract_movie_tmdb_link(self.dom)
-    def get_imdb_link(self) -> str: return extract_movie_imdb_link(self.dom)
-    def get_poster(self) -> str: return extract_movie_poster(self.script)
-    def get_banner(self) -> str: return extract_movie_banner(self.dom)
-    def get_tagline(self) -> str: return extract_movie_tagline(self.dom)
-    
+    def get_id(self) -> str:
+        return extract_movie_id(self.dom)
+
+    def get_title(self) -> str:
+        return extract_movie_title(self.dom)
+
+    def get_original_title(self) -> str:
+        return extract_movie_original_title(self.dom)
+
+    def get_runtime(self) -> int:
+        return extract_movie_runtime(self.dom)
+
+    def get_rating(self) -> float:
+        return extract_movie_rating(self.dom, self.script)
+
+    def get_year(self) -> int:
+        return extract_movie_year(self.dom, self.script)
+
+    def get_tmdb_link(self) -> str:
+        return extract_movie_tmdb_link(self.dom)
+
+    def get_imdb_link(self) -> str:
+        return extract_movie_imdb_link(self.dom)
+
+    def get_poster(self) -> str:
+        return extract_movie_poster(self.script)
+
+    def get_banner(self) -> str:
+        return extract_movie_banner(self.dom)
+
+    def get_tagline(self) -> str:
+        return extract_movie_tagline(self.dom)
+
     # long contents
-    def get_description(self) -> str: return extract_movie_description(self.dom)
-    def get_trailer(self) -> dict: return extract_movie_trailer(self.dom)
-    def get_alternative_titles(self) -> list: return extract_movie_alternative_titles(self.dom)
-    def get_details(self) -> list: return extract_movie_details(self.dom)
-    def get_genres(self) -> list: return extract_movie_genres(self.dom, self.slug)
-    def get_cast(self) -> list: return extract_movie_cast(self.dom)
-    def get_crew(self) -> dict: return extract_movie_crew(self.dom)
-    def get_popular_reviews(self) -> list: return extract_movie_popular_reviews(self.dom)
+    def get_description(self) -> str:
+        return extract_movie_description(self.dom)
+
+    def get_trailer(self) -> dict:
+        return extract_movie_trailer(self.dom)
+
+    def get_alternative_titles(self) -> list:
+        return extract_movie_alternative_titles(self.dom)
+
+    def get_details(self) -> list:
+        return extract_movie_details(self.dom)
+
+    def get_genres(self) -> list:
+        return extract_movie_genres(self.dom, self.slug)
+
+    def get_cast(self) -> list:
+        return extract_movie_cast(self.dom)
+
+    def get_crew(self) -> dict:
+        return extract_movie_crew(self.dom)
+
+    def get_popular_reviews(self) -> list:
+        return extract_movie_popular_reviews(self.dom)
+
 
 # ONE LINE CONTENTS
 
+
 def extract_movie_id(dom):
     """Extract movie ID from DOM."""
-    elem = dom.find('span', 'block-flag-wrapper')
-    elem = elem.find('a')
+    elem = dom.find("span", "block-flag-wrapper")
+    elem = elem.find("a")
     # join=True: extracts and joins all digits (e.g. data-report-url)
-    return extract_number_from_text(elem.get('data-report-url'), join=True)
+    return extract_number_from_text(elem.get("data-report-url"), join=True)
+
 
 def extract_movie_title(dom):
     """Extract movie title from DOM."""
@@ -58,10 +98,12 @@ def extract_movie_title(dom):
         elem = dom.find("h1", {"class": ["filmtitle"]})
         return elem.text if elem else None
 
+
 def extract_movie_original_title(dom):
     """Extract movie original title from DOM."""
     elem = dom.find("h2", {"class": ["originalname"]})
     return elem.text.strip() if elem else None
+
 
 def extract_movie_runtime(dom):
     """Extract movie runtime from DOM."""
@@ -69,75 +111,89 @@ def extract_movie_runtime(dom):
     # join=True: extracts and joins all digits (e.g. '124 mins' -> 124)
     return extract_number_from_text(elem.text, join=True) if elem else None
 
+
 def extract_movie_rating(dom, script=None):
     """Extract movie rating from DOM."""
-    elem = dom.find('span', attrs={'class': 'average-rating'})
+    elem = dom.find("span", attrs={"class": "average-rating"})
     rating = elem.text if elem else None
     try:
-        rating = rating if rating else (
-            script['aggregateRating']['ratingValue'] if script else None
+        rating = (
+            rating
+            if rating
+            else (script["aggregateRating"]["ratingValue"] if script else None)
         )
         return float(rating) if rating else None
     except (KeyError, ValueError):
         return None
 
+
 def extract_movie_year(dom, script=None):
     """Extract movie year from DOM."""
-    elem = dom.find('div', {'class': 'releaseyear'})
+    elem = dom.find("div", {"class": "releaseyear"})
     year = elem.text if elem else None
     try:
-        year = year if year else (
-            script['releasedEvent'][0]['startDate'] if script else None
+        year = (
+            year
+            if year
+            else (script["releasedEvent"][0]["startDate"] if script else None)
         )
         return int(year) if year else None
     except (KeyError, ValueError):
         return None
 
+
 def extract_movie_tmdb_link(dom):
     """Extract TMDB link from DOM."""
     a = dom.find("a", {"data-track-action": ["TMDB"]})
-    return a['href'] if a else None
+    return a["href"] if a else None
+
 
 def extract_movie_imdb_link(dom):
     """Extract IMDB link from DOM."""
     a = dom.find("a", {"data-track-action": ["IMDb"]})
-    return a['href'] if a else None
+    return a["href"] if a else None
+
 
 def extract_movie_poster(script):
     """Extract movie poster from script."""
     # crop: list=(1500, 1000)
     # .replace('230-0-345', f'{crop[0]}-0-{crop[1]}')
     if script:
-        poster = script['image'] if 'image' in script else None
-        return poster.split('?')[0] if poster else None
+        poster = script.get("image", None)
+        return poster.split("?")[0] if poster else None
     else:
         return None
+
 
 def extract_movie_banner(dom):
     """Extract movie banner from DOM."""
     elem = dom.find("div", {"id": ["backdrop"]})
     if not elem:
         return None
-    
+
     # Try high-res first, fallback to standard
     if "data-backdrop2x" in elem.attrs:
-        return elem['data-backdrop2x'].split('?')[0]
+        return elem["data-backdrop2x"].split("?")[0]
     elif "data-backdrop" in elem.attrs:
-        return elem['data-backdrop'].split('?')[0]
-    
+        return elem["data-backdrop"].split("?")[0]
+
     return None
+
 
 def extract_movie_tagline(dom):
     """Extract movie tagline from DOM."""
-    elem = dom.find(attrs={'class':'tagline'})
+    elem = dom.find(attrs={"class": "tagline"})
     return elem.text if elem else None
 
+
 # LONG CONTENTS
+
 
 def extract_movie_description(dom):
     """Extract movie description from DOM."""
     # elem_section = page.find("div", attrs={'class': 'truncate'}).text
-    return get_meta_content(dom, name='description')
+    return get_meta_content(dom, name="description")
+
 
 def extract_movie_popular_reviews(dom) -> list:
     """Extract popular reviews from main movie page."""
@@ -170,12 +226,12 @@ def extract_movie_popular_reviews(dom) -> list:
         #         if any((cls == "rating") or cls.startswith("rating") for cls in classes):
         #             rating_span = span
         #             break
-        
+
         if rating_span:
-            for cls in rating_span.get('class', []):
-                if cls.startswith('rated-'):
+            for cls in rating_span.get("class", []):
+                if cls.startswith("rated-"):
                     try:
-                        return int(cls.split('-')[-1]) / 2.0
+                        return int(cls.split("-")[-1]) / 2.0
                     except (ValueError, IndexError):
                         continue
         return None
@@ -187,40 +243,47 @@ def extract_movie_popular_reviews(dom) -> list:
 
     reviews = []
     if container_section:
-        article_elements = container_section.find_all("article", {"class": ["production-viewing"]})
+        article_elements = container_section.find_all(
+            "article", {"class": ["production-viewing"]}
+        )
         for article in article_elements:
-            reviews.append({
-                "user": {
-                    "username": extract_reviewer_username(article),
-                    "display_name": extract_reviewer_display_name(article)
-                },  
-                "link": extract_review_link(article),
-                "rating": extract_rating(article),
-                "review": extract_review_text(article),
-            })
+            reviews.append(
+                {
+                    "user": {
+                        "username": extract_reviewer_username(article),
+                        "display_name": extract_reviewer_display_name(article),
+                    },
+                    "link": extract_review_link(article),
+                    "rating": extract_rating(article),
+                    "review": extract_review_text(article),
+                }
+            )
 
     return reviews
+
 
 def extract_movie_trailer(dom):
     """Extract movie trailer from DOM."""
     elem = dom.find("p", {"class": ["trailer-link"]})
 
     if elem:
-        elem = elem.a['href'].lstrip('/').split('?')[0]
-        trailer_id = elem.split('/')[-1]
+        elem = elem.a["href"].lstrip("/").split("?")[0]
+        trailer_id = elem.split("/")[-1]
 
         return {
-            'id': trailer_id,
-            'link': f"https://www.youtube.com/watch?v={trailer_id}",
-            'embed_url': f"https://{elem}",
+            "id": trailer_id,
+            "link": f"https://www.youtube.com/watch?v={trailer_id}",
+            "embed_url": f"https://{elem}",
         }
     return None
 
+
 def extract_movie_alternative_titles(dom):
     """Extract movie alternative titles from DOM."""
-    data = dom.find(attrs={'class': 'text-indentedlist'})
+    data = dom.find(attrs={"class": "text-indentedlist"})
     text = data.text if data else None
-    return [i.strip() for i in text.split(', ')] if text else None
+    return [i.strip() for i in text.split(", ")] if text else None
+
 
 def extract_movie_details(dom):
     """Extract movie details from DOM."""
@@ -229,19 +292,22 @@ def extract_movie_details(dom):
 
     details = []
     for item in data:
-        url_parts = item['href'].split('/')
+        url_parts = item["href"].split("/")
 
-        _ = url_parts[1] == 'films'
-        item_type, slug = url_parts[1+_:3+_] 
+        _ = url_parts[1] == "films"
+        item_type, slug = url_parts[1 + _ : 3 + _]
 
-        details.append({
-            'type': item_type,
-            'name': item.text.strip(),
-            'slug': slug,
-            'url': DOMAIN + "/".join(url_parts)
-        })
+        details.append(
+            {
+                "type": item_type,
+                "name": item.text.strip(),
+                "slug": slug,
+                "url": DOMAIN + "/".join(url_parts),
+            }
+        )
 
     return details
+
 
 def extract_movie_genres(dom, slug):
     """Extract movie genres from DOM."""
@@ -250,17 +316,19 @@ def extract_movie_genres(dom, slug):
 
     genres = []
     for item in data:
-        url_parts = item['href'].split('/')
-        
-        genres.append({
-            'type': url_parts[2],
-            'name': item.text,
-            'slug': url_parts[3],
-            'url': DOMAIN + "/".join(url_parts)
-        })
+        url_parts = item["href"].split("/")
 
-    if genres and slug == genres[-1]['type']:
-        genres.pop() # for show all button
+        genres.append(
+            {
+                "type": url_parts[2],
+                "name": item.text,
+                "slug": url_parts[3],
+                "url": DOMAIN + "/".join(url_parts),
+            }
+        )
+
+    if genres and slug == genres[-1]["type"]:
+        genres.pop()  # for show all button
 
     return genres
 
@@ -273,18 +341,16 @@ def extract_movie_cast(dom):
     cast = []
     for person in data:
         name = person.text
-        role_name = person['title'] if 'title' in person.attrs else None
-        url = person['href']
-        slug = url.split('/')[-2]
-        
-        cast.append({
-            'name': name,
-            'role_name': role_name,
-            'slug': slug,
-            'url': DOMAIN + url
-        })
+        role_name = person["title"] if "title" in person.attrs else None
+        url = person["href"]
+        slug = url.split("/")[-2]
+
+        cast.append(
+            {"name": name, "role_name": role_name, "slug": slug, "url": DOMAIN + url}
+        )
 
     return cast
+
 
 def extract_movie_crew(dom):
     """Extract movie crew from DOM."""
@@ -294,18 +360,14 @@ def extract_movie_crew(dom):
     crew = {}
     for person in data:
         name = person.text
-        url = person['href']
+        url = person["href"]
 
-        job, slug = filter(None, url.split('/'))
-        job = job.replace('-', '_')
+        job, slug = filter(None, url.split("/"))
+        job = job.replace("-", "_")
 
         if job not in crew:
             crew[job] = []
 
-        crew[job].append({
-            'name': name,
-            'slug': slug,
-            'url': DOMAIN + url
-        })
+        crew[job].append({"name": name, "slug": slug, "url": DOMAIN + url})
 
     return crew

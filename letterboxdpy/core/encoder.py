@@ -1,5 +1,6 @@
-from json import JSONEncoder
 from enum import Enum
+from json import JSONEncoder
+
 from letterboxdpy.core.exceptions import CustomEncoderError
 
 
@@ -9,10 +10,11 @@ class Encoder(JSONEncoder):
     .. instances to JSON by overriding the default serialization
     .. logic to return the object's namespace dictionary.
     """
+
     def default(self, o):
         if isinstance(o, Enum):
             return o.value
-        
+
         try:
             return o.__dict__
         except AttributeError:
@@ -20,10 +22,13 @@ class Encoder(JSONEncoder):
         except Exception as e:
             raise CustomEncoderError(f"An error occurred during encoding: {e}") from e
 
+
 class SecretsEncoder(JSONEncoder):
     """JSON encoder that excludes specified attributes from the output."""
 
-    def __init__(self, secrets: list = ['secrets'], **kwargs):
+    def __init__(self, secrets: list | None = None, **kwargs):
+        if secrets is None:
+            secrets = ["secrets"]
         if not isinstance(secrets, list):
             raise TypeError("secrets must be a list")
         if not secrets:
@@ -38,7 +43,7 @@ class SecretsEncoder(JSONEncoder):
         """Encodes the object to JSON format excluding specified attributes."""
         if isinstance(o, Enum):
             return o.value
-        
+
         try:
             return {k: v for k, v in o.__dict__.items() if k not in self.secrets}
         except AttributeError:

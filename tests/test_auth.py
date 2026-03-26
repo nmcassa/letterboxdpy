@@ -6,8 +6,9 @@ Tests cookie loading, username/csrf resolution, and session validity.
 For library-wide integration tests, see test_auth_integration.py
 """
 
-from letterboxdpy.auth import UserSession, BASE_URL, DEFAULT_COOKIE_PATH
 import unittest
+
+from letterboxdpy.auth import BASE_URL, DEFAULT_COOKIE_PATH, UserSession
 
 
 class TestUserSession(unittest.TestCase):
@@ -17,7 +18,7 @@ class TestUserSession(unittest.TestCase):
     def setUpClass(cls):
         if not DEFAULT_COOKIE_PATH.exists():
             raise unittest.SkipTest(f"Missing cookie file: {DEFAULT_COOKIE_PATH}")
-        
+
         # Load and validate session without calling interactive ensure()
         try:
             us = UserSession.load(DEFAULT_COOKIE_PATH)
@@ -25,7 +26,7 @@ class TestUserSession(unittest.TestCase):
                 raise unittest.SkipTest("Existing session cookie is invalid or expired")
             cls.us = us
         except Exception as e:
-            raise unittest.SkipTest(f"Could not load session: {e}")
+            raise unittest.SkipTest(f"Could not load session: {e}") from e
 
     def test_username_resolution(self):
         """Username must be resolved from cookies."""
@@ -41,13 +42,13 @@ class TestUserSession(unittest.TestCase):
         """Session must not redirect to login page."""
         url = f"{BASE_URL}/activity/"
         response = self.us.session.get(url, allow_redirects=True)
-        
+
         self.assertEqual(response.status_code, 200)
-        
+
         final_url = str(response.url)
         self.assertNotIn("/sign-in", final_url)
         self.assertNotIn("/user/login", final_url)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

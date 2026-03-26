@@ -1,10 +1,9 @@
-from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_url import extract_path_segment
 
 
 class UserTags:
-
     def __init__(self, username: str) -> None:
         self.username = username
         self.url = f"{DOMAIN}/{self.username}/tags"
@@ -12,16 +11,18 @@ class UserTags:
         self.diary_url = f"{DOMAIN}/{self.username}/tags/diary"
         self.reviews_url = f"{DOMAIN}/{self.username}/tags/reviews"
         self.lists_url = f"{DOMAIN}/{self.username}/tags/lists"
-        
-    def get_user_tags(self) -> dict: return extract_user_tags(self.url)
+
+    def get_user_tags(self) -> dict:
+        return extract_user_tags(self.url)
+
 
 def extract_user_tags(url: str) -> dict:
     BASE_URL = url
-    PAGES = ['films', 'diary', 'reviews', 'lists']
+    PAGES = ["films", "diary", "reviews", "lists"]
 
     def extract_tags(page: str) -> dict:
         """Extract tags from the page."""
-        
+
         def fetch_dom() -> any:
             """Fetch and return the DOM for the page."""
             return parse_url(f"{BASE_URL}/{page}")
@@ -29,16 +30,16 @@ def extract_user_tags(url: str) -> dict:
         def parse_tag(tag) -> dict:
             """Extract tag information from a single tag element."""
             name = tag.a.text.strip()
-            title = tag.a['title']
-            link = tag.a['href']
-            slug = extract_path_segment(link, after='/tag/', before='/')
+            title = tag.a["title"]
+            link = tag.a["href"]
+            slug = extract_path_segment(link, after="/tag/", before="/")
             count = int(tag.span.text.strip() or 1)
             return {
-                'name': name,
-                'title': title,
-                'slug': slug,
-                'link': DOMAIN + link,
-                'count': count,
+                "name": name,
+                "title": title,
+                "slug": slug,
+                "link": DOMAIN + link,
+                "count": count,
             }
 
         dom = fetch_dom()
@@ -51,10 +52,10 @@ def extract_user_tags(url: str) -> dict:
         tags = tags_ul.find_all("li")
         index = 1
         for tag in tags:
-            if 'href' in tag.a.attrs:
+            if "href" in tag.a.attrs:
                 tag_info = parse_tag(tag)
-                tag_info['no'] = index
-                data[tag_info['slug']] = tag_info
+                tag_info["no"] = index
+                data[tag_info["slug"]] = tag_info
                 index += 1
 
         return data
@@ -62,11 +63,8 @@ def extract_user_tags(url: str) -> dict:
     data = {}
     for page in PAGES:
         tags = extract_tags(page)
-        data[page] = {
-            'tags': tags,
-            'count': len(tags)
-        }
+        data[page] = {"tags": tags, "count": len(tags)}
 
-    data['total_count'] = sum(data[page]['count'] for page in PAGES)
+    data["total_count"] = sum(data[page]["count"] for page in PAGES)
 
     return data
