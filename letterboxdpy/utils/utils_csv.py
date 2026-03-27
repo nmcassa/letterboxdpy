@@ -14,9 +14,10 @@ def create_movie_data(**kwargs) -> dict:
     Returns:
         dict: Filtered movie data with Letterboxd column names
     """
+
     def _is_valid_value(value):
         """Check if value is valid for Letterboxd import."""
-        return value and isinstance(value, (str, int, bool))
+        return value and isinstance(value, str | int | bool)
 
     movie_data = {}
     for field_name, value in kwargs.items():
@@ -41,8 +42,8 @@ def transform_to_ranked_movies(letterboxd_movies: dict) -> list:
     for rank, (_, movie_data) in enumerate(letterboxd_movies.items(), 1):
         movie = {
             "Rank": rank,
-            "Title": movie_data.get('name', ''),
-            "LetterboxdURI": movie_data.get('url', '')
+            "Title": movie_data.get("name", ""),
+            "LetterboxdURI": movie_data.get("url", ""),
         }
         movies.append(movie)
     return movies

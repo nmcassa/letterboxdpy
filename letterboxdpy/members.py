@@ -1,8 +1,10 @@
-if __loader__.name == '__main__':
+if __loader__.name == "__main__":
     import sys
-    sys.path.append(sys.path[0] + '/..')
+
+    sys.path.append(sys.path[0] + "/..")
 
 import re
+
 from letterboxdpy.core.encoder import Encoder
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_file import JsonFile
@@ -15,7 +17,7 @@ class Members:
     MEMBERS_YEAR_TOP = "https://letterboxd.com/members/popular/this/year/"
     MEMBERS_PER_PAGE = 30
 
-    def __init__(self, url: str = "", max: int = None):
+    def __init__(self, url: str = "", max: int | None = None):
         """Initialize Members with the base URL."""
         self.url = url or self.MEMBERS_YEAR_TOP
         self.max = max
@@ -36,14 +38,15 @@ class Members:
             url = get_page_url(self.url, page)
             dom = parse_url(url)
 
-            tables = dom.find_all('table', {"class": ["member-table"]})
-            if not tables: break
+            tables = dom.find_all("table", {"class": ["member-table"]})
+            if not tables:
+                break
 
             avatars = tables[0].find_all("a", {"class": ["avatar -a40"]})
 
             for avatar in avatars:
-                user_url = avatar['href']
-                user_name = user_url.replace('/', '')
+                user_url = avatar["href"]
+                user_name = user_url.replace("/", "")
                 data.append(user_name)
 
                 if self.max and len(data) >= self.max:
@@ -69,12 +72,15 @@ class Members:
         """Convert the instance to a JSON dictionary."""
         return JsonFile.parse(self.__str__())
 
+
 # -- FUNCTIONS --
+
 
 def top_users(max: int = 100) -> list:
     """Fetch the top n members from the Letterboxd popular members page."""
     return Members(max=max).members
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     data = top_users(max=200)
-    JsonFile.save(f'top_members_{len(data)}', data, indent=2)
+    JsonFile.save(f"top_members_{len(data)}", data, indent=2)

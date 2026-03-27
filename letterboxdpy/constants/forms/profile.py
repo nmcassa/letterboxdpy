@@ -1,112 +1,135 @@
 """Form field definitions for user profile."""
 
 from dataclasses import dataclass
-from typing import Tuple, Optional
+
 
 @dataclass
 class FormField:
     """Single form field."""
+
     key: str
     label: str
     field_type: str
-    options: Tuple[str, ...] = ()
+    options: tuple[str, ...] = ()
     required: bool = False
 
-    def get_options(self) -> Tuple[str, ...]:
+    def get_options(self) -> tuple[str, ...]:
         return self.options
-    
+
     def is_valid_value(self, value: str) -> bool:
-        if not self.options: return True
+        if not self.options:
+            return True
         return value in self.options
+
 
 # PROFILE FORM FIELDS
 # Visual order as they appear on Letterboxd settings
 
-PROFILE_EDITABLE_FIELDS: Tuple[FormField, ...] = (
+PROFILE_EDITABLE_FIELDS: tuple[FormField, ...] = (
     # Name
     FormField(key="username", label="Username", field_type="text"),
     FormField(key="givenName", label="Given Name", field_type="text"),
     FormField(key="familyName", label="Family Name", field_type="text"),
-    
     # Contact/Location
     FormField(key="emailAddress", label="Email Address", field_type="text"),
     FormField(key="location", label="Location", field_type="text"),
     FormField(key="website", label="Website", field_type="text"),
-    
     # Bio
     FormField(key="bio", label="Bio", field_type="textarea"),
-    
     # Identity
     FormField(
-        key="pronoun", 
-        label="Pronoun", 
+        key="pronoun",
+        label="Pronoun",
         field_type="select",
-        options=("They", "He", "HeThem", "She", "SheThem", "Xe", "ZeHir", "ZeZir", "It")
+        options=(
+            "They",
+            "He",
+            "HeThem",
+            "She",
+            "SheThem",
+            "Xe",
+            "ZeHir",
+            "ZeZir",
+            "It",
+        ),
     ),
-    
     # Preferences
     FormField(
-        key="posterMode", 
+        key="posterMode",
         label="Posters",
         field_type="select",
-        options=("All", "Theirs", "Yours", "None")
+        options=("All", "Theirs", "Yours", "None"),
     ),
     FormField(
-        key="commentPolicy", 
-        label="Replies", 
+        key="commentPolicy",
+        label="Replies",
         field_type="select",
-        options=("Anyone", "Friends", "You")
+        options=("Anyone", "Friends", "You"),
     ),
-    
     # Checkboxes
-    FormField(key="privacyIncludeInPeopleSection", label="Show in Members", field_type="toggle"),
+    FormField(
+        key="privacyIncludeInPeopleSection",
+        label="Show in Members",
+        field_type="toggle",
+    ),
     FormField(key="showAdultContent", label="Adult Content", field_type="toggle"),
 )
 
 # Helper lists
-PROFILE_TEXT_FIELDS = tuple(f for f in PROFILE_EDITABLE_FIELDS if f.field_type == "text")
-PROFILE_TEXTAREA_FIELDS = tuple(f for f in PROFILE_EDITABLE_FIELDS if f.field_type == "textarea")
-PROFILE_SELECT_FIELDS = tuple(f for f in PROFILE_EDITABLE_FIELDS if f.field_type == "select")
-PROFILE_TOGGLE_FIELDS = tuple(f for f in PROFILE_EDITABLE_FIELDS if f.field_type == "toggle")
+PROFILE_TEXT_FIELDS = tuple(
+    f for f in PROFILE_EDITABLE_FIELDS if f.field_type == "text"
+)
+PROFILE_TEXTAREA_FIELDS = tuple(
+    f for f in PROFILE_EDITABLE_FIELDS if f.field_type == "textarea"
+)
+PROFILE_SELECT_FIELDS = tuple(
+    f for f in PROFILE_EDITABLE_FIELDS if f.field_type == "select"
+)
+PROFILE_TOGGLE_FIELDS = tuple(
+    f for f in PROFILE_EDITABLE_FIELDS if f.field_type == "toggle"
+)
+
 
 @dataclass
 class ProfileFormFields:
     """Field definitions for user profile form."""
-    
+
     FORM_ID: str = "user-update"
     CSRF_FIELD: str = "__csrf"
-    
+
     # Hidden/system fields
     COMPLETE_SETTINGS_FIELD: str = "completeSettings"
     EMAIL_FIELD: str = "emailAddress"
-    PASSWORD_FIELD: str = "password"
-    
+    PASSWORD_FIELD: str = "password"  # noqa: S105
+
     # Favorite films
     FAVORITE_FILMS_FIELD: str = "favouriteFilmIds"
-    
-    def get_all_fields(self) -> Tuple[FormField, ...]:
+
+    def get_all_fields(self) -> tuple[FormField, ...]:
         return PROFILE_EDITABLE_FIELDS
-    
-    def get_field(self, key: str) -> Optional[FormField]:
+
+    def get_field(self, key: str) -> FormField | None:
         for f in PROFILE_EDITABLE_FIELDS:
-            if f.key == key: return f
+            if f.key == key:
+                return f
         return None
-    
-    def get_text_field_keys(self) -> Tuple[str, ...]:
+
+    def get_text_field_keys(self) -> tuple[str, ...]:
         return tuple(f.key for f in PROFILE_TEXT_FIELDS)
-    
-    def get_textarea_field_keys(self) -> Tuple[str, ...]:
+
+    def get_textarea_field_keys(self) -> tuple[str, ...]:
         return tuple(f.key for f in PROFILE_TEXTAREA_FIELDS)
-    
-    def get_select_field_keys(self) -> Tuple[str, ...]:
+
+    def get_select_field_keys(self) -> tuple[str, ...]:
         return tuple(f.key for f in PROFILE_SELECT_FIELDS)
-    
-    def get_toggle_field_keys(self) -> Tuple[str, ...]:
+
+    def get_toggle_field_keys(self) -> tuple[str, ...]:
         return tuple(f.key for f in PROFILE_TOGGLE_FIELDS)
-    
-    def get_select_options(self, key: str) -> Tuple[str, ...]:
+
+    def get_select_options(self, key: str) -> tuple[str, ...]:
         f = self.get_field(key)
         return f.options if f else ()
+
 
 # Convenience instances
 PROFILE_FORM = ProfileFormFields()

@@ -1,27 +1,21 @@
-# letterboxdpy
+<h1 align="center">
+  letterboxdpy
+</h1>
 
-[![PyPI version](https://img.shields.io/pypi/v/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
-[![Python Version](https://img.shields.io/pypi/pyversions/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
-[![Wheel](https://img.shields.io/pypi/wheel/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
-[![License](https://img.shields.io/pypi/l/letterboxdpy?color=blue)](https://github.com/nmcassa/letterboxdpy/blob/main/LICENSE)
-[![Downloads](https://static.pepy.tech/personalized-badge/letterboxdpy?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads)](https://pepy.tech/project/letterboxdpy)
+<p align="center">
+  <strong>A Python library for Letterboxd data</strong><br>
+  <sub>Simple, modern, and easy-to-use toolkit for movies, users, and more.</sub>
+</p>
 
-## Table of Contents
-- [Installation](#installation)
-- [Core Objects](#core-objects)
-  - [User](#user)
-  - [Movie](#movie)
-  - [Search](#search)
-  - [List](#list)
-  - [Members](#members)
-  - [Films](#films)
-  - [Watchlist](#watchlist)
-- [Advanced Features](#advanced-features)
-  - [Authentication](#authentication)
-  - [Settings](#settings)
-- [Development](#development)
-  - [Examples](#examples)
-  - [Testing](#testing)
+<p align="center">
+  <a href="https://pypi.org/project/letterboxdpy/"><img src="https://img.shields.io/pypi/v/letterboxdpy?color=blue&style=flat-square" alt="PyPI version"></a>
+  <a href="https://pypi.org/project/letterboxdpy/"><img src="https://img.shields.io/pypi/pyversions/letterboxdpy?color=blue&style=flat-square" alt="Python Version"></a>
+  <a href="https://github.com/nmcassa/letterboxdpy/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/letterboxdpy?color=blue&style=flat-square" alt="License"></a>
+  <a href="https://pepy.tech/project/letterboxdpy"><img src="https://static.pepy.tech/personalized-badge/letterboxdpy?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads&style=flat-square" alt="Downloads"></a>
+  <a href="https://github.com/nmcassa/letterboxdpy/actions/workflows/health-check.yml"><img src="https://img.shields.io/github/actions/workflow/status/nmcassa/letterboxdpy/health-check.yml?style=flat-square&label=Health%20Check" alt="Weekly DOM Health Check"></a>
+</p>
+
+---
 
 <h1 id="installation">Installation</h1>
 
@@ -126,7 +120,18 @@ print(user_instance)
 
 ```python
 from letterboxdpy.movie import Movie
+
+# lookup by slug
 movie_instance = Movie("v-for-vendetta")
+
+# lookup by external ids
+movie_instance = Movie(tmdb=752)
+movie_instance = Movie(imdb="tt0434409")
+
+# or using factory methods
+movie_instance = Movie.from_tmdb(752)
+movie_instance = Movie.from_imdb("tt0434409")
+
 print(movie_instance)
 ```
 
@@ -137,14 +142,16 @@ print(movie_instance)
 {
   "url": "https://letterboxd.com/film/v-for-vendetta",
   "slug": "v-for-vendetta",
-  "letterboxd_id": 51400,
+  "id": "51400",
   "title": "V for Vendetta",
   "original_title": null,
   "runtime": 132,
   "rating": 3.84,
   "year": 2005,
   "tmdb_link": "https://www.themoviedb.org/movie/752/",
+  "tmdb_id": "752",
   "imdb_link": "http://www.imdb.com/title/tt0434409/maindetails",
+  "imdb_id": "tt0434409",
   "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-230-0-345-crop.jpg",
   "banner": "https://a.ltrbxd.com/resized/sm/upload/mx/jg/tz/ni/v-for-vendetta-1920-1920-1080-1080-crop-000000.jpg",
   "tagline": "People should not be afraid of their governments. Governments should be afraid of their people.",
@@ -455,24 +462,90 @@ settings.update_notifications({"emailEditorial": True, "pushFollowers": False})
 
 <h1 id="development">Development</h1>
 
+<h2 id="requirements">Requirements</h2>
+
+This project requires **Python 3.10 or higher**. All dependencies are listed in [`requirements.txt`](requirements.txt).
+
+```bash
+pip install -r requirements.txt
+```
+
 <h2 id="examples">Examples</h2>
 
 Example scripts demonstrating various features are available in the [`examples/`](examples/) directory.
 
 See [`examples/README.md`](examples/README.md) for detailed usage instructions.
 
+<h2 id="linting">Linting</h2>
+
+This project uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting, configured in [`pyproject.toml`](pyproject.toml).
+
+```bash
+# Check for issues
+ruff check .
+
+# Auto-fix issues
+ruff check --fix .
+
+# Format code
+ruff format .
+```
+
 <h2 id="testing">Testing</h2>
 
-You may test the plugin by using the built-in `unittest` package through the CLI:
+Run the full test suite using `pytest`:
 
-```zsh
-python -m unittest <TEST_FILE_LINK>
+```bash
+python -m pytest tests
 ```
 
-**Example**
-```zsh
-python -m unittest tests/test_movie.py
+Or run a specific test file:
+
+```bash
+python -m pytest tests/test_movie.py
 ```
 
-## Stargazers over time
-[![Stargazers over time](https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636)](https://starchart.cc/nmcassa/letterboxdpy)
+> [!NOTE]
+> Tests that require an authenticated Letterboxd session (e.g. `test_auth.py`) are automatically skipped if no valid `.cookie` file is present. This ensures the suite runs cleanly in CI environments without credentials.
+
+<h2 id="pre-commit-hooks">Pre-commit Hooks</h2>
+
+Pre-commit hooks automatically run Ruff and the test suite before every commit, ensuring no broken or non-compliant code enters the repository.
+
+```bash
+# Install hooks (one-time setup)
+pre-commit install
+
+# Run manually against all files
+pre-commit run --all-files
+```
+
+<h2 id="ci-pipeline">CI Pipeline</h2>
+
+GitHub Actions automatically runs linting and tests on every push and pull request against the `main` branch, across **Python 3.10, 3.11, and 3.12**.
+
+See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the full pipeline configuration.
+
+---
+
+## Contributors
+
+<a href="https://github.com/nmcassa/letterboxdpy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=nmcassa/letterboxdpy" />
+</a>
+
+---
+
+## License
+
+**[MIT License](LICENSE)** — Free to use, modify, and share.
+
+---
+
+<p align="center">
+  <sub><strong>Stargazers over time:</strong></sub><br>
+  <a href="https://starchart.cc/nmcassa/letterboxdpy">
+    <img src="https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636" alt="Stargazers over time">
+  </a><br>
+  <sub>Built by the Letterboxdpy community</sub>
+</p>

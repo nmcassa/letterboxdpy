@@ -1,10 +1,11 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from enum import Enum
 from itertools import islice
-from typing import Any, Iterator
+from typing import Any
 
 from bs4 import Tag
 from fastfingertips.string_utils import extract_number_from_text
+
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.encoder import Encoder
@@ -35,7 +36,12 @@ class Search:
     RESULTS_PER_PAGE = 20
     DEFAULT_NUM_PAGES = DEFAULT_NUM_RESULTS // RESULTS_PER_PAGE
 
-    def __init__(self, query: str, search_filter: SearchFilter | str = SearchFilter.ALL, adult: bool = True,):
+    def __init__(
+        self,
+        query: str,
+        search_filter: SearchFilter | str = SearchFilter.ALL,
+        adult: bool = True,
+    ):
         if not isinstance(query, str):
             raise TypeError("query must be a string")
 
@@ -65,7 +71,10 @@ class Search:
     def get_results(self, num_results: int = DEFAULT_NUM_RESULTS) -> dict[str, Any]:
         result_item_elems = islice(self.extract_search_results(), num_results)
         result_items = map(self.get_parse_func_from_filter(), result_item_elems)
-        results = [{"no": i + 1, "page": (i // self.RESULTS_PER_PAGE) + 1, **result} for i, result in enumerate(result_items)]
+        results = [
+            {"no": i + 1, "page": (i // self.RESULTS_PER_PAGE) + 1, **result}
+            for i, result in enumerate(result_items)
+        ]
 
         return {
             "available": len(results) > 0,
@@ -141,7 +150,9 @@ class Search:
 
         article_elem = result_item_elem.find("article")
         if article_elem is None:
-             raise ValueError("Unknown search result type: no identifiable classes or article element")
+            raise ValueError(
+                "Unknown search result type: no identifiable classes or article element"
+            )
 
         article_class = article_elem.get("class")
         match article_class:
@@ -174,7 +185,13 @@ class Search:
             }
 
         directors_elem = result_item_elem.find("p", class_="film-metadata")
-        directors = None if directors_elem is None else [_parse_director(dir_elem) for dir_elem in directors_elem.find_all("a")]
+        directors = (
+            None
+            if directors_elem is None
+            else [
+                _parse_director(dir_elem) for dir_elem in directors_elem.find_all("a")
+            ]
+        )
 
         return {
             "type": "film",
@@ -197,21 +214,33 @@ class Search:
         movie_url = f"{DOMAIN}{movie_container.get('data-item-link')}"
 
         review_body = article.find("div", class_="body", recursive=False)
-        url = review_body.find("h2", class_="name -primary prettify").find("a").get("href")
+        url = (
+            review_body.find("h2", class_="name -primary prettify")
+            .find("a")
+            .get("href")
+        )
 
         display_name_elem = review_body.find("strong", class_="displayname")
         display_name = display_name_elem.get_text()
 
         rating_elem = review_body.find("span", class_="rating")
-        rating = None if rating_elem is None else extract_number_from_text(rating_elem.get("class")[-1]) / 2
+        rating = (
+            None
+            if rating_elem is None
+            else extract_number_from_text(rating_elem.get("class")[-1]) / 2
+        )
         liked_elem = review_body.find("span", class_="label", string="Liked")
-        liked = False if liked_elem is None else True
+        liked = liked_elem is not None
 
-        review_text_elem = review_body.find("div", class_="body-text -prose -reset js-review-body js-collapsible-text")
-        full_text = True if review_text_elem.find("div", class_="collapsed-text") is None else False
-        review_text =review_text_elem.get_text(strip=True, separator=" ")
+        review_text_elem = review_body.find(
+            "div", class_="body-text -prose -reset js-review-body js-collapsible-text"
+        )
+        full_text = review_text_elem.find("div", class_="collapsed-text") is None
+        review_text = review_text_elem.get_text(strip=True, separator=" ")
 
-        review_actions = review_body.find("p", class_="like-link-target react-component")
+        review_actions = review_body.find(
+            "p", class_="like-link-target react-component"
+        )
         likes = extract_number_from_text(review_actions.get("data-count"), join=True)
 
         return {
@@ -221,7 +250,7 @@ class Search:
             "liked": liked,
             "likes": likes,
             "text": review_text,
-            'full_text': full_text,
+            "full_text": full_text,
             "owner": {
                 "username": username,
                 "display_name": display_name,
@@ -250,10 +279,18 @@ class Search:
         film_count = extract_number_from_text(film_count_elem.text)
 
         like_count_elem = list_body.find("span", class_="label")
-        like_count = 0 if like_count_elem is None else extract_and_convert_shorthand(like_count_elem)
+        like_count = (
+            0
+            if like_count_elem is None
+            else extract_and_convert_shorthand(like_count_elem)
+        )
 
         comment_count_elem = list_body.find("span", class_="label")
-        comment_count = 0 if comment_count_elem is None else extract_and_convert_shorthand(comment_count_elem)
+        comment_count = (
+            0
+            if comment_count_elem is None
+            else extract_and_convert_shorthand(comment_count_elem)
+        )
 
         text_elem = list_body.find("div", class_="notes body-text -reset -prose")
         text = None if text_elem is None else text_elem.get_text(strip=True)
@@ -286,7 +323,9 @@ class Search:
         url = f"{DOMAIN}{href}"
         title = href_elem.text
 
-        description_elem = detail_elem.find("div", class_="description body-text -small")
+        description_elem = detail_elem.find(
+            "div", class_="description body-text -small"
+        )
         description = None if description_elem is None else description_elem.text
 
         return {
@@ -333,7 +372,6 @@ class Search:
         name_elem_strings = name_elem.stripped_strings
         display_name = next(name_elem_strings)
         badge = next(name_elem_strings, None)
-
 
         return {
             "type": "member",
@@ -397,6 +435,7 @@ class Search:
 
 # -- FUNCTIONS --
 
+
 def get_film_slug_from_title(title: str) -> str | None:
     """
     Helper function to get a film's slug from its title.
@@ -413,15 +452,17 @@ def get_film_slug_from_title(title: str) -> str | None:
         'the-matrix'
     """
     try:
-      query = Search(title, 'films')
-      # return first page first result
-      return query.get_results(1)['results'][0]['slug']
+        query = Search(title, "films")
+        # return first page first result
+        return query.get_results(1)["results"][0]["slug"]
     except IndexError:
-      return None
+        return None
+
 
 if __name__ == "__main__":
     import sys
-    sys.stdout.reconfigure(encoding='utf-8')
+
+    sys.stdout.reconfigure(encoding="utf-8")
 
     """
     Phrase usage:
@@ -453,12 +494,13 @@ if __name__ == "__main__":
 
     # Example: Get film slug from title
     print("\n--- Slug Examples ---")
-    print('slug 1:', get_film_slug_from_title("V for Vendetta"))
-    print('slug 2:', get_film_slug_from_title("v for"))
-    print('slug 3:', get_film_slug_from_title("VENDETTA"))
+    print("slug 1:", get_film_slug_from_title("V for Vendetta"))
+    print("slug 2:", get_film_slug_from_title("v for"))
+    print("slug 3:", get_film_slug_from_title("VENDETTA"))
 
     # Example: Combined usage with Movie class
     from letterboxdpy.movie import Movie
+
     movie_slug = get_film_slug_from_title("V for Vendetta")
     if movie_slug:
         movie = Movie(movie_slug)
