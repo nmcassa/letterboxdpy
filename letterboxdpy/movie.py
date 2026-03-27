@@ -12,19 +12,39 @@ from letterboxdpy.utils.utils_file import JsonFile
 
 class Movie:
     class MoviePages:
-        def __init__(self, slug: str) -> None:
-            self.profile = movie_profile.MovieProfile(slug)
-            self.details = movie_details.MovieDetails(slug)
-            self.lists = movie_lists.MovieLists(slug)
-            self.members = movie_members.MovieMembers(slug)
-            self.reviews = movie_reviews.MovieReviews(slug)
-            self.similar = movie_similar.MovieSimilar(slug)
+        def __init__(
+            self,
+            slug: str | None = None,
+            *,
+            tmdb: str | int | None = None,
+            imdb: str | None = None,
+        ) -> None:
+            self.profile = movie_profile.MovieProfile(slug, tmdb=tmdb, imdb=imdb)
+            self.details = movie_details.MovieDetails(self.profile.slug)
+            self.lists = movie_lists.MovieLists(self.profile.slug)
+            self.members = movie_members.MovieMembers(self.profile.slug)
+            self.reviews = movie_reviews.MovieReviews(self.profile.slug)
+            self.similar = movie_similar.MovieSimilar(self.profile.slug)
 
-    def __init__(self, slug: str) -> None:
-        assert isinstance(slug, str), f"Movie slug must be a string, not {type(slug)}"
+    @classmethod
+    def from_tmdb(cls, tmdb_id: str | int) -> "Movie":
+        """Initialize Movie using TMDB ID."""
+        return cls(tmdb=tmdb_id)
 
-        self.slug = slug
-        self.pages = self.MoviePages(self.slug)
+    @classmethod
+    def from_imdb(cls, imdb_id: str) -> "Movie":
+        """Initialize Movie using IMDB ID."""
+        return cls(imdb=imdb_id)
+
+    def __init__(
+        self,
+        slug: str | None = None,
+        *,
+        tmdb: str | int | None = None,
+        imdb: str | None = None,
+    ) -> None:
+        self.pages = self.MoviePages(slug, tmdb=tmdb, imdb=imdb)
+        self.slug = self.pages.profile.slug
 
         self.url = self.get_url()
 
@@ -36,7 +56,9 @@ class Movie:
         self.rating = self.get_rating()
         self.year = self.get_year()
         self.tmdb_link = self.get_tmdb_link()
+        self.tmdb_id = str(tmdb) if tmdb else self.get_tmdb_id()
         self.imdb_link = self.get_imdb_link()
+        self.imdb_id = str(imdb) if imdb else self.get_imdb_id()
         self.poster = self.get_poster()
         self.banner = self.get_banner()
         self.tagline = self.get_tagline()
@@ -84,8 +106,14 @@ class Movie:
     def get_tmdb_link(self) -> str:
         return self.pages.profile.get_tmdb_link()
 
+    def get_tmdb_id(self) -> str:
+        return self.pages.profile.get_tmdb_id()
+
     def get_imdb_link(self) -> str:
         return self.pages.profile.get_imdb_link()
+
+    def get_imdb_id(self) -> str:
+        return self.pages.profile.get_imdb_id()
 
     def get_poster(self) -> str:
         return self.pages.profile.get_poster()

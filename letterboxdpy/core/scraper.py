@@ -18,6 +18,7 @@ from letterboxdpy.core.exceptions import (
     InvalidResponseError,
     PageLoadError,
     PrivateRouteError,
+    ResourceNotFoundError,
 )
 from letterboxdpy.utils.utils_file import JsonFile
 
@@ -145,6 +146,9 @@ class Scraper:
             error_message = cls._get_error_message(response)
             formatted_error_message = cls._format_error(url, response, error_message)
 
+            if response.status_code == 404:
+                raise ResourceNotFoundError(url)
+
             if response.status_code == 403:
                 # Differentiate between VPN/IP blocks and private profiles
                 is_blocked = (
@@ -157,7 +161,9 @@ class Scraper:
 
                 raise PrivateRouteError(formatted_error_message)
 
-            raise InvalidResponseError(formatted_error_message)
+            raise InvalidResponseError(
+                formatted_error_message, code=response.status_code
+            )
 
     @classmethod
     def _get_error_message(cls, response: requests.Response) -> str:
@@ -210,7 +216,12 @@ class Scraper:
     def _parse_html(cls, response: requests.Response) -> BeautifulSoup:
         """Parse the HTML content from the response."""
         try:
-            return BeautifulSoup(response.text, cls.builder)
+            soup = BeautifulSoup(response.text, cls.builder)
+            # Attach the final URL after all redirections.
+            # This allows downstream page classes (like MovieProfile) to resolve
+            # the canonical slug from an external ID in a single network request.
+            soup.final_url = response.url
+            return soup
         except Exception as e:
             raise InvalidResponseError(f"Error parsing response: {e}") from e
 

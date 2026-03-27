@@ -2,7 +2,7 @@ import unittest
 
 from bs4 import BeautifulSoup
 
-from letterboxdpy.core.exceptions import InvalidResponseError
+from letterboxdpy.core.exceptions import ResourceNotFoundError
 from letterboxdpy.core.scraper import Scraper, url_encode
 
 
@@ -17,7 +17,7 @@ class TestScraper(unittest.TestCase):
         self.assertIsInstance(self.scraper.get_page(self.valid_film_url), BeautifulSoup)
 
     def test_invalid_film_url(self):
-        with self.assertRaises(InvalidResponseError):
+        with self.assertRaises(ResourceNotFoundError):
             self.scraper.get_page(self.invalid_film_url)
 
     def test_url_encode(self):

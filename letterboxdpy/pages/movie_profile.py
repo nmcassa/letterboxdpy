@@ -1,6 +1,12 @@
+import re
+
 from fastfingertips.string_utils import extract_number_from_text
+from fastfingertips.url_utils import extract_path_segment
 
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.core.exceptions import (
+    MovieNotFoundError,
+)
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content
 
@@ -8,13 +14,41 @@ from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_con
 class MovieProfile:
     """Movie profile page operations - main movie details."""
 
-    def __init__(self, slug: str):
-        """Initialize MovieProfile with a movie slug."""
-        self.slug = slug
-        self.url = f"{DOMAIN}/film/{slug}"
+    def __init__(
+        self,
+        slug: str | None = None,
+        *,
+        tmdb: str | int | None = None,
+        imdb: str | None = None,
+    ):
+        """Initialize MovieProfile with a movie slug or external ID."""
+        # 1. Build URL
+        if not slug:
+            if tmdb:
+                slug = f"tmdb/{tmdb}"
+            elif imdb:
+                slug = f"imdb/{imdb}"
+
+        if slug and not str(slug).startswith("http"):
+            # ID routes (tmdb/imdb) are top-level on Letterboxd
+            # Standard slugs are under /film/
+            prefix = "" if slug.startswith(("tmdb/", "imdb/")) else "film/"
+            self.url = f"{DOMAIN}/{prefix}{slug}/"
+        else:
+            self.url = slug
+
+        assert self.url, "Provide slug, tmdb, or imdb to build Movie URL."
+
+        # 2. Fetch and Validate
         self.dom = parse_url(self.url)
 
-        # Get script data for some fields
+        if get_meta_content(self.dom, property="og:type") != "video.movie":
+            raise MovieNotFoundError(slug, self.url)
+
+        # 3. State Synchronization
+        self.url = getattr(self.dom, "final_url", self.url)
+        # Extract canonical slug if redirection happened, otherwise use identifier
+        self.slug = extract_path_segment(self.url, after="/film/") or slug
         self.script = extract_json_ld_script(self.dom)
 
     # one line contents
@@ -39,8 +73,14 @@ class MovieProfile:
     def get_tmdb_link(self) -> str:
         return extract_movie_tmdb_link(self.dom)
 
+    def get_tmdb_id(self) -> str | None:
+        return extract_movie_tmdb_id(self.dom)
+
     def get_imdb_link(self) -> str:
         return extract_movie_imdb_link(self.dom)
+
+    def get_imdb_id(self) -> str | None:
+        return extract_movie_imdb_id(self.dom)
 
     def get_poster(self) -> str:
         return extract_movie_poster(self.script)
@@ -148,10 +188,29 @@ def extract_movie_tmdb_link(dom):
     return a["href"] if a else None
 
 
+def extract_movie_tmdb_id(dom):
+    """Extract TMDB ID from DOM."""
+    link = extract_movie_tmdb_link(dom)
+    if link:
+        # TMDB link usually contains movie/ID
+        match = re.search(r"movie/(\d+)", link)
+        return match.group(1) if match else None
+    return None
+
+
 def extract_movie_imdb_link(dom):
     """Extract IMDB link from DOM."""
     a = dom.find("a", {"data-track-action": ["IMDb"]})
     return a["href"] if a else None
+
+
+def extract_movie_imdb_id(dom):
+    """Extract IMDB ID from DOM."""
+    link = extract_movie_imdb_link(dom)
+    if link:
+        match = re.search(r"tt\d+", link)
+        return match.group(0) if match else None
+    return None
 
 
 def extract_movie_poster(script):
@@ -193,73 +252,6 @@ def extract_movie_description(dom):
     """Extract movie description from DOM."""
     # elem_section = page.find("div", attrs={'class': 'truncate'}).text
     return get_meta_content(dom, name="description")
-
-
-def extract_movie_popular_reviews(dom) -> list:
-    """Extract popular reviews from main movie page."""
-    container_section = dom.find("section", {"class": ["film-reviews"]})
-
-    def get_text_or_none(element):
-        return element.text.strip() if (element and element.text) else None
-
-    def extract_reviewer_username(article):
-        return article.get("data-person")
-
-    def extract_reviewer_display_name(article):
-        return get_text_or_none(article.find("strong", {"class": ["displayname"]}))
-
-    def extract_review_link(article):
-        context_link = article.find("a", {"class": ["context"]})
-        href = context_link.get("href") if context_link else None
-        return (DOMAIN + href) if href else None
-
-    def extract_rating(article) -> float | None:
-        """Extracts the rating element from a review and converts it to a numerical value (float)."""
-
-        rating_span = article.find("span", class_="rating")
-
-        # [LEGACY NOTE]: Original robust finding logic (kept as reference)
-        # rating_span = article.find("span", {"class": ["rating"]})
-        # if not (rating_span and rating_span.text):
-        #     for span in article.find_all("span"):
-        #         classes = span.get("class") or []
-        #         if any((cls == "rating") or cls.startswith("rating") for cls in classes):
-        #             rating_span = span
-        #             break
-
-        if rating_span:
-            for cls in rating_span.get("class", []):
-                if cls.startswith("rated-"):
-                    try:
-                        return int(cls.split("-")[-1]) / 2.0
-                    except (ValueError, IndexError):
-                        continue
-        return None
-
-    def extract_review_text(article):
-        body_div = article.find("div", {"class": ["body-text"]})
-        paragraph = body_div.find("p") if body_div else None
-        return get_text_or_none(paragraph)
-
-    reviews = []
-    if container_section:
-        article_elements = container_section.find_all(
-            "article", {"class": ["production-viewing"]}
-        )
-        for article in article_elements:
-            reviews.append(
-                {
-                    "user": {
-                        "username": extract_reviewer_username(article),
-                        "display_name": extract_reviewer_display_name(article),
-                    },
-                    "link": extract_review_link(article),
-                    "rating": extract_rating(article),
-                    "review": extract_review_text(article),
-                }
-            )
-
-    return reviews
 
 
 def extract_movie_trailer(dom):
@@ -371,3 +363,70 @@ def extract_movie_crew(dom):
         crew[job].append({"name": name, "slug": slug, "url": DOMAIN + url})
 
     return crew
+
+
+def extract_movie_popular_reviews(dom) -> list:
+    """Extract popular reviews from main movie page."""
+    container_section = dom.find("section", {"class": ["film-reviews"]})
+
+    def get_text_or_none(element):
+        return element.text.strip() if (element and element.text) else None
+
+    def extract_reviewer_username(article):
+        return article.get("data-person")
+
+    def extract_reviewer_display_name(article):
+        return get_text_or_none(article.find("strong", {"class": ["displayname"]}))
+
+    def extract_review_link(article):
+        context_link = article.find("a", {"class": ["context"]})
+        href = context_link.get("href") if context_link else None
+        return (DOMAIN + href) if href else None
+
+    def extract_rating(article) -> float | None:
+        """Extracts the rating element from a review and converts it to a numerical value (float)."""
+
+        rating_span = article.find("span", class_="rating")
+
+        # [LEGACY NOTE]: Original robust finding logic (kept as reference)
+        # rating_span = article.find("span", {"class": ["rating"]})
+        # if not (rating_span and rating_span.text):
+        #     for span in article.find_all("span"):
+        #         classes = span.get("class") or []
+        #         if any((cls == "rating") or cls.startswith("rating") for cls in classes):
+        #             rating_span = span
+        #             break
+
+        if rating_span:
+            for cls in rating_span.get("class", []):
+                if cls.startswith("rated-"):
+                    try:
+                        return int(cls.split("-")[-1]) / 2.0
+                    except (ValueError, IndexError):
+                        continue
+        return None
+
+    def extract_review_text(article):
+        body_div = article.find("div", {"class": ["body-text"]})
+        paragraph = body_div.find("p") if body_div else None
+        return get_text_or_none(paragraph)
+
+    reviews = []
+    if container_section:
+        article_elements = container_section.find_all(
+            "article", {"class": ["production-viewing"]}
+        )
+        for article in article_elements:
+            reviews.append(
+                {
+                    "user": {
+                        "username": extract_reviewer_username(article),
+                        "display_name": extract_reviewer_display_name(article),
+                    },
+                    "link": extract_review_link(article),
+                    "rating": extract_rating(article),
+                    "review": extract_review_text(article),
+                }
+            )
+
+    return reviews

@@ -130,7 +130,18 @@ print(user_instance)
 
 ```python
 from letterboxdpy.movie import Movie
+
+# lookup by slug
 movie_instance = Movie("v-for-vendetta")
+
+# lookup by external ids
+movie_instance = Movie(tmdb=752)
+movie_instance = Movie(imdb="tt0434409")
+
+# or using factory methods
+movie_instance = Movie.from_tmdb(752)
+movie_instance = Movie.from_imdb("tt0434409")
+
 print(movie_instance)
 ```
 
@@ -141,14 +152,16 @@ print(movie_instance)
 {
   "url": "https://letterboxd.com/film/v-for-vendetta",
   "slug": "v-for-vendetta",
-  "letterboxd_id": 51400,
+  "id": "51400",
   "title": "V for Vendetta",
   "original_title": null,
   "runtime": 132,
   "rating": 3.84,
   "year": 2005,
   "tmdb_link": "https://www.themoviedb.org/movie/752/",
+  "tmdb_id": "752",
   "imdb_link": "http://www.imdb.com/title/tt0434409/maindetails",
+  "imdb_id": "tt0434409",
   "poster": "https://a.ltrbxd.com/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-230-0-345-crop.jpg",
   "banner": "https://a.ltrbxd.com/resized/sm/upload/mx/jg/tz/ni/v-for-vendetta-1920-1920-1080-1080-crop-000000.jpg",
   "tagline": "People should not be afraid of their governments. Governments should be afraid of their people.",

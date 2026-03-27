@@ -17,7 +17,7 @@ def create_movie_data(**kwargs) -> dict:
 
     def _is_valid_value(value):
         """Check if value is valid for Letterboxd import."""
-        return value and isinstance(value, (str, int, bool))
+        return value and isinstance(value, str | int | bool)
 
     movie_data = {}
     for field_name, value in kwargs.items():

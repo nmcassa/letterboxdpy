@@ -15,7 +15,26 @@ class PageLoadError(Exception):
 class InvalidResponseError(Exception):
     """Exception raised when an HTTP response is invalid or unexpected."""
 
-    pass
+    def __init__(self, message: str, code: int | None = None):
+        super().__init__(message)
+        self.message = message
+        self.code = code
+
+
+class ResourceNotFoundError(Exception):
+    """Raised when a requested resource (URL) cannot be found (404)."""
+
+    def __init__(self, url: str, message: str = "Resource not found"):
+        super().__init__(f"{message}: {url}")
+        self.url = url
+
+
+class MovieNotFoundError(ResourceNotFoundError):
+    """Raised when a movie cannot be found for a given slug or ID."""
+
+    def __init__(self, identifier: str, url: str):
+        super().__init__(url, message=f"Movie not found (slug/id: {identifier})")
+        self.identifier = identifier
 
 
 class CustomEncoderError(Exception):
