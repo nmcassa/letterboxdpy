@@ -1,31 +1,21 @@
-# letterboxdpy
+<h1 align="center">
+  letterboxdpy
+</h1>
 
-[![PyPI version](https://img.shields.io/pypi/v/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
-[![Python Version](https://img.shields.io/pypi/pyversions/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
-[![Wheel](https://img.shields.io/pypi/wheel/letterboxdpy?color=blue)](https://pypi.org/project/letterboxdpy/)
-[![License](https://img.shields.io/pypi/l/letterboxdpy?color=blue)](https://github.com/nmcassa/letterboxdpy/blob/main/LICENSE)
-[![Downloads](https://static.pepy.tech/personalized-badge/letterboxdpy?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads)](https://pepy.tech/project/letterboxdpy)
+<p align="center">
+  <strong>A Python library for Letterboxd data</strong><br>
+  <sub>Simple, modern, and easy-to-use toolkit for movies, users, and more.</sub>
+</p>
 
-## Table of Contents
-- [Installation](#installation)
-- [Core Objects](#core-objects)
-  - [User](#user)
-  - [Movie](#movie)
-  - [Search](#search)
-  - [List](#list)
-  - [Members](#members)
-  - [Films](#films)
-  - [Watchlist](#watchlist)
-- [Advanced Features](#advanced-features)
-  - [Authentication](#authentication)
-  - [Settings](#settings)
-- [Development](#development)
-  - [Requirements](#requirements)
-  - [Examples](#examples)
-  - [Linting](#linting)
-  - [Testing](#testing)
-  - [Pre-commit Hooks](#pre-commit-hooks)
-  - [CI Pipeline](#ci-pipeline)
+<p align="center">
+  <a href="https://pypi.org/project/letterboxdpy/"><img src="https://img.shields.io/pypi/v/letterboxdpy?color=blue&style=flat-square" alt="PyPI version"></a>
+  <a href="https://pypi.org/project/letterboxdpy/"><img src="https://img.shields.io/pypi/pyversions/letterboxdpy?color=blue&style=flat-square" alt="Python Version"></a>
+  <a href="https://github.com/nmcassa/letterboxdpy/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/letterboxdpy?color=blue&style=flat-square" alt="License"></a>
+  <a href="https://pepy.tech/project/letterboxdpy"><img src="https://static.pepy.tech/personalized-badge/letterboxdpy?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads&style=flat-square" alt="Downloads"></a>
+  <a href="https://github.com/nmcassa/letterboxdpy/actions/workflows/health-check.yml"><img src="https://img.shields.io/github/actions/workflow/status/nmcassa/letterboxdpy/health-check.yml?style=flat-square&label=Health%20Check" alt="Weekly DOM Health Check"></a>
+</p>
+
+---
 
 <h1 id="installation">Installation</h1>
 
@@ -536,5 +526,26 @@ GitHub Actions automatically runs linting and tests on every push and pull reque
 
 See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the full pipeline configuration.
 
-## Stargazers over time
-[![Stargazers over time](https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636)](https://starchart.cc/nmcassa/letterboxdpy)
+---
+
+## Contributors
+
+<a href="https://github.com/nmcassa/letterboxdpy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=nmcassa/letterboxdpy" />
+</a>
+
+---
+
+## License
+
+**[MIT License](LICENSE)** — Free to use, modify, and share.
+
+---
+
+<p align="center">
+  <sub><strong>Stargazers over time:</strong></sub><br>
+  <a href="https://starchart.cc/nmcassa/letterboxdpy">
+    <img src="https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636" alt="Stargazers over time">
+  </a><br>
+  <sub>Built by the Letterboxdpy community</sub>
+</p>
