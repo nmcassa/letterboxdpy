@@ -5,6 +5,9 @@ This module provides generic functions to extract movie data from various
 Letterboxd page types that display movies in different layouts.
 """
 
+import json
+import warnings
+
 
 def extract_movies_from_horizontal_list(dom, max_items=12 * 6) -> dict:
     """
@@ -75,10 +78,24 @@ def extract_movies_from_vertical_list(dom, max_items=20 * 5) -> dict:
             if item.name == "li"
             else item
         )
-        if not react_component or "data-film-id" not in react_component.attrs:
+        if (
+            not react_component
+            or "data-postered-identifier" not in react_component.attrs
+        ):
+            warnings.warn("Failed to get movie data", stacklevel=2)
             return None
 
-        movie_id = react_component["data-film-id"]
+        movie_uid = json.loads(react_component["data-postered-identifier"])["uid"]
+        if not isinstance(movie_uid, str):
+            warnings.warn("Invalid movie uid type", stacklevel=2)
+            return None
+
+        prefix, sep, value = movie_uid.partition(":")
+        if sep != ":" or prefix != "film" or not value.isdigit():
+            warnings.warn(f"Invalid movie uid format: {movie_uid!r}", stacklevel=2)
+            return None
+
+        movie_id = value
         movie_slug = react_component.get("data-item-slug") or react_component.get(
             "data-film-slug"
         )
