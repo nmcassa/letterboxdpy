@@ -143,18 +143,30 @@ def extract_movies_from_user_watched(dom, max=12 * 6) -> dict:
             extract_year_from_movie_name,
         )
 
+        import json
+
         react_component = (
             container.find("div", {"class": "react-component"}) or container.div
         )
-        if not react_component or "data-film-id" not in react_component.attrs:
+        if not react_component:
             return None
+
+        if "data-film-id" in react_component.attrs:
+            movie_id = react_component["data-film-id"]
+        else:
+            postered = react_component.get("data-postered-identifier")
+            if not postered:
+                return None
+            uid = json.loads(postered).get("uid", "")
+            movie_id = uid.removeprefix("film:")
+            if not movie_id:
+                return None
 
         rating, liked = _extract_rating_and_like_status(container)
 
         movie_slug = react_component.get("data-item-slug") or react_component.get(
             "data-film-slug"
         )
-        movie_id = react_component["data-film-id"]
         raw_name = react_component.get("data-item-name") or react_component.img["alt"]
         movie_name = clean_movie_name(raw_name)
         year = extract_year_from_movie_name(raw_name)
