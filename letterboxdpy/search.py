@@ -214,11 +214,9 @@ class Search:
         movie_url = f"{DOMAIN}{movie_container.get('data-item-link')}"
 
         review_body = article.find("div", class_="body", recursive=False)
-        url = (
-            review_body.find("h2", class_="name -primary prettify")
-            .find("a")
-            .get("href")
-        )
+        url = f"{DOMAIN}" + review_body.find("h2", class_="primaryname prettify").find(
+            "a"
+        ).get("href")
 
         display_name_elem = review_body.find("strong", class_="displayname")
         display_name = display_name_elem.get_text()
