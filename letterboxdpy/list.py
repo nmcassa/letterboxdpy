@@ -23,17 +23,20 @@ class List:
         self.slug = slug
         self.pages = self.ListPages(self.username, self.slug)
 
-        self._movies = None
-
-        self.url = self.get_url()
+        # one line contents
+        self.list_id = self.get_list_id()
         self.title = self.get_title()
         self.author = self.get_author()
-        self.description = self.get_description()
+        self.url = self.get_url()
+        self.count = self.get_count()
         self.date_created = self.get_date_created()
         self.date_updated = self.get_date_updated()
+
+        # long contents
+        self.description = self.get_description()
         self.tags = self.get_tags()
-        self.count = self.get_count()
-        self.list_id = self.get_list_id()
+
+        self._movies = None
 
     # Properties
     @property
