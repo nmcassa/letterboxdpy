@@ -285,6 +285,7 @@ print(search_instance.get_results(5))
 ```python
 from letterboxdpy.list import List
 list_instance = List("nmcassa", "movies-to-watch-with-priscilla-park")
+list_instance.movies # fetch movies (lazy loading)
 print(list_instance)
 ```
 
@@ -295,6 +296,15 @@ print(list_instance)
 {
   "username": "nmcassa",
   "slug": "movies-to-watch-with-priscilla-park",
+  "url": "https://letterboxd.com/nmcassa/list/movies-to-watch-with-priscilla-park",
+  "list_id": "31052453",
+  "title": "Movies to Watch with Priscilla Park",
+  "author": "nmcassa",
+  "count": 2,
+  "date_created": "2024-05-18T16:44:57.013000Z",
+  "date_updated": "2024-05-20T14:58:06.486000Z",
+  "description": null,
+  "tags": [],
   "_movies": {
     "240344": {
       "slug": "la-la-land",
@@ -303,16 +313,7 @@ print(list_instance)
       "url": "https://letterboxd.com/film/la-la-land/"
     },
     "...": "..."
-  },
-  "url": "https://letterboxd.com/nmcassa/list/movies-to-watch-with-priscilla-park",
-  "title": "Movies to Watch with Priscilla Park",
-  "author": "nmcassa",
-  "description": null,
-  "date_created": "2024-05-18T16:44:57.013000Z",
-  "date_updated": "2024-05-20T14:58:06.486000Z",
-  "tags": [],
-  "count": 19,
-  "list_id": "46710824"
+  }
 }
 ```
 </details>
@@ -385,7 +386,7 @@ print(films_instance.movies)
 ```python
 from letterboxdpy.watchlist import Watchlist
 watchlist = Watchlist("nmcassa")
-# movies loaded when accessed
+watchlist.movies # fetch movies (lazy loading)
 print(watchlist)
 ```
 
