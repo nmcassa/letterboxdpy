@@ -18,9 +18,18 @@ def index_to_month(month_index):
 
 def get_ajax_url(url: str) -> str:
     """
-    this function returns the ajax url of the given url.
+    Converts a standard discovery URL to the modern CSI discovery API endpoint.
+    Letterboxd recently migrated from /films/ajax/ to /csi/films/films-browser-list/.
     """
-    x = ".com/films"
-    ax = ".com/films/ajax"
+    # 1. Normalize: Remove legacy '/ajax' path segment if it's already there
+    url = url.replace(".com/films/ajax", ".com/films")
 
-    return url if ax in url else url.replace(x, ax)
+    # 2. Redirect discovery traffic to the new CSI internal API
+    discovery_base = ".com/films"
+    csi_endpoint = ".com/csi/films/films-browser-list"
+
+    # Avoid double-replacement if the URL is already converted
+    if csi_endpoint in url:
+        return url
+
+    return url.replace(discovery_base, csi_endpoint)
