@@ -4,6 +4,7 @@ from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.forms.favorites import FAVORITE_ATTRS
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.utils.movies_extractor import extract_movie_info
 from letterboxdpy.utils.utils_file import JsonFile
 from letterboxdpy.utils.utils_parser import get_body_content, get_meta_content
 from letterboxdpy.utils.utils_transform import month_to_index
@@ -193,7 +194,10 @@ def extract_favorites(dom) -> dict:
         if not favorites_section:
             return {}
 
-        poster_list = favorites_section.find("ul", class_="poster-list")
+        # Look for the list container (formerly 'poster-list', now often 'grid')
+        poster_list = favorites_section.find(
+            "ul", class_=re.compile(r"poster-list|grid")
+        )
         if not poster_list:
             return {}
 
@@ -201,46 +205,35 @@ def extract_favorites(dom) -> dict:
         items = poster_list.find_all("li")
 
         for item in items:
-            react_div = item.find("div", class_=FAVORITE_ATTRS.COMPONENT_CLASS)
-            if not react_div:
+            movie_data = extract_movie_info(item)
+            if not movie_data:
                 continue
 
-            # Extract data from react component attributes
-            movie_id = react_div.get(FAVORITE_ATTRS.FILM_ID_ATTR)
-            movie_slug = react_div.get(FAVORITE_ATTRS.FILM_SLUG_ATTR)
-            movie_name = react_div.get(FAVORITE_ATTRS.FILM_NAME_ATTR)
+            movie_id, data = movie_data
 
-            # Clean movie name (remove year) like we did in diary
-            if movie_name and " (" in movie_name and movie_name.endswith(")"):
-                movie_name = movie_name.rsplit(" (", 1)[0]
-
-            if movie_id and movie_slug and movie_name:
-                # Extract additional data
+            # Additional processing for favorites (log_url and year from full_display_name)
+            react_div = item.find("div", class_=FAVORITE_ATTRS.COMPONENT_CLASS)
+            if react_div:
                 full_display_name = react_div.get("data-item-full-display-name", "")
                 target_link = react_div.get("data-target-link", "")
 
-                # Extract release year from full display name
-                release_year = None
+                # Extract release year from full display name if not already found
                 if (
-                    full_display_name
+                    not data.get("year")
                     and "(" in full_display_name
                     and ")" in full_display_name
                 ):
                     try:
                         year_part = full_display_name.split("(")[-1].split(")")[0]
-                        release_year = int(year_part) if year_part.isdigit() else None
+                        data["year"] = int(year_part) if year_part.isdigit() else None
                     except (ValueError, IndexError):
                         pass
 
-                favorites[movie_id] = {
-                    "slug": movie_slug,
-                    "name": movie_name,
-                    "url": f"https://letterboxd.com/film/{movie_slug}/",
-                    "year": release_year,
-                    "log_url": f"https://letterboxd.com{target_link}"
-                    if target_link
-                    else None,
-                }
+                data["log_url"] = (
+                    f"https://letterboxd.com{target_link}" if target_link else None
+                )
+
+            favorites[movie_id] = data
 
         return favorites
     except Exception as e:
@@ -262,31 +255,15 @@ def extract_avatar(dom) -> dict | None:
 def extract_watchlist_recent(dom) -> dict:
     """Extracts recent watchlist items from the DOM, with error handling."""
 
-    def extract_movie_info(item) -> dict:
+    def extract_movie_info_wrapper(item) -> dict:
         """Extracts movie information from a watchlist item."""
-        from letterboxdpy.utils.utils_string import (
-            clean_movie_name,
-            extract_year_from_movie_name,
-        )
+        movie_data = extract_movie_info(item)
+        if not movie_data:
+            return None
 
-        # Look for data attributes in the nested react-component div
-        react_div = item.find("div", {"class": FAVORITE_ATTRS.COMPONENT_CLASS})
-
-        if react_div:
-            film_id = react_div.get(FAVORITE_ATTRS.FILM_ID_ATTR)
-            film_slug = react_div.get(FAVORITE_ATTRS.FILM_SLUG_ATTR)
-            raw_name = react_div.get(FAVORITE_ATTRS.FILM_NAME_ATTR, "Unknown")
-            film_name = clean_movie_name(raw_name)
-            year = extract_year_from_movie_name(raw_name)
-        else:
-            # Fallback to original method (for backwards compatibility)
-            film_id = item.get("data-film-id")
-            film_slug = item.get("data-film-slug")
-            raw_name = item.img.get("alt", "Unknown") if item.img else "Unknown"
-            film_name = clean_movie_name(raw_name)
-            year = extract_year_from_movie_name(raw_name)
-
-        return {"id": film_id, "slug": film_slug, "name": film_name, "year": year}
+        movie_id, data = movie_data
+        data["id"] = movie_id
+        return data
 
     watchlist_recent = {}
     section = dom.find("section", {"class": ["watchlist-aside"]})
@@ -301,8 +278,8 @@ def extract_watchlist_recent(dom) -> dict:
         raise ValueError("No watchlist items found in the DOM")
 
     for item in watchlist_items:
-        movie = extract_movie_info(item)
-        if movie["id"]:
+        movie = extract_movie_info_wrapper(item)
+        if movie and movie.get("id"):
             watchlist_recent[movie["id"]] = movie
 
     return watchlist_recent

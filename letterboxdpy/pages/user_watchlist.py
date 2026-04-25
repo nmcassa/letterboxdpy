@@ -7,6 +7,7 @@ from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.user_list import extract_movies
 from letterboxdpy.utils.utils_url import get_page_url
+from letterboxdpy.utils.movies_extractor import extract_movie_info, extract_movies_from_vertical_list
 
 
 class UserWatchlist:
@@ -87,62 +88,21 @@ def extract_watchlist(username: str, filters: dict | None = None) -> dict:
             f += "+".join([str(v) for v in values]) + "/"
         BASE_URL += f
 
-    def extract_movie_info(container) -> dict[str, str | int | None] | None:
-        """Extract film ID, slug, name, and year from watchlist container.
-
-        Returns:
-            dict: {"id": str, "slug": str, "name": str, "year": int|None} or None if extraction fails
-
-        Example:
-            Input: container with "The Matrix (1999)"
-            Output: {"id": "12345", "slug": "the-matrix", "name": "The Matrix", "year": 1999}
-        """
-        from letterboxdpy.utils.utils_string import (
-            clean_movie_name,
-            extract_year_from_movie_name,
-        )
-
-        data = container.find("div", {"class": "react-component"}) or container.div
-        if not data or "data-film-id" not in data.attrs:
-            return None
-
-        raw_name = data.get("data-item-name") or data.img["alt"]
-        name = clean_movie_name(raw_name)
-        year = extract_year_from_movie_name(raw_name)
-
-        context = {
-            "id": data["data-film-id"],
-            "slug": data.get("data-item-slug") or data.get("data-film-slug"),
-            "name": name,
-            "year": year,
-        }
-
-        return context
-
     page = 1
     no = 1
     while True:
         dom = parse_url(get_page_url(BASE_URL, page))
-        containers = dom.find_all("li", {"class": "griditem"}) or dom.find_all(
-            "li", {"class": ["poster-container"]}
-        )
+        movies_on_page = extract_movies_from_vertical_list(dom)
 
-        for container in containers:
-            movie_info = extract_movie_info(container)
-            if movie_info:
-                data["data"][movie_info["id"]] = {
-                    "name": movie_info["name"],
-                    "slug": movie_info["slug"],
-                    "year": movie_info["year"],
-                    "page": page,
-                    "url": f"{DOMAIN}/film/{movie_info['slug']}/",
-                    "no": no,
-                }
-                no += 1
+        for movie_id, movie_data in movies_on_page.items():
+            movie_data.update({"page": page, "no": no})
+            data["data"][movie_id] = movie_data
+            no += 1
 
-        if len(containers) < FILMS_PER_PAGE:
+        if len(movies_on_page) < FILMS_PER_PAGE:
             break
         page += 1
+
 
     # Set the count of films and availability
     data["count"] = len(data["data"])

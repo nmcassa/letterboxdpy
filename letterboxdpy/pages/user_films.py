@@ -1,5 +1,6 @@
 from letterboxdpy.constants.project import DOMAIN, GENRES
 from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.utils.movies_extractor import extract_movie_info
 from letterboxdpy.utils.utils_url import get_page_url
 
 
@@ -138,34 +139,16 @@ def extract_movies_from_user_watched(dom, max=12 * 6) -> dict:
 
     def _get_movie_details(container):
         """Extract complete movie information including rating and like status."""
-        from letterboxdpy.utils.utils_string import (
-            clean_movie_name,
-            extract_year_from_movie_name,
-        )
-
-        react_component = (
-            container.find("div", {"class": "react-component"}) or container.div
-        )
-        if not react_component or "data-film-id" not in react_component.attrs:
+        movie_data = extract_movie_info(container)
+        if not movie_data:
             return None
 
+        movie_id, data = movie_data
         rating, liked = _extract_rating_and_like_status(container)
 
-        movie_slug = react_component.get("data-item-slug") or react_component.get(
-            "data-film-slug"
-        )
-        movie_id = react_component["data-film-id"]
-        raw_name = react_component.get("data-item-name") or react_component.img["alt"]
-        movie_name = clean_movie_name(raw_name)
-        year = extract_year_from_movie_name(raw_name)
+        data.update({"id": movie_id, "rating": rating, "liked": liked})
 
-        return movie_slug, {
-            "name": movie_name,
-            "id": movie_id,
-            "rating": rating,
-            "year": year,
-            "liked": liked,
-        }
+        return data["slug"], data
 
     def _find_movie_containers(dom):
         """Find movie containers using modern structure with legacy fallback."""
