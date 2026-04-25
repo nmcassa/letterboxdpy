@@ -6,8 +6,10 @@ Extracts watchlist data by scraping Letterboxd HTML pages.
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.user_list import extract_movies
+from letterboxdpy.utils.movies_extractor import (
+    extract_movies_from_vertical_list,
+)
 from letterboxdpy.utils.utils_url import get_page_url
-from letterboxdpy.utils.movies_extractor import extract_movie_info, extract_movies_from_vertical_list
 
 
 class UserWatchlist:
@@ -102,7 +104,6 @@ def extract_watchlist(username: str, filters: dict | None = None) -> dict:
         if len(movies_on_page) < FILMS_PER_PAGE:
             break
         page += 1
-
 
     # Set the count of films and availability
     data["count"] = len(data["data"])

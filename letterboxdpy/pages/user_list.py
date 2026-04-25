@@ -149,7 +149,7 @@ def extract_author(dom) -> str | None:
         name_link = summary.find("a", class_="name")
         if name_link:
             return name_link.text.strip()
-    
+
     # Fallback to itemprop (legacy)
     data = dom.find("span", attrs={"itemprop": "name"})
     return data.text.strip() if data else None
