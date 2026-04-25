@@ -141,10 +141,18 @@ def extract_title(dom) -> str:
     return get_meta_content(dom, property="og:title")
 
 
-def extract_author(dom) -> str:
+def extract_author(dom) -> str | None:
+    """Extracts the list author's name from the DOM."""
+    # Look for author in person-summary block
+    summary = dom.find("div", class_="person-summary")
+    if summary:
+        name_link = summary.find("a", class_="name")
+        if name_link:
+            return name_link.text.strip()
+    
+    # Fallback to itemprop (legacy)
     data = dom.find("span", attrs={"itemprop": "name"})
-    data = data.text if data else None
-    return data
+    return data.text.strip() if data else None
 
 
 def extract_description(dom) -> str:
