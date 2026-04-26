@@ -93,3 +93,9 @@ max-complexity = 15
 quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
+
+[tool.pytest]
+pythonpath = ["."]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
