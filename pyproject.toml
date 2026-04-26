@@ -9,8 +9,9 @@ dependencies = [
     "beautifulsoup4>=4.12.3",
     "lxml>=5.1.0",
     "curl_cffi>=0.14.0",
-    "fastfingertips>=0.1.3"
+    "fastfingertips>=0.1.4"
 ]
+
 requires-python = ">=3.10"
 authors = [
   { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
