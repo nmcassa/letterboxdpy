@@ -5,8 +5,11 @@ Example scripts demonstrating `letterboxdpy` library features.
 ## Installation
 
 ```bash
-pip install -e .
-pip install -r examples/requirements.txt
+# Standard install with example dependencies
+pip install ".[examples]"
+
+# Or for local development
+pip install -e ".[examples]"
 ```
 
 ## Examples
@@ -38,11 +41,13 @@ __created_at__ = "YYYY-MM-DD"
 
 ## Requirements
 
-**letterboxdpy dependencies** (auto-installed with `pip install -e .`):
-- curl_cffi, beautifulsoup4, lxml, fastfingertips
+Dependencies are managed via optional extras in `pyproject.toml`.
 
-**Example-specific dependencies** (install with `pip install -r examples/requirements.txt`):
-- matplotlib, numpy, pillow — *used by visualization scripts*
-- Jinja2 — *used for HTML reports*
+- **Standard Dependencies:** `curl_cffi`, `beautifulsoup4`, `lxml`, `fastfingertips`
+- **Example Extras:** `rich`, `Jinja2`, `matplotlib`, `numpy`, `pillow`
 
-See [`requirements.txt`](requirements.txt) for details.
+To install everything needed for examples, run:
+```bash
+pip install ".[examples]"
+```
+

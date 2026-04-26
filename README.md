@@ -41,7 +41,11 @@ If you have cloned the repository locally and want to make changes to the code, 
 
 ```bash
 pip install -e .
+
+# Or with example dependencies
+pip install -e ".[examples]"
 ```
+
 
 > [!WARNING]
 > Please be aware that installing directly from the GitHub repository or locally might give you access to the most recent features and bug fixes, but it could also include changes that haven't been thoroughly tested and may not be stable for production use.
@@ -473,11 +477,16 @@ settings.update_notifications({"emailEditorial": True, "pushFollowers": False})
 
 <h2 id="requirements">Requirements</h2>
 
-This project requires **Python 3.10 or higher**. All dependencies are listed in [`requirements.txt`](requirements.txt).
+This project requires **Python 3.10 or higher**.
 
 ```bash
-pip install -r requirements.txt
+# Core installation
+pip install letterboxdpy
+
+# With example dependencies
+pip install "letterboxdpy[examples]"
 ```
+
 
 <h2 id="examples">Examples</h2>
 
