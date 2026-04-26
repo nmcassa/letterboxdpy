@@ -13,6 +13,15 @@ dependencies = [
 ]
 
 requires-python = ">=3.10"
+[project.optional-dependencies]
+examples = [
+    "rich",
+    "Jinja2",
+    "matplotlib>=3.5.0",
+    "numpy>=1.21.0",
+    "pillow>=8.0.0"
+]
+
 authors = [
   { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
 ]

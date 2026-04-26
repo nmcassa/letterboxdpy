@@ -1,23 +1,7 @@
 # Examples requirements for letterboxdpy
-
 # ============================================
-# letterboxdpy dependencies (auto-installed with: pip install -e .)
-# Listed here for reference only
-# ============================================
-# curl_cffi>=0.14.0
-# beautifulsoup4>=4.12.3
-# lxml>=5.1.0
-fastfingertips>=0.1.3
-rich
-Jinja2
-
-# ============================================
-# Example-specific dependencies
-# Install with: pip install -r examples/requirements.txt
+# This file is now a pointer to pyproject.toml
+# All dependencies are managed there under [project.optional-dependencies]
 # ============================================
 
-# Visualization and plotting
-# Used by: user_rating_plot.py, user_plot_statistics.py
-matplotlib>=3.5.0
-numpy>=1.21.0
-pillow>=8.0.0
+-e ..[examples]
