@@ -1,8 +1,3 @@
-if __loader__.name == "__main__":
-    import sys
-
-    sys.path.append(sys.path[0] + "/..")
-
 from typing import ClassVar
 
 from letterboxdpy.core.decorators import assert_instance
@@ -183,6 +178,8 @@ def print_movies(movies, title=None, max_count=None):
 
 
 if __name__ == "__main__":
+    import sys
+
     sys.stdout.reconfigure(encoding="utf-8")
 
     # Movies similar to "V for Vendetta" are retrieved and printed.

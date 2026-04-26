@@ -1,8 +1,3 @@
-if __name__ == "__main__":
-    import sys
-
-    sys.path.append(sys.path[0] + "/..")
-
 import random
 import time
 from typing import ClassVar
@@ -237,6 +232,8 @@ def url_encode(query: str, safe: str = "") -> str:
 
 
 if __name__ == "__main__":
+    import sys
+
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore
 
     input_domain = ""

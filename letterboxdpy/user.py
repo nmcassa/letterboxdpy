@@ -1,8 +1,3 @@
-if __loader__.name == "__main__":
-    import sys
-
-    sys.path.append(sys.path[0] + "/..")
-
 import re
 
 from letterboxdpy.constants.project import CURRENT_DAY, CURRENT_MONTH, CURRENT_YEAR

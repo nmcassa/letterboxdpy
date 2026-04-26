@@ -35,8 +35,16 @@ Alternatively, if you wish to access the latest (potentially unstable) version d
 pip install git+https://github.com/nmcassa/letterboxdpy.git
 ```
 
+### Local Installation (for Development)
+
+If you have cloned the repository locally and want to make changes to the code, it is recommended to install it in "editable" mode. This allows you to run the library files directly and see your changes reflected immediately:
+
+```bash
+pip install -e .
+```
+
 > [!WARNING]
-> Please be aware that installing directly from the GitHub repository might give you access to the most recent features and bug fixes, but it could also include changes that haven't been thoroughly tested and may not be stable for production use.
+> Please be aware that installing directly from the GitHub repository or locally might give you access to the most recent features and bug fixes, but it could also include changes that haven't been thoroughly tested and may not be stable for production use.
 
 <h1 id="core-objects">Core Objects</h1>
 

@@ -3,11 +3,6 @@ Watchlist module.
 Provides the Watchlist class for accessing user watchlist data.
 """
 
-if __loader__.name == "__main__":
-    import sys
-
-    sys.path.append(sys.path[0] + "/..")
-
 import re
 
 from letterboxdpy.core.encoder import SecretsEncoder
