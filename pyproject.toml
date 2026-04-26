@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "letterboxdpy"
-version = "6.5.1"
+version = "6.5.2"
 description = "A letterboxd webscraper"
 readme = "README.md"
 license = "MIT"
