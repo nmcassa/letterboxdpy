@@ -178,9 +178,9 @@ def print_movies(movies, title=None, max_count=None):
 
 
 if __name__ == "__main__":
-    import sys
+    from fastfingertips.terminal_utils import setup_encoding
 
-    sys.stdout.reconfigure(encoding="utf-8")
+    setup_encoding()
 
     # Movies similar to "V for Vendetta" are retrieved and printed.
     # https://letterboxd.com/films/like/v-for-vendetta/

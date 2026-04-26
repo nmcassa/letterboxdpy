@@ -173,9 +173,9 @@ class Movie:
 
 
 if __name__ == "__main__":
-    import sys
+    from fastfingertips.terminal_utils import setup_encoding
 
-    sys.stdout.reconfigure(encoding="utf-8")
+    setup_encoding()
 
     movie_instance = Movie("v-for-vendetta")  # 132 mins
     # movie_instance_2 = Movie("honk-2013") # 1 min

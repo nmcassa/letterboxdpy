@@ -5,33 +5,18 @@ build-backend = "hatchling.build"
 [project]
 name = "letterboxdpy"
 version = "6.5.1"
+description = "A letterboxd webscraper"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
 dependencies = [
     "beautifulsoup4>=4.12.3",
     "lxml>=5.1.0",
     "curl_cffi>=0.14.0",
     "fastfingertips>=0.1.4"
 ]
-
-requires-python = ">=3.10"
-[project.optional-dependencies]
-examples = [
-    "rich",
-    "Jinja2",
-    "matplotlib>=3.5.0",
-    "numpy>=1.21.0",
-    "pillow>=8.0.0"
-]
-
-authors = [
-  { name="Nicholas Cassarino", email="nmcassa804@outlook.com" },
-]
-maintainers = [
-    { name="FastFingertips", email="fastfingertips@gmail.com" }
-]
-description = "A letterboxd webscraper"
-readme = "README.md"
-license = "MIT"
-license-files = ["LICENSE"]
+keywords = ["letterboxd", "webscraper", "movie", "film", "rating", "review", "watchlist", "diary"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -40,7 +25,23 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-keywords = ["letterboxd", "webscraper", "movie", "film", "rating", "review", "watchlist", "diary"]
+
+[[project.authors]]
+name = "Nicholas Cassarino"
+email = "nmcassa804@outlook.com"
+
+[[project.maintainers]]
+name = "FastFingertips"
+email = "fastfingertips@gmail.com"
+
+[project.optional-dependencies]
+examples = [
+    "rich",
+    "Jinja2",
+    "matplotlib>=3.5.0",
+    "numpy>=1.21.0",
+    "pillow>=8.0.0"
+]
 
 [project.urls]
 Repository = "https://github.com/nmcassa/letterboxdpy"
@@ -108,4 +109,3 @@ line-ending = "auto"
 pythonpath = ["."]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-

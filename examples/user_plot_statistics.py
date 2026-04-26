@@ -8,7 +8,6 @@ Creates visualizations of user movie watching patterns over time.
 """
 
 import argparse
-import sys
 from datetime import datetime
 
 import matplotlib.pyplot as plt
@@ -145,10 +144,9 @@ class LetterboxdStatisticsPlotter:
 
     def run(self):
         """Main program loop"""
-        try:
-            sys.stdout.reconfigure(encoding="utf-8")  # type: ignore
-        except AttributeError:
-            pass
+        from fastfingertips.terminal_utils import setup_encoding
+
+        setup_encoding()
 
         parser = argparse.ArgumentParser(
             description="Visualize Letterboxd user statistics"

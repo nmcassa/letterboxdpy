@@ -232,9 +232,9 @@ def url_encode(query: str, safe: str = "") -> str:
 
 
 if __name__ == "__main__":
-    import sys
+    from fastfingertips.terminal_utils import setup_encoding
 
-    sys.stdout.reconfigure(encoding="utf-8")  # type: ignore
+    setup_encoding()
 
     input_domain = ""
     while not len(input_domain.strip()):

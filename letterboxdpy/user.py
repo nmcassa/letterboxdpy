@@ -186,10 +186,10 @@ class User:
 
 if __name__ == "__main__":
     import argparse
-    import sys
 
-    # Reconfigure stdout encoding to UTF-8 to support non-ASCII characters
-    sys.stdout.reconfigure(encoding="utf-8")
+    from fastfingertips.terminal_utils import setup_encoding
+
+    setup_encoding()
 
     # Parse command-line arguments
     parser = argparse.ArgumentParser()

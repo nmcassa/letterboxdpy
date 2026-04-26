@@ -110,6 +110,10 @@ class List:
 
 
 if __name__ == "__main__":
+    from fastfingertips.terminal_utils import setup_encoding
+
+    setup_encoding()
+
     # user list usage:
     list_instance = List("nmcassa", "def-con-movie-list")
     movies = list_instance.movies

@@ -10,7 +10,6 @@ Recreates the ratings distribution section of a Letterboxd profile with a clean,
 import argparse
 import contextlib
 import math
-import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -205,10 +204,9 @@ class LetterboxdRatingPlotter:
 
     def run(self):
         """Main program loop"""
-        try:
-            sys.stdout.reconfigure(encoding="utf-8")  # type: ignore
-        except AttributeError:
-            pass  # Python < 3.7 or non-standard stdout
+        from fastfingertips.terminal_utils import setup_encoding
+
+        setup_encoding()
 
         parser = argparse.ArgumentParser(
             description="Visualize Letterboxd user rating distribution."

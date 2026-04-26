@@ -62,9 +62,10 @@ class Watchlist:
 
 if __name__ == "__main__":
     import argparse
-    import sys
 
-    sys.stdout.reconfigure(encoding="utf-8")
+    from fastfingertips.terminal_utils import setup_encoding
+
+    setup_encoding()
 
     parser = argparse.ArgumentParser(description="Fetch a user's watchlist.")
     parser.add_argument(

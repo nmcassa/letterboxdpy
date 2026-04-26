@@ -458,9 +458,9 @@ def get_film_slug_from_title(title: str) -> str | None:
 
 
 if __name__ == "__main__":
-    import sys
+    from fastfingertips.terminal_utils import setup_encoding
 
-    sys.stdout.reconfigure(encoding="utf-8")
+    setup_encoding()
 
     """
     Phrase usage:
