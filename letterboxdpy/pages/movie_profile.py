@@ -169,7 +169,7 @@ def extract_movie_rating(dom, script=None):
 
 def extract_movie_year(dom, script=None):
     """Extract movie year from DOM."""
-    elem = dom.find("div", {"class": "releaseyear"})
+    elem = dom.find("span", {"class": "releasedate"})
     year = elem.text if elem else None
     try:
         year = (
