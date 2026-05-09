@@ -1,3 +1,5 @@
+"""Tests for the Movie class."""
+
 import unittest
 
 from letterboxdpy.core.exceptions import MovieNotFoundError, ResourceNotFoundError
@@ -5,8 +7,11 @@ from letterboxdpy.movie import Movie
 
 
 class TestMovie(unittest.TestCase):
-    def setUp(self):
-        self.movie = Movie("v-for-vendetta")
+    """Integration tests for Movie scraping and factory methods."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.movie = Movie("v-for-vendetta")
 
     def test_get_not_exists_banner_movie(self):
         instance = Movie("avatar-4")

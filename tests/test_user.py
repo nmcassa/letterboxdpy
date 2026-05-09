@@ -1,11 +1,16 @@
+"""Tests for the User class."""
+
 import unittest
 
 from letterboxdpy.user import User
 
 
 class TestUser(unittest.TestCase):
-    def setUp(self):
-        self.user = User("nmcassa")
+    """Integration tests for User scraping methods."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.user = User("nmcassa")
 
     def test_get_all_liked_films(self):
         movies = self.user.get_liked_films()["movies"]
