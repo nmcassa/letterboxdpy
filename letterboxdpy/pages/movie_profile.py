@@ -2,6 +2,19 @@ from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.utils.utils_parser import extract_json_ld_script, get_meta_content, extract_numeric_text
 
+STAR_PATTERNS = {
+    "★★★★★": 5,
+    "★★★★½": 4.5,
+    "★★★★": 4,
+    "★★★½": 3.5,
+    "★★★": 3,
+    "★★½": 2.5,
+    "★★": 2,
+    "★½": 1.5,
+    "half-★": 0.5,
+    "★": 1,
+    "½": 0.5
+}
 
 class MovieProfile:
     """Movie profile page operations - main movie details."""
@@ -11,16 +24,28 @@ class MovieProfile:
         self.slug = slug
         self.url = f"{DOMAIN}/film/{slug}"
         self.dom = parse_url(self.url)
-        
+
         # Get script data for some fields
         self.script = extract_json_ld_script(self.dom)
-    
+
+        # Per-star histogram lives on a separate CSI fragment and is fetched
+        # lazily; aggregate rating comes from the main page's JSON-LD.
+        self.ratings_url = f"{DOMAIN}/csi/film/{slug}/rating-histogram/"
+        self._ratings_dom = None
+
+    @property
+    def ratings_dom(self):
+        if self._ratings_dom is None:
+            self._ratings_dom = parse_url(self.ratings_url)
+        return self._ratings_dom
+
     # one line contents
     def get_id(self) -> str: return extract_movie_id(self.dom)
     def get_title(self) -> str: return extract_movie_title(self.dom)
     def get_original_title(self) -> str: return extract_movie_original_title(self.dom)
     def get_runtime(self) -> int: return extract_movie_runtime(self.dom)
     def get_rating(self) -> float: return extract_movie_rating(self.dom, self.script)
+    def get_rating_counts(self) -> dict: return extract_movie_rating_counts(self.ratings_dom)
     def get_year(self) -> int: return extract_movie_year(self.dom, self.script)
     def get_tmdb_link(self) -> str: return extract_movie_tmdb_link(self.dom)
     def get_imdb_link(self) -> str: return extract_movie_imdb_link(self.dom)
@@ -78,6 +103,28 @@ def extract_movie_rating(dom, script=None):
         return float(rating) if rating else None
     except (KeyError, ValueError):
         return None
+
+def extract_movie_rating_counts(dom):
+    """Extract per-star rating counts from the rating-histogram CSI fragment.
+
+    Each bar is an <a class="barcolumn"> with title like
+    "4,933 half-★ ratings (0%)" or "12,086 ★ ratings (0%)".
+    """
+    extracted_ratings = {}
+    bars = dom.find_all('a', attrs={'class': 'barcolumn'})
+    for bar in bars:
+        title = bar.get('title') or ''
+        parts = title.split(' ')
+        if len(parts) < 2:
+            continue
+        try:
+            rating_count = int(parts[0].replace(',', ''))
+        except ValueError:
+            continue
+        rating_stars = parts[1]
+        if rating_stars in STAR_PATTERNS:
+            extracted_ratings[STAR_PATTERNS[rating_stars]] = rating_count
+    return extracted_ratings
 
 def extract_movie_year(dom, script=None):
     """Extract movie year from DOM."""
