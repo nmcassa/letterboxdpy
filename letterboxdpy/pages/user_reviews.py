@@ -1,5 +1,6 @@
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
+from letterboxdpy.utils.movies_extractor import extract_movie_info
 from letterboxdpy.utils.utils_parser import parse_review_date, parse_review_text
 from letterboxdpy.utils.utils_url import get_page_url
 
@@ -40,32 +41,37 @@ def extract_user_reviews(url: str) -> dict:
             ...
 
         for log in logs:
-            # Handle react structure
-            react_component = (
+            # Extract movie info using centralized logic
+            container = (
                 log.parent.find("div", {"class": "react-component"}) or log.parent.div
             )
+            movie_data = extract_movie_info(container)
 
-            movie_name = log.a.text
-            slug = react_component.get("data-item-slug") or react_component.get(
-                "data-film-slug"
-            )
-            movie_id = react_component["data-film-id"]
-            # str   ^^^--- movie_id: unique id of the movie.
+            if not movie_data:
+                continue
+
+            movie_id, m_info = movie_data
+            movie_name = m_info["name"]
+            slug = m_info["slug"]
+            movie_link = m_info["url"]
+
             # Find release year in spans
-            release = None
-            spans = log.find_all("span")
-            for span in spans:
-                if (
-                    span.text
-                    and span.text.strip().isdigit()
-                    and len(span.text.strip()) == 4
-                ):
-                    release = int(span.text.strip())
-                    break
-            movie_link = f"{DOMAIN}/film/{slug}/"
+            release = m_info.get("year")
+            if not release:
+                spans = log.find_all("span")
+                for span in spans:
+                    if (
+                        span.text
+                        and span.text.strip().isdigit()
+                        and len(span.text.strip()) == 4
+                    ):
+                        release = int(span.text.strip())
+                        break
+
             log_id = log["data-object-id"].split(":")[-1]
             # str ^^^--- log_id: unique id of the review.
             log_link = DOMAIN + log.a["href"]
+
             log_no = log_link.split(slug)[-1]
             log_no = int(log_no.replace("/", "")) if log_no.count("/") == 2 else 0
             # int ^^^--- log_no: there can be multiple reviews for a movie.
