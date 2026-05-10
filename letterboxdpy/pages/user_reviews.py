@@ -32,13 +32,14 @@ def extract_user_reviews(url: str) -> dict:
 
         if not container:
             # No container (div.viewing-list) found in the page.
-            ...
+            # User has no reviews, or we've gone past the last page.
+            break
 
         logs = container.find_all("article")
 
         if not logs:
             # No item (article) found in container.
-            ...
+            break
 
         for log in logs:
             # Extract movie info using centralized logic
