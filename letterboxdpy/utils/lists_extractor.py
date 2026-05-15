@@ -48,7 +48,7 @@ class ListsExtractor:
         Returns:
             dict: Contains 'lists', 'count', 'last_page'
         """
-        data = {"limit": max_lists, "count": 0, "last_page": 1, "lists": {}}
+        data = {"limit": False, "count": 0, "last_page": 1, "lists": {}}
         page = 1
 
         while True:
