@@ -1,6 +1,5 @@
 from letterboxdpy.core.encoder import SecretsEncoder
 from letterboxdpy.pages import (
-    movie_details,
     movie_lists,
     movie_members,
     movie_profile,
@@ -20,7 +19,6 @@ class Movie:
             imdb: str | None = None,
         ) -> None:
             self.profile = movie_profile.MovieProfile(slug, tmdb=tmdb, imdb=imdb)
-            self.details = movie_details.MovieDetails(self.profile.slug)
             self.lists = movie_lists.MovieLists(self.profile.slug)
             self.members = movie_members.MovieMembers(self.profile.slug)
             self.reviews = movie_reviews.MovieReviews(self.profile.slug)
@@ -148,9 +146,8 @@ class Movie:
     def get_popular_reviews(self) -> list:
         return self.pages.profile.get_popular_reviews()
 
-    # DETAILS PAGE
     def get_details_from_details(self) -> dict:
-        return self.pages.details.get_extended_details()
+        return self.pages.profile.get_extended_details()
 
     # LISTS PAGE
     def get_lists(self) -> dict:
