@@ -121,6 +121,19 @@ class TestMovie(unittest.TestCase):
         }
         self.assertIn(expected_director, directors)
 
+    def test_members(self):
+        stats = self.movie.get_watchers_stats()
+        self.assertGreater(stats["members"], 1_500_000)
+        self.assertLess(stats["members"], 3_000_000)
+        self.assertGreater(stats["fans"], 15_000)
+        self.assertLess(stats["fans"], 30_000)
+        self.assertGreater(stats["likes"], 400_000)
+        self.assertLess(stats["likes"], 800_000)
+        self.assertGreater(stats["reviews"], 90_000)
+        self.assertLess(stats["reviews"], 180_000)
+        self.assertGreater(stats["lists"], 150_000)
+        self.assertLess(stats["lists"], 300_000)
+
 
 if __name__ == "__main__":
     unittest.main()
