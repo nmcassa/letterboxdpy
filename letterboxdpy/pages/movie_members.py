@@ -1,3 +1,6 @@
+from functools import cached_property
+
+from bs4 import BeautifulSoup
 from fastfingertips.string_utils import extract_number_from_text
 
 from letterboxdpy.constants.project import DOMAIN
@@ -11,7 +14,10 @@ class MovieMembers:
         """Initialize MovieMembers with a movie slug."""
         self.slug = slug
         self.url = f"{DOMAIN}/film/{slug}/members"
-        self.dom = parse_url(self.url)
+
+    @cached_property
+    def dom(self) -> BeautifulSoup:
+        return parse_url(self.url)
 
     def get_watchers_stats(self) -> dict:
         """Get movie watchers' statistics."""
