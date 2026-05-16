@@ -1,5 +1,3 @@
-from typing import ClassVar
-
 from letterboxdpy.core.decorators import assert_instance
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.movies_extractor import (
@@ -74,40 +72,6 @@ class Films:
             movies = dict(list(movies.items())[: self.max])
 
         return movies
-
-
-class Future:
-    ARGS: ClassVar[list[str]] = [
-        "name",
-        "release",
-        "release-earliest",
-        "rating",
-        "rating-lowest",
-        "shortest",
-        "longest",
-    ]
-
-    def get_movies_with_args(args: list) -> dict:
-        # by
-        pass
-
-    def get_with_language(language: str):
-        pass
-
-    def get_with_country(country: str):
-        pass
-
-    def get_with_year(year: int):
-        pass
-
-    def get_with_actor(actor: str):
-        pass
-
-    def get_with_director(director: str):
-        pass
-
-    def get_with_writer(writer: str):
-        pass
 
 
 def get_upcoming_movies(max: int | None = None) -> dict:
