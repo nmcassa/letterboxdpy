@@ -516,7 +516,7 @@ uv run ruff format .
 Run the full test suite using `pytest`:
 
 ```bash
-uv run pytest tests
+uv run pytest
 ```
 
 Or run a specific test file:
@@ -527,6 +527,20 @@ uv run pytest tests/test_movie.py
 
 > [!NOTE]
 > Tests that require an authenticated Letterboxd session (e.g. `test_auth.py`) are automatically skipped if no valid `.cookie` file is present. This ensures the suite runs cleanly in CI environments without credentials.
+
+<h3 id="vcr-pattern">VCR Pattern</h3>
+
+Tests use a VCR (Video Cassette Recorder) pattern to avoid live network requests. The first time a test runs, real HTTP responses are recorded to compressed cassette files under `tests/cassettes/`. Subsequent runs replay those cassettes, making tests fast and fully offline.
+
+The recording mode is controlled by the `--vcr-record` flag:
+
+| Mode | Behaviour |
+|------|-----------|
+| `once` *(default)* | record if no cassette exists, replay if exists |
+| `rerecord` | record cassettes even if they already exist |
+| `disable` | disable replays, always make real requests |
+
+Cassette files are committed to the repository so the suite runs in CI without network access.
 
 <h2 id="pre-commit-hooks">Pre-commit Hooks</h2>
 
@@ -542,7 +556,7 @@ uv run pre-commit run --all-files
 
 <h2 id="ci-pipeline">CI Pipeline</h2>
 
-GitHub Actions automatically runs linting and tests on every push and pull request against the `main` branch, across all supported Python versions.
+GitHub Actions automatically runs linting and tests on every push and pull request against the `main` branch across all supported Python versions.
 
 See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the full pipeline configuration.
 
@@ -568,4 +582,4 @@ See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the full pipeline
     <img src="https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636" alt="Stargazers over time">
   </a><br>
   <sub>Built by the Letterboxdpy community</sub>
-</p>
+</p>
