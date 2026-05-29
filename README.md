@@ -37,14 +37,16 @@ pip install git+https://github.com/nmcassa/letterboxdpy.git
 
 ### Local Installation (for Development)
 
-If you have cloned the repository locally and want to make changes to the code, it is recommended to install it in "editable" mode. This allows you to run the library files directly and see your changes reflected immediately:
+If you have cloned the repository locally and want to make changes to the code, use [uv](https://docs.astral.sh/uv/) to set up the environment:
 
 ```bash
-pip install -e .
+uv sync
 
 # Or with example dependencies
-pip install -e ".[examples]"
+uv sync --extra examples
 ```
+
+This installs the package in editable mode and all dependencies. Run project commands with `uv run <command>` (see [Development](#development) below).
 
 
 > [!WARNING]
@@ -477,14 +479,14 @@ settings.update_notifications({"emailEditorial": True, "pushFollowers": False})
 
 <h2 id="requirements">Requirements</h2>
 
-This project requires **Python 3.10 or higher**.
+This project requires **Python 3.10 or higher** and [uv](https://docs.astral.sh/uv/) for local development.
 
 ```bash
-# Core installation
-pip install letterboxdpy
+# Set up local dev environment
+uv sync
 
 # With example dependencies
-pip install "letterboxdpy[examples]"
+uv sync --extra examples
 ```
 
 
@@ -500,13 +502,13 @@ This project uses [Ruff](https://docs.astral.sh/ruff/) for linting and formattin
 
 ```bash
 # Check for issues
-ruff check .
+uv run ruff check .
 
 # Auto-fix issues
-ruff check --fix .
+uv run ruff check --fix .
 
 # Format code
-ruff format .
+uv run ruff format .
 ```
 
 <h2 id="testing">Testing</h2>
@@ -514,13 +516,13 @@ ruff format .
 Run the full test suite using `pytest`:
 
 ```bash
-python -m pytest tests
+uv run pytest tests
 ```
 
 Or run a specific test file:
 
 ```bash
-python -m pytest tests/test_movie.py
+uv run pytest tests/test_movie.py
 ```
 
 > [!NOTE]
@@ -532,10 +534,10 @@ Pre-commit hooks automatically run Ruff and the test suite before every commit, 
 
 ```bash
 # Install hooks (one-time setup)
-pre-commit install
+uv run pre-commit install
 
 # Run manually against all files
-pre-commit run --all-files
+uv run pre-commit run --all-files
 ```
 
 <h2 id="ci-pipeline">CI Pipeline</h2>

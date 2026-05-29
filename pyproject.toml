@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build>=0.11.17,<0.12"]
+build-backend = "uv_build"
 
 [project]
 name = "letterboxdpy"
@@ -36,6 +36,19 @@ email = "nmcassa804@outlook.com"
 name = "FastFingertips"
 email = "fastfingertips@gmail.com"
 
+[project.urls]
+Repository = "https://github.com/nmcassa/letterboxdpy"
+Documentation = "https://github.com/nmcassa/letterboxdpy"
+"Bug Tracker" = "https://github.com/nmcassa/letterboxdpy/issues"
+"Source Code" = "https://github.com/nmcassa/letterboxdpy/archive/refs/heads/main.zip"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.0",
+    "pytest>=9.0.3",
+    "ruff>=0.15.15",
+]
+
 [project.optional-dependencies]
 examples = [
     "rich",
@@ -45,17 +58,8 @@ examples = [
     "pillow>=8.0.0"
 ]
 
-[project.urls]
-Repository = "https://github.com/nmcassa/letterboxdpy"
-Documentation = "https://github.com/nmcassa/letterboxdpy"
-"Bug Tracker" = "https://github.com/nmcassa/letterboxdpy/issues"
-"Source Code" = "https://github.com/nmcassa/letterboxdpy/archive/refs/heads/main.zip"
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.build.targets.wheel]
-packages = ["letterboxdpy"]
+[tool.uv.build-backend]
+module-root = ""
 
 [tool.ruff]
 line-length = 88
@@ -106,8 +110,3 @@ max-complexity = 15
 quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
-
-[tool.pytest]
-pythonpath = ["."]
-testpaths = ["tests"]
-python_files = ["test_*.py"]

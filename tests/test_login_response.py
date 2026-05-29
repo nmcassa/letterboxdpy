@@ -96,7 +96,3 @@ class TestCookieExpiryParsing(unittest.TestCase):
                 # Session cookies typically have None expiry
                 # (or the file might not store it)
                 pass  # Just ensuring no exception is raised
-
-
-if __name__ == "__main__":
-    unittest.main()
