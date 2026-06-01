@@ -75,6 +75,52 @@ class TestMovie(unittest.TestCase):
         movie = Movie.from_imdb("tt0133093")
         self.assertEqual(movie.slug, "the-matrix")
 
+    def test_get_details(self):
+        details = self.movie.get_details()
+        expected_language = {
+            "type": "language",
+            "name": "English",
+            "slug": "english",
+            "url": "https://letterboxd.com/films/language/english/",
+        }
+        self.assertIn(expected_language, details)
+        expected_studio = {
+            "type": "studio",
+            "name": "Warner Bros. Productions",
+            "slug": "warner-bros-productions",
+            "url": "https://letterboxd.com/studio/warner-bros-productions/",
+        }
+        self.assertIn(expected_studio, details)
+
+    def test_get_genres(self):
+        genres = self.movie.get_genres()
+        expected_genre = {
+            "type": "genre",
+            "name": "Thriller",
+            "slug": "thriller",
+            "url": "https://letterboxd.com/films/genre/thriller/",
+        }
+        self.assertIn(expected_genre, genres)
+
+    def test_get_cast(self):
+        cast = self.movie.get_cast()
+        expected_cast_member = {
+            "name": "Natalie Portman",
+            "role_name": "Evey",
+            "slug": "natalie-portman",
+            "url": "https://letterboxd.com/actor/natalie-portman/",
+        }
+        self.assertIn(expected_cast_member, cast)
+
+    def test_get_crew(self):
+        directors = self.movie.get_crew()["director"]
+        expected_director = {
+            "name": "James McTeigue",
+            "slug": "james-mcteigue",
+            "url": "https://letterboxd.com/director/james-mcteigue/",
+        }
+        self.assertIn(expected_director, directors)
+
 
 if __name__ == "__main__":
     unittest.main()

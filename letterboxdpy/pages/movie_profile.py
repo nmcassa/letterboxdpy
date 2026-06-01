@@ -279,7 +279,7 @@ def extract_movie_alternative_titles(dom):
 
 def extract_movie_details(dom):
     """Extract movie details from DOM."""
-    data = dom.find("div", {"id": ["tab-details"]})
+    data = dom.find("div", {"id": ["tab-panel-details"]})
     data = data.find_all("a") if data else []
 
     details = []
@@ -303,7 +303,7 @@ def extract_movie_details(dom):
 
 def extract_movie_genres(dom, slug):
     """Extract movie genres from DOM."""
-    data = dom.find(attrs={"id": ["tab-genres"]})
+    data = dom.find("div", {"id": ["tab-panel-genres"]})
     data = data.find_all("a") if data else []
 
     genres = []
@@ -327,7 +327,7 @@ def extract_movie_genres(dom, slug):
 
 def extract_movie_cast(dom):
     """Extract movie cast from DOM."""
-    data = dom.find("div", {"id": ["tab-cast"]})
+    data = dom.find("div", {"id": ["tab-panel-cast"]})
     data = data.find_all("a", {"class": {"tooltip"}}) if data else []
 
     cast = []
@@ -346,7 +346,7 @@ def extract_movie_cast(dom):
 
 def extract_movie_crew(dom):
     """Extract movie crew from DOM."""
-    data = dom.find("div", {"id": ["tab-crew"]})
+    data = dom.find("div", {"id": ["tab-panel-crew"]})
     data = data.find_all("a") if data else []
 
     crew = {}
