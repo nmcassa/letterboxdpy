@@ -1,4 +1,4 @@
-name: Weekly DOM Health Check
+name: Daily DOM Health Check
 
 on:
   schedule:
