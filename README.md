@@ -540,7 +540,7 @@ pre-commit run --all-files
 
 <h2 id="ci-pipeline">CI Pipeline</h2>
 
-GitHub Actions automatically runs linting and tests on every push and pull request against the `main` branch, across **Python 3.10, 3.11, and 3.12**.
+GitHub Actions automatically runs linting and tests on every push and pull request against the `main` branch, across all supported Python versions.
 
 See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the full pipeline configuration.
 
