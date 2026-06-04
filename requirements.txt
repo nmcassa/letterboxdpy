@@ -1,3 +1,0 @@
-# This file is for local development only.
-# Dependencies are managed in pyproject.toml
-.

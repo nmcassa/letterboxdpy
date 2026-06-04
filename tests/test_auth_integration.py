@@ -56,7 +56,3 @@ class TestAuthIntegration(unittest.TestCase):
             title.lower(),
             "Scraper could not access protected route - session inheritance failed",
         )
-
-
-if __name__ == "__main__":
-    unittest.main()
