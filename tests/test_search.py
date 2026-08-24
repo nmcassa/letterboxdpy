@@ -25,7 +25,3 @@ class TestSearch(unittest.TestCase):
     def test_get_film_slug_from_title(self):
         slug = get_film_slug_from_title(self.movie_name)
         self.assertEqual(slug, "v-for-vendetta")
-
-
-if __name__ == "__main__":
-    unittest.main()

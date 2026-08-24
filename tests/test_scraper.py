@@ -28,7 +28,3 @@ class TestScraper(unittest.TestCase):
         query = "Dune: Part Two"
         encoded_query = url_encode(query)
         self.assertEqual(encoded_query, "Dune%3A%20Part%20Two")
-
-
-if __name__ == "__main__":
-    unittest.main()

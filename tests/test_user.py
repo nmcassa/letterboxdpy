@@ -24,7 +24,3 @@ class TestUser(unittest.TestCase):
 
         self.assertEqual(self.user.stats["followers"], len(followers))
         self.assertEqual(self.user.stats["following"], len(following))
-
-
-if __name__ == "__main__":
-    unittest.main()

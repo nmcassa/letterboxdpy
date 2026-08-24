@@ -47,7 +47,3 @@ class TestUserSession(unittest.TestCase):
         final_url = str(response.url)
         self.assertNotIn("/sign-in", final_url)
         self.assertNotIn("/user/login", final_url)
-
-
-if __name__ == "__main__":
-    unittest.main()

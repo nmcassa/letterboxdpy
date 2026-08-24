@@ -133,7 +133,3 @@ class TestMovie(unittest.TestCase):
         self.assertLess(stats["reviews"], 180_000)
         self.assertGreater(stats["lists"], 150_000)
         self.assertLess(stats["lists"], 300_000)
-
-
-if __name__ == "__main__":
-    unittest.main()

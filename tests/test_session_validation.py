@@ -107,7 +107,3 @@ class TestLogoutSignalDetection(unittest.TestCase):
         )
 
         self.assertFalse(has_logout_signal)
-
-
-if __name__ == "__main__":
-    unittest.main()
