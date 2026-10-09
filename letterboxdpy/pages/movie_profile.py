@@ -392,24 +392,24 @@ def extract_movie_popular_reviews(dom) -> list:
     """Extract popular reviews from main movie page."""
     container_section = dom.find("section", {"class": ["film-reviews"]})
 
-    def get_text_or_none(element):
+    def get_text_or_none(element) -> str or None:
         return element.text.strip() if (element and element.text) else None
 
-    def extract_reviewer_username(article):
+    def extract_reviewer_username(article) -> str | None:
         return article.get("data-person")
 
-    def extract_reviewer_display_name(article):
+    def extract_reviewer_display_name(article) -> str or None:
         return get_text_or_none(article.find("strong", {"class": ["displayname"]}))
 
-    def extract_review_link(article):
+    def extract_review_link(article) -> str | None:
         context_link = article.find("a", {"class": ["context"]})
         href = context_link.get("href") if context_link else None
         return (DOMAIN + href) if href else None
 
     def extract_rating(article) -> float | None:
-        """Extracts the rating element from a review and converts it to a numerical value (float)."""
+        """Extracts the rating element from a review and converts it to a numerical value 0-5 (float)."""
 
-        rating_span = article.find("span", class_="rating")
+        rating_svg = article.select_one("svg.glyph.-rating")
 
         # [LEGACY NOTE]: Original robust finding logic (kept as reference)
         # rating_span = article.find("span", {"class": ["rating"]})
@@ -420,19 +420,27 @@ def extract_movie_popular_reviews(dom) -> list:
         #             rating_span = span
         #             break
 
-        if rating_span:
-            for cls in rating_span.get("class", []):
-                if cls.startswith("rated-"):
-                    try:
-                        return int(cls.split("-")[-1]) / 2.0
-                    except (ValueError, IndexError):
-                        continue
+        if rating_svg is not None:
+            rating_label = rating_svg.get("aria-label")
+            if rating_label:
+                return (
+                    rating_label.count("★") +
+                    rating_label.count("½") * 0.5
+                )
+
         return None
 
-    def extract_review_text(article):
+    def extract_review_text(article) -> str | None:
         body_div = article.find("div", {"class": ["body-text"]})
         paragraph = body_div.find("p") if body_div else None
         return get_text_or_none(paragraph)
+
+    def extract_review_likes(article) -> int | None:
+        paragraph = article.find("p", {"class": ["like-link-target", "react-component"]})
+        if paragraph:
+            likes = paragraph.get("data-count")
+            return int(likes) if likes and likes.isdigit() else None
+        return None
 
     reviews = []
     if container_section:
@@ -446,6 +454,7 @@ def extract_movie_popular_reviews(dom) -> list:
                         "username": extract_reviewer_username(article),
                         "display_name": extract_reviewer_display_name(article),
                     },
+                    "likes": extract_review_likes(article),
                     "link": extract_review_link(article),
                     "rating": extract_rating(article),
                     "review": extract_review_text(article),
