@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup, Tag
 from curl_cffi import requests
 from fastfingertips.terminal_utils import get_input
 
-from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.constants.project import SITE
 from letterboxdpy.core.exceptions import (
     AccessDeniedError,
     InvalidResponseError,
@@ -41,8 +41,9 @@ class Scraper:
     ERR_UNKNOWN = "Unknown error occurred"
 
     _session = None
+    # Root referer requires a trailing slash per RFC 9110 §4.2.3 URI normalization
     headers: ClassVar[dict[str, str]] = {
-        "referer": DOMAIN,
+        "referer": SITE,
         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
         "accept-encoding": "gzip, deflate, br",
         "accept-language": "en-US,en;q=0.9",
@@ -54,6 +55,11 @@ class Scraper:
     def __init__(self, domain: str = headers["referer"], user_agent: str | None = None):
         """Initialize the scraper with the specified domain and user-agent."""
         self.headers = self.headers.copy()
+        if domain:
+            if not domain.startswith(("http://", "https://")):
+                domain = f"https://{domain}"
+            if not domain.endswith("/"):
+                domain = f"{domain}/"
         self.headers["referer"] = domain
         if user_agent:
             self.headers["user-agent"] = user_agent
