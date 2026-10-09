@@ -169,24 +169,9 @@ class Scraper:
     @classmethod
     def _get_error_message(cls, response: requests.Response) -> str:
         """Extract the error message from the response, if available."""
-        # 1. Header-based detection (More reliable than text-matching)
-        server_header = response.headers.get("Server", "").lower()
-        has_cf_header = any(
-            h in response.headers for h in ["cf-ray", "cf-cache-status"]
-        )
-
-        if response.status_code == 403 and (
-            server_header == "cloudflare" or has_cf_header
-        ):
-            return cls.ERR_VPN_BLOCK
-
-        # 2. Text-based detection (Fallback)
-        if response.status_code == 403 and any(
-            kw in response.text.lower() for kw in cls.BLOCK_KEYWORDS
-        ):
-            return cls.ERR_VPN_BLOCK
-
-        # 3. Try to find Letterboxd's official error message in the DOM
+        # 1. DOM-based detection — check Letterboxd's own error message first.
+        #    Private resources (watchlists, lists) return a full HTML page with
+        #    <section class="message"><strong> even on 403, so this takes priority.
         dom = BeautifulSoup(response.text, cls.builder)
         message_section = dom.find("section", {"class": "message"})
 
@@ -194,6 +179,18 @@ class Scraper:
             strong = message_section.find("strong")
             if strong:
                 return strong.get_text()
+
+        # 2. Cloudflare challenge detection — cf-mitigated is only set on a real
+        #    bot/IP block; app-level 403s leave it absent.
+        is_cf_challenge = response.headers.get("cf-mitigated") == "challenge"
+        if response.status_code == 403 and is_cf_challenge:
+            return cls.ERR_VPN_BLOCK
+
+        # 3. Text-based detection (fallback for edge cases without DOM message)
+        if response.status_code == 403 and any(
+            kw in response.text.lower() for kw in cls.BLOCK_KEYWORDS
+        ):
+            return cls.ERR_VPN_BLOCK
 
         if response.status_code == 403:
             return f"{cls.ERR_FORBIDDEN_FALLBACK} URL: {response.url}"
