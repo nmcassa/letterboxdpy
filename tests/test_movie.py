@@ -134,6 +134,19 @@ class TestMovie(unittest.TestCase):
         self.assertGreater(stats["lists"], 150_000)
         self.assertLess(stats["lists"], 300_000)
 
+    def test_popular_reviews(self):
+        reviews = self.movie.popular_reviews
+        self.assertIsInstance(reviews, list)
+        self.assertGreater(len(reviews), 0)
+        first_review = reviews[0]
+        self.assertIn("user", first_review)
+        self.assertIn("link", first_review)
+        self.assertIn("rating", first_review)
+        self.assertIn("likes", first_review)
+        self.assertIn("review", first_review)
+        self.assertIsInstance(first_review["rating"], float)
+        self.assertIsInstance(first_review["likes"], int)
+
 
 if __name__ == "__main__":
     unittest.main()

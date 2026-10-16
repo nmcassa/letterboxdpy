@@ -392,13 +392,13 @@ def extract_movie_popular_reviews(dom) -> list:
     """Extract popular reviews from main movie page."""
     container_section = dom.find("section", {"class": ["film-reviews"]})
 
-    def get_text_or_none(element) -> str or None:
+    def get_text_or_none(element) -> str | None:
         return element.text.strip() if (element and element.text) else None
 
     def extract_reviewer_username(article) -> str | None:
         return article.get("data-person")
 
-    def extract_reviewer_display_name(article) -> str or None:
+    def extract_reviewer_display_name(article) -> str | None:
         return get_text_or_none(article.find("strong", {"class": ["displayname"]}))
 
     def extract_review_link(article) -> str | None:
@@ -423,10 +423,7 @@ def extract_movie_popular_reviews(dom) -> list:
         if rating_svg is not None:
             rating_label = rating_svg.get("aria-label")
             if rating_label:
-                return (
-                    rating_label.count("★") +
-                    rating_label.count("½") * 0.5
-                )
+                return rating_label.count("★") + rating_label.count("½") * 0.5
 
         return None
 
@@ -436,7 +433,9 @@ def extract_movie_popular_reviews(dom) -> list:
         return get_text_or_none(paragraph)
 
     def extract_review_likes(article) -> int | None:
-        paragraph = article.find("p", {"class": ["like-link-target", "react-component"]})
+        paragraph = article.find(
+            "p", {"class": ["like-link-target", "react-component"]}
+        )
         if paragraph:
             likes = paragraph.get("data-count")
             return int(likes) if likes and likes.isdigit() else None
