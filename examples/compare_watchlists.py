@@ -17,7 +17,7 @@ __title__ = "Watchlist Comparison"
 __description__ = (
     "Identify films from your watchlist that are also wanted by users you follow."
 )
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2025-12-24"
@@ -196,9 +196,15 @@ class WatchlistComparator:
         TextColumn("[progress.description]{task.description}"),
     ]
 
-    def __init__(self, username: str, force_refresh: bool = False):
+    def __init__(
+        self,
+        username: str,
+        force_refresh: bool = False,
+        open_browser: bool = False,
+    ):
         self.username = username
         self.force_refresh = force_refresh
+        self.open_browser = open_browser
         self.my_films = {}
         self.my_film_ids = set()
         self.following = []
@@ -474,6 +480,12 @@ class WatchlistComparator:
         )
         self.console.print("\n")
 
+        if self.open_browser:
+            import webbrowser
+
+            html_path = os.path.abspath(base_path + ".html")
+            webbrowser.open(f"file:///{html_path.replace(os.sep, '/')}")
+
     # Helpers
     def _user_dir(self, username: str) -> str:
         path = build_path(self.EXPORTS_DIR, username)
@@ -567,11 +579,21 @@ if __name__ == "__main__":
     parser.add_argument(
         "--force", "-f", action="store_true", help="Force refresh cached data"
     )
+    parser.add_argument(
+        "--open",
+        "-o",
+        action="store_true",
+        help="Automatically open the HTML report in your browser when done",
+    )
     args = parser.parse_args()
 
     username = args.user or args.username or get_input("Enter username: ")
 
-    comparator = WatchlistComparator(username, args.force)
+    comparator = WatchlistComparator(
+        username,
+        force_refresh=args.force,
+        open_browser=args.open,
+    )
 
     # Visual workflow exposed in main
     comparator.print_welcome()

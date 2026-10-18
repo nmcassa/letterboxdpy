@@ -18,7 +18,7 @@ __title__ = "Network Balance"
 __description__ = (
     "Analyze follower/following ratios and mutual relationships in your network."
 )
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2026-05-10"
@@ -149,7 +149,10 @@ def save_html_report(report: dict, output_path: str) -> None:
 
 
 def run_full_audit(
-    target_user: str, force: bool = False, console: Console | None = None
+    target_user: str,
+    force: bool = False,
+    console: Console | None = None,
+    open_browser: bool = False,
 ) -> None:
     console = console or Console()
 
@@ -255,6 +258,12 @@ def run_full_audit(
     save_html_report(report, html_path)
     console.print(f"[green][OK][/green] HTML report: {html_path}")
 
+    if open_browser:
+        import webbrowser
+
+        html_url = os.path.abspath(html_path)
+        webbrowser.open(f"file:///{html_url.replace(os.sep, '/')}")
+
     # ── Summary ──
     console.print()
     top_n = report["followers_analysis"][:5]
@@ -297,7 +306,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--force", "-f", action="store_true", help="Force refresh cached data"
     )
+    parser.add_argument(
+        "--open",
+        "-o",
+        action="store_true",
+        help="Automatically open the HTML report in your browser when done",
+    )
     args = parser.parse_args()
 
     username = args.user or args.username or get_input("Enter username: ")
-    run_full_audit(username, force=args.force)
+    run_full_audit(username, force=args.force, open_browser=args.open)

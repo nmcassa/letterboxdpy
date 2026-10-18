@@ -11,7 +11,7 @@ Generates interactive HTML report and JSON data.
 
 __title__ = "Follow Statistics"
 __description__ = "Analyze follow relationships (followers/following) to identify mutuals, fans, and unrequited follows."
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2024-09-06"
@@ -123,8 +123,9 @@ class FollowStatsAnalyzer:
 
     EXPORTS_DIR = build_path(os.path.dirname(__file__), "exports", "users")
 
-    def __init__(self, username: str):
+    def __init__(self, username: str, open_browser: bool = False):
         self.username = username
+        self.open_browser = open_browser
         self.console = Console()
         self.user_instance = user.User(username)
 
@@ -256,6 +257,12 @@ class FollowStatsAnalyzer:
         )
         self.console.print("\n")
 
+        if self.open_browser:
+            import webbrowser
+
+            html_url = os.path.abspath(html_path)
+            webbrowser.open(f"file:///{html_url.replace(os.sep, '/')}")
+
 
 if __name__ == "__main__":
     # 1. Parse command line arguments
@@ -264,12 +271,18 @@ if __name__ == "__main__":
     )
     parser.add_argument("username", nargs="?", help="Letterboxd username (positional)")
     parser.add_argument("--user", "-u", help="Letterboxd username (named)")
+    parser.add_argument(
+        "--open",
+        "-o",
+        action="store_true",
+        help="Automatically open the HTML report in your browser when done",
+    )
     args = parser.parse_args()
 
     # Identfy target user
     username = args.user or args.username or get_input("Enter username: ")
 
     # Run analysis
-    analyzer = FollowStatsAnalyzer(username)
+    analyzer = FollowStatsAnalyzer(username, open_browser=args.open)
     analyzer.print_welcome()
     analyzer.analyze()
