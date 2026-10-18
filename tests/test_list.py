@@ -33,6 +33,12 @@ class TestList(unittest.TestCase):
         self.assertIsInstance(movies, dict)
         self.assertGreater(len(movies), 0)
 
+    def test_list_pagination_constants(self):
+        """Test pagination constant for UserList."""
+        from letterboxdpy.pages.user_list import UserList
+
+        self.assertEqual(UserList.FILMS_PER_PAGE, 100)
+
 
 if __name__ == "__main__":
     unittest.main()

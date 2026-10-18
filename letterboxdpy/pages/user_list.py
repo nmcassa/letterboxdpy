@@ -22,7 +22,7 @@ class ListMetaData(dict):
 
 class UserList:
     LIST_PATTERN = f"{DOMAIN}/%s/list/%s/"
-    LIST_ITEMS_PER_PAGE = 12 * 5
+    FILMS_PER_PAGE = 20 * 5
 
     def __init__(self, username: str, slug: str) -> None:
         assert re.match("^[A-Za-z0-9_]+$", username), "Invalid author"
@@ -54,7 +54,7 @@ class UserList:
         return extract_tags(self.dom)
 
     def get_movies(self) -> dict:
-        return extract_movies(self.url, self.LIST_ITEMS_PER_PAGE)
+        return extract_movies(self.url, self.FILMS_PER_PAGE)
 
     def get_count(self) -> int:
         return extract_count(self.dom)
@@ -120,7 +120,9 @@ def extract_count(dom) -> int:
         raise RuntimeError("Failed to extract film count: " + str(e)) from e
 
 
-def extract_movies(list_url: str, items_per_page) -> dict:
+def extract_movies(
+    list_url: str, items_per_page: int = UserList.FILMS_PER_PAGE
+) -> dict:
     data = {}
 
     page = 1
