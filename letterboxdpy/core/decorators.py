@@ -34,6 +34,37 @@ def assert_instance(expected_class: type):
     return decorator
 
 
+def skip_if_hq(default=None):
+    """
+    Decorator to skip method execution and return a default value if the instance is an HQ account.
+
+    Note on caching:
+        HQ status is lazily evaluated on first access and cached on `self._is_hq` directly
+        by this decorator. This keeps page classes (e.g. UserProfile) clean and focused on
+        DOM extraction without coupling them to intermediate caching state.
+    """
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            # Check cached HQ status on the instance to avoid redundant DOM lookups
+            is_hq = getattr(self, "_is_hq", None)
+            if is_hq is None:
+                if hasattr(self, "get_hq_status"):
+                    is_hq = self.get_hq_status()
+                else:
+                    is_hq = getattr(self, "is_hq", False)
+                self._is_hq = is_hq
+
+            if is_hq:
+                return default
+            return func(self, *args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
 if __name__ == "__main__":
 
     @assert_instance(int)

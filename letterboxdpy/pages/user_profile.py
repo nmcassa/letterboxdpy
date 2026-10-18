@@ -3,6 +3,7 @@ import re
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.forms.favorites import FAVORITE_ATTRS
 from letterboxdpy.constants.project import DOMAIN
+from letterboxdpy.core.decorators import skip_if_hq
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.movies_extractor import extract_movie_info
 from letterboxdpy.utils.utils_file import JsonFile
@@ -38,22 +39,26 @@ class UserProfile:
     def get_website(self) -> str | None:
         return extract_website(self.dom)
 
+    @skip_if_hq(default=None)
     def get_watchlist_length(self) -> int | None:
         return extract_watchlist_length(self.dom)
 
     def get_stats(self) -> dict:
         return extract_stats(self.dom)
 
-    def get_favorites(self) -> dict:
+    @skip_if_hq(default=None)
+    def get_favorites(self) -> dict | None:
         return extract_favorites(self.dom)
 
     def get_avatar(self) -> dict | None:
         return extract_avatar(self.dom)
 
-    def get_watchlist_recent(self) -> dict:
+    @skip_if_hq(default=None)
+    def get_watchlist_recent(self) -> dict | None:
         return extract_watchlist_recent(self.dom)
 
-    def get_diary_recent(self) -> dict:
+    @skip_if_hq(default=None)
+    def get_diary_recent(self) -> dict | None:
         return extract_diary_recent(self.dom)
 
 
