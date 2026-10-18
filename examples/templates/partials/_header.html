@@ -44,6 +44,6 @@
 <div class="header-brand">
     <h1>{{ metadata.title or "Report" }} <span style="font-size: 12px; font-weight: normal; opacity: 0.5; margin-left: 8px;">v{{ metadata.version or "0.1.0" }}</span></h1>
     <div class="subtext">
-        for <span class="username">@{{ username or "USER" }}</span> · {{ metadata.description or "Analysis report generated for your account." }}
+        for {% if username %}<a href="https://letterboxd.com/{{ username }}/" target="_blank" class="username">@{{ username }}</a>{% else %}<span class="username">@USER</span>{% endif %} · {{ metadata.description or "Analysis report generated for your account." }}
     </div>
 </div>

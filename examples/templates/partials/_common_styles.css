@@ -51,7 +51,8 @@ body {
 .header-top { display: flex; justify-content: space-between; align-items: center; }
 
 .header-brand h1 { margin: 0; font-size: 20px; font-weight: 600; color: #f0f6fc; }
-.header-brand .username { color: var(--link-color); font-weight: 600; }
+.header-brand .username { color: var(--link-color); font-weight: 600; text-decoration: none; }
+.header-brand .username:hover { text-decoration: underline; }
 .header-brand .subtext { margin-top: 4px; color: var(--text-secondary); }
 
 /* Dashboard Summary Cards / Stats Block */
