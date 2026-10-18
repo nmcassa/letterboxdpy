@@ -554,16 +554,18 @@ See [`.github/workflows/ci.yml`](.github/workflows/ci.yml) for the full pipeline
 
 ---
 
-## License
+## Star History
 
-**[MIT License](LICENSE)** — Free to use, modify, and share.
+<a href="https://www.star-history.com/?repos=nmcassa%2Fletterboxdpy&type=timeline&releases=&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=nmcassa/letterboxdpy&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=nmcassa/letterboxdpy&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=nmcassa/letterboxdpy&type=date&legend=top-left" />
+ </picture>
+</a>
 
 ---
 
-<p align="center">
-  <sub><strong>Stargazers over time:</strong></sub><br>
-  <a href="https://starchart.cc/nmcassa/letterboxdpy">
-    <img src="https://starchart.cc/nmcassa/letterboxdpy.svg?background=%2300000000&axis=%23848D97&line=%23238636" alt="Stargazers over time">
-  </a><br>
-  <sub>Built by the Letterboxdpy community</sub>
-</p>
+## License
+
+**[MIT License](LICENSE)** — Free to use, modify, and share.
