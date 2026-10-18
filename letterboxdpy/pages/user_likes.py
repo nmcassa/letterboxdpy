@@ -6,6 +6,7 @@ from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.user_films import extract_user_films
 from letterboxdpy.utils.utils_parser import (
+    extract_and_convert_shorthand,
     parse_iso_date,
     parse_rating,
     parse_review_date,
@@ -267,21 +268,11 @@ def extract_liked_lists(url: str) -> dict:
             else 0
         )
 
-        likes_elem = item.find("a", {"class": lambda x: x and "icon-like" in x})
-        likes = 0
-        if likes_elem:
-            likes_span = likes_elem.find("span", {"class": "label"})
-            if likes_span:
-                with contextlib.suppress(ValueError):
-                    likes = int(likes_span.text.strip())
+        likes_elem = item.find("a", href=re.compile(r"/likes/?$"))
+        likes = extract_and_convert_shorthand(likes_elem) if likes_elem else 0
 
-        comments_elem = item.find("a", {"class": lambda x: x and "icon-comment" in x})
-        comments = 0
-        if comments_elem:
-            comments_span = comments_elem.find("span", {"class": "label"})
-            if comments_span:
-                with contextlib.suppress(ValueError):
-                    comments = int(comments_span.text.strip())
+        comments_elem = item.find("a", href=re.compile(r"comments"))
+        comments = extract_and_convert_shorthand(comments_elem) if comments_elem else 0
 
         return {
             "id": list_id,

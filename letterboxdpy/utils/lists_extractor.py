@@ -4,6 +4,7 @@ This module provides common functionality for extracting list data
 from user lists, movie lists, and individual list pages.
 """
 
+import re
 from typing import ClassVar
 
 from fastfingertips.string_utils import extract_number_from_text
@@ -30,8 +31,8 @@ class ListsExtractor:
         "title": ("h2", {"class": "title"}),
         "description": ("div", {"class": "body-text"}),
         "value": ("span", {"class": "value"}),
-        "likes": ("a", {"class": "icon-like"}),
-        "comments": ("a", {"class": "icon-comment"}),
+        "likes": ("a", {"href": re.compile(r"/likes/?$")}),
+        "comments": ("a", {"href": re.compile(r"comments")}),
     }
 
     LISTS_PER_PAGE = 12
