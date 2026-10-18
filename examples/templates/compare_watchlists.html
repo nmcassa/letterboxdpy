@@ -7,60 +7,491 @@
     <style>
         {% include 'partials/_common_styles.css' %}
 
-        /* Script Specific Styles */
-        .filter-bar {
-            display: flex; gap: 12px; align-items: center;
-            padding-top: 12px; border-top: 1px solid var(--border-color);
+        /* Compact Horizontal Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 2px;
+        }
+        .stat-box {
+            background: rgba(13, 17, 23, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 12px;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .stat-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f0f6fc;
+            line-height: 1;
+        }
+        .stat-number.highlight {
+            color: #3fb950;
+        }
+        .stat-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        /* Nav & Tabs with Inline Skipped Accounts */
+        .nav-and-tabs {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            gap: 12px;
+            margin-top: 2px;
+        }
+
+        /* Controls Card Stacking Context */
+        .controls-card {
+            position: relative;
+            z-index: 50;
+        }
+        .tab-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Skipped Accounts Popover / Dropdown */
+        .skipped-wrapper {
+            position: relative;
+            z-index: 60;
+        }
+        .skipped-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(210, 153, 34, 0.1);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+            color: #d29922;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .skipped-btn:hover {
+            background: rgba(210, 153, 34, 0.18);
+            border-color: rgba(210, 153, 34, 0.5);
+            color: #e3b341;
+        }
+        .skipped-btn-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #d29922;
+        }
+        .skipped-btn-arrow {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+        .skipped-dropdown {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 6px);
+            width: 340px;
+            max-width: 90vw;
+            background: #161b22;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 12px;
+            z-index: 9999;
+            animation: fadeIn 0.15s ease-out;
+        }
+        .skipped-dropdown-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .skipped-dropdown-header strong {
+            font-size: 12px;
+            color: #f0f6fc;
+        }
+        .skipped-dropdown-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .skipped-dropdown-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        .skipped-dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 4px 6px;
+            background: rgba(13, 17, 23, 0.5);
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            border-radius: 5px;
+            font-size: 11px;
+        }
+        .skipped-badge {
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .badge-hq {
+            background: rgba(163, 113, 247, 0.15);
+            color: #d2a8ff;
+            border: 1px solid rgba(163, 113, 247, 0.3);
+        }
+        .badge-private {
+            background: rgba(248, 81, 73, 0.15);
+            color: #ff7b72;
+            border: 1px solid rgba(248, 81, 73, 0.3);
+        }
+
+        /* Filter Container */
+        .filter-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+        .filter-top-row, .filter-bottom-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .filter-bottom-row {
+            justify-content: space-between;
         }
         
+        .search-input-wrapper {
+            position: relative;
+            flex: 1 1 240px;
+            min-width: 200px;
+        }
+        .search-svg {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+        #filmSearch {
+            width: 100%;
+            padding: 7px 30px 7px 32px;
+            box-sizing: border-box;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 12px;
+        }
+        .clear-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .clear-btn:hover {
+            color: var(--text-primary);
+        }
+
+        /* Min Matches Pills */
+        .min-matches-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .match-pills {
+            display: inline-flex;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 2px;
+        }
+        .pill-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .pill-btn:hover {
+            color: var(--text-primary);
+        }
+        .pill-btn.active {
+            background: var(--badge-bg);
+            color: var(--badge-text);
+        }
+
+        /* User Filter */
+        .user-filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
         .toggle-group {
-            display: flex; background: var(--input-bg);
-            border: 1px solid var(--border-color); border-radius: 6px; padding: 2px;
+            display: flex;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 2px;
         }
         .toggle-btn {
-            border: none; background: transparent; padding: 4px 12px;
-            cursor: pointer; color: var(--text-secondary); border-radius: 4px;
-            font-size: 12px;
+            border: none;
+            background: transparent;
+            padding: 3px 10px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-radius: 4px;
+            font-size: 11px;
         }
-        .toggle-btn.active { background: var(--badge-bg); color: var(--badge-text); font-weight: 600; }
-        
-        .rank { color: var(--text-secondary); width: 40px; font-family: monospace; font-size: 12px; text-align: center; }
-        .count { white-space: nowrap; width: 80px; }
-        .year { font-size: 12px; color: var(--text-secondary); font-weight: normal; margin-left: 6px; }
-        
-        .users-cell { width: 50%; vertical-align: top; padding-top: 12px; }
-        .users-wrapper { display: flex; flex-wrap: wrap; gap: 4px; }
-        
-        #match-count { 
-            color: var(--text-secondary); 
-            font-size: 12px;
-            margin-left: auto; 
+        .toggle-btn.active {
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            font-weight: 600;
         }
-        
-        .films-cell { padding: 12px; vertical-align: top; }
-        .films-wrapper { 
-            display: flex; flex-wrap: wrap; gap: 4px; 
+
+        .filter-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+        #match-count {
+            color: var(--text-secondary);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .reset-btn {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            color: #ff7b72;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .reset-btn:hover {
+            background: rgba(248, 81, 73, 0.2);
+        }
+
+        /* Table Styles */
+        .rank {
+            color: var(--text-secondary);
+            width: 40px;
+            font-family: monospace;
+            font-size: 12px;
+            text-align: center;
+        }
+        .count {
+            white-space: nowrap;
+            width: 75px;
+            text-align: center;
+        }
+        .year-cell {
+            width: 60px;
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        .film-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.15s;
+        }
+        .film-link:hover {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+
+        /* Matches badges color scale */
+        .count-badge-gold {
+            background: rgba(240, 136, 62, 0.25) !important;
+            color: #ffa657 !important;
+            border: 1px solid rgba(240, 136, 62, 0.4) !important;
+            font-weight: 700;
+        }
+        .count-badge-green {
+            background: rgba(46, 160, 67, 0.2) !important;
+            color: #3fb950 !important;
+            border: 1px solid rgba(46, 160, 67, 0.35) !important;
+            font-weight: 700;
+        }
+        .count-badge-blue {
+            background: rgba(56, 139, 253, 0.15) !important;
+            color: #58a6ff !important;
+            border: 1px solid rgba(56, 139, 253, 0.3) !important;
+        }
+        .count-badge-dim {
+            background: rgba(110, 118, 129, 0.15) !important;
+            color: var(--text-secondary) !important;
+        }
+
+        .users-cell {
+            vertical-align: top;
+            padding-top: 12px;
+        }
+        .users-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        /* Taste match meter */
+        .taste-meter {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .taste-val {
+            font-size: 11px;
+            font-family: monospace;
+            min-width: 38px;
+            text-align: right;
+        }
+        .meter-track {
+            flex: 1;
+            max-width: 80px;
+            height: 4px;
+            background: rgba(110, 118, 129, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #58a6ff, #3fb950);
+            border-radius: 2px;
+        }
+
+        .films-cell {
+            padding: 12px;
+            vertical-align: top;
+        }
+        .films-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
             max-width: 100%;
         }
-        .extra-film { display: none; }
-        .films-wrapper.expanded .extra-film { display: inline-block; }
-
+        .extra-film {
+            display: none;
+        }
+        .films-wrapper.expanded .extra-film {
+            display: inline-block;
+        }
         .more-badge {
-            background: var(--hover-bg); border: 1px dashed var(--border-color);
-            color: var(--link-color); cursor: pointer; font-weight: 600;
+            background: var(--hover-bg);
+            border: 1px dashed var(--border-color);
+            color: var(--link-color);
+            cursor: pointer;
+            font-weight: 600;
         }
-        .more-badge:hover { background: var(--badge-bg); border-style: solid; }
-        .films-wrapper.expanded .more-badge { display: none; }
-        
+        .more-badge:hover {
+            background: var(--badge-bg);
+            border-style: solid;
+        }
+        .films-wrapper.expanded .more-badge {
+            display: none;
+        }
         .show-less-btn {
-            display: none; background: none; border: none; color: var(--text-secondary);
-            font-size: 10px; text-decoration: underline; cursor: pointer; margin-top: 4px;
-            width: 100%; text-align: left; padding: 0;
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 4px;
+            width: 100%;
+            text-align: left;
+            padding: 0;
         }
-        .films-wrapper.expanded + .show-less-btn { display: block; }
-        
-        .user-link { color: var(--text-primary); font-weight: 600; text-decoration: none; }
-        .user-link:hover { color: var(--link-color); text-decoration: underline; }
+        .films-wrapper.expanded + .show-less-btn {
+            display: block;
+        }
+
+        .user-link {
+            color: var(--text-primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .user-link:hover {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+
+        /* Skipped Accounts in Users tab */
+        .skipped-users-section {
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(22, 27, 34, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .section-title {
+            margin: 0 0 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+        .section-subtitle {
+            margin: 0 0 12px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .skipped-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .skipped-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 11px;
+        }
     </style>
 </head>
 <body {% if not generated_at %}class="preview-mode"{% endif %}>
@@ -72,42 +503,107 @@
         </div>
 
         <!-- Controls & Stats Card -->
-        <div class="header">
-            <div class="stats" style="margin-bottom: 4px;">
-                <div class="stat-item"><strong>{{ stats.watchlist }}</strong> in watchlist</div>
-                <div class="stat-item"><strong>{{ stats.following }}</strong> scanned</div>
-                <div class="stat-item"><strong>{{ stats.matches }}</strong> matches</div>
-            </div>
-            
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="tab-films" onclick="switchTab('tab-films')">
-                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"><path d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25Z"></path><path d="M3.5 6.5a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM8 5.75a.75.75 0 0 0-.75.75v1c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1a.75.75 0 0 0-.75-.75h-1Zm2.75.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM3.5 9.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM8 9a.75.75 0 0 0-.75.75v1c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1A.75.75 0 0 0 9 9h-1Zm2.75.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1Z"></path></svg>
-                    Films
-                </button>
-                <button class="tab-btn" data-tab="tab-users" onclick="switchTab('tab-users')">
-                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 2.5.75.75 0 0 1 11 1h.5a3 3 0 0 1-.5 3Zm-5.5 1.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path></svg>
-                    Users
-                </button>
-            </div>
-            
-            <div class="filter-bar">
-                <span style="color: var(--text-secondary); font-weight: 600;">Filter by User:</span>
-                <select id="userSelect" onchange="applyFilter()">
-                    <option value="">All Users</option>
-                    {% for user in all_users|sort %}
-                    <option value="{{ user }}">{{ user }}</option>
-                    {% endfor %}
-                </select>
-                
-                <div class="toggle-group">
-                    <button id="btnInclude" class="toggle-btn active" onclick="setMode('include')">Must have</button>
-                    <button id="btnExclude" class="toggle-btn" onclick="setMode('exclude')">Must NOT have</button>
+        <div class="header controls-card">
+            <!-- Compact horizontal stats row -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <span class="stat-number">{{ stats.watchlist }}</span>
+                    <span class="stat-desc">In Watchlist</span>
                 </div>
-                
-                <div id="match-count">Showing all films</div>
+                <div class="stat-box">
+                    <span class="stat-number highlight">{{ stats.matches }}</span>
+                    <span class="stat-desc">Matches ({{ stats.match_rate }}%)</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">{{ stats.following }}</span>
+                    <span class="stat-desc">Following ({{ stats.active_users }} active{% if stats.skipped_count %}, {{ stats.skipped_count }} skipped{% endif %})</span>
+                </div>
+            </div>
+
+            <!-- Tabs row with right-aligned Excluded Accounts button -->
+            <div class="nav-and-tabs">
+                <div class="tabs" style="margin-bottom: 0;">
+                    <button class="tab-btn active" data-tab="tab-films" onclick="switchTab('tab-films')">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"><path d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25Z"></path><path d="M3.5 6.5a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM8 5.75a.75.75 0 0 0-.75.75v1c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1a.75.75 0 0 0-.75-.75h-1Zm2.75.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM3.5 9.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1ZM8 9a.75.75 0 0 0-.75.75v1c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1A.75.75 0 0 0 9 9h-1Zm2.75.75a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75v-1Z"></path></svg>
+                        Films ({{ stats.matches }})
+                    </button>
+                    <button class="tab-btn" data-tab="tab-users" onclick="switchTab('tab-users')">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 2.5.75.75 0 0 1 11 1h.5a3 3 0 0 1-.5 3Zm-5.5 1.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path></svg>
+                        Users ({{ user_rankings|length }})
+                    </button>
+                </div>
+
+                {% if skipped_users %}
+                <div class="skipped-wrapper">
+                    <button type="button" class="skipped-btn" id="skippedBtn" onclick="toggleSkipped(event)">
+                        <span class="skipped-btn-dot"></span>
+                        <span><strong>{{ stats.skipped_count }}</strong> Excluded Accounts</span>
+                        <span class="skipped-btn-arrow" id="skippedArrow">▾</span>
+                    </button>
+                    <div class="skipped-dropdown" id="skippedDropdown" style="display: none;">
+                        <div class="skipped-dropdown-header">
+                            <strong>Excluded from Scan ({{ stats.skipped_count }})</strong>
+                            <span class="skipped-dropdown-desc">Accounts with no accessible watchlists</span>
+                        </div>
+                        <div class="skipped-dropdown-list">
+                            {% for u, reason in skipped_users.items() %}
+                            <div class="skipped-dropdown-item">
+                                <a href="https://letterboxd.com/{{ u }}/" target="_blank" class="user-link">@{{ u }}</a>
+                                <span class="skipped-badge {% if 'HQ' in reason or 'hq' in reason %}badge-hq{% else %}badge-private{% endif %}">{{ reason }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Enhanced Filters for Films -->
+            <div class="filter-container" id="filmsFilterContainer">
+                <div class="filter-top-row">
+                    <div class="search-input-wrapper">
+                        <svg class="search-svg" height="14" viewBox="0 0 16 16" width="14" fill="currentColor">
+                            <path d="M11.5 7a4.485 4.485 0 1 0-8.97 0 4.485 4.485 0 0 0 8.97 0Zm-.82 4.74a6 6 0 1 1 1.06-1.06l3.04 3.04a.75.75 0 1 1-1.06 1.06l-3.04-3.04Z"/>
+                        </svg>
+                        <input type="text" id="filmSearch" placeholder="Filter by film title or year..." oninput="applyFilter()">
+                        <button type="button" id="clearSearchBtn" class="clear-btn" onclick="clearSearch()" style="display: none;">✕</button>
+                    </div>
+
+                    <div class="min-matches-wrapper">
+                        <span class="filter-label">Min Matches:</span>
+                        <div class="match-pills" id="matchPills">
+                            <button type="button" class="pill-btn active" data-min="1" onclick="setMinMatches(1, this)">All</button>
+                            <button type="button" class="pill-btn" data-min="2" onclick="setMinMatches(2, this)">2+</button>
+                            <button type="button" class="pill-btn" data-min="3" onclick="setMinMatches(3, this)">3+</button>
+                            <button type="button" class="pill-btn" data-min="4" onclick="setMinMatches(4, this)">4+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-bottom-row">
+                    <div class="user-filter-group">
+                        <span class="filter-label">Filter by User:</span>
+                        <select id="userSelect" onchange="applyFilter()">
+                            <option value="">All Users</option>
+                            {% for user in all_users|sort %}
+                            <option value="{{ user }}">{{ user }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="toggle-group">
+                            <button type="button" id="btnInclude" class="toggle-btn active" onclick="setMode('include')">Must have</button>
+                            <button type="button" id="btnExclude" class="toggle-btn" onclick="setMode('exclude')">Must NOT have</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-meta">
+                        <span id="match-count">Showing all {{ stats.matches }} films</span>
+                        <button type="button" id="resetFiltersBtn" class="reset-btn" onclick="resetFilters()" style="display: none;">Reset Filters</button>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- Tab 1: Films Table -->
         <div id="tab-films" class="tab-content active">
             <div class="table-container">
                 <table id="filmsTable">
@@ -128,15 +624,20 @@
                                     Film <span class="sort-icon"></span>
                                 </button>
                             </th>
+                            <th>
+                                <button class="sort-btn" onclick="sortTable('filmsTable', 3, 'num')">
+                                    Year <span class="sort-icon"></span>
+                                </button>
+                            </th>
                             <th style="padding: 12px;">Wanted by (Following)</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for film in results %}
-                        <tr data-users="{{ film.users|join(',') }}">
+                        <tr data-users="{{ film.users|join(',') }}" data-count="{{ film.count }}" data-title="{{ film.name|lower }}" data-year="{{ film.year }}">
                             <td class="rank">#{{ loop.index }}</td>
                             <td class="count">
-                                <span class="count-badge">
+                                <span class="count-badge {% if film.count >= 4 %}count-badge-gold{% elif film.count == 3 %}count-badge-green{% elif film.count == 2 %}count-badge-blue{% else %}count-badge-dim{% endif %}">
                                     {{ film.count }}
                                 </span>
                             </td>
@@ -144,8 +645,8 @@
                                 <a href="{{ film.url }}" target="_blank" class="film-link">
                                     {{ film.name }}
                                 </a>
-                                <span class="year">({{ film.year }})</span>
                             </td>
+                            <td class="year-cell">{{ film.year }}</td>
                             <td class="users-cell">
                                 <div class="users-wrapper">
                                     {% for user in film.users|sort %}
@@ -160,6 +661,7 @@
             </div>
         </div>
 
+        <!-- Tab 2: Users Table -->
         <div id="tab-users" class="tab-content">
             <div class="table-container">
                 <table id="usersTable">
@@ -202,9 +704,12 @@
                                 <span style="font-size: 10px; opacity: 0.5; margin-left: 4px;">/ {{ user.total_count }}</span>
                             </td>
                             <td class="percentage">
-                                <span class="count-badge" style="background: rgba(110, 118, 129, 0.15);">
-                                    {{ user.percentage }}%
-                                </span>
+                                <div class="taste-meter">
+                                    <span class="taste-val">{{ user.percentage }}%</span>
+                                    <div class="meter-track">
+                                        <div class="meter-fill" style="width: {{ user.percentage }}%;"></div>
+                                    </div>
+                                </div>
                             </td>
                             <td class="films-cell">
                                 <div class="films-wrapper" id="films-{{ user.name }}">
@@ -230,6 +735,21 @@
                     </tbody>
                 </table>
             </div>
+
+            {% if skipped_users %}
+            <div class="skipped-users-section">
+                <h3 class="section-title">Excluded Accounts ({{ stats.skipped_count }})</h3>
+                <p class="section-subtitle">These accounts were analyzed during the scan but have no accessible personal watchlists:</p>
+                <div class="skipped-list">
+                    {% for u, reason in skipped_users.items() %}
+                    <div class="skipped-item">
+                        <a href="https://letterboxd.com/{{ u }}/" target="_blank" class="user-link">@{{ u }}</a>
+                        <span class="skipped-badge {% if 'HQ' in reason or 'hq' in reason %}badge-hq{% else %}badge-private{% endif %}">{{ reason }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
 
         <div class="footer">
@@ -268,6 +788,8 @@
 
     <script>
         let filterMode = 'include';
+        let currentMinMatches = 1;
+        const totalMatchesCount = {{ stats.matches }};
         
         function switchTab(tabId) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -276,11 +798,9 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             
-            const filterBar = document.querySelector('.filter-bar');
-            if (tabId === 'tab-films') {
-                filterBar.style.display = 'flex';
-            } else {
-                filterBar.style.display = 'none';
+            const filterContainer = document.getElementById('filmsFilterContainer');
+            if (filterContainer) {
+                filterContainer.style.display = (tabId === 'tab-films') ? 'flex' : 'none';
             }
         }
         
@@ -323,22 +843,71 @@
             document.getElementById('btnExclude').classList.toggle('active', mode === 'exclude');
             applyFilter();
         }
+
+        function setMinMatches(val, btn) {
+            currentMinMatches = val;
+            document.querySelectorAll('#matchPills .pill-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            applyFilter();
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('filmSearch');
+            searchInput.value = '';
+            document.getElementById('clearSearchBtn').style.display = 'none';
+            applyFilter();
+            searchInput.focus();
+        }
+
+        function resetFilters() {
+            document.getElementById('filmSearch').value = '';
+            document.getElementById('clearSearchBtn').style.display = 'none';
+            document.getElementById('userSelect').value = '';
+            currentMinMatches = 1;
+            document.querySelectorAll('#matchPills .pill-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.min === '1');
+            });
+            setMode('include');
+        }
         
         function applyFilter() {
             const selectedUser = document.getElementById('userSelect').value;
+            const searchInput = document.getElementById('filmSearch');
+            const searchQuery = searchInput.value.toLowerCase().trim();
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const resetBtn = document.getElementById('resetFiltersBtn');
+            
+            clearBtn.style.display = searchQuery ? 'block' : 'none';
+            
+            const isFiltered = Boolean(selectedUser || searchQuery || currentMinMatches > 1);
+            resetBtn.style.display = isFiltered ? 'inline-block' : 'none';
+
             const rows = document.querySelectorAll('#filmsTable tbody tr');
             let visibleCount = 0;
             
             rows.forEach(row => {
-                const users = row.dataset.users.split(',');
+                const users = (row.dataset.users || '').split(',');
+                const count = parseInt(row.dataset.count, 10) || 0;
+                const title = row.dataset.title || '';
+                const year = row.dataset.year || '';
+                
                 let show = true;
                 
-                if (selectedUser) {
+                // 1. Min matches check
+                if (count < currentMinMatches) {
+                    show = false;
+                }
+                
+                // 2. User filter check
+                if (show && selectedUser) {
                     const hasUser = users.includes(selectedUser);
-                    if (filterMode === 'include') {
-                        show = hasUser;
-                    } else {
-                        show = !hasUser;
+                    show = (filterMode === 'include') ? hasUser : !hasUser;
+                }
+
+                // 3. Search query check
+                if (show && searchQuery) {
+                    if (!title.includes(searchQuery) && !year.includes(searchQuery)) {
+                        show = false;
                     }
                 }
                 
@@ -351,21 +920,49 @@
             });
             
             let countText = '';
-            if (selectedUser) {
-                if (filterMode === 'include') {
-                    countText = `Found ${visibleCount} films wanted by ${selectedUser}`;
-                } else {
-                    countText = `Found ${visibleCount} films NOT wanted by ${selectedUser}`;
+            if (isFiltered) {
+                countText = `Showing ${visibleCount} of ${totalMatchesCount} films`;
+                if (selectedUser) {
+                    countText += (filterMode === 'include') ? ` (wanted by @${selectedUser})` : ` (not wanted by @${selectedUser})`;
+                }
+                if (currentMinMatches > 1) {
+                    countText += ` (≥${currentMinMatches} matches)`;
                 }
             } else {
-                countText = `Showing all ${visibleCount} films`;
+                countText = `Showing all ${totalMatchesCount} films`;
             }
                 
             document.getElementById('match-count').textContent = countText;
         }
 
+        function toggleSkipped(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('skippedDropdown');
+            const arrow = document.getElementById('skippedArrow');
+            if (!dropdown) return;
+            const isHidden = dropdown.style.display === 'none';
+            dropdown.style.display = isHidden ? 'block' : 'none';
+            if (arrow) arrow.textContent = isHidden ? '▴' : '▾';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const wrapper = document.querySelector('.skipped-wrapper');
+            const dropdown = document.getElementById('skippedDropdown');
+            const arrow = document.getElementById('skippedArrow');
+            if (dropdown && dropdown.style.display !== 'none') {
+                if (!wrapper || !wrapper.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                    if (arrow) arrow.textContent = '▾';
+                }
+            }
+        });
+
         function toggleFilms(btn) {
-            const wrapper = btn.closest('.films-wrapper') || btn.nextElementSibling;
+            const cell = btn.closest('.films-cell');
+            const wrapper = cell ? cell.querySelector('.films-wrapper') : (btn.closest('.films-wrapper') || btn.previousElementSibling || btn.nextElementSibling);
+            if (!wrapper) return;
+
             const isExpanding = !wrapper.classList.contains('expanded');
             
             // Close all other expanded rows

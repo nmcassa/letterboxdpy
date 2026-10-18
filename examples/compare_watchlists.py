@@ -17,7 +17,7 @@ __title__ = "Watchlist Comparison"
 __description__ = (
     "Identify films from your watchlist that are also wanted by users you follow."
 )
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2025-12-24"
@@ -60,12 +60,18 @@ class WatchlistHtmlRenderer:
     TEMPLATE_NAME = "compare_watchlists.html"
 
     def __init__(
-        self, username: str, my_films: dict, film_users: dict, user_totals: dict
+        self,
+        username: str,
+        my_films: dict,
+        film_users: dict,
+        user_totals: dict,
+        skipped_users: dict | None = None,
     ):
         self.username = username
         self.my_films = my_films
         self.film_users = film_users
         self.user_totals = user_totals
+        self.skipped_users = skipped_users or {}
 
     def render(self, filepath: str, sorted_films: list, stats: dict) -> None:
         """Generates and saves the HTML report using Jinja2."""
@@ -94,6 +100,7 @@ class WatchlistHtmlRenderer:
             all_users=list(all_included_users),
             results=films_data,
             user_rankings=users_data,
+            skipped_users=self.skipped_users,
             generated_at=generated_at,
             metadata={
                 "title": __title__,
@@ -436,12 +443,24 @@ class WatchlistComparator:
 
         # Save HTML
         renderer = WatchlistHtmlRenderer(
-            self.username, self.my_films, self.film_users, self.user_total_counts
+            self.username,
+            self.my_films,
+            self.film_users,
+            self.user_total_counts,
+            skipped_users=self.skipped_users,
+        )
+        match_rate = (
+            round((len(self.film_popularity) / len(self.my_film_ids)) * 100, 1)
+            if self.my_film_ids
+            else 0
         )
         stats = {
             "watchlist": len(self.my_film_ids),
             "following": len(self.following),
             "matches": len(self.film_popularity),
+            "active_users": len(self.following) - len(self.skipped_users),
+            "skipped_count": len(self.skipped_users),
+            "match_rate": match_rate,
         }
         renderer.render(base_path + ".html", sorted_films, stats)
 
