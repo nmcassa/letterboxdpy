@@ -158,9 +158,9 @@ class Scraper:
                 )
 
                 if is_blocked:
-                    raise AccessDeniedError(formatted_error_message)
+                    raise AccessDeniedError(message=error_message, url=url)
 
-                raise PrivateRouteError(formatted_error_message)
+                raise PrivateRouteError(url=url, message=error_message)
 
             raise InvalidResponseError(
                 formatted_error_message, code=response.status_code

@@ -10,6 +10,7 @@ class PageLoadError(Exception):
     def __init__(self, url, message="Failed to load the page"):
         super().__init__(f"{message}: {url}")
         self.url = url
+        self.message = message
 
 
 class InvalidResponseError(Exception):
@@ -27,6 +28,7 @@ class ResourceNotFoundError(Exception):
     def __init__(self, url: str, message: str = "Resource not found"):
         super().__init__(f"{message}: {url}")
         self.url = url
+        self.message = message
 
 
 class MovieNotFoundError(ResourceNotFoundError):
@@ -49,18 +51,23 @@ class CustomEncoderError(Exception):
 
 
 class PrivateRouteError(Exception):
-    """Exception raised when a private route is accessed."""
+    """Exception raised when a private route is accessed (403)."""
 
-    pass
+    def __init__(self, url: str, message: str = "This resource is not public"):
+        super().__init__(f"{message}: {url}" if url else message)
+        self.url = url
+        self.message = message
 
 
 class AccessDeniedError(Exception):
     """Exception raised when access is denied by the server (e.g. IP/VPN block)."""
 
-    def __init__(self, message: str = "Access Denied"):
+    def __init__(self, message: str = "Access Denied", url: str | None = None):
         self.message = message
+        self.url = url
         hint = "\nHint: If you are using a VPN or Proxy, Letterboxd might be blocking your connection. Try disabling it."
-        super().__init__(f"{message}{hint}")
+        prefix = f"{message}: {url}" if url else message
+        super().__init__(f"{prefix}{hint}")
 
 
 # ----------------
