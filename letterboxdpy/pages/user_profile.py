@@ -80,12 +80,23 @@ def extract_id(dom) -> int:
 def extract_hq_status(dom) -> bool:
     """Checks if the user has a high-quality account and returns the status."""
     try:
+        # 1. Badge element in profile header: <span class="badge -hq">HQ</span>
+        badge = dom.find("span", class_="-hq")
+        if badge and badge.get_text(strip=True).upper() == "HQ":
+            return True
+
+        # 2. Body class: 'screen-member-profile-hq' (standard) or 'profile-hq' (legacy)
+        body_classes = get_body_content(dom, "class") or []
+        if any(c in body_classes for c in ("screen-member-profile-hq", "profile-hq")):
+            return True
+
+        # 3. Data-options fallback (legacy)
         data = dom.find("div", {"class": "profile-summary"})
         if data and "data-profile-summary-options" in data.attrs:
             profile_summary = data["data-profile-summary-options"]
-            return JsonFile.parse(profile_summary)["isHQ"]
-        else:
-            return "profile-hq" in (get_body_content(dom, "class") or [])
+            return bool(JsonFile.parse(profile_summary).get("isHQ", False))
+
+        return False
     except Exception as e:
         raise RuntimeError("Failed to check HQ status from DOM") from e
 
