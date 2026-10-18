@@ -38,6 +38,7 @@ class Scraper:
     ERR_FORBIDDEN_FALLBACK = (
         "Forbidden: Access denied. Your network might be restricted or IP is flagged."
     )
+    ERR_PRIVATE_RESOURCE = "This resource is classified or private."
     ERR_UNKNOWN = "Unknown error occurred"
 
     _session = None
@@ -176,9 +177,19 @@ class Scraper:
         message_section = dom.find("section", {"class": "message"})
 
         if isinstance(message_section, Tag):
+            section_text = message_section.get_text().lower()
+            if "falken" in section_text or "classified" in section_text:
+                return cls.ERR_PRIVATE_RESOURCE
+
             strong = message_section.find("strong")
             if strong:
-                return strong.get_text()
+                strong_text = strong.get_text()
+                if (
+                    "falken" in strong_text.lower()
+                    or "classified" in strong_text.lower()
+                ):
+                    return cls.ERR_PRIVATE_RESOURCE
+                return strong_text
 
         # 2. Cloudflare challenge detection — cf-mitigated is only set on a real
         #    bot/IP block; app-level 403s leave it absent.

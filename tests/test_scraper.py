@@ -61,6 +61,23 @@ class TestScraper(unittest.TestCase):
         self.assertTrue(watchlist.url.endswith("/"))
         self.assertEqual(watchlist.url, "https://letterboxd.com/testuser/watchlist/")
 
+    def test_private_resource_classified_error_message(self):
+        """Test private resource WarGames quote is mapped to clean error message."""
+        from unittest.mock import Mock
+
+        fake_html = (
+            '<section class="message"><p><strong>Greetings, Professor Falken. '
+            "Shall we play a game?</strong><br/>The file you're attempting to access is "
+            "classified...</p></section>"
+        )
+        fake_response = Mock()
+        fake_response.text = fake_html
+        fake_response.status_code = 403
+        fake_response.headers = {}
+
+        msg = Scraper._get_error_message(fake_response)
+        self.assertEqual(msg, Scraper.ERR_PRIVATE_RESOURCE)
+
 
 if __name__ == "__main__":
     unittest.main()
