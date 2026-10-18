@@ -102,15 +102,34 @@ def extract_hq_status(dom) -> bool:
 
 
 def extract_display_name(dom) -> str:
-    """Extracts the display name from the DOM using the Open Graph title property."""
+    """Extracts the display name from the DOM."""
     try:
+        # 1. Primary: Direct element in profile header
+        # <h1 class="person-display-name"><span class="displayname">Name</span></h1>
+        h1 = dom.find("h1", class_="person-display-name")
+        if h1:
+            span = h1.find("span", class_="displayname")
+            if span:
+                display_name = span.get_text(strip=True)
+                if display_name:
+                    return display_name
+
+        # 2. Fallback: Open Graph title property
         content = get_meta_content(dom, property="og:title")
         if content:
-            return content[
-                :-10
-            ]  # Remove the last 10 characters (e.g., " | Letterboxd")
-        else:
-            raise ValueError("Display name not found in the DOM")
+            suffixes = (
+                "\u2019s HQ profile",
+                "'s HQ profile",
+                "\u2019s profile",
+                "'s profile",
+                " | Letterboxd",
+            )
+            for suffix in suffixes:
+                if content.endswith(suffix):
+                    return content[: -len(suffix)].strip()
+            return content.strip()
+
+        raise ValueError("Display name not found in the DOM")
     except Exception as e:
         raise RuntimeError("Failed to extract display name from DOM") from e
 
