@@ -39,7 +39,7 @@ def skip_if_hq(default=None):
     Decorator to skip method execution and return a default value if the instance is an HQ account.
 
     Note on caching:
-        HQ status is lazily evaluated on first access and cached on `self._is_hq` directly
+        Badge status is lazily evaluated on first access and cached on `self._badge` directly
         by this decorator. This keeps page classes (e.g. UserProfile) clean and focused on
         DOM extraction without coupling them to intermediate caching state.
     """
@@ -47,16 +47,16 @@ def skip_if_hq(default=None):
     def decorator(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
-            # Check cached HQ status on the instance to avoid redundant DOM lookups
-            is_hq = getattr(self, "_is_hq", None)
-            if is_hq is None:
-                if hasattr(self, "get_hq_status"):
-                    is_hq = self.get_hq_status()
+            # Check cached badge on the instance to avoid redundant DOM lookups
+            badge = getattr(self, "_badge", None)
+            if badge is None:
+                if hasattr(self, "get_badge"):
+                    badge = self.get_badge()
                 else:
-                    is_hq = getattr(self, "is_hq", False)
-                self._is_hq = is_hq
+                    badge = getattr(self, "badge", None)
+                self._badge = badge
 
-            if is_hq:
+            if badge == "hq":
                 return default
             return func(self, *args, **kwargs)
 

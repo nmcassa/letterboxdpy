@@ -6,8 +6,7 @@ from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.decorators import skip_if_hq
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.movies_extractor import extract_movie_info
-from letterboxdpy.utils.utils_file import JsonFile
-from letterboxdpy.utils.utils_parser import get_body_content, get_meta_content
+from letterboxdpy.utils.utils_parser import get_meta_content
 from letterboxdpy.utils.utils_transform import month_to_index
 from letterboxdpy.utils.utils_url import extract_path_segment
 
@@ -24,8 +23,8 @@ class UserProfile:
     def get_id(self) -> int:
         return extract_id(self.dom)
 
-    def get_hq_status(self) -> bool:
-        return extract_hq_status(self.dom)
+    def get_badge(self) -> str | None:
+        return extract_badge(self.dom)
 
     def get_display_name(self) -> str:
         return extract_display_name(self.dom)
@@ -82,28 +81,16 @@ def extract_id(dom) -> int:
         raise RuntimeError("Failed to extract user ID from DOM") from e
 
 
-def extract_hq_status(dom) -> bool:
-    """Checks if the user has a high-quality account and returns the status."""
+def extract_badge(dom) -> str | None:
+    """Extracts the user badge (e.g. 'pro', 'patron', 'hq', 'crew') from the DOM."""
     try:
-        # 1. Badge element in profile header: <span class="badge -hq">HQ</span>
-        badge = dom.find("span", class_="-hq")
-        if badge and badge.get_text(strip=True).upper() == "HQ":
-            return True
-
-        # 2. Body class: 'screen-member-profile-hq' (standard) or 'profile-hq' (legacy)
-        body_classes = get_body_content(dom, "class") or []
-        if any(c in body_classes for c in ("screen-member-profile-hq", "profile-hq")):
-            return True
-
-        # 3. Data-options fallback (legacy)
-        data = dom.find("div", {"class": "profile-summary"})
-        if data and "data-profile-summary-options" in data.attrs:
-            profile_summary = data["data-profile-summary-options"]
-            return bool(JsonFile.parse(profile_summary).get("isHQ", False))
-
-        return False
+        h1 = dom.find("h1", class_="person-display-name")
+        badge = h1.find(class_="badge") if h1 else None
+        if not badge:
+            badge = dom.find("span", class_="badge")
+        return badge.get_text(strip=True).lower() if badge else None
     except Exception as e:
-        raise RuntimeError("Failed to check HQ status from DOM") from e
+        raise RuntimeError("Failed to extract badge from DOM") from e
 
 
 def extract_display_name(dom) -> str:

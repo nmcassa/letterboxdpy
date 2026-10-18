@@ -40,7 +40,7 @@ class User:
 
         self.url = self.get_url()
         self.id = self.get_id()
-        self.is_hq = self.get_hq_status()
+        self.badge = self.get_badge()
         self.display_name = self.get_display_name()
         self.bio = self.get_bio()
         self.location = self.get_location()
@@ -135,8 +135,8 @@ class User:
     def get_id(self) -> str:
         return self.pages.profile.get_id()
 
-    def get_hq_status(self) -> bool:
-        return self.pages.profile.get_hq_status()
+    def get_badge(self) -> str | None:
+        return self.pages.profile.get_badge()
 
     def get_display_name(self) -> str:
         return self.pages.profile.get_display_name()
