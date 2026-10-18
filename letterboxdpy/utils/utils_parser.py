@@ -244,6 +244,44 @@ def parse_review_text(dom_element):
     return review_text, spoiler
 
 
+def parse_rating(element) -> float | None:
+    """Extract rating from a DOM element (supports modern SVG glyphs and legacy rated-* classes)."""
+    if not element:
+        return None
+
+    # 1. Modern SVG glyph rating (e.g. <svg class="glyph -rating" aria-label="★★★★½">)
+    svg = (
+        element
+        if getattr(element, "name", None) == "svg"
+        and any("-rating" in str(c) for c in element.get("class", []))
+        else (
+            element.find("svg", class_=lambda c: c and "-rating" in str(c))
+            if hasattr(element, "find")
+            else None
+        )
+    )
+    if svg:
+        label = svg.get("aria-label") or (
+            svg.find("title").text if svg.find("title") else ""
+        )
+        if label and ("★" in label or "½" in label):
+            return label.count("★") + (0.5 if "½" in label else 0.0)
+
+    # 2. Class-based rating (e.g. rated-X, rating-color-X)
+    elements = [element]
+    if hasattr(element, "find_all"):
+        elements.extend(element.find_all(["span", "div"]))
+
+    for el in elements:
+        for cls in el.get("class", []):
+            if "rated-" in cls:
+                val = cls.split("rated-")[-1]
+                if val.isdigit():
+                    return int(val) / 2.0
+
+    return None
+
+
 def extract_json_ld_script(dom):
     """
     Extract JSON-LD script safely from DOM.

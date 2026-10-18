@@ -1,9 +1,15 @@
 import contextlib
+import json
+import re
 
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.pages.user_films import extract_user_films
-from letterboxdpy.utils.utils_parser import parse_iso_date, parse_review_date
+from letterboxdpy.utils.utils_parser import (
+    parse_iso_date,
+    parse_rating,
+    parse_review_date,
+)
 from letterboxdpy.utils.utils_url import extract_path_segment, get_page_url
 
 
@@ -63,13 +69,15 @@ def extract_liked_reviews(url: str) -> dict:
             user_url = (
                 DOMAIN + avatar_link["href"] if avatar_link else f"{DOMAIN}/{username}/"
             )
-            name_elem = elem_review_detail.find("strong", {"class": "name"})
+            name_elem = elem_review_detail.find(
+                "strong", {"class": ["name", "displayname"]}
+            )
             display_name = name_elem.text.strip() if name_elem else username
             review_log_type = "Review"
 
             # Extract movie data
             header = elem_review_detail.find(
-                "header", {"class": "inline-production-masthead"}
+                ["header", "div"], {"class": "inline-production-masthead"}
             )
             if not header:
                 raise ValueError("Header is missing for review item")
@@ -94,6 +102,17 @@ def extract_liked_reviews(url: str) -> dict:
 
             react_component = item.find("div", {"class": "react-component"})
             movie_id = react_component.get("data-film-id") if react_component else None
+            if (
+                not movie_id
+                and react_component
+                and "data-postered-identifier" in react_component.attrs
+            ):
+                with contextlib.suppress(Exception):
+                    movie_id = (
+                        json.loads(react_component["data-postered-identifier"])
+                        .get("uid", "")
+                        .split(":")[-1]
+                    )
 
             if not movie_id:
                 raise ValueError(
@@ -103,9 +122,7 @@ def extract_liked_reviews(url: str) -> dict:
             # Extract release year
             movie_release = None
             if header:
-                import re
-
-                header_text = header.get_text()
+                header_text = header.get_text(separator=" ")
                 year_match = re.search(r"\b(19|20)\d{2}\b", header_text)
                 if year_match:
                     movie_release = int(year_match.group())
@@ -126,20 +143,7 @@ def extract_liked_reviews(url: str) -> dict:
             review_no = 0  # Default value
 
             # Extract rating (optional)
-            review_rating = None
-            all_spans = elem_review_detail.find_all("span")
-            for span in all_spans:
-                classes = span.get("class", [])
-                rating_classes = [cls for cls in classes if "rated-" in str(cls)]
-                if rating_classes:
-                    try:
-                        review_rating = (
-                            int(extract_path_segment(rating_classes[0], after="rated-"))
-                            / 2.0
-                        )
-                        break
-                    except (ValueError, IndexError):
-                        pass
+            review_rating = parse_rating(elem_review_detail)
 
             # Extract content and spoiler flag
             content_elem = elem_review_detail.find("div", {"class": "body-text"})
