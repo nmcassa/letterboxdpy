@@ -17,7 +17,7 @@ __title__ = "Watchlist Comparison"
 __description__ = (
     "Identify films from your watchlist that are also wanted by users you follow."
 )
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2025-12-24"
@@ -46,6 +46,7 @@ from rich.table import Table
 from rich.text import Text
 
 # Add parent directory to path for local letterboxdpy
+from letterboxdpy.pages.user_profile import UserProfile
 from letterboxdpy.pages.user_watchlist import UserWatchlist
 from letterboxdpy.user import User
 from letterboxdpy.utils.utils_directory import Directory
@@ -204,6 +205,7 @@ class WatchlistComparator:
         self.film_popularity = Counter()
         self.film_users = {}
         self.user_total_counts = {}
+        self.skipped_users = {}
         self.console = Console()
 
     def print_welcome(self):
@@ -299,7 +301,7 @@ class WatchlistComparator:
         )
         start_time = time.time()
 
-        their_ids, cache_info = self._get_film_ids(user)
+        their_ids, cache_info, reason = self._get_film_ids(user)
         common = self.my_film_ids & their_ids
         duration = time.time() - start_time
 
@@ -307,7 +309,7 @@ class WatchlistComparator:
         prefix_markup = f"  [{index:>{idx_width}}/{total}] [bold]{user:<20}[/bold] "
         line_item = Text.from_markup(prefix_markup)
 
-        # 2. Stats Column: common/total (perc%) or private (Fixed width: 26 chars)
+        # 2. Stats Column: common/total (perc%) or status (Fixed width: 26 chars)
         if their_ids:
             shared_count = len(common)
             total_count = len(their_ids)
@@ -324,9 +326,22 @@ class WatchlistComparator:
                 self.film_popularity[film_id] += 1
                 self.film_users.setdefault(film_id, []).append(user)
         else:
-            # Align "private" exactly to the end of the 26-char column
-            stats_str = "private".rjust(26)
-            stats_color = "red"
+            if reason == "hq":
+                stats_str = "no watchlist (hq account)".rjust(26)
+                stats_color = "yellow"
+                self.skipped_users[user] = "HQ accounts do not have a watchlist"
+            elif reason == "empty":
+                stats_str = "empty watchlist".rjust(26)
+                stats_color = "dim"
+                self.skipped_users[user] = "Watchlist is empty"
+            elif reason == "private":
+                stats_str = "private watchlist".rjust(26)
+                stats_color = "red"
+                self.skipped_users[user] = "Watchlist is private"
+            else:
+                stats_str = "unavailable".rjust(26)
+                stats_color = "red"
+                self.skipped_users[user] = "Watchlist unavailable"
 
         line_item.append(stats_str, style=stats_color)
 
@@ -397,6 +412,8 @@ class WatchlistComparator:
             "user": self.username,
             "watchlist_count": len(self.my_film_ids),
             "common_films_count": len(self.film_popularity),
+            "following_count": len(self.following),
+            "skipped_users": self.skipped_users,
             "films": {
                 fid: {
                     "name": self.my_films.get(fid, {}).get("name", ""),
@@ -434,6 +451,11 @@ class WatchlistComparator:
         summary_grid.add_row(
             "Scanned Users:", f" [bold yellow]{len(self.following)}[/bold yellow]"
         )
+        if self.skipped_users:
+            summary_grid.add_row(
+                "Skipped Users:",
+                f" [dim]{len(self.skipped_users)} (HQ or private watchlists)[/dim]",
+            )
         summary_grid.add_row("JSON Export:", f" [dim]{base_path}.json[/dim]")
         summary_grid.add_row(
             "HTML Report:", f" [bold blue]{base_path}.html[/bold blue]"
@@ -470,11 +492,56 @@ class WatchlistComparator:
                 return cached, self._format_age(age)
 
         try:
+            # Check profile first to avoid 20+ second 403 retry loop on HQ/private accounts
+            profile = UserProfile(username)
+            badge = profile.get_badge()
+            wl_len = profile.get_watchlist_length()
+
+            if badge == "hq":
+                empty_data = {
+                    "available": False,
+                    "reason": "hq",
+                    "message": "HQ accounts do not have a watchlist",
+                    "count": 0,
+                    "data": {},
+                }
+                JsonFile.save(filepath, empty_data)
+                return empty_data, None
+
+            if wl_len is None:
+                empty_data = {
+                    "available": False,
+                    "reason": "private",
+                    "message": "Watchlist is private or unavailable",
+                    "count": 0,
+                    "data": {},
+                }
+                JsonFile.save(filepath, empty_data)
+                return empty_data, None
+
+            if wl_len == 0:
+                empty_data = {
+                    "available": True,
+                    "reason": "empty",
+                    "message": "Watchlist is empty",
+                    "count": 0,
+                    "data": {},
+                }
+                JsonFile.save(filepath, empty_data)
+                return empty_data, None
+
             data = UserWatchlist(username).get_watchlist()
             JsonFile.save(filepath, data)
             return data, None
         except Exception:
-            return {"data": {}}, None
+            empty_data = {
+                "available": False,
+                "reason": "error",
+                "count": 0,
+                "data": {},
+            }
+            JsonFile.save(filepath, empty_data)
+            return empty_data, None
 
     def _format_age(self, seconds: float) -> str:
         if seconds < 60:
@@ -488,7 +555,7 @@ class WatchlistComparator:
 
     def _get_film_ids(self, username: str) -> tuple:
         data, cache_info = self._get_watchlist(username, self.force_refresh)
-        return set(data.get("data", {}).keys()), cache_info
+        return set(data.get("data", {}).keys()), cache_info, data.get("reason")
 
 
 if __name__ == "__main__":
