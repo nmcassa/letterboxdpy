@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ metadata.title }} - {{ username }}</title>
+    <style>
+        {% include 'partials/_common_styles.css' %}
+
+        /* Script Specific Styles */
+        .score-bar-wrap {
+            display: flex; align-items: center; gap: 8px; width: 100%;
+        }
+        .score-bar-bg {
+            flex: 1; height: 6px; background: rgba(110, 118, 129, 0.2);
+            border-radius: 3px; overflow: hidden;
+        }
+        .score-bar-fill {
+            height: 100%; border-radius: 3px;
+            background: linear-gradient(90deg, #238636, #2ea043);
+            transition: width 0.4s ease;
+        }
+        .score-bar-fill.mid  { background: linear-gradient(90deg, #9e6a03, #d29922); }
+        .score-bar-fill.low  { background: linear-gradient(90deg, #8b1d1d, #da3633); }
+
+        .score-val {
+            font-size: 12px; font-weight: 700; width: 44px; text-align: right;
+            font-family: monospace;
+        }
+        .score-high { color: #3fb950; }
+        .score-mid  { color: #d29922; }
+        .score-low  { color: #f85149; }
+
+        .stats-badge {
+            font-size: 11px; color: var(--text-secondary); font-family: monospace;
+        }
+
+        .user-link { color: var(--text-primary); font-weight: 600; text-decoration: none; }
+        .user-link:hover { color: var(--link-color); text-decoration: underline; }
+
+        .rank { color: var(--text-secondary); width: 40px; font-family: monospace; font-size: 12px; text-align: center; }
+
+        .tab-section-label {
+            font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+            color: var(--text-secondary); font-weight: 600; margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        .table-container { overflow-x: auto; }
+
+        .search-wrap {
+            display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+            padding-top: 12px; border-top: 1px solid var(--border-color);
+        }
+        #searchInput { flex: 1; }
+        #match-count { font-size: 12px; color: var(--text-secondary); }
+
+        .mutual-badge {
+            background: rgba(46, 160, 67, 0.12) !important;
+            color: #3fb950 !important;
+            border: 1px solid rgba(46, 160, 67, 0.2) !important;
+            font-size: 10px;
+            padding: 1px 6px;
+            margin-left: 6px;
+        }
+        .fan-badge {
+            background: rgba(56, 139, 253, 0.1) !important;
+            color: #58a6ff !important;
+            border: 1px solid rgba(56, 139, 253, 0.25) !important;
+            font-size: 10px;
+            padding: 1px 6px;
+            margin-left: 6px;
+        }
+        .warning-badge {
+            background: rgba(248, 81, 73, 0.08) !important;
+            color: #f85149 !important;
+            border: 1px solid rgba(248, 81, 73, 0.15) !important;
+            font-size: 10px;
+            padding: 1px 6px;
+            margin-left: 6px;
+        }
+    </style>
+</head>
+<body {% if not generated_at %}class="preview-mode"{% endif %}>
+
+    <div class="container">
+        <!-- Header Card -->
+        <div class="header" style="margin-bottom: 12px;">
+            {% include 'partials/_header.html' %}
+        </div>
+
+        <!-- Stats + Controls Card -->
+        <div class="header">
+            <div class="stats" style="margin-bottom: 4px;">
+                <div class="stat-item"><strong>{{ summary.total_followers }}</strong> followers</div>
+                <div class="stat-item"><strong>{{ summary.total_following }}</strong> following</div>
+                <div class="stat-item"><strong>{{ summary.mutual_count }}</strong> mutuals</div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="tab-followers" onclick="switchTab('tab-followers')">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 2.5.75.75 0 0 1 11 1h.5a3 3 0 0 1-.5 3Zm-5.5 1.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path></svg>
+                    Followers <span class="count-badge" style="margin-left: 6px;">{{ followers_analysis | length }}</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-following" onclick="switchTab('tab-following')">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16"><path d="M3.5 2.75a.25.25 0 0 1 .25-.25h8.5a.25.25 0 0 1 .25.25v5.5a.25.25 0 0 1-.25.25h-1a.75.75 0 0 0 0 1.5h1A1.75 1.75 0 0 0 14 8.25v-5.5A1.75 1.75 0 0 0 12.25 1h-8.5A1.75 1.75 0 0 0 2 2.75v5.5c0 .966.784 1.75 1.75 1.75h1a.75.75 0 0 0 0-1.5h-1a.25.25 0 0 1-.25-.25ZM7.25 8a.75.75 0 0 0-1.5 0v5.19l-.97-.97a.749.749 0 0 0-1.06.02.749.749 0 0 0 .02 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l2.25-2.25a.749.749 0 1 0-1.06-1.06l-.97.97Z"></path></svg>
+                    Following <span class="count-badge" style="margin-left: 6px;">{{ following_analysis | length }}</span>
+                </button>
+            </div>
+
+            <div class="search-wrap">
+                <span style="color: var(--text-secondary); font-weight: 600;">Connection:</span>
+                <select id="connectionFilter" onchange="applySearch()">
+                    <option value="all">All Connections</option>
+                    <option value="mutual">Mutual Follows</option>
+                    <option value="no-back">Not Mutual</option>
+                </select>
+                <span style="color: var(--text-secondary); font-weight: 600; margin-left: 8px;">Search:</span>
+                <input type="text" id="searchInput" placeholder="Filter by username…" oninput="applySearch()" />
+                <span id="match-count"></span>
+            </div>
+        </div>
+
+        <!-- Followers Tab -->
+        <div id="tab-followers" class="tab-content active">
+            <div class="table-container">
+                <table id="followersTable">
+                    <thead>
+                        <tr>
+                            <th class="sort-asc"><button class="sort-btn" onclick="sortTable('followersTable', 0, 'num')"># <span class="sort-icon"></span></button></th>
+                            <th><button class="sort-btn" onclick="sortTable('followersTable', 1, 'str')">User <span class="sort-icon"></span></button></th>
+                            <th><button class="sort-btn" onclick="sortTable('followersTable', 2, 'num')">Order <span class="sort-icon"></span></button></th>
+                            <th><button class="sort-btn" onclick="sortTable('followersTable', 3, 'num')">Follower Share <span class="sort-icon"></span></button></th>
+                            <th style="padding: 12px;">F / Fing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if followers_analysis %}
+                        {% for item in followers_analysis %}
+                        {% set score = item.follower_share %}
+                        <tr data-user="{{ item.user }}" data-mutual="{{ 'true' if item.mutual else 'false' }}">
+                            <td class="rank">#{{ item.network_rank }}</td>
+                            <td>
+                                <a href="https://letterboxd.com/{{ item.user }}/" target="_blank" class="user-link">@{{ item.user }}</a>
+                                {% if item.mutual %}
+                                <span class="user-badge mutual-badge">Mutual</span>
+                                {% else %}
+                                <span class="user-badge fan-badge" title="Follows you, but you don't follow back">Fan</span>
+                                {% endif %}
+                            </td>
+                            <td class="rank">{{ item.follow_order }}</td>
+                            <td style="min-width: 160px;">
+                                <div class="score-bar-wrap">
+                                    <div class="score-bar-bg">
+                                        <div class="score-bar-fill {% if score >= 60 %}{% elif score >= 40 %}mid{% else %}low{% endif %}"
+                                             style="width: {{ score }}%;"></div>
+                                    </div>
+                                    <span class="score-val {% if score >= 60 %}score-high{% elif score >= 40 %}score-mid{% else %}score-low{% endif %}">
+                                        {{ item.follower_share_percentage }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td><span class="stats-badge">{{ item.stats }}</span></td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 32px 16px;">
+                                No followers found.
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Following Tab -->
+        <div id="tab-following" class="tab-content">
+            <div class="table-container">
+                <table id="followingTable">
+                    <thead>
+                        <tr>
+                            <th class="sort-asc"><button class="sort-btn" onclick="sortTable('followingTable', 0, 'num')"># <span class="sort-icon"></span></button></th>
+                            <th><button class="sort-btn" onclick="sortTable('followingTable', 1, 'str')">User <span class="sort-icon"></span></button></th>
+                            <th><button class="sort-btn" onclick="sortTable('followingTable', 2, 'num')">Order <span class="sort-icon"></span></button></th>
+                            <th><button class="sort-btn" onclick="sortTable('followingTable', 3, 'num')">Follower Share <span class="sort-icon"></span></button></th>
+                            <th style="padding: 12px;">F / Fing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if following_analysis %}
+                        {% for item in following_analysis %}
+                        {% set score = item.follower_share %}
+                        <tr data-user="{{ item.user }}" data-mutual="{{ 'true' if item.mutual else 'false' }}">
+                            <td class="rank">#{{ item.network_rank }}</td>
+                            <td>
+                                <a href="https://letterboxd.com/{{ item.user }}/" target="_blank" class="user-link">@{{ item.user }}</a>
+                                {% if item.mutual %}
+                                <span class="user-badge mutual-badge">Mutual</span>
+                                {% else %}
+                                <span class="user-badge warning-badge" title="You follow, but doesn't follow you back">No Back</span>
+                                {% endif %}
+                            </td>
+                            <td class="rank">{{ item.follow_order }}</td>
+                            <td style="min-width: 160px;">
+                                <div class="score-bar-wrap">
+                                    <div class="score-bar-bg">
+                                        <div class="score-bar-fill {% if score >= 60 %}{% elif score >= 40 %}mid{% else %}low{% endif %}"
+                                             style="width: {{ score }}%;"></div>
+                                    </div>
+                                    <span class="score-val {% if score >= 60 %}score-high{% elif score >= 40 %}score-mid{% else %}score-low{% endif %}">
+                                        {{ item.follower_share_percentage }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td><span class="stats-badge">{{ item.stats }}</span></td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 32px 16px;">
+                                Not following anyone.
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% include 'partials/_footer.html' %}
+    </div>
+
+    <button id="scrollTopBtn" title="Go to top">
+        <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>
+    </button>
+
+    <script>
+        let activeTab = 'tab-followers';
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            activeTab = tabId;
+            applySearch();
+        }
+
+        function applySearch() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const filter = document.getElementById('connectionFilter').value;
+            const tableId = activeTab === 'tab-followers' ? 'followersTable' : 'followingTable';
+            const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+            let count = 0;
+            rows.forEach(row => {
+                if (!row.dataset.user) return;
+                const user = row.dataset.user.toLowerCase();
+                const mutual = row.dataset.mutual === 'true';
+
+                let matchFilter = true;
+                if (filter === 'mutual') {
+                    matchFilter = mutual;
+                } else if (filter === 'no-back') {
+                    matchFilter = !mutual;
+                }
+
+                const show = (!q || user.includes(q)) && matchFilter;
+                row.style.display = show ? '' : 'none';
+                if (show) count++;
+            });
+            document.getElementById('match-count').textContent = (q || filter !== 'all') ? `${count} result${count !== 1 ? 's' : ''}` : '';
+        }
+
+        const sortStates = {
+            'followersTable-0': 'asc',
+            'followingTable-0': 'asc'
+        };
+        function sortTable(tableId, n, type) {
+            const table = document.getElementById(tableId);
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+            const stateKey = `${tableId}-${n}`;
+            const dir = sortStates[stateKey] === 'asc' ? 'desc' : 'asc';
+            sortStates[stateKey] = dir;
+
+            table.querySelectorAll('.sort-btn').forEach(btn => btn.closest('th').classList.remove('sort-asc', 'sort-desc'));
+            table.querySelectorAll('thead th')[n].classList.add(dir === 'asc' ? 'sort-asc' : 'sort-desc');
+
+            rows.sort((a, b) => {
+                if (!a.cells[n] || !b.cells[n]) return 0;
+                let x = a.cells[n].innerText.replace('#', '').trim();
+                let y = b.cells[n].innerText.replace('#', '').trim();
+                if (type === 'num') {
+                    x = parseFloat(x.replace(/[^0-9.]/g, '')) || 0;
+                    y = parseFloat(y.replace(/[^0-9.]/g, '')) || 0;
+                } else {
+                    x = (a.dataset.user || x).toLowerCase();
+                    y = (b.dataset.user || y).toLowerCase();
+                }
+                if (dir === 'asc') return x > y ? 1 : -1;
+                return x < y ? 1 : -1;
+            });
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+        });
+        scrollTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    </script>
+</body>
+</html>
