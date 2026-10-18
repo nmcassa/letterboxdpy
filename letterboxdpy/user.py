@@ -49,6 +49,7 @@ class User:
         self.stats = self.get_stats()
         self.favorites = self.get_favorites()
         self.avatar = self.get_avatar()
+        self.backdrop = self.get_backdrop()
         self.recent = {
             "watchlist": self.get_watchlist_recent(),
             "diary": self.get_diary_recent(),
@@ -161,6 +162,9 @@ class User:
 
     def get_avatar(self) -> dict | None:
         return self.pages.profile.get_avatar()
+
+    def get_backdrop(self) -> dict | None:
+        return self.pages.profile.get_backdrop()
 
     def get_watchlist_recent(self) -> dict:
         return self.pages.profile.get_watchlist_recent()

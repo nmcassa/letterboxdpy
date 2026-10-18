@@ -3,7 +3,7 @@ import re
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.forms.favorites import FAVORITE_ATTRS
 from letterboxdpy.constants.project import DOMAIN
-from letterboxdpy.core.decorators import skip_if_hq
+from letterboxdpy.core.decorators import skip_if
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.movies_extractor import extract_movie_info
 from letterboxdpy.utils.utils_parser import get_meta_content
@@ -38,25 +38,29 @@ class UserProfile:
     def get_website(self) -> str | None:
         return extract_website(self.dom)
 
-    @skip_if_hq(default=None)
+    @skip_if("badge", "hq", default=None)
     def get_watchlist_length(self) -> int | None:
         return extract_watchlist_length(self.dom)
 
     def get_stats(self) -> dict:
         return extract_stats(self.dom)
 
-    @skip_if_hq(default=None)
+    @skip_if("badge", "hq", default=None)
     def get_favorites(self) -> dict | None:
         return extract_favorites(self.dom)
 
     def get_avatar(self) -> dict | None:
         return extract_avatar(self.dom)
 
-    @skip_if_hq(default=None)
+    @skip_if("badge", (None, "pro"), default=None)
+    def get_backdrop(self) -> dict | None:
+        return extract_backdrop(self.dom)
+
+    @skip_if("badge", "hq", default=None)
     def get_watchlist_recent(self) -> dict | None:
         return extract_watchlist_recent(self.dom)
 
-    @skip_if_hq(default=None)
+    @skip_if("badge", "hq", default=None)
     def get_diary_recent(self) -> dict | None:
         return extract_diary_recent(self.dom)
 
@@ -272,6 +276,33 @@ def extract_avatar(dom) -> dict | None:
         return None  # Avatar not found
     except Exception as e:
         raise RuntimeError("Failed to extract avatar from DOM") from e
+
+
+def extract_backdrop(dom) -> dict | None:
+    """Extracts profile backdrop data (URL, high-res, mobile, offset) from the DOM."""
+    try:
+        elem = dom.find("div", {"id": "backdrop"})
+        if not elem:
+            return None
+
+        url = elem.get("data-backdrop")
+        if not url:
+            return None
+
+        offset = elem.get("data-offset")
+        try:
+            offset_val = int(offset) if offset is not None else None
+        except ValueError:
+            offset_val = None
+
+        return {
+            "url": url,
+            "url_2x": elem.get("data-backdrop2x"),
+            "mobile": elem.get("data-backdrop-mobile"),
+            "offset": offset_val,
+        }
+    except Exception as e:
+        raise RuntimeError("Failed to extract backdrop from DOM") from e
 
 
 def extract_watchlist_recent(dom) -> dict:
