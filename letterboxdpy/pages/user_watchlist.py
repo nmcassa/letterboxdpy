@@ -17,7 +17,7 @@ class UserWatchlist:
 
     def __init__(self, username: str) -> None:
         self.username = username
-        self.url = f"{DOMAIN}/{self.username}/watchlist"
+        self.url = f"{DOMAIN}/{self.username}/watchlist/"
 
     def __str__(self) -> str:
         return f"Not printable object of type: {self.__class__.__name__}"

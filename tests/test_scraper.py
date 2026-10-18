@@ -53,6 +53,14 @@ class TestScraper(unittest.TestCase):
         )
         self.assertIn("Hint: If you are using a VPN or Proxy", str(err))
 
+    def test_watchlist_url_format(self):
+        """Test watchlist URL ends with a trailing slash to prevent Cloudflare 403 challenge."""
+        from letterboxdpy.pages.user_watchlist import UserWatchlist
+
+        watchlist = UserWatchlist("testuser")
+        self.assertTrue(watchlist.url.endswith("/"))
+        self.assertEqual(watchlist.url, "https://letterboxd.com/testuser/watchlist/")
+
 
 if __name__ == "__main__":
     unittest.main()
