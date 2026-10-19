@@ -11,7 +11,7 @@ Generates interactive HTML report and JSON data.
 
 __title__ = "Follow Statistics"
 __description__ = "Analyze follow relationships (followers/following) to identify mutuals, fans, and unrequited follows."
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2024-09-06"
@@ -72,7 +72,7 @@ class FollowStatsHtmlRenderer:
             },
             {
                 "id": "fans",
-                "title": "Fans (Reviewers)",
+                "title": "Fans",
                 "data": stats["details"]["fans"],
             },
             {
@@ -131,7 +131,7 @@ class FollowStatsAnalyzer:
 
         # Setup directories
         self.user_dir = build_path(self.EXPORTS_DIR, self.username)
-        Directory.create(self.user_dir)
+        Directory.create(self.user_dir, silent=True)
 
     def print_welcome(self):
         """Prints a welcome banner."""
@@ -175,37 +175,69 @@ class FollowStatsAnalyzer:
         return stats
 
     def _calculate_stats(self, following: dict, followers: dict) -> dict:
-        """Calculate follow statistics preserving original order."""
-        following_list = list(following.keys())
-        followers_list = list(followers.keys())
+        """Calculate follow statistics preserving original order and rich user data."""
+        following_keys = list(following.keys())
+        followers_keys = list(followers.keys())
 
-        following_set = set(following_list)
-        followers_set = set(followers_list)
+        following_set = set(following_keys)
+        followers_set = set(followers_keys)
 
-        # Lists preserving order
-        not_followback = [u for u in following_list if u not in followers_set]
-        followback = [u for u in following_list if u in followers_set]
-        fans = [u for u in followers_list if u not in following_set]
+        # Combine lookup map for rich user profiles
+        all_user_records = {**followers, **following}
+
+        def _format_entry(username: str) -> dict:
+            rec = all_user_records.get(username, {})
+            if isinstance(rec, dict):
+                return {
+                    "username": rec.get("username", username),
+                    "name": rec.get("name") or username,
+                    "url": rec.get("url", f"https://letterboxd.com/{username}"),
+                    "avatar": rec.get("avatar", {}),
+                    "followers": rec.get("followers"),
+                    "following": rec.get("following"),
+                    "watched": rec.get("watched"),
+                    "lists": rec.get("lists"),
+                    "likes": rec.get("likes"),
+                }
+            return {
+                "username": username,
+                "name": username,
+                "url": f"https://letterboxd.com/{username}",
+                "avatar": {},
+                "followers": None,
+                "following": None,
+                "watched": None,
+                "lists": None,
+                "likes": None,
+            }
+
+        not_followback = [
+            _format_entry(u) for u in following_keys if u not in followers_set
+        ]
+        followback = [_format_entry(u) for u in following_keys if u in followers_set]
+        fans = [_format_entry(u) for u in followers_keys if u not in following_set]
+        all_following = [_format_entry(u) for u in following_keys]
+        all_followers = [_format_entry(u) for u in followers_keys]
 
         return {
             "summary": {
-                "total_following": len(following_list),
-                "total_followers": len(followers_list),
+                "total_following": len(following_keys),
+                "total_followers": len(followers_keys),
                 "mutual_follows": len(followback),
                 "not_followback_count": len(not_followback),
                 "fans_count": len(fans),
                 "followback_ratio": round(
-                    len(followback) / len(following_list) * 100, 2
+                    len(followback) / len(following_keys) * 100, 2
                 )
-                if following_list
+                if following_keys
                 else 0,
             },
             "details": {
                 "not_followback": not_followback,
                 "followback": followback,
                 "fans": fans,
-                "all_following": following_list,
-                "all_followers": followers_list,
+                "all_following": all_following,
+                "all_followers": all_followers,
             },
         }
 
@@ -222,15 +254,23 @@ class FollowStatsAnalyzer:
 
         # FINAL SUMMARY PANEL
         summary_grid = Table.grid(expand=True)
-        summary_grid.add_column(style="cyan", justify="right", width=20)
+        summary_grid.add_column(style="cyan", justify="right", width=22)
         summary_grid.add_column(style="white")
 
+        summary_grid.add_row(
+            "Total Followers:",
+            f" [bold white]{stats['summary']['total_followers']}[/bold white]",
+        )
+        summary_grid.add_row(
+            "Total Following:",
+            f" [bold white]{stats['summary']['total_following']}[/bold white]",
+        )
         summary_grid.add_row(
             "Mutual Follows:",
             f" [bold green]{stats['summary']['mutual_follows']}[/bold green]",
         )
         summary_grid.add_row(
-            "Fans (Reviewers):",
+            "Fans:",
             f" [bold yellow]{stats['summary']['fans_count']}[/bold yellow]",
         )
         summary_grid.add_row(
@@ -238,7 +278,7 @@ class FollowStatsAnalyzer:
             f" [bold red]{stats['summary']['not_followback_count']}[/bold red]",
         )
         summary_grid.add_row(
-            "Success Rate:",
+            "Follow-Back Rate:",
             f" [bold blue]{stats['summary']['followback_ratio']}%[/bold blue]",
         )
         summary_grid.add_row("JSON Export:", f" [dim]{json_path}[/dim]")
@@ -279,7 +319,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # Identfy target user
+    # Identify target user
     username = args.user or args.username or get_input("Enter username: ")
 
     # Run analysis

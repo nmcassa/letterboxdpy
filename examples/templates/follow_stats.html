@@ -7,10 +7,246 @@
     <style>
         {% include 'partials/_common_styles.css' %}
 
-        /* Script Specific Styles */
-        .search-container { position: relative; margin-bottom: 20px; }
-        .search-input { width: 100%; box-sizing: border-box; }
-        .sort-info { margin-bottom: 12px; color: var(--text-secondary); font-size: 11px; font-style: italic; }
+        /* Follow Stats Custom Styles */
+        .controls-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
+            margin-bottom: 12px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .search-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding-right: 32px;
+        }
+
+        .clear-search-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+
+        .clear-search-btn:hover {
+            color: var(--text-primary);
+            background: rgba(110, 118, 129, 0.2);
+        }
+
+        .controls-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .sort-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            color: var(--text-primary);
+            background: rgba(177, 186, 196, 0.08);
+            border-color: rgba(177, 186, 196, 0.3);
+        }
+
+        .action-btn.copied {
+            background: rgba(35, 134, 54, 0.2);
+            border-color: var(--accent-color);
+            color: #3fb950;
+        }
+
+        .btn-icon {
+            flex-shrink: 0;
+            fill: currentColor;
+        }
+
+        .sort-info-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-style: italic;
+            padding: 0 2px;
+        }
+
+        .stat-card {
+            transition: background 0.15s ease;
+        }
+
+        .stat-card:hover {
+            transform: none;
+            background: var(--hover-bg);
+        }
+
+        .user-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .user-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.15s ease, border-color 0.15s ease;
+            text-decoration: none;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        .user-card:hover {
+            border-color: rgba(177, 186, 196, 0.2);
+            background: var(--hover-bg);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .user-avatar-wrapper {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(240, 246, 252, 0.12);
+            background-color: #161b22;
+            display: block;
+        }
+
+        .avatar-placeholder {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #21262d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: var(--link-color);
+            font-weight: 700;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 0;
+            gap: 1px;
+        }
+
+        .user-display-name {
+            color: #f0f6fc;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-handle {
+            color: var(--text-secondary);
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.15s ease;
+        }
+
+        .user-card:hover .user-handle {
+            color: var(--link-color);
+        }
+
+        .user-meta-stats {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .meta-pill {
+            background: rgba(110, 118, 129, 0.15);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .no-results-state, .empty-tab-state {
+            text-align: center;
+            padding: 40px 16px;
+            color: var(--text-secondary);
+            background: rgba(22, 27, 34, 0.4);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .no-results-icon {
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .no-results-text, .empty-tab-text {
+            font-size: 13px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body {% if not generated_at %}class="preview-mode"{% endif %}>
@@ -22,7 +258,15 @@
 
         <!-- Controls & Stats Card -->
         <div class="header">
-            <div class="stats-grid">
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                <div class="stat-card">
+                    <span class="stat-val">{{ stats.summary.total_followers }}</span>
+                    <span class="stat-label">Followers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-val">{{ stats.summary.total_following }}</span>
+                    <span class="stat-label">Following</span>
+                </div>
                 <div class="stat-card">
                     <span class="stat-val">{{ stats.summary.mutual_follows }}</span>
                     <span class="stat-label">Mutuals</span>
@@ -37,12 +281,34 @@
                 </div>
                 <div class="stat-card">
                     <span class="stat-val">{{ stats.summary.followback_ratio }}%</span>
-                    <span class="stat-label">Success Rate</span>
+                    <span class="stat-label">Follow-Back Rate</span>
                 </div>
             </div>
 
-            <div class="search-container" style="margin-top: 15px; margin-bottom: 0;">
-                <input type="text" class="search-input" placeholder="Search users in current tab..." onkeyup="filterUsers(this.value)">
+            <div class="controls-bar">
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search by username or name..." oninput="handleSearch(this.value)">
+                    <button type="button" id="clearSearchBtn" class="clear-search-btn hidden" onclick="clearSearch()" title="Clear search">×</button>
+                </div>
+                <div class="controls-actions">
+                    <div class="sort-control">
+                        <label for="sortSelect" class="control-label">Sort:</label>
+                        <select id="sortSelect" onchange="handleSortChange(this.value)">
+                            <option value="default">Recency (Default)</option>
+                            <option value="alpha-asc">Alphabetical (A → Z)</option>
+                            <option value="alpha-desc">Alphabetical (Z → A)</option>
+                            <option value="followers-desc">Most Followers</option>
+                            <option value="films-desc">Most Films Watched</option>
+                        </select>
+                    </div>
+                    <button type="button" class="action-btn" onclick="copyActiveUsernames(this)" title="Copy usernames in current tab">
+                        <svg class="btn-icon" viewBox="0 0 16 16" width="14" height="14">
+                            <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
+                            <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
+                        <span>Copy Usernames</span>
+                    </button>
+                </div>
             </div>
 
             <div class="tabs" style="margin-bottom: 0;">
@@ -56,20 +322,64 @@
 
         {% for section in sections %}
         <div id="{{ section.id }}" class="tab-content {% if loop.first %}active{% endif %}">
-            <div class="sort-info">Sorted by Letterboxd default (recency) {% if section.ratio_label %}· {{ section.ratio_label|safe }}{% endif %}</div>
+            <div class="sort-info-bar">
+                <span class="sort-note">Sorted by Letterboxd default (recency) {% if section.ratio_label %}· {{ section.ratio_label|safe }}{% endif %}</span>
+                <span class="count-notice">Showing {{ section.data|length }} users</span>
+            </div>
+
+            {% if section.data|length == 0 %}
+            <div class="empty-tab-state">
+                <div class="empty-tab-text">No users in this list</div>
+            </div>
+            {% else %}
             <div class="user-grid">
                 {% for user in section.data %}
-                <a href="https://letterboxd.com/{{ user }}/" target="_blank" class="user-card" data-username="{{ user }}">
-                    <div class="avatar-placeholder">
-                        {{ user[0]|upper }}
+                {% set username = user.username if user.username is defined else user %}
+                {% set display_name = user.name if user.name is defined and user.name else username %}
+                {% set avatar_url = user.avatar.url if user.avatar is defined and user.avatar and user.avatar.url else '' %}
+                {% set followers_cnt = user.followers if user.followers is defined and user.followers is not none else -1 %}
+                {% set films_cnt = user.watched if user.watched is defined and user.watched is not none else -1 %}
+
+                <a href="https://letterboxd.com/{{ username }}/" target="_blank" rel="noopener noreferrer" class="user-card"
+                   data-username="{{ username }}"
+                   data-name="{{ display_name }}"
+                   data-followers="{{ followers_cnt }}"
+                   data-films="{{ films_cnt }}"
+                   data-index="{{ loop.index0 }}">
+                    <div class="user-avatar-wrapper">
+                        {% if avatar_url %}
+                        <img src="{{ avatar_url }}" class="user-avatar" alt="{{ username }}" loading="lazy"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display: none;">{{ (display_name or username)[0]|upper }}</div>
+                        {% else %}
+                        <div class="avatar-placeholder">{{ (display_name or username)[0]|upper }}</div>
+                        {% endif %}
                     </div>
                     <div class="user-info">
-                        <span class="user-name">@{{ user }}</span>
-                        <span class="user-meta">View Profile →</span>
+                        <span class="user-display-name" title="{{ display_name }}">{{ display_name }}</span>
+                        <span class="user-handle">@{{ username }}</span>
+                        {% if films_cnt >= 0 or followers_cnt >= 0 %}
+                        <div class="user-meta-stats">
+                            {% if films_cnt >= 0 %}
+                            <span class="meta-pill">{{ films_cnt }} films</span>
+                            {% endif %}
+                            {% if followers_cnt >= 0 %}
+                            <span class="meta-pill">{{ followers_cnt }} followers</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
                     </div>
                 </a>
                 {% endfor %}
             </div>
+
+            <div class="no-results-state hidden">
+                <svg class="no-results-icon" viewBox="0 0 16 16" width="28" height="28" fill="currentColor">
+                    <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path>
+                </svg>
+                <div class="no-results-text">No users found matching your search</div>
+            </div>
+            {% endif %}
         </div>
         {% endfor %}
 
@@ -83,25 +393,179 @@
     <script>
         function switchTab(tabId) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-            
+            const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            const activeContent = document.getElementById(tabId);
+            if (activeContent) {
+                activeContent.classList.add('active');
+                
+                // Reapply current sort
+                const sortSelect = document.getElementById('sortSelect');
+                if (sortSelect) {
+                    applySortToTab(activeContent, sortSelect.value);
+                }
+
+                // Reapply current search to newly active tab
+                const searchInput = document.getElementById('searchInput');
+                handleSearch(searchInput ? searchInput.value : '');
+            }
         }
 
-        function filterUsers(query) {
+        function handleSearch(query) {
             const activeTab = document.querySelector('.tab-content.active');
+            if (!activeTab) return;
+
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const q = (query || '').trim().toLowerCase();
+
+            if (clearBtn) {
+                if (q.length > 0) {
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                }
+            }
+
             const cards = activeTab.querySelectorAll('.user-card');
-            const q = query.toLowerCase();
-            
+            let visibleCount = 0;
+
             cards.forEach(card => {
-                const username = card.dataset.username.toLowerCase();
-                if (username.includes(q)) {
+                const username = (card.dataset.username || '').toLowerCase();
+                const name = (card.dataset.name || '').toLowerCase();
+                if (!q || username.includes(q) || name.includes(q)) {
                     card.style.display = 'flex';
+                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            const noResults = activeTab.querySelector('.no-results-state');
+            if (noResults) {
+                if (visibleCount === 0 && cards.length > 0) {
+                    noResults.classList.remove('hidden');
+                } else {
+                    noResults.classList.add('hidden');
+                }
+            }
+
+            const countNotice = activeTab.querySelector('.count-notice');
+            if (countNotice) {
+                if (q) {
+                    countNotice.textContent = `Showing ${visibleCount} of ${cards.length} users`;
+                } else {
+                    countNotice.textContent = `Showing ${cards.length} users`;
+                }
+            }
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                searchInput.focus();
+                handleSearch('');
+            }
+        }
+
+        function handleSortChange(sortMode) {
+            const activeTab = document.querySelector('.tab-content.active');
+            if (activeTab) {
+                applySortToTab(activeTab, sortMode);
+            }
+        }
+
+        function applySortToTab(tabContent, sortMode) {
+            const grid = tabContent.querySelector('.user-grid');
+            if (!grid) return;
+
+            const cards = Array.from(grid.querySelectorAll('.user-card'));
+            cards.sort((a, b) => {
+                if (sortMode === 'alpha-asc') {
+                    return (a.dataset.username || '').localeCompare(b.dataset.username || '');
+                } else if (sortMode === 'alpha-desc') {
+                    return (b.dataset.username || '').localeCompare(a.dataset.username || '');
+                } else if (sortMode === 'followers-desc') {
+                    const fA = parseInt(a.dataset.followers, 10) || 0;
+                    const fB = parseInt(b.dataset.followers, 10) || 0;
+                    return fB - fA;
+                } else if (sortMode === 'films-desc') {
+                    const wA = parseInt(a.dataset.films, 10) || 0;
+                    const wB = parseInt(b.dataset.films, 10) || 0;
+                    return wB - wA;
+                } else {
+                    const idxA = parseInt(a.dataset.index, 10) || 0;
+                    const idxB = parseInt(b.dataset.index, 10) || 0;
+                    return idxA - idxB;
+                }
+            });
+
+            cards.forEach(card => grid.appendChild(card));
+
+            const sortNote = tabContent.querySelector('.sort-note');
+            if (sortNote) {
+                const labels = {
+                    'default': 'Letterboxd default (recency)',
+                    'alpha-asc': 'Alphabetical (A → Z)',
+                    'alpha-desc': 'Alphabetical (Z → A)',
+                    'followers-desc': 'Most followers',
+                    'films-desc': 'Most films watched'
+                };
+                const baseLabel = labels[sortMode] || 'Recency';
+                const originalText = sortNote.innerHTML;
+                const ratioPart = originalText.includes('·') ? ' · ' + originalText.split('·')[1] : '';
+                sortNote.innerHTML = `Sorted by ${baseLabel}${ratioPart}`;
+            }
+        }
+
+        function copyActiveUsernames(btn) {
+            const activeTab = document.querySelector('.tab-content.active');
+            if (!activeTab) return;
+
+            const visibleCards = Array.from(activeTab.querySelectorAll('.user-card')).filter(c => c.style.display !== 'none');
+            const usernames = visibleCards.map(c => c.dataset.username).filter(Boolean);
+            if (!usernames.length) return;
+
+            const textToCopy = usernames.join('\n');
+            const span = btn.querySelector('span');
+            const originalText = span ? span.textContent : 'Copy Usernames';
+
+            const notifySuccess = () => {
+                btn.classList.add('copied');
+                if (span) span.textContent = `Copied (${usernames.length})!`;
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    if (span) span.textContent = originalText;
+                }, 2000);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy).then(notifySuccess).catch(() => {
+                    fallbackCopy(textToCopy, notifySuccess);
+                });
+            } else {
+                fallbackCopy(textToCopy, notifySuccess);
+            }
+        }
+
+        function fallbackCopy(text, onSuccess) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            try {
+                if (document.execCommand('copy')) {
+                    if (onSuccess) onSuccess();
+                }
+            } catch (e) {
+                console.error('Copy fallback failed', e);
+            }
+            document.body.removeChild(textarea);
         }
 
         const scrollTopBtn = document.getElementById("scrollTopBtn");
