@@ -27,6 +27,7 @@ values you provide.
 | [`user_rating_plot.py`](user_rating_plot.py) | Displays a Letterboxd-style rating distribution histogram | `python examples/user_rating_plot.py <username>` | Interactive Matplotlib window |
 | [`user_plot_statistics.py`](user_plot_statistics.py) | Displays yearly movie-watching statistics | `python examples/user_plot_statistics.py <username> [--start-year <year>] [--end-year <year>]` | Interactive Matplotlib window |
 | [`export_user_data.py`](export_user_data.py) | Exports profile, films, diary, reviews, lists, network, tags, and watchlist data | `python examples/export_user_data.py <username>` | JSON files under `exports/users/<username>/` |
+| [`export_user_data_excel.py`](export_user_data_excel.py) | Exports comprehensive user data to a styled multi-sheet Excel spreadsheet | `python examples/export_user_data_excel.py <username> [--force] [--runtime] [--open]` | Excel workbook (`.xlsx`) under `exports/users/<username>/` |
 | [`export_user_diary_posters.py`](export_user_diary_posters.py) | Downloads posters from a user's diary | `python examples/export_user_diary_posters.py <username>` | Images under `exports/users/<username>/posters/` |
 | [`search_and_export_lists.py`](search_and_export_lists.py) | Searches Letterboxd lists and exports their films | `python examples/search_and_export_lists.py <query> <max-lists>` | CSV files under `exports/lists/` |
 
@@ -57,7 +58,7 @@ __created_at__ = "YYYY-MM-DD"
 Dependencies are managed via optional extras in `pyproject.toml`.
 
 - **Standard Dependencies:** `curl_cffi`, `beautifulsoup4`, `lxml`, `fastfingertips`
-- **Example Extras:** `rich`, `Jinja2`, `matplotlib`, `numpy`, `pillow`
+- **Example Extras:** `rich`, `Jinja2`, `matplotlib`, `numpy`, `pillow`, `openpyxl`
 
 To install everything needed for examples, run:
 
