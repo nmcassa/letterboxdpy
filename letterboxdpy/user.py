@@ -75,27 +75,55 @@ class User:
         month: int | None = None,
         day: int | None = None,
         page: int | None = None,
+        fetch_runtime: bool = False,
+        max_workers: int | None = None,
     ) -> dict:
-        return self.pages.diary.get_diary(year, month, day, page)
+        return self.pages.diary.get_diary(
+            year, month, day, page, fetch_runtime, max_workers
+        )
 
-    def get_diary_year(self, year: int = CURRENT_YEAR) -> dict:
-        return self.pages.diary.get_year(year)
+    def get_diary_year(
+        self,
+        year: int = CURRENT_YEAR,
+        fetch_runtime: bool = False,
+        max_workers: int | None = None,
+    ) -> dict:
+        return self.pages.diary.get_year(
+            year, fetch_runtime=fetch_runtime, max_workers=max_workers
+        )
 
     def get_diary_month(
-        self, year: int = CURRENT_YEAR, month: int = CURRENT_MONTH
+        self,
+        year: int = CURRENT_YEAR,
+        month: int = CURRENT_MONTH,
+        fetch_runtime: bool = False,
+        max_workers: int | None = None,
     ) -> dict:
-        return self.pages.diary.get_month(year, month)
+        return self.pages.diary.get_month(
+            year, month, fetch_runtime=fetch_runtime, max_workers=max_workers
+        )
 
     def get_diary_day(
         self,
         year: int = CURRENT_YEAR,
         month: int = CURRENT_MONTH,
         day: int = CURRENT_DAY,
+        fetch_runtime: bool = False,
+        max_workers: int | None = None,
     ) -> dict:
-        return self.pages.diary.get_day(year, month, day)
+        return self.pages.diary.get_day(
+            year, month, day, fetch_runtime=fetch_runtime, max_workers=max_workers
+        )
 
-    def get_wrapped(self, year: int = CURRENT_YEAR) -> dict:
-        return self.pages.diary.get_wrapped(year)
+    def get_wrapped(
+        self,
+        year: int = CURRENT_YEAR,
+        fetch_runtime: bool = False,
+        max_workers: int | None = None,
+    ) -> dict:
+        return self.pages.diary.get_wrapped(
+            year, fetch_runtime=fetch_runtime, max_workers=max_workers
+        )
 
     def get_films(self) -> dict:
         return self.pages.films.get_films()
