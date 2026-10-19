@@ -1,3 +1,5 @@
+from fastfingertips.string_utils import extract_number_from_text
+
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.utils_url import extract_path_segment
@@ -33,13 +35,13 @@ def extract_user_tags(url: str) -> dict:
             title = tag.a["title"]
             link = tag.a["href"]
             slug = extract_path_segment(link, after="/tag/", before="/")
-            count = int(tag.span.text.strip() or 1)
+            count = extract_number_from_text(tag.span.text) if tag.span else 1
             return {
                 "name": name,
                 "title": title,
                 "slug": slug,
                 "link": DOMAIN + link,
-                "count": count,
+                "count": count or 1,
             }
 
         dom = fetch_dom()

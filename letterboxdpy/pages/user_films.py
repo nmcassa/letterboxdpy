@@ -1,4 +1,7 @@
+from fastfingertips.string_utils import extract_number_from_text
+
 from letterboxdpy.constants.project import DOMAIN, GENRES
+from letterboxdpy.core.exceptions import ResourceNotFoundError
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.movies_extractor import extract_movie_info
 from letterboxdpy.utils.utils_url import get_page_url
@@ -182,17 +185,21 @@ def extract_movies_from_user_watched(dom, max=12 * 6) -> dict:
 def extract_user_genre_info(username: str) -> dict:
     ret = {}
     for genre in GENRES:
-        dom = parse_url(f"{DOMAIN}/{username}/films/genre/{genre}/")
-        data = dom.find(
-            "span",
-            {
-                "class": ["replace-if-you"],
-            },
-        )
-        data = data.next_sibling.replace(",", "")
         try:
-            ret[genre] = next(int(s) for s in data.split() if s.isdigit())
-        except IndexError:
+            dom = parse_url(f"{DOMAIN}/{username}/films/genre/{genre}/")
+            data = dom.find(
+                "span",
+                {
+                    "class": ["replace-if-you"],
+                },
+            )
+            count = (
+                extract_number_from_text(data.next_sibling)
+                if data and data.next_sibling
+                else 0
+            )
+            ret[genre] = count or 0
+        except ResourceNotFoundError:
             ret[genre] = 0
 
     return ret

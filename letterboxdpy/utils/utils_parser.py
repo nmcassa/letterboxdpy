@@ -1,4 +1,7 @@
+import re
+
 from bs4 import Tag
+from fastfingertips.string_utils import extract_number_from_text
 
 from letterboxdpy.constants.project import DOMAIN_SHORT
 from letterboxdpy.constants.selectors import PageSelectors
@@ -19,14 +22,26 @@ def try_parse(value, target_type):
 
 
 def extract_and_convert_shorthand(tag) -> int:
-    """Extracts text from a tag and converts shorthand notation (e.g., '6.3K') to an integer."""
-    if tag and tag.text:
-        count_str = tag.text.strip().replace(",", "")
-        if "K" in count_str:
-            count_str = float(count_str.replace("K", ""))
-            count_str *= 1000
-        return int(count_str)
-    return 0
+    """Extracts text from a tag and converts shorthand notation (e.g., '6.3K', '1.2M') to an integer."""
+    if not tag:
+        return 0
+    text = tag.text if hasattr(tag, "text") else str(tag)
+    if not text:
+        return 0
+
+    text = text.strip().replace(",", "")
+    match = re.search(r"([\d.]+)\s*([KkMm])?", text)
+    if not match:
+        return 0
+
+    number = float(match.group(1))
+    suffix = (match.group(2) or "").upper()
+    if suffix == "K":
+        number *= 1_000
+    elif suffix == "M":
+        number *= 1_000_000
+
+    return int(number)
 
 
 def parse_iso_date(iso_date_str: str) -> str:
@@ -107,32 +122,14 @@ def get_body_content(dom, attribute: str) -> str | None:
 
 
 def get_movie_count_from_meta(dom, default=None) -> int:
-    # Instead of making a GET request to the last page to retrieve the number of movies,
-    # which could slow down the program, an alternative approach is employed.
-    # The meta description of the list page is retrieved to obtain the count of movies.
-
-    movie_count = default
-
+    """Get the number of movies from list page meta description."""
     try:
         meta_description = get_meta_content(dom, name="description")
-
-        for item in meta_description.split(" "):
-            if item[0].isdigit():
-                movie_count = item
-                for char in item:
-                    if not char.isdigit():
-                        movie_count = movie_count.replace(char, "")
-                break
-
-        movie_count = int(movie_count)
-        if movie_count is not None:
-            # print(f"Found the movie count in the meta description as {movie_count}.")
-            return int(movie_count)
-        else:
-            # handle the case where no digit is found in the meta description
-            print("Error: No digit found in the meta description.")
-            return None
-    except (AttributeError, TypeError) as e:
+        if not meta_description:
+            return default
+        count = extract_number_from_text(meta_description)
+        return count if count is not None else default
+    except Exception as e:
         print(f"Error while getting movie count from meta: {e}")
         return default
 

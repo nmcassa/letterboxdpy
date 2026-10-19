@@ -83,8 +83,6 @@ def extract_list_id(dom) -> str | None:
             report_url = report_link.get("data-report-url")
             if report_url and "filmlist:" in report_url:
                 # Extract ID from pattern like "/ajax/filmlist:30052453/report-form"
-                import re
-
                 match = re.search(r"filmlist:(\d+)", report_url)
                 if match:
                     return match.group(1)
@@ -95,8 +93,6 @@ def extract_list_id(dom) -> str | None:
             popmenu_id = report_menu.get("data-popmenu-id")
             if popmenu_id and "list-" in popmenu_id:
                 # Extract ID from pattern like "report-member-username-list-30052453"
-                import re
-
                 match = re.search(r"list-(\d+)$", popmenu_id)
                 if match:
                     return match.group(1)

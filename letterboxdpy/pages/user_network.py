@@ -1,4 +1,4 @@
-import re
+from fastfingertips.string_utils import extract_number_from_text
 
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
@@ -94,56 +94,29 @@ def extract_network(
                     "a", href=lambda x: x and "followers" in x
                 )
                 if followers_link:
-                    followers_text = followers_link.get_text(strip=True)
-                    # Extract number from "5 followers"
-
-                    followers_match = re.search(r"([\d,]+)", followers_text)
-                    if followers_match:
-                        followers_count = int(followers_match.group(1).replace(",", ""))
+                    followers_count = extract_number_from_text(followers_link.text)
 
                 following_link = metadata.find(
                     "a", href=lambda x: x and "following" in x
                 )
                 if following_link:
-                    following_text = following_link.get_text(strip=True)
-                    # Extract number from "following 6"
-                    following_match = re.search(r"([\d,]+)", following_text)
-                    if following_match:
-                        following_count = int(following_match.group(1).replace(",", ""))
+                    following_count = extract_number_from_text(following_link.text)
 
             # Extract stats from other columns
             watched_cell = row.find("td", class_="col-watched")
-            watched_count = None
-            if watched_cell:
-                watched_link = watched_cell.find("a")
-                if watched_link:
-                    watched_text = watched_link.get_text(strip=True)
-
-                    watched_match = re.search(r"([\d,]+)", watched_text)
-                    if watched_match:
-                        watched_count = int(watched_match.group(1).replace(",", ""))
+            watched_count = (
+                extract_number_from_text(watched_cell.text) if watched_cell else None
+            )
 
             lists_cell = row.find("td", class_="col-lists")
-            lists_count = None
-            if lists_cell:
-                lists_link = lists_cell.find("a")
-                if lists_link:
-                    lists_text = lists_link.get_text(strip=True)
-
-                    lists_match = re.search(r"([\d,]+)", lists_text)
-                    if lists_match:
-                        lists_count = int(lists_match.group(1).replace(",", ""))
+            lists_count = (
+                extract_number_from_text(lists_cell.text) if lists_cell else None
+            )
 
             likes_cell = row.find("td", class_="col-likes")
-            likes_count = None
-            if likes_cell:
-                likes_link = likes_cell.find("a")
-                if likes_link:
-                    likes_text = likes_link.get_text(strip=True)
-
-                    likes_match = re.search(r"([\d,]+)", likes_text)
-                    if likes_match:
-                        likes_count = int(likes_match.group(1).replace(",", ""))
+            likes_count = (
+                extract_number_from_text(likes_cell.text) if likes_cell else None
+            )
 
             persons_dict[username] = {
                 "username": username,
