@@ -1,3 +1,5 @@
+import re
+
 from letterboxdpy.avatar import Avatar
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.exceptions import PageFetchError
@@ -26,9 +28,10 @@ def extract_network(
     limit: Optional maximum number of pages to fetch.
     page: Optional starting page number.
     """
-    assert section in ["followers", "following"], (
-        "Section must be either 'followers' or 'following'"
-    )
+    assert section in [
+        "followers",
+        "following",
+    ], "Section must be either 'followers' or 'following'"
 
     BASE_URL = f"{DOMAIN}/{username}/{section}"
     PERSONS_PER_PAGE = 25
@@ -93,11 +96,10 @@ def extract_network(
                 if followers_link:
                     followers_text = followers_link.get_text(strip=True)
                     # Extract number from "5 followers"
-                    import re
 
-                    followers_match = re.search(r"(\d+)", followers_text)
+                    followers_match = re.search(r"([\d,]+)", followers_text)
                     if followers_match:
-                        followers_count = int(followers_match.group(1))
+                        followers_count = int(followers_match.group(1).replace(",", ""))
 
                 following_link = metadata.find(
                     "a", href=lambda x: x and "following" in x
@@ -105,9 +107,9 @@ def extract_network(
                 if following_link:
                     following_text = following_link.get_text(strip=True)
                     # Extract number from "following 6"
-                    following_match = re.search(r"(\d+)", following_text)
+                    following_match = re.search(r"([\d,]+)", following_text)
                     if following_match:
-                        following_count = int(following_match.group(1))
+                        following_count = int(following_match.group(1).replace(",", ""))
 
             # Extract stats from other columns
             watched_cell = row.find("td", class_="col-watched")
@@ -116,11 +118,10 @@ def extract_network(
                 watched_link = watched_cell.find("a")
                 if watched_link:
                     watched_text = watched_link.get_text(strip=True)
-                    import re
 
-                    watched_match = re.search(r"(\d+)", watched_text)
+                    watched_match = re.search(r"([\d,]+)", watched_text)
                     if watched_match:
-                        watched_count = int(watched_match.group(1))
+                        watched_count = int(watched_match.group(1).replace(",", ""))
 
             lists_cell = row.find("td", class_="col-lists")
             lists_count = None
@@ -128,11 +129,10 @@ def extract_network(
                 lists_link = lists_cell.find("a")
                 if lists_link:
                     lists_text = lists_link.get_text(strip=True)
-                    import re
 
-                    lists_match = re.search(r"(\d+)", lists_text)
+                    lists_match = re.search(r"([\d,]+)", lists_text)
                     if lists_match:
-                        lists_count = int(lists_match.group(1))
+                        lists_count = int(lists_match.group(1).replace(",", ""))
 
             likes_cell = row.find("td", class_="col-likes")
             likes_count = None
@@ -140,11 +140,10 @@ def extract_network(
                 likes_link = likes_cell.find("a")
                 if likes_link:
                     likes_text = likes_link.get_text(strip=True)
-                    import re
 
-                    likes_match = re.search(r"(\d+)", likes_text)
+                    likes_match = re.search(r"([\d,]+)", likes_text)
                     if likes_match:
-                        likes_count = int(likes_match.group(1))
+                        likes_count = int(likes_match.group(1).replace(",", ""))
 
             persons_dict[username] = {
                 "username": username,
