@@ -8,92 +8,110 @@ Exports comprehensive user data from Letterboxd profiles.
 - Progress tracking and timing
 """
 
+__title__ = "User Data Exporter"
+__description__ = "Exports comprehensive user data from Letterboxd profiles."
+__version__ = "0.1.1"
+__author__ = "fastfingertips"
+__author_url__ = "https://github.com/fastfingertips"
+__created_at__ = "2024-06-18"
+
 import os
+import sys
 import time
 
-from fastfingertips.terminal_utils import get_input
+from fastfingertips.terminal_utils import args_exists, get_input
 
 from letterboxdpy import user
 from letterboxdpy.utils.utils_directory import check_and_create_dirs
 from letterboxdpy.utils.utils_file import JsonFile, build_click_url, build_path
 from letterboxdpy.utils.utils_string import strip_prefix
 
-# -- MAIN --
 
-username = get_input("Enter username: ", index=1)
-user_instance = user.User(username)
+def main():
+    if not args_exists():
+        print(f"Quick usage: python {sys.argv[0]} <username>\n")
 
-# Get the directory where this script is located (examples folder)
-script_dir = os.path.dirname(os.path.abspath(__file__))
+    username = get_input("Enter username: ", index=1)
+    user_instance = user.User(username)
 
-# Export directories
-EXPORTS_DIR = build_path(script_dir, "exports")
-USERS_FOLDER = build_path(EXPORTS_DIR, "users")
-USER_FOLDER = build_path(USERS_FOLDER, user_instance.username)
-directories = [EXPORTS_DIR, USERS_FOLDER, USER_FOLDER]
-check_and_create_dirs(directories)
+    # Get the directory where this script is located (examples folder)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
 
-start_time = time.time()
+    # Export directories
+    exports_dir = build_path(script_dir, "exports")
+    users_folder = build_path(exports_dir, "users")
+    user_folder = build_path(users_folder, user_instance.username)
+    directories = [exports_dir, users_folder, user_folder]
+    check_and_create_dirs(directories)
 
-# Save user instance data
-user_data_path = build_path(USER_FOLDER, "user")
-JsonFile.save(user_data_path, user_instance.jsonify())
+    start_time = time.time()
 
-# Export data for each method
-# If you want to add a new method, add it here
-# With arg: [user.User.user_watchlist, {'filters': {'genre': ['action', '-drama']}}],
-methods = [
-    user.User.get_activity,
-    user.User.get_activity_following,
-    user.User.get_diary,
-    user.User.get_wrapped,
-    user.User.get_films,
-    [user.User.get_films_by_rating, {"rating": 5}],
-    user.User.get_films_not_rated,
-    user.User.get_genre_info,
-    user.User.get_liked_films,
-    user.User.get_liked_reviews,
-    user.User.get_lists,
-    user.User.get_following,
-    user.User.get_followers,
-    user.User.get_reviews,
-    user.User.get_user_tags,
-    user.User.get_watchlist_movies,
-    user.User.get_watchlist,
-]
-methods_str_length = len(str(len(methods)))
+    # Save user instance data
+    user_data_path = build_path(user_folder, "user")
+    JsonFile.save(user_data_path, user_instance.jsonify())
 
-print("\nExporting data...")
-for no, method in enumerate(methods, 1):
-    method_start_time = time.time()
+    # Export data for each method
+    methods = [
+        user.User.get_activity,
+        user.User.get_activity_following,
+        user.User.get_diary,
+        user.User.get_wrapped,
+        user.User.get_films,
+        user.User.get_films_not_rated,
+        user.User.get_genre_info,
+        user.User.get_liked_films,
+        user.User.get_liked_reviews,
+        user.User.get_liked_lists,
+        user.User.get_lists,
+        user.User.get_following,
+        user.User.get_followers,
+        user.User.get_reviews,
+        user.User.get_user_tags,
+        user.User.get_watchlist,
+    ]
+    methods_str_length = len(str(len(methods)))
 
-    args = {}
-    if isinstance(method, list):
-        method, args = method
+    print("\nExporting data...")
+    for no, method in enumerate(methods, 1):
+        method_start_time = time.time()
 
-    method_name = method.__name__
-    method_name_without_prefix = strip_prefix(method_name)
+        args = {}
+        if isinstance(method, list):
+            method, args = method
 
-    os.system(
-        f"title [{len(methods)}/{no:0>{methods_str_length}}] Exporting {method_name}..."
-    )
-    print(
-        f'[{len(methods)}/{no:0>{methods_str_length}}]: Processing "{method_name}" method',
-        end=f" with args: {args}...\r" if args else "...\r",
-    )
+        method_name = method.__name__
+        method_name_without_prefix = strip_prefix(method_name)
 
-    data = method(user_instance, **args) if args else method(user_instance)
+        os.system(
+            f"title [{len(methods)}/{no:0>{methods_str_length}}] Exporting {method_name}..."
+        )
+        print(
+            f'[{len(methods)}/{no:0>{methods_str_length}}]: Processing "{method_name}" method',
+            end=f" with args: {args}...\r" if args else "...\r",
+        )
 
-    file_path = build_path(USER_FOLDER, method_name_without_prefix)
-    JsonFile.save(file_path, data)
+        try:
+            data = method(user_instance, **args) if args else method(user_instance)
 
-    print(
-        f"{time.time() - method_start_time:<7.2f} seconds - {method_name:<22} - {build_click_url(file_path)}.json"
-    )
+            file_path = build_path(user_folder, method_name_without_prefix)
+            JsonFile.save(file_path, data)
 
-os.system("title Completed!")
-print("\nProcessing complete!")
-print(f"\tTotal time: {time.time() - start_time:.2f} seconds")
+            print(
+                f"{time.time() - method_start_time:<7.2f} seconds - {method_name:<22} - {build_click_url(file_path)}.json"
+            )
+        except Exception as e:
+            print(
+                f"{time.time() - method_start_time:<7.2f} seconds - {method_name:<22} - Error: {e}"
+            )
 
-print("\tAt", build_click_url(USER_FOLDER), end="\n\n")
-os.system("pause")
+    os.system("title Completed!")
+    print("\nProcessing complete!")
+    print(f"\tTotal time: {time.time() - start_time:.2f} seconds")
+
+    print("\tAt", build_click_url(user_folder), end="\n\n")
+    if not args_exists():
+        os.system("pause")
+
+
+if __name__ == "__main__":
+    main()
