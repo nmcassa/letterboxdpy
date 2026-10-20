@@ -18,7 +18,7 @@ __title__ = "Network Balance"
 __description__ = (
     "Analyze follower/following ratios and mutual relationships in your network."
 )
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2026-05-10"
@@ -64,39 +64,58 @@ def _follower_share(followers: int, following: int) -> float:
 
 
 def analyze_list(
-    username_list: list[str],
+    users_data: dict[str, dict] | list[str],
     list_name: str,
     *,
     progress: Progress,
     overall_task,
 ) -> list[dict]:
-    """Fetch stats for each user and compute their follower share."""
+    """Analyze follower share for users, using network data with fallback to User()."""
     results = []
-    if not username_list:
+    if not users_data:
         return results
 
-    task = progress.add_task(list_name, total=len(username_list), current="")
+    if isinstance(users_data, list):
+        users_dict = {u: {} for u in users_data}
+    else:
+        users_dict = users_data
 
-    for i, username in enumerate(username_list):
+    task = progress.add_task(list_name, total=len(users_dict), current="")
+
+    for i, (username, user_data) in enumerate(users_dict.items()):
         progress.update(task, current=f"@{username:<20}")
         try:
-            u = User(username)
-            f_count = u.stats.get("followers", 0)
-            fing_count = u.stats.get("following", 0)
+            f_count = user_data.get("followers")
+            fing_count = user_data.get("following")
+
+            # Fallback to User(username) if counts are missing
+            if f_count is None or fing_count is None:
+                u = User(username)
+                f_count = u.stats.get("followers", 0) if f_count is None else f_count
+                fing_count = (
+                    u.stats.get("following", 0) if fing_count is None else fing_count
+                )
+                time.sleep(1)
+
+            f_count = f_count or 0
+            fing_count = fing_count or 0
             score = _follower_share(f_count, fing_count)
+            name = user_data.get("name") or username
+            avatar = user_data.get("avatar")
 
             results.append(
                 {
                     "user": username,
-                    "follow_order": len(username_list) - i,
+                    "name": name,
+                    "avatar": avatar,
+                    "followers": f_count,
+                    "following": fing_count,
+                    "follow_order": len(users_dict) - i,
                     "follower_share_percentage": f"{score:.1f}%",
                     "follower_share": score,
-                    "stats": f"{f_count} F / {fing_count} Fing",
+                    "stats": f"{f_count:,} F / {fing_count:,} Fing",
                 }
             )
-
-            if (i + 1) % 15 == 0:
-                time.sleep(2)
 
         except Exception:
             pass  # silently skip; overall still advances
@@ -194,12 +213,12 @@ def run_full_audit(
             sys.exit(1)
 
         console.print("[dim]Fetching followers…[/dim]")
-        followers_list = list(main.get_followers().keys())
+        followers_dict = main.get_followers()
         console.print("[dim]Fetching following…[/dim]")
-        following_list = list(main.get_following().keys())
+        following_dict = main.get_following()
 
         console.print()
-        total_users = len(followers_list) + len(following_list)
+        total_users = len(followers_dict) + len(following_dict)
         with Progress(
             SpinnerColumn(),
             TextColumn("[bold]{task.description}[/bold]"),
@@ -217,13 +236,13 @@ def run_full_audit(
                 current="",
             )
             followers_analysis = analyze_list(
-                followers_list,
+                followers_dict,
                 "[1/2] Followers",
                 progress=progress,
                 overall_task=overall_task,
             )
             following_analysis = analyze_list(
-                following_list,
+                following_dict,
                 "[2/2] Following",
                 progress=progress,
                 overall_task=overall_task,
@@ -231,8 +250,8 @@ def run_full_audit(
         console.print()
 
         # Calculate mutual follow status
-        followers_set = set(followers_list)
-        following_set = set(following_list)
+        followers_set = set(followers_dict.keys())
+        following_set = set(following_dict.keys())
         for item in followers_analysis:
             item["mutual"] = item["user"] in following_set
         for item in following_analysis:
@@ -242,8 +261,8 @@ def run_full_audit(
             "target": target_user,
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "summary": {
-                "total_followers": len(followers_list),
-                "total_following": len(following_list),
+                "total_followers": len(followers_dict),
+                "total_following": len(following_dict),
                 "mutual_count": len(followers_set & following_set),
             },
             "followers_analysis": followers_analysis,
@@ -291,8 +310,11 @@ def run_full_audit(
                 f"[{color}]{entry['follower_share_percentage']}[/{color}]",
                 entry["stats"],
             )
-        console.print(table)
-    console.print()
+        try:
+            console.print(table)
+        except Exception:
+            pass
+        console.print()
 
 
 # ── Entry point ────────────────────────────────────────────────────────────────

@@ -48,6 +48,66 @@
 
         .table-container { overflow-x: auto; }
 
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .table-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(240, 246, 252, 0.12);
+            background-color: #161b22;
+            flex-shrink: 0;
+        }
+        .table-avatar-placeholder {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #21262d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--link-color);
+            font-weight: 700;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .user-details {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-width: 0;
+        }
+        .user-display-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+        .user-username {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        .user-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: inherit;
+            text-decoration: none;
+        }
+        .user-link:hover .user-display-name {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+        .user-link:hover .user-username {
+            color: var(--link-color);
+        }
+
         .search-wrap {
             display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
             padding-top: 12px; border-top: 1px solid var(--border-color);
@@ -61,7 +121,7 @@
             border: 1px solid rgba(46, 160, 67, 0.2) !important;
             font-size: 10px;
             padding: 1px 6px;
-            margin-left: 6px;
+            margin-left: 2px;
         }
         .fan-badge {
             background: rgba(56, 139, 253, 0.1) !important;
@@ -69,7 +129,7 @@
             border: 1px solid rgba(56, 139, 253, 0.25) !important;
             font-size: 10px;
             padding: 1px 6px;
-            margin-left: 6px;
+            margin-left: 2px;
         }
         .warning-badge {
             background: rgba(248, 81, 73, 0.08) !important;
@@ -77,7 +137,7 @@
             border: 1px solid rgba(248, 81, 73, 0.15) !important;
             font-size: 10px;
             padding: 1px 6px;
-            margin-left: 6px;
+            margin-left: 2px;
         }
     </style>
 </head>
@@ -116,7 +176,7 @@
                     <option value="no-back">Not Mutual</option>
                 </select>
                 <span style="color: var(--text-secondary); font-weight: 600; margin-left: 8px;">Search:</span>
-                <input type="text" id="searchInput" placeholder="Filter by username…" oninput="applySearch()" />
+                <input type="text" id="searchInput" placeholder="Filter by name or username…" oninput="applySearch()" />
                 <span id="match-count"></span>
             </div>
         </div>
@@ -138,15 +198,31 @@
                         {% if followers_analysis %}
                         {% for item in followers_analysis %}
                         {% set score = item.follower_share %}
-                        <tr data-user="{{ item.user }}" data-mutual="{{ 'true' if item.mutual else 'false' }}">
+                        <tr data-user="{{ item.user }}" data-name="{{ item.name or '' }}" data-mutual="{{ 'true' if item.mutual else 'false' }}">
                             <td class="rank">#{{ item.network_rank }}</td>
                             <td>
-                                <a href="https://letterboxd.com/{{ item.user }}/" target="_blank" class="user-link">@{{ item.user }}</a>
-                                {% if item.mutual %}
-                                <span class="user-badge mutual-badge">Mutual</span>
-                                {% else %}
-                                <span class="user-badge fan-badge" title="Follows you, but you don't follow back">Fan</span>
-                                {% endif %}
+                                <div class="user-cell">
+                                    {% if item.avatar and item.avatar.url %}
+                                    <img src="{{ item.avatar.url }}" alt="{{ item.name or item.user }}" class="table-avatar" loading="lazy" />
+                                    {% else %}
+                                    <div class="table-avatar-placeholder">{{ (item.name or item.user)[0] | upper }}</div>
+                                    {% endif %}
+                                    <div class="user-details">
+                                        <a href="https://letterboxd.com/{{ item.user }}/" target="_blank" class="user-link">
+                                            {% if item.name and item.name != item.user %}
+                                            <span class="user-display-name">{{ item.name }}</span>
+                                            <span class="user-username">@{{ item.user }}</span>
+                                            {% else %}
+                                            <span class="user-display-name">@{{ item.user }}</span>
+                                            {% endif %}
+                                        </a>
+                                        {% if item.mutual %}
+                                        <span class="user-badge mutual-badge">Mutual</span>
+                                        {% else %}
+                                        <span class="user-badge fan-badge" title="Follows you, but you don't follow back">Fan</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </td>
                             <td class="rank">{{ item.follow_order }}</td>
                             <td style="min-width: 160px;">
@@ -192,15 +268,31 @@
                         {% if following_analysis %}
                         {% for item in following_analysis %}
                         {% set score = item.follower_share %}
-                        <tr data-user="{{ item.user }}" data-mutual="{{ 'true' if item.mutual else 'false' }}">
+                        <tr data-user="{{ item.user }}" data-name="{{ item.name or '' }}" data-mutual="{{ 'true' if item.mutual else 'false' }}">
                             <td class="rank">#{{ item.network_rank }}</td>
                             <td>
-                                <a href="https://letterboxd.com/{{ item.user }}/" target="_blank" class="user-link">@{{ item.user }}</a>
-                                {% if item.mutual %}
-                                <span class="user-badge mutual-badge">Mutual</span>
-                                {% else %}
-                                <span class="user-badge warning-badge" title="You follow, but doesn't follow you back">No Back</span>
-                                {% endif %}
+                                <div class="user-cell">
+                                    {% if item.avatar and item.avatar.url %}
+                                    <img src="{{ item.avatar.url }}" alt="{{ item.name or item.user }}" class="table-avatar" loading="lazy" />
+                                    {% else %}
+                                    <div class="table-avatar-placeholder">{{ (item.name or item.user)[0] | upper }}</div>
+                                    {% endif %}
+                                    <div class="user-details">
+                                        <a href="https://letterboxd.com/{{ item.user }}/" target="_blank" class="user-link">
+                                            {% if item.name and item.name != item.user %}
+                                            <span class="user-display-name">{{ item.name }}</span>
+                                            <span class="user-username">@{{ item.user }}</span>
+                                            {% else %}
+                                            <span class="user-display-name">@{{ item.user }}</span>
+                                            {% endif %}
+                                        </a>
+                                        {% if item.mutual %}
+                                        <span class="user-badge mutual-badge">Mutual</span>
+                                        {% else %}
+                                        <span class="user-badge warning-badge" title="You follow, but doesn't follow you back">No Back</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </td>
                             <td class="rank">{{ item.follow_order }}</td>
                             <td style="min-width: 160px;">
@@ -249,7 +341,7 @@
         }
 
         function applySearch() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
+            const q = document.getElementById('searchInput').value.toLowerCase().trim();
             const filter = document.getElementById('connectionFilter').value;
             const tableId = activeTab === 'tab-followers' ? 'followersTable' : 'followingTable';
             const rows = document.querySelectorAll(`#${tableId} tbody tr`);
@@ -257,6 +349,7 @@
             rows.forEach(row => {
                 if (!row.dataset.user) return;
                 const user = row.dataset.user.toLowerCase();
+                const name = (row.dataset.name || '').toLowerCase();
                 const mutual = row.dataset.mutual === 'true';
 
                 let matchFilter = true;
@@ -266,7 +359,7 @@
                     matchFilter = !mutual;
                 }
 
-                const show = (!q || user.includes(q)) && matchFilter;
+                const show = (!q || user.includes(q) || name.includes(q)) && matchFilter;
                 row.style.display = show ? '' : 'none';
                 if (show) count++;
             });
