@@ -111,9 +111,7 @@ def skip_if(target, match=_DEFAULT_MATCH, default=None):
 
                 if has_match:
                     should_skip = (
-                        val in match_container
-                        if is_container
-                        else (val == match)
+                        val in match_container if is_container else (val == match)
                     )
                 else:
                     should_skip = bool(val)

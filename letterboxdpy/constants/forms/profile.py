@@ -100,7 +100,7 @@ class ProfileFormFields:
     # Hidden/system fields
     COMPLETE_SETTINGS_FIELD: str = "completeSettings"
     EMAIL_FIELD: str = "emailAddress"
-    PASSWORD_FIELD: str = "password"  # noqa: S105
+    PASSWORD_FIELD: str = "password"
 
     # Favorite films
     FAVORITE_FILMS_FIELD: str = "favouriteFilmIds"
