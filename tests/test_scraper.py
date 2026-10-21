@@ -2,6 +2,7 @@
 
 import unittest
 
+import pytest
 from bs4 import BeautifulSoup
 
 from letterboxdpy.core.exceptions import (
@@ -12,6 +13,7 @@ from letterboxdpy.core.exceptions import (
 from letterboxdpy.core.scraper import Scraper, url_encode
 
 
+@pytest.mark.smoke()
 class TestScraper(unittest.TestCase):
     """Integration tests for Scraper HTTP operations."""
 

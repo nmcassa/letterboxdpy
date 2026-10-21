@@ -2,9 +2,12 @@
 
 import unittest
 
+import pytest
+
 from letterboxdpy.list import List
 
 
+@pytest.mark.smoke()
 class TestList(unittest.TestCase):
     """Integration tests for List scraping methods."""
 

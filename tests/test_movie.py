@@ -2,10 +2,13 @@
 
 import unittest
 
+import pytest
+
 from letterboxdpy.core.exceptions import MovieNotFoundError, ResourceNotFoundError
 from letterboxdpy.movie import Movie
 
 
+@pytest.mark.smoke()
 class TestMovie(unittest.TestCase):
     """Integration tests for Movie scraping and factory methods."""
 

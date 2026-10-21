@@ -2,9 +2,12 @@
 
 import unittest
 
+import pytest
+
 from letterboxdpy.search import Search, get_film_slug_from_title
 
 
+@pytest.mark.smoke()
 class TestSearch(unittest.TestCase):
     """Integration tests for Search functionality."""
 
