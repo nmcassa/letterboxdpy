@@ -93,9 +93,10 @@ ignore = [
 max-complexity = 15
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PT009", "PT027"] # Use of assert and legacy unittest assertions
+"tests/*" = ["S101", "PT009", "PT027", "PT023"] # Use of assert, legacy unittest assertions, marker parens
 "examples/*" = ["T201", "T203", "S110", "S112", "S608", "RUF012", "S605", "S603", "C901", "S311", "SIM105", "S607"]   # Examples can be complex and simple
 "docs/*" = ["E501"]  # Long docstrings in docs helper scripts
+"letterboxdpy/constants/forms/profile.py" = ["S105"] # PASSWORD_FIELD constant is field name, not secret
 "letterboxdpy/legacy_search.py" = ["C901"] # Intentionally complex legacy logic
 "letterboxdpy/pages/user_network.py" = ["C901"]
 "letterboxdpy/pages/user_likes.py" = ["C901", "S112"]
