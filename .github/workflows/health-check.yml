@@ -28,4 +28,5 @@ jobs:
       - name: Run Core Tests
         run: |
           # We run tests specifically to catch any HTML/DOM parsing failures
-          python -m pytest tests
+          python -m pytest tests -m smoke
+

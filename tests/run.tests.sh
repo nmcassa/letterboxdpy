@@ -6,7 +6,7 @@ export PYTHONPATH=..
 
 run_tests() {
     echo "Running tests..."
-    python -m unittest discover -v
+    python -m pytest
 }
 
 if run_tests; then
