@@ -17,7 +17,7 @@ __title__ = "Watchlist Comparison"
 __description__ = (
     "Identify films from your watchlist that are also wanted by users you follow."
 )
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 __author__ = "fastfingertips"
 __author_url__ = "https://github.com/fastfingertips"
 __created_at__ = "2025-12-24"
@@ -66,18 +66,21 @@ class WatchlistHtmlRenderer:
         film_users: dict,
         user_totals: dict,
         skipped_users: dict | None = None,
+        user_records: dict | None = None,
     ):
         self.username = username
         self.my_films = my_films
         self.film_users = film_users
         self.user_totals = user_totals
         self.skipped_users = skipped_users or {}
+        self.user_records = user_records or {}
 
     def render(self, filepath: str, sorted_films: list, stats: dict) -> None:
         """Generates and saves the HTML report using Jinja2."""
 
         films_data, all_included_users = self._prepare_films_data(sorted_films)
         users_data = self._prepare_users_data()
+        skipped_data = self._prepare_skipped_users_data()
 
         # Final stats
         generated_at = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -100,7 +103,8 @@ class WatchlistHtmlRenderer:
             all_users=list(all_included_users),
             results=films_data,
             user_rankings=users_data,
-            skipped_users=self.skipped_users,
+            skipped_users=skipped_data,
+            user_records=self.user_records,
             generated_at=generated_at,
             metadata={
                 "title": __title__,
@@ -165,10 +169,15 @@ class WatchlistHtmlRenderer:
             percentage = (len(fids) / total_count * 100) if total_count > 0 else 0
 
             shared_films = [self._get_film_info(fid) for fid in fids]
+            rec = self.user_records.get(user, {})
+            name = rec.get("name") or user
+            avatar = rec.get("avatar") or {}
 
             users_data.append(
                 {
-                    "name": user,
+                    "username": user,
+                    "name": name,
+                    "avatar": avatar,
                     "url": f"https://letterboxd.com/{user}/",
                     "matches_count": len(fids),
                     "total_count": total_count,
@@ -177,6 +186,24 @@ class WatchlistHtmlRenderer:
                 }
             )
         return users_data
+
+    def _prepare_skipped_users_data(self) -> list:
+        """Prepares rich data structure for skipped/excluded accounts."""
+        skipped_data = []
+        for user, reason in self.skipped_users.items():
+            rec = self.user_records.get(user, {})
+            name = rec.get("name") or user
+            avatar = rec.get("avatar") or {}
+            skipped_data.append(
+                {
+                    "username": user,
+                    "name": name,
+                    "avatar": avatar,
+                    "url": f"https://letterboxd.com/{user}/",
+                    "reason": reason,
+                }
+            )
+        return skipped_data
 
 
 class WatchlistComparator:
@@ -215,6 +242,7 @@ class WatchlistComparator:
         self.my_films = {}
         self.my_film_ids = set()
         self.following = []
+        self.following_data = {}
         self.film_popularity = Counter()
         self.film_users = {}
         self.user_total_counts = {}
@@ -264,19 +292,35 @@ class WatchlistComparator:
 
     def fetch_following(self):
         """Fetches the list of users followed by the main user."""
-        with Progress(
-            *self.PROGRESS_COLUMNS, console=self.console, transient=True
-        ) as progress:
-            progress.add_task(
-                description=f"[bold blue]Fetching[/bold blue] following list for [cyan]@{self.username}[/cyan]...",
-                total=None,
-            )
-            user = User(self.username)
-            self.following = list(user.get_following().keys())
+        filepath = build_path(self._user_dir(self.username), "following")
+        cache_info = None
 
-        self.console.print(
-            f"[bold green][OK][/bold green] Following fetched: [white]{len(self.following)}[/white] users"
-        )
+        if not self.force_refresh and JsonFile.exists(filepath):
+            cached = JsonFile.load(filepath)
+            if cached:
+                self.following_data = cached
+                self.following = list(self.following_data.keys())
+                full_path = JsonFile._get_path(filepath)
+                mtime = os.path.getmtime(full_path)
+                cache_info = self._format_age(time.time() - mtime)
+
+        if not self.following:
+            with Progress(
+                *self.PROGRESS_COLUMNS, console=self.console, transient=True
+            ) as progress:
+                progress.add_task(
+                    description=f"[bold blue]Fetching[/bold blue] following list for [cyan]@{self.username}[/cyan]...",
+                    total=None,
+                )
+                user = User(self.username)
+                self.following_data = user.get_following()
+                self.following = list(self.following_data.keys())
+                JsonFile.save(filepath, self.following_data)
+
+        status_text = f"[bold green][OK][/bold green] Following fetched: [white]{len(self.following)}[/white] users"
+        if cache_info:
+            status_text += f" [dim](cached {cache_info})[/dim]"
+        self.console.print(status_text)
 
     def analyze_watchlists(self):
         """Iterates through followed users to find common films in their watchlists."""
@@ -448,6 +492,7 @@ class WatchlistComparator:
             self.film_users,
             self.user_total_counts,
             skipped_users=self.skipped_users,
+            user_records=self.following_data,
         )
         match_rate = (
             round((len(self.film_popularity) / len(self.my_film_ids)) * 100, 1)

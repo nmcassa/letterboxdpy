@@ -31,7 +31,7 @@
             line-height: 1;
         }
         .stat-number.highlight {
-            color: #3fb950;
+            color: var(--link-color);
         }
         .stat-desc {
             font-size: 11px;
@@ -100,13 +100,13 @@
             position: absolute;
             right: 0;
             top: calc(100% + 6px);
-            width: 340px;
-            max-width: 90vw;
+            width: 390px;
+            max-width: 92vw;
             background: #161b22;
             border: 1px solid var(--border-color);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
             border-radius: 8px;
-            padding: 12px;
+            padding: 10px 12px;
             z-index: 9999;
             animation: fadeIn 0.15s ease-out;
         }
@@ -130,37 +130,47 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            max-height: 240px;
+            max-height: 280px;
             overflow-y: auto;
         }
         .skipped-dropdown-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            padding: 4px 6px;
-            background: rgba(13, 17, 23, 0.5);
-            border: 1px solid rgba(48, 54, 61, 0.5);
-            border-radius: 5px;
-            font-size: 11px;
+            gap: 12px;
+            padding: 6px 10px;
+            background: rgba(13, 17, 23, 0.6);
+            border: 1px solid rgba(48, 54, 61, 0.6);
+            border-radius: 6px;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .skipped-dropdown-item:hover {
+            background: rgba(22, 27, 34, 0.95);
+            border-color: rgba(139, 148, 158, 0.35);
         }
         .skipped-badge {
             font-size: 10px;
-            padding: 1px 6px;
-            border-radius: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .badge-hq {
             background: rgba(163, 113, 247, 0.15);
             color: #d2a8ff;
-            border: 1px solid rgba(163, 113, 247, 0.3);
+            border: 1px solid rgba(163, 113, 247, 0.35);
         }
         .badge-private {
             background: rgba(248, 81, 73, 0.15);
             color: #ff7b72;
-            border: 1px solid rgba(248, 81, 73, 0.3);
+            border: 1px solid rgba(248, 81, 73, 0.35);
+        }
+        .badge-empty {
+            background: rgba(139, 148, 158, 0.15);
+            color: #8b949e;
+            border: 1px solid rgba(139, 148, 158, 0.35);
         }
 
         /* Filter Container */
@@ -194,7 +204,7 @@
             color: var(--text-secondary);
             pointer-events: none;
         }
-        #filmSearch {
+        .search-input-wrapper input[type="text"] {
             width: 100%;
             padding: 7px 30px 7px 32px;
             box-sizing: border-box;
@@ -312,9 +322,21 @@
         }
 
         /* Table Styles */
+        .th-rank {
+            width: 48px;
+            text-align: center;
+        }
+        .th-rank .sort-btn {
+            justify-content: center;
+            padding: 12px 4px;
+            gap: 2px;
+        }
+        .th-rank .sort-icon {
+            margin-left: 2px;
+        }
         .rank {
             color: var(--text-secondary);
-            width: 40px;
+            width: 48px;
             font-family: monospace;
             font-size: 12px;
             text-align: center;
@@ -397,7 +419,7 @@
         }
         .meter-fill {
             height: 100%;
-            background: linear-gradient(90deg, #58a6ff, #3fb950);
+            background: linear-gradient(90deg, #58a6ff, #1f6feb);
             border-radius: 2px;
         }
 
@@ -448,14 +470,141 @@
             display: block;
         }
 
-        .user-link {
-            color: var(--text-primary);
+        /* User Cell & Avatar Styles */
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .table-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(240, 246, 252, 0.12);
+            background-color: #161b22;
+            flex-shrink: 0;
+        }
+        .table-avatar-placeholder {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #21262d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--link-color);
+            font-weight: 700;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .user-details {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-width: 0;
+        }
+        .user-display-name {
             font-weight: 600;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+        .user-username {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        .user-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: inherit;
             text-decoration: none;
         }
-        .user-link:hover {
+        .user-link:hover .user-display-name {
             color: var(--link-color);
             text-decoration: underline;
+        }
+        .user-link:hover .user-username {
+            color: var(--link-color);
+        }
+
+        /* Skipped / Excluded Account Avatars & User Info */
+        .skipped-item-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            flex: 1;
+        }
+        .skipped-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(240, 246, 252, 0.12);
+            background-color: #161b22;
+            flex-shrink: 0;
+        }
+        .skipped-avatar-placeholder {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #21262d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--link-color);
+            font-weight: 700;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .skipped-user-link {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            text-decoration: none;
+            color: inherit;
+            line-height: 1.25;
+        }
+        .skipped-user-link:hover .skipped-display-name {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+        .skipped-display-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .skipped-username {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Badge Avatars in Wanted By Pills */
+        .user-badge {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 5px;
+            vertical-align: middle;
+        }
+        .badge-avatar {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
         /* Skipped Accounts in Users tab */
@@ -485,12 +634,17 @@
         .skipped-item {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            background: var(--input-bg);
+            gap: 10px;
+            background: rgba(13, 17, 23, 0.6);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 4px 8px;
+            padding: 5px 10px;
             font-size: 11px;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .skipped-item:hover {
+            background: rgba(22, 27, 34, 0.95);
+            border-color: rgba(139, 148, 158, 0.35);
         }
     </style>
 </head>
@@ -546,10 +700,32 @@
                             <span class="skipped-dropdown-desc">Accounts with no accessible watchlists</span>
                         </div>
                         <div class="skipped-dropdown-list">
-                            {% for u, reason in skipped_users.items() %}
+                            {% for item in skipped_users %}
                             <div class="skipped-dropdown-item">
-                                <a href="https://letterboxd.com/{{ u }}/" target="_blank" class="user-link">@{{ u }}</a>
-                                <span class="skipped-badge {% if 'HQ' in reason or 'hq' in reason %}badge-hq{% else %}badge-private{% endif %}">{{ reason }}</span>
+                                <div class="skipped-item-user">
+                                    {% if item.avatar and item.avatar.url %}
+                                    <img src="{{ item.avatar.url }}" alt="{{ item.name or item.username }}" class="skipped-avatar" loading="lazy" />
+                                    {% else %}
+                                    <div class="skipped-avatar-placeholder">{{ (item.name or item.username)[0] | upper }}</div>
+                                    {% endif %}
+                                    <a href="https://letterboxd.com/{{ item.username }}/" target="_blank" class="skipped-user-link">
+                                        {% if item.name and item.name != item.username %}
+                                        <span class="skipped-display-name">{{ item.name }}</span>
+                                        <span class="skipped-username">@{{ item.username }}</span>
+                                        {% else %}
+                                        <span class="skipped-display-name">@{{ item.username }}</span>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                {% if 'HQ' in item.reason or 'hq' in item.reason %}
+                                <span class="skipped-badge badge-hq" title="{{ item.reason }}">HQ Account</span>
+                                {% elif 'private' in item.reason or 'Private' in item.reason %}
+                                <span class="skipped-badge badge-private" title="{{ item.reason }}">Private</span>
+                                {% elif 'empty' in item.reason or 'Empty' in item.reason %}
+                                <span class="skipped-badge badge-empty" title="{{ item.reason }}">Empty</span>
+                                {% else %}
+                                <span class="skipped-badge badge-private" title="{{ item.reason }}">{{ item.reason }}</span>
+                                {% endif %}
                             </div>
                             {% endfor %}
                         </div>
@@ -586,7 +762,8 @@
                         <select id="userSelect" onchange="applyFilter()">
                             <option value="">All Users</option>
                             {% for user in all_users|sort %}
-                            <option value="{{ user }}">{{ user }}</option>
+                            {% set u_rec = user_records.get(user) if user_records else none %}
+                            <option value="{{ user }}">{% if u_rec and u_rec.name and u_rec.name != user %}{{ u_rec.name }} (@{{ user }}){% else %}@{{ user }}{% endif %}</option>
                             {% endfor %}
                         </select>
                         <div class="toggle-group">
@@ -601,6 +778,24 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Enhanced Filters for Users -->
+            <div class="filter-container" id="usersFilterContainer" style="display: none;">
+                <div class="filter-top-row">
+                    <div class="search-input-wrapper">
+                        <svg class="search-svg" height="14" viewBox="0 0 16 16" width="14" fill="currentColor">
+                            <path d="M11.5 7a4.485 4.485 0 1 0-8.97 0 4.485 4.485 0 0 0 8.97 0Zm-.82 4.74a6 6 0 1 1 1.06-1.06l3.04 3.04a.75.75 0 1 1-1.06 1.06l-3.04-3.04Z"/>
+                        </svg>
+                        <input type="text" id="userSearch" placeholder="Filter by name or @username..." oninput="applyUserFilter()">
+                        <button type="button" id="clearUserSearchBtn" class="clear-btn" onclick="clearUserSearch()" style="display: none;">✕</button>
+                    </div>
+
+                    <div class="filter-meta">
+                        <span id="user-match-count">Showing all {{ user_rankings|length }} users</span>
+                        <button type="button" id="resetUserFilterBtn" class="reset-btn" onclick="clearUserSearch()" style="display: none;">Reset</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Tab 1: Films Table -->
@@ -609,7 +804,7 @@
                 <table id="filmsTable">
                     <thead>
                         <tr>
-                            <th>
+                            <th class="th-rank">
                                 <button class="sort-btn" onclick="sortTable('filmsTable', 0, 'num')">
                                     # <span class="sort-icon"></span>
                                 </button>
@@ -650,7 +845,13 @@
                             <td class="users-cell">
                                 <div class="users-wrapper">
                                     {% for user in film.users|sort %}
-                                    <a href="https://letterboxd.com/{{ user }}/" target="_blank" class="user-badge">{{ user }}</a>
+                                    {% set u_rec = user_records.get(user) if user_records else none %}
+                                    <a href="https://letterboxd.com/{{ user }}/" target="_blank" class="user-badge" title="{% if u_rec and u_rec.name and u_rec.name != user %}{{ u_rec.name }} (@{{ user }}){% else %}@{{ user }}{% endif %}">
+                                        {% if u_rec and u_rec.avatar and u_rec.avatar.url %}
+                                        <img src="{{ u_rec.avatar.url }}" alt="{{ user }}" class="badge-avatar" loading="lazy" />
+                                        {% endif %}
+                                        {{ user }}
+                                    </a>
                                     {% endfor %}
                                 </div>
                             </td>
@@ -667,7 +868,7 @@
                 <table id="usersTable">
                     <thead>
                         <tr>
-                            <th>
+                            <th class="th-rank">
                                 <button class="sort-btn" onclick="sortTable('usersTable', 0, 'num')">
                                     # <span class="sort-icon"></span>
                                 </button>
@@ -692,12 +893,26 @@
                     </thead>
                     <tbody>
                         {% for user in user_rankings %}
-                        <tr>
+                        <tr data-user="{{ user.username }}" data-name="{{ user.name|lower }}">
                             <td class="rank">#{{ loop.index }}</td>
                             <td>
-                                <a href="https://letterboxd.com/{{ user.name }}/" target="_blank" class="user-link">
-                                    @{{ user.name }}
-                                </a>
+                                <div class="user-cell">
+                                    {% if user.avatar and user.avatar.url %}
+                                    <img src="{{ user.avatar.url }}" alt="{{ user.name }}" class="table-avatar" loading="lazy" />
+                                    {% else %}
+                                    <div class="table-avatar-placeholder">{{ user.name[0] | upper }}</div>
+                                    {% endif %}
+                                    <div class="user-details">
+                                        <a href="https://letterboxd.com/{{ user.username }}/" target="_blank" class="user-link">
+                                            {% if user.name and user.name != user.username %}
+                                            <span class="user-display-name">{{ user.name }}</span>
+                                            <span class="user-username">@{{ user.username }}</span>
+                                            {% else %}
+                                            <span class="user-display-name">@{{ user.username }}</span>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
                             </td>
                             <td class="count">
                                 <span class="count-badge">{{ user.matches_count }}</span>
@@ -712,7 +927,7 @@
                                 </div>
                             </td>
                             <td class="films-cell">
-                                <div class="films-wrapper" id="films-{{ user.name }}">
+                                <div class="films-wrapper" id="films-{{ user.username }}">
                                     {% for film in user.shared_films %}
                                     <a href="{{ film.url }}" target="_blank" 
                                        class="film-badge {% if loop.index > 8 %}extra-film{% endif %}" 
@@ -741,10 +956,32 @@
                 <h3 class="section-title">Excluded Accounts ({{ stats.skipped_count }})</h3>
                 <p class="section-subtitle">These accounts were analyzed during the scan but have no accessible personal watchlists:</p>
                 <div class="skipped-list">
-                    {% for u, reason in skipped_users.items() %}
+                    {% for item in skipped_users %}
                     <div class="skipped-item">
-                        <a href="https://letterboxd.com/{{ u }}/" target="_blank" class="user-link">@{{ u }}</a>
-                        <span class="skipped-badge {% if 'HQ' in reason or 'hq' in reason %}badge-hq{% else %}badge-private{% endif %}">{{ reason }}</span>
+                        <div class="skipped-item-user">
+                            {% if item.avatar and item.avatar.url %}
+                            <img src="{{ item.avatar.url }}" alt="{{ item.name or item.username }}" class="skipped-avatar" loading="lazy" />
+                            {% else %}
+                            <div class="skipped-avatar-placeholder">{{ (item.name or item.username)[0] | upper }}</div>
+                            {% endif %}
+                            <a href="https://letterboxd.com/{{ item.username }}/" target="_blank" class="skipped-user-link">
+                                {% if item.name and item.name != item.username %}
+                                <span class="skipped-display-name">{{ item.name }}</span>
+                                <span class="skipped-username">@{{ item.username }}</span>
+                                {% else %}
+                                <span class="skipped-display-name">@{{ item.username }}</span>
+                                {% endif %}
+                            </a>
+                        </div>
+                        {% if 'HQ' in item.reason or 'hq' in item.reason %}
+                        <span class="skipped-badge badge-hq" title="{{ item.reason }}">HQ Account</span>
+                        {% elif 'private' in item.reason or 'Private' in item.reason %}
+                        <span class="skipped-badge badge-private" title="{{ item.reason }}">Private</span>
+                        {% elif 'empty' in item.reason or 'Empty' in item.reason %}
+                        <span class="skipped-badge badge-empty" title="{{ item.reason }}">Empty</span>
+                        {% else %}
+                        <span class="skipped-badge badge-private" title="{{ item.reason }}">{{ item.reason }}</span>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
@@ -798,10 +1035,10 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             
-            const filterContainer = document.getElementById('filmsFilterContainer');
-            if (filterContainer) {
-                filterContainer.style.display = (tabId === 'tab-films') ? 'flex' : 'none';
-            }
+            const filmsFilter = document.getElementById('filmsFilterContainer');
+            const usersFilter = document.getElementById('usersFilterContainer');
+            if (filmsFilter) filmsFilter.style.display = (tabId === 'tab-films') ? 'flex' : 'none';
+            if (usersFilter) usersFilter.style.display = (tabId === 'tab-users') ? 'flex' : 'none';
         }
         
         const sortStates = {};
@@ -826,8 +1063,8 @@
                     x = Number.parseFloat(x.replaceAll(/[^\d.-]/g, '')) || 0;
                     y = Number.parseFloat(y.replaceAll(/[^\d.-]/g, '')) || 0;
                 } else {
-                    x = x.toLowerCase();
-                    y = y.toLowerCase();
+                    x = (a.dataset.name || a.dataset.user || x).toLowerCase();
+                    y = (b.dataset.name || b.dataset.user || y).toLowerCase();
                 }
                 
                 if (dir === 'asc') return x > y ? 1 : -1;
@@ -835,6 +1072,42 @@
             });
             
             rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function clearUserSearch() {
+            const input = document.getElementById('userSearch');
+            if (!input) return;
+            input.value = '';
+            document.getElementById('clearUserSearchBtn').style.display = 'none';
+            document.getElementById('resetUserFilterBtn').style.display = 'none';
+            applyUserFilter();
+            input.focus();
+        }
+
+        function applyUserFilter() {
+            const searchInput = document.getElementById('userSearch');
+            if (!searchInput) return;
+            const q = searchInput.value.toLowerCase().trim();
+            const clearBtn = document.getElementById('clearUserSearchBtn');
+            const resetBtn = document.getElementById('resetUserFilterBtn');
+            
+            clearBtn.style.display = q ? 'block' : 'none';
+            resetBtn.style.display = q ? 'inline-block' : 'none';
+
+            const rows = document.querySelectorAll('#usersTable tbody tr');
+            let visibleCount = 0;
+            rows.forEach(row => {
+                const u = (row.dataset.user || '').toLowerCase();
+                const n = (row.dataset.name || '').toLowerCase();
+                const show = !q || u.includes(q) || n.includes(q);
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            const totalUsers = rows.length;
+            document.getElementById('user-match-count').textContent = q 
+                ? `Showing ${visibleCount} of ${totalUsers} users` 
+                : `Showing all ${totalUsers} users`;
         }
         
         function setMode(mode) {
