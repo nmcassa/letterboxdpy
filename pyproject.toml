@@ -61,6 +61,7 @@ packages = ["letterboxdpy"]
 [tool.ruff]
 line-length = 88
 target-version = "py310"
+extend-exclude = ["docs", "*.md"]
 
 [tool.ruff.lint]
 # E      : Error

@@ -160,14 +160,9 @@ class Search:
                 return self.parse_article(result_item_elem)
             case ["card-summary", "-graph"]:
                 return self.parse_episode(result_item_elem)
-            case (
-                ["card-summary", "js-card-summary"]
-                | [
-                    "card-summary",
-                    "-graph",
-                    "js-card-summary",
-                ]
-            ):
+            case ["card-summary", "js-card-summary"]:
+                return self.parse_story(result_item_elem)
+            case ["card-summary", "-graph", "js-card-summary"]:
                 return self.parse_story(result_item_elem)
             case _:
                 raise ValueError
