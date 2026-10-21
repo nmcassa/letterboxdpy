@@ -108,7 +108,12 @@ quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
 
-[tool.pytest]
+[tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+markers = [
+    "smoke: live external integration tests touching real Letterboxd servers",
+]
+addopts = "-m 'not smoke'"
+

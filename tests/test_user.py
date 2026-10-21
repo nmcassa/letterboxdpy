@@ -2,9 +2,12 @@
 
 import unittest
 
+import pytest
+
 from letterboxdpy.user import User
 
 
+@pytest.mark.smoke()
 class TestUser(unittest.TestCase):
     """Integration tests for User scraping methods."""
 
