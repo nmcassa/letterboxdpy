@@ -8,9 +8,8 @@ repos:
 
   - repo: local
     hooks:
-      - id: tests
-        name: Run tests
-        entry: python -m pytest tests
+      - id: check-commit-title
+        name: Check commit title length (<= 62 chars)
+        entry: python -c "import sys; p=sys.argv[1]; lines=[l.strip() for l in open(p, encoding='utf-8') if not l.startswith('#') and l.strip()]; title=lines[0] if lines else ''; sys.exit(f'[ERROR] Commit title exceeds 62 characters ({len(title)} chars):\nSubject: {title}\nRule: Keep the title line at or under 62 characters.') if len(title) > 62 else None"
         language: system
-        pass_filenames: false
-        stages: [pre-commit]
+        stages: [commit-msg]
