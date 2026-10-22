@@ -25,25 +25,40 @@ print(f"Average rating: {data['rating_average']}")
 ```json
 {
   "movies": {
-    "civil-war-2024": {
-      "name": "Civil War",
-      "id": "834656",
-      "rating": 1.5,
+    "street-fighter-2026": {
+      "slug": "street-fighter-2026",
+      "name": "Street Fighter",
+      "year": 2026,
+      "url": "https://letterboxd.com/film/street-fighter-2026/",
+      "id": "1040290",
+      "rating": 2.5,
       "liked": false
     },
-    "monkey-man": {
-      "name": "Monkey Man",
-      "id": "488751",
-      "rating": 4.5,
-      "liked": true
+    "the-social-reckoning": {
+      "slug": "the-social-reckoning",
+      "name": "The Social Reckoning",
+      "year": 2026,
+      "url": "https://letterboxd.com/film/the-social-reckoning/",
+      "id": "1164669",
+      "rating": 2.0,
+      "liked": false
+    },
+    "digger-2026": {
+      "slug": "digger-2026",
+      "name": "Digger",
+      "year": 2026,
+      "url": "https://letterboxd.com/film/digger-2026/",
+      "id": "1132688",
+      "rating": 2.5,
+      "liked": false
     }
   },
-  "count": 560,
-  "liked_count": 80,
-  "rating_count": 518,
-  "liked_percentage": 14.29,
-  "rating_percentage": 92.5,
-  "rating_average": 6.47
+  "count": 767,
+  "liked_count": 98,
+  "rating_count": 707,
+  "liked_percentage": 12.78,
+  "rating_percentage": 92.18,
+  "rating_average": 3.27
 }
 ```
 </details>

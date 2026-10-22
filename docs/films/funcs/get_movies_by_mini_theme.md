@@ -6,7 +6,7 @@ Fetches films matching a Letterboxd mini-theme slug.
 from letterboxdpy.films import get_movies_by_mini_theme
 
 # Fetch films matching a mini-theme
-movies = get_movies_by_mini_theme("cyberpunk", max=10)
+movies = get_movies_by_mini_theme("terrorism-thriller-gripping-intense-political", max=10)
 
 for movie_id, film in movies.items():
     print(f"- {film['name']} ({film.get('rating')})")
@@ -24,26 +24,26 @@ for movie_id, film in movies.items():
 
 ```json
 {
-  "51848": {
-    "slug": "blade-runner-2049",
-    "name": "Blade Runner 2049",
-    "year": 2017,
-    "rating": 4.15,
-    "url": "https://letterboxd.com/film/blade-runner-2049/"
+  "784328": {
+    "slug": "oppenheimer-2023",
+    "name": "Oppenheimer",
+    "year": 2023,
+    "url": "https://letterboxd.com/film/oppenheimer-2023/",
+    "rating": 4.16
   },
-  "51847": {
-    "slug": "blade-runner",
-    "name": "Blade Runner",
-    "year": 1982,
-    "rating": 4.21,
-    "url": "https://letterboxd.com/film/blade-runner/"
+  "951277": {
+    "slug": "one-battle-after-another",
+    "name": "One Battle After Another",
+    "year": 2025,
+    "url": "https://letterboxd.com/film/one-battle-after-another/",
+    "rating": 4.12
   },
-  "51853": {
-    "slug": "akira",
-    "name": "Akira",
-    "year": 1988,
-    "rating": 4.20,
-    "url": "https://letterboxd.com/film/akira/"
+  "877253": {
+    "slug": "conclave",
+    "name": "Conclave",
+    "year": 2024,
+    "url": "https://letterboxd.com/film/conclave/",
+    "rating": 3.92
   }
 }
 ```

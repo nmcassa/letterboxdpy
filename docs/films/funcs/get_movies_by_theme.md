@@ -6,7 +6,7 @@ Fetches films matching a Letterboxd theme slug.
 from letterboxdpy.films import get_movies_by_theme
 
 # Fetch films matching a theme
-movies = get_movies_by_theme("time-loop", max=10)
+movies = get_movies_by_theme("epic-heroes", max=10)
 
 for movie_id, film in movies.items():
     print(f"- {film['name']} ({film.get('rating')})")
@@ -24,26 +24,26 @@ for movie_id, film in movies.items():
 
 ```json
 {
-  "51855": {
-    "slug": "groundhog-day",
-    "name": "Groundhog Day",
-    "year": 1993,
-    "rating": 4.10,
-    "url": "https://letterboxd.com/film/groundhog-day/"
+  "872871": {
+    "slug": "spider-man-brand-new-day",
+    "name": "Spider-Man: Brand New Day",
+    "year": 2026,
+    "url": "https://letterboxd.com/film/spider-man-brand-new-day/",
+    "rating": 4.03
   },
-  "51856": {
-    "slug": "edge-of-tomorrow",
-    "name": "Edge of Tomorrow",
-    "year": 2014,
-    "rating": 3.96,
-    "url": "https://letterboxd.com/film/edge-of-tomorrow/"
+  "371378": {
+    "slug": "dune-2021",
+    "name": "Dune",
+    "year": 2021,
+    "url": "https://letterboxd.com/film/dune-2021/",
+    "rating": 3.89
   },
-  "51857": {
-    "slug": "palm-springs-2020",
-    "name": "Palm Springs",
-    "year": 2020,
-    "rating": 3.79,
-    "url": "https://letterboxd.com/film/palm-springs-2020/"
+  "51896": {
+    "slug": "the-dark-knight",
+    "name": "The Dark Knight",
+    "year": 2008,
+    "url": "https://letterboxd.com/film/the-dark-knight/",
+    "rating": 4.5
   }
 }
 ```

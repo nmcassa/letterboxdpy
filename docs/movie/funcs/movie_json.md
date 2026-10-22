@@ -23,22 +23,22 @@ for director in movie_json.directors:
 ```json
 {
   "result": true,
-  "csrf": "a1b2c3d4e5f6...",
-  "lid": "16f4",
+  "csrf": "<redacted>",
+  "lid": "29Ik",
   "uid": "film:51400",
   "type": "film",
-  "typeName": "film",
+  "type_name": "film",
   "id": 51400,
   "name": "V for Vendetta",
-  "originalName": null,
-  "image125": "/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-125-0-187-crop.jpg",
-  "image150": "/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-150-0-225-crop.jpg",
-  "releaseYear": 2005,
-  "runTime": 132,
+  "image_125": "/film/v-for-vendetta/image-125/",
+  "image_150": "/film/v-for-vendetta/image-150/",
+  "release_year": 2005,
+  "run_time": 132,
   "slug": "v-for-vendetta",
   "url": "/film/v-for-vendetta/",
-  "filmlistAction": "/film/v-for-vendetta/mark-as-watched/",
-  "watchlistAction": "/film/v-for-vendetta/mark-as-want/",
+  "original_name": null,
+  "filmlist_action": "null",
+  "watchlist_action": "/film/v-for-vendetta/add-to-watchlist/",
   "directors": [
     {
       "name": "James McTeigue"

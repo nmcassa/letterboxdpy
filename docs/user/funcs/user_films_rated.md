@@ -28,25 +28,40 @@ print(f"Unrated count: {unrated['count']}")
 ```json
 {
   "movies": {
-    "the-matrix": {
-      "name": "The Matrix",
-      "id": "20593",
+    "the-odyssey-2026": {
+      "slug": "the-odyssey-2026",
+      "name": "The Odyssey",
+      "year": 2026,
+      "url": "https://letterboxd.com/film/the-odyssey-2026/",
+      "id": "1255394",
+      "rating": 5.0,
+      "liked": false
+    },
+    "one-battle-after-another": {
+      "slug": "one-battle-after-another",
+      "name": "One Battle After Another",
+      "year": 2025,
+      "url": "https://letterboxd.com/film/one-battle-after-another/",
+      "id": "951277",
       "rating": 5.0,
       "liked": true
     },
-    "interstellar": {
-      "name": "Interstellar",
-      "id": "117623",
+    "walle": {
+      "slug": "walle",
+      "name": "WALL·E",
+      "year": 2008,
+      "url": "https://letterboxd.com/film/walle/",
+      "id": "45994",
       "rating": 5.0,
       "liked": true
     }
   },
-  "count": 42,
-  "liked_count": 39,
-  "rating_count": 42,
-  "liked_percentage": 92.86,
+  "count": 38,
+  "liked_count": 33,
+  "rating_count": 38,
+  "liked_percentage": 86.84,
   "rating_percentage": 100.0,
-  "rating_average": 10.0
+  "rating_average": 5.0
 }
 ```
 </details>

@@ -19,12 +19,12 @@ print_movies(movies, title="Top Movies of 2024", max_count=5)
 
 ```text
 Top Movies of 2024 -- (10 movies)
-****************************************************************
-1        834656   Civil War
-2        488751   Monkey Man
-3        768407   Dune: Part Two
-4        710352   Poor Things
-5        703077   Magazine Dreams
-****************************************************************
+********************************
+1        838140   The Substance
+2        359505   Nosferatu
+3        617443   Dune: Part Two
+4        462870   Deadpool & Wolverine
+5        959540   Anora
+********************************
 ```
 </details>

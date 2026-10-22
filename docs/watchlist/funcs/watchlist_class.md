@@ -26,20 +26,26 @@ except PrivateRouteError:
 ```json
 {
   "username": "nmcassa",
-  "url": "https://letterboxd.com/nmcassa/watchlist",
-  "count": 76,
+  "url": "https://letterboxd.com/nmcassa/watchlist/",
+  "count": 82,
   "movies": {
-    "51315": {
-      "slug": "videodrome",
-      "name": "Videodrome",
-      "year": 1983,
-      "url": "https://letterboxd.com/film/videodrome/"
+    "1464835": {
+      "slug": "the-history-of-concrete",
+      "name": "The History of Concrete",
+      "year": 2026,
+      "url": "https://letterboxd.com/film/the-history-of-concrete/"
     },
-    "703077": {
-      "slug": "magazine-dreams",
-      "name": "Magazine Dreams",
-      "year": 2023,
-      "url": "https://letterboxd.com/film/magazine-dreams/"
+    "475935": {
+      "slug": "manhunt-2017-1",
+      "name": "Manhunt",
+      "year": 2017,
+      "url": "https://letterboxd.com/film/manhunt-2017-1/"
+    },
+    "44930": {
+      "slug": "the-color-of-money",
+      "name": "The Color of Money",
+      "year": 1986,
+      "url": "https://letterboxd.com/film/the-color-of-money/"
     }
   }
 }

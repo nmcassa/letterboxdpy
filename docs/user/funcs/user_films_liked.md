@@ -22,25 +22,40 @@ for slug, movie in liked_films['movies'].items():
 ```json
 {
   "movies": {
-    "monkey-man": {
-      "name": "Monkey Man",
-      "id": "488751",
+    "you-can-see-everything": {
+      "slug": "you-can-see-everything",
+      "name": "You Can See Everything",
+      "year": 2026,
+      "url": "https://letterboxd.com/film/you-can-see-everything/",
+      "id": "1629443",
       "rating": 4.5,
       "liked": true
     },
-    "poor-things-2023": {
-      "name": "Poor Things",
-      "id": "710352",
-      "rating": 4.0,
+    "project-hail-mary": {
+      "slug": "project-hail-mary",
+      "name": "Project Hail Mary",
+      "year": 2026,
+      "url": "https://letterboxd.com/film/project-hail-mary/",
+      "id": "611288",
+      "rating": 4.5,
+      "liked": true
+    },
+    "send-help": {
+      "slug": "send-help",
+      "name": "Send Help",
+      "year": 2026,
+      "url": "https://letterboxd.com/film/send-help/",
+      "id": "1084117",
+      "rating": 4.5,
       "liked": true
     }
   },
-  "count": 80,
-  "liked_count": 80,
-  "rating_count": 78,
+  "count": 98,
+  "liked_count": 98,
+  "rating_count": 97,
   "liked_percentage": 100.0,
-  "rating_percentage": 97.5,
-  "rating_average": 7.82
+  "rating_percentage": 98.98,
+  "rating_average": 4.55
 }
 ```
 </details>

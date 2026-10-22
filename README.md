@@ -452,7 +452,7 @@ print(f"Authenticated as: {session.username}")
 
 ```text
 Authenticated as: nmcassa
-Session CSRF token: 9a8b7c6d5e4f3a2b1c0d
+Session CSRF token: <csrf-token>
 ```
 </details>
 
@@ -488,7 +488,7 @@ settings.update_notifications({"emailEditorial": True, "pushFollowers": False})
 
 ```json
 {
-  "__csrf": "9a8b7c6d5e4f3a2b1c0d",
+  "__csrf": "<csrf-token>",
   "completeSettings": "true",
   "givenName": "Jane",
   "familyName": "Doe",

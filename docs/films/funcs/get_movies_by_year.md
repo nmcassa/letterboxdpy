@@ -24,26 +24,26 @@ for movie_id, film in movies.items():
 
 ```json
 {
-  "834656": {
-    "slug": "civil-war-2024",
-    "name": "Civil War",
+  "838140": {
+    "slug": "the-substance",
+    "name": "The Substance",
     "year": 2024,
-    "rating": 3.65,
-    "url": "https://letterboxd.com/film/civil-war-2024/"
+    "url": "https://letterboxd.com/film/the-substance/",
+    "rating": 3.72
   },
-  "488751": {
-    "slug": "monkey-man",
-    "name": "Monkey Man",
+  "359505": {
+    "slug": "nosferatu-2024",
+    "name": "Nosferatu",
     "year": 2024,
-    "rating": 3.73,
-    "url": "https://letterboxd.com/film/monkey-man/"
+    "url": "https://letterboxd.com/film/nosferatu-2024/",
+    "rating": 3.65
   },
-  "768407": {
+  "617443": {
     "slug": "dune-part-two",
     "name": "Dune: Part Two",
     "year": 2024,
-    "rating": 4.51,
-    "url": "https://letterboxd.com/film/dune-part-two/"
+    "url": "https://letterboxd.com/film/dune-part-two/",
+    "rating": 4.37
   }
 }
 ```

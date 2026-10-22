@@ -26,7 +26,7 @@ if session.validate():
 
 ```text
 Authenticated as: nmcassa
-Session CSRF token: 9a8b7c6d5e4f3a2b1c0d
+Session CSRF token: <csrf-token>
 ```
 </details>
 

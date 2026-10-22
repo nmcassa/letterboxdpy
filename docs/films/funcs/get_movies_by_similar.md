@@ -27,26 +27,23 @@ print(films.movies)
 
 ```json
 {
-  "51508": {
+  "46911": {
     "slug": "children-of-men",
     "name": "Children of Men",
     "year": 2006,
-    "rating": 4.19,
     "url": "https://letterboxd.com/film/children-of-men/"
   },
-  "51401": {
+  "16550": {
+    "slug": "the-dark-knight-rises",
+    "name": "The Dark Knight Rises",
+    "year": 2012,
+    "url": "https://letterboxd.com/film/the-dark-knight-rises/"
+  },
+  "48059": {
     "slug": "equilibrium",
     "name": "Equilibrium",
     "year": 2002,
-    "rating": 3.44,
     "url": "https://letterboxd.com/film/equilibrium/"
-  },
-  "51842": {
-    "slug": "dark-city",
-    "name": "Dark City",
-    "year": 1998,
-    "rating": 3.82,
-    "url": "https://letterboxd.com/film/dark-city/"
   }
 }
 ```

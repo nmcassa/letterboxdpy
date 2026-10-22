@@ -37,7 +37,7 @@ settings.update_notifications({
 
 ```json
 {
-  "__csrf": "9a8b7c6d5e4f3a2b1c0d",
+  "__csrf": "<csrf-token>",
   "completeSettings": "true",
   "password": "",
   "givenName": "Jane",

@@ -19,32 +19,7 @@ for movie_id, film in movies.items():
 **Returns:**
 - `dict`: Dictionary mapping film IDs to movie metadata.
 
-<details>
-  <summary>Click to expand demo response</summary>
-
-```json
-{
-  "51849": {
-    "slug": "mad-max-fury-road",
-    "name": "Mad Max: Fury Road",
-    "year": 2015,
-    "rating": 4.14,
-    "url": "https://letterboxd.com/film/mad-max-fury-road/"
-  },
-  "51508": {
-    "slug": "children-of-men",
-    "name": "Children of Men",
-    "year": 2006,
-    "rating": 4.19,
-    "url": "https://letterboxd.com/film/children-of-men/"
-  },
-  "51850": {
-    "slug": "stalker",
-    "name": "Stalker",
-    "year": 1979,
-    "rating": 4.38,
-    "url": "https://letterboxd.com/film/stalker/"
-  }
-}
-```
-</details>
+> [!NOTE]
+> No live response is shown here. The example slug could not be verified against
+> the live site (the request returned 404), so the output format is not documented
+> for this function yet. It returns the same structure as the other `get_movies_by_*` functions.

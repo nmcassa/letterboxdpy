@@ -31,17 +31,16 @@ member_search = search.with_filter(SearchFilter.MEMBERS)
   "query": "Inception",
   "filter": "films",
   "end_page": 1,
-  "count": 5,
+  "count": 3,
   "results": [
     {
       "no": 1,
       "page": 1,
       "type": "film",
       "slug": "inception",
-      "name": "Inception",
+      "title": "Inception",
       "year": 2010,
       "url": "https://letterboxd.com/film/inception/",
-      "poster": "https://a.ltrbxd.com/resized/film-poster/4/7/4/4/7/47447-inception-0-230-0-345-crop.jpg",
       "directors": [
         {
           "name": "Christopher Nolan",
@@ -54,12 +53,27 @@ member_search = search.with_filter(SearchFilter.MEMBERS)
       "no": 2,
       "page": 1,
       "type": "film",
-      "slug": "the-inception-of-the-terminator",
-      "name": "The Inception of 'The Terminator'",
-      "year": 2001,
-      "url": "https://letterboxd.com/film/the-inception-of-the-terminator/",
-      "poster": null,
-      "directors": []
+      "slug": "inception-1980",
+      "title": "Inception",
+      "year": 1980,
+      "url": "https://letterboxd.com/film/inception-1980/",
+      "directors": null
+    },
+    {
+      "no": 3,
+      "page": 1,
+      "type": "film",
+      "slug": "inception-the-cobol-job",
+      "title": "Inception: The Cobol Job",
+      "year": 2010,
+      "url": "https://letterboxd.com/film/inception-the-cobol-job/",
+      "directors": [
+        {
+          "name": "Ian Kirby",
+          "slug": "ian-kirby",
+          "url": "https://letterboxd.com/director/ian-kirby/"
+        }
+      ]
     }
   ]
 }

@@ -24,28 +24,14 @@ for review in movie_instance.popular_reviews:
 
 ```json
 {
-  "available": true,
-  "count": 2,
-  "reviews": [
-    {
-      "user": {
-        "username": "filmcritic",
-        "display_name": "Film Critic"
-      },
-      "link": "https://letterboxd.com/filmcritic/film/v-for-vendetta/",
-      "rating": 4.5,
-      "review": "A timeless dystopian classic featuring incredible performances."
-    },
-    {
-      "user": {
-        "username": "cinephile99",
-        "display_name": "Alex Vance"
-      },
-      "link": "https://letterboxd.com/cinephile99/film/v-for-vendetta/",
-      "rating": 5.0,
-      "review": "Hugo Weaving's voice work alone elevates this graphic novel adaptation into masterclass territory."
-    }
-  ]
+  "available": false,
+  "count": 0,
+  "reviews": []
 }
 ```
 </details>
+
+> [!NOTE]
+> Movie review scraping is not implemented yet. `get_reviews()` and
+> `get_reviews_by_rating()` currently return the stub response shown above.
+> Use `popular_reviews` for review data scraped from the film page.

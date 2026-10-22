@@ -17,26 +17,26 @@ for movie_id, film in similar_movies.items():
 
 ```json
 {
-  "51508": {
-    "slug": "children-of-men",
-    "name": "Children of Men",
-    "year": 2006,
-    "rating": 4.19,
-    "url": "https://letterboxd.com/film/children-of-men/"
+  "51568": {
+    "slug": "fight-club",
+    "name": "Fight Club",
+    "year": 1999,
+    "url": "https://letterboxd.com/film/fight-club/",
+    "rating": 4.27
   },
-  "51401": {
-    "slug": "equilibrium",
-    "name": "Equilibrium",
-    "year": 2002,
-    "rating": 3.44,
-    "url": "https://letterboxd.com/film/equilibrium/"
+  "371378": {
+    "slug": "dune-2021",
+    "name": "Dune",
+    "year": 2021,
+    "url": "https://letterboxd.com/film/dune-2021/",
+    "rating": 3.89
   },
-  "51842": {
-    "slug": "dark-city",
-    "name": "Dark City",
-    "year": 1998,
-    "rating": 3.82,
-    "url": "https://letterboxd.com/film/dark-city/"
+  "51896": {
+    "slug": "the-dark-knight",
+    "name": "The Dark Knight",
+    "year": 2008,
+    "url": "https://letterboxd.com/film/the-dark-knight/",
+    "rating": 4.5
   }
 }
 ```
