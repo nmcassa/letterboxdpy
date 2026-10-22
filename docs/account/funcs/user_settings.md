@@ -31,3 +31,57 @@ settings.update_notifications({
     "pushFollowers": False
 })
 ```
+
+<details>
+  <summary>Click to expand demo response for <code>get_profile</code></summary>
+
+```json
+{
+  "__csrf": "9a8b7c6d5e4f3a2b1c0d",
+  "completeSettings": "true",
+  "password": "",
+  "givenName": "Jane",
+  "familyName": "Doe",
+  "emailAddress": "jane.doe@example.com",
+  "location": "New York, USA",
+  "website": "https://example.com",
+  "bio": "Cinephile and developer.",
+  "pronoun": "she/her",
+  "favouriteFilms": [
+    {
+      "id": "51400",
+      "name": "V for Vendetta"
+    },
+    {
+      "id": "47447",
+      "name": "Inception"
+    },
+    {
+      "id": "240344",
+      "name": "La La Land"
+    },
+    {
+      "id": "20956",
+      "name": "Black Swan"
+    }
+  ]
+}
+```
+</details>
+
+<details>
+  <summary>Click to expand demo response for <code>get_notifications</code></summary>
+
+```json
+{
+  "emailEditorial": true,
+  "emailWeekly": false,
+  "emailDigest": true,
+  "emailFollowers": true,
+  "emailReplies": true,
+  "pushFollowers": false,
+  "pushReplies": true,
+  "pushLikes": true
+}
+```
+</details>

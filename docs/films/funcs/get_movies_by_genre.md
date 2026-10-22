@@ -19,3 +19,33 @@ for movie_id, film in movies.items():
 
 **Returns:**
 - `dict`: Dictionary mapping film IDs to movie metadata.
+
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "47447": {
+    "slug": "inception",
+    "name": "Inception",
+    "year": 2010,
+    "rating": 4.19,
+    "url": "https://letterboxd.com/film/inception/"
+  },
+  "117623": {
+    "slug": "interstellar",
+    "name": "Interstellar",
+    "year": 2014,
+    "rating": 4.35,
+    "url": "https://letterboxd.com/film/interstellar/"
+  },
+  "20593": {
+    "slug": "the-matrix",
+    "name": "The Matrix",
+    "year": 1999,
+    "rating": 4.42,
+    "url": "https://letterboxd.com/film/the-matrix/"
+  }
+}
+```
+</details>

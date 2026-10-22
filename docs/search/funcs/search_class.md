@@ -22,6 +22,50 @@ print(search.results)
 member_search = search.with_filter(SearchFilter.MEMBERS)
 ```
 
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "available": true,
+  "query": "Inception",
+  "filter": "films",
+  "end_page": 1,
+  "count": 5,
+  "results": [
+    {
+      "no": 1,
+      "page": 1,
+      "type": "film",
+      "slug": "inception",
+      "name": "Inception",
+      "year": 2010,
+      "url": "https://letterboxd.com/film/inception/",
+      "poster": "https://a.ltrbxd.com/resized/film-poster/4/7/4/4/7/47447-inception-0-230-0-345-crop.jpg",
+      "directors": [
+        {
+          "name": "Christopher Nolan",
+          "slug": "christopher-nolan",
+          "url": "https://letterboxd.com/director/christopher-nolan/"
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "page": 1,
+      "type": "film",
+      "slug": "the-inception-of-the-terminator",
+      "name": "The Inception of 'The Terminator'",
+      "year": 2001,
+      "url": "https://letterboxd.com/film/the-inception-of-the-terminator/",
+      "poster": null,
+      "directors": []
+    }
+  ]
+}
+```
+</details>
+
 ### SearchFilter Enum Values
 
 - `SearchFilter.ALL` (`""`)

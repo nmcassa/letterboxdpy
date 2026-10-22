@@ -21,3 +21,32 @@ print(f"Unrated count: {unrated['count']}")
 
 **Returns:**
 - `dict`: Movies dictionary matching the rating with count and pagination details.
+
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "movies": {
+    "the-matrix": {
+      "name": "The Matrix",
+      "id": "20593",
+      "rating": 5.0,
+      "liked": true
+    },
+    "interstellar": {
+      "name": "Interstellar",
+      "id": "117623",
+      "rating": 5.0,
+      "liked": true
+    }
+  },
+  "count": 42,
+  "liked_count": 39,
+  "rating_count": 42,
+  "liked_percentage": 92.86,
+  "rating_percentage": 100.0,
+  "rating_average": 10.0
+}
+```
+</details>

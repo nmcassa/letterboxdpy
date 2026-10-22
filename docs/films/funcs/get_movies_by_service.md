@@ -19,3 +19,33 @@ for movie_id, film in movies.items():
 
 **Returns:**
 - `dict`: Dictionary mapping film IDs to movie metadata.
+
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "51851": {
+    "slug": "roma-2018",
+    "name": "Roma",
+    "year": 2018,
+    "rating": 4.16,
+    "url": "https://letterboxd.com/film/roma-2018/"
+  },
+  "51852": {
+    "slug": "marriage-story",
+    "name": "Marriage Story",
+    "year": 2019,
+    "rating": 4.02,
+    "url": "https://letterboxd.com/film/marriage-story/"
+  },
+  "51854": {
+    "slug": "the-irishman",
+    "name": "The Irishman",
+    "year": 2019,
+    "rating": 3.91,
+    "url": "https://letterboxd.com/film/the-irishman/"
+  }
+}
+```
+</details>

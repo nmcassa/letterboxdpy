@@ -20,6 +20,32 @@ except PrivateRouteError:
     print("User's watchlist is private.")
 ```
 
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "username": "nmcassa",
+  "url": "https://letterboxd.com/nmcassa/watchlist",
+  "count": 76,
+  "movies": {
+    "51315": {
+      "slug": "videodrome",
+      "name": "Videodrome",
+      "year": 1983,
+      "url": "https://letterboxd.com/film/videodrome/"
+    },
+    "703077": {
+      "slug": "magazine-dreams",
+      "name": "Magazine Dreams",
+      "year": 2023,
+      "url": "https://letterboxd.com/film/magazine-dreams/"
+    }
+  }
+}
+```
+</details>
+
 ### Attributes & Methods
 
 - `username` (str): Target username.

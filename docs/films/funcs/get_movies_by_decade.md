@@ -18,3 +18,33 @@ for movie_id, film in movies.items():
 
 **Returns:**
 - `dict`: Dictionary mapping film IDs to movie dictionaries (`slug`, `name`, `rating`, `url`).
+
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "51846": {
+    "slug": "fight-club",
+    "name": "Fight Club",
+    "year": 1999,
+    "rating": 4.28,
+    "url": "https://letterboxd.com/film/fight-club/"
+  },
+  "51842": {
+    "slug": "pulp-fiction",
+    "name": "Pulp Fiction",
+    "year": 1994,
+    "rating": 4.45,
+    "url": "https://letterboxd.com/film/pulp-fiction/"
+  },
+  "20593": {
+    "slug": "the-matrix",
+    "name": "The Matrix",
+    "year": 1999,
+    "rating": 4.42,
+    "url": "https://letterboxd.com/film/the-matrix/"
+  }
+}
+```
+</details>

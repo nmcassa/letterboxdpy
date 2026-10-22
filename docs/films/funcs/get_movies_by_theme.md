@@ -18,3 +18,33 @@ for movie_id, film in movies.items():
 
 **Returns:**
 - `dict`: Dictionary mapping film IDs to movie metadata.
+
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "51855": {
+    "slug": "groundhog-day",
+    "name": "Groundhog Day",
+    "year": 1993,
+    "rating": 4.10,
+    "url": "https://letterboxd.com/film/groundhog-day/"
+  },
+  "51856": {
+    "slug": "edge-of-tomorrow",
+    "name": "Edge of Tomorrow",
+    "year": 2014,
+    "rating": 3.96,
+    "url": "https://letterboxd.com/film/edge-of-tomorrow/"
+  },
+  "51857": {
+    "slug": "palm-springs-2020",
+    "name": "Palm Springs",
+    "year": 2020,
+    "rating": 3.79,
+    "url": "https://letterboxd.com/film/palm-springs-2020/"
+  }
+}
+```
+</details>

@@ -15,3 +15,32 @@ for slug, movie in liked_films['movies'].items():
 
 **Returns:**
 - `dict`: A dictionary containing `count`, `movies` (dict mapping film slug to movie metadata), and pagination details.
+
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "movies": {
+    "monkey-man": {
+      "name": "Monkey Man",
+      "id": "488751",
+      "rating": 4.5,
+      "liked": true
+    },
+    "poor-things-2023": {
+      "name": "Poor Things",
+      "id": "710352",
+      "rating": 4.0,
+      "liked": true
+    }
+  },
+  "count": 80,
+  "liked_count": 80,
+  "rating_count": 78,
+  "liked_percentage": 100.0,
+  "rating_percentage": 97.5,
+  "rating_average": 7.82
+}
+```
+</details>

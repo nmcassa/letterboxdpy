@@ -21,6 +21,15 @@ if session.validate():
     print(f"Session CSRF token: {session.csrf}")
 ```
 
+<details>
+  <summary>Click to expand demo output</summary>
+
+```text
+Authenticated as: nmcassa
+Session CSRF token: 9a8b7c6d5e4f3a2b1c0d
+```
+</details>
+
 ### CLI Authentication
 
 You can authenticate directly from the command line:

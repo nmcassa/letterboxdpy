@@ -17,6 +17,37 @@ for director in movie_json.directors:
     print(f"Director: {director.name}")
 ```
 
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "result": true,
+  "csrf": "a1b2c3d4e5f6...",
+  "lid": "16f4",
+  "uid": "film:51400",
+  "type": "film",
+  "typeName": "film",
+  "id": 51400,
+  "name": "V for Vendetta",
+  "originalName": null,
+  "image125": "/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-125-0-187-crop.jpg",
+  "image150": "/resized/film-poster/5/1/4/0/0/51400-v-for-vendetta-0-150-0-225-crop.jpg",
+  "releaseYear": 2005,
+  "runTime": 132,
+  "slug": "v-for-vendetta",
+  "url": "/film/v-for-vendetta/",
+  "filmlistAction": "/film/v-for-vendetta/mark-as-watched/",
+  "watchlistAction": "/film/v-for-vendetta/mark-as-want/",
+  "directors": [
+    {
+      "name": "James McTeigue"
+    }
+  ]
+}
+```
+</details>
+
 ### MovieJSON Dataclass Fields
 
 - `id` (int): Numeric Letterboxd film ID.

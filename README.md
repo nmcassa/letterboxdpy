@@ -447,6 +447,15 @@ session = UserSession.ensure()
 print(f"Authenticated as: {session.username}")
 ```
 
+<details>
+  <summary>Click to expand <code>UserSession</code> demo output</summary>
+
+```text
+Authenticated as: nmcassa
+Session CSRF token: 9a8b7c6d5e4f3a2b1c0d
+```
+</details>
+
 <h2 id="settings">User Settings</h2>
 
 [Explore the file](letterboxdpy/account/settings.py)
@@ -473,6 +482,40 @@ settings.update_profile({
 notifs = settings.get_notifications()
 settings.update_notifications({"emailEditorial": True, "pushFollowers": False})
 ```
+
+<details>
+  <summary>Click to expand <code>UserSettings</code> demo response</summary>
+
+```json
+{
+  "__csrf": "9a8b7c6d5e4f3a2b1c0d",
+  "completeSettings": "true",
+  "givenName": "Jane",
+  "familyName": "Doe",
+  "location": "New York, USA",
+  "website": "https://example.com",
+  "bio": "Just another movie lover.",
+  "favouriteFilms": [
+    {
+      "id": "51400",
+      "name": "V for Vendetta"
+    },
+    {
+      "id": "47447",
+      "name": "Inception"
+    },
+    {
+      "id": "240344",
+      "name": "La La Land"
+    },
+    {
+      "id": "20956",
+      "name": "Black Swan"
+    }
+  ]
+}
+```
+</details>
 
 <h1 id="development">Development</h1>
 

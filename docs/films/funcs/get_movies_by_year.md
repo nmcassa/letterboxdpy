@@ -18,3 +18,33 @@ for movie_id, film in movies.items():
 
 **Returns:**
 - `dict`: Dictionary mapping film IDs to movie metadata.
+
+<details>
+  <summary>Click to expand demo response</summary>
+
+```json
+{
+  "834656": {
+    "slug": "civil-war-2024",
+    "name": "Civil War",
+    "year": 2024,
+    "rating": 3.65,
+    "url": "https://letterboxd.com/film/civil-war-2024/"
+  },
+  "488751": {
+    "slug": "monkey-man",
+    "name": "Monkey Man",
+    "year": 2024,
+    "rating": 3.73,
+    "url": "https://letterboxd.com/film/monkey-man/"
+  },
+  "768407": {
+    "slug": "dune-part-two",
+    "name": "Dune: Part Two",
+    "year": 2024,
+    "rating": 4.51,
+    "url": "https://letterboxd.com/film/dune-part-two/"
+  }
+}
+```
+</details>
