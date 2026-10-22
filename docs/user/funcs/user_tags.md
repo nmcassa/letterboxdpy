@@ -1,10 +1,11 @@
-<h2 id="user_tags">user_tags(user object)</h2>
+<h2 id="get_user_tags">get_user_tags() -> dict</h2>
 
 ```python
-from letterboxdpy import user
-user_instance = user.User("nmcassa")
-result = user.user_tags(user_instance)
-print(result)
+from letterboxdpy.user import User
+
+user_instance = User("nmcassa")
+result = user_instance.get_user_tags()
+print(f"Total tag references: {result['count']}")
 ```
 
 <details>

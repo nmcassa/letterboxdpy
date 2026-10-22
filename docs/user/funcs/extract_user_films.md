@@ -1,7 +1,20 @@
-<h2 id="extract_user_films">extract_user_films(user: letterboxdpy.user.User, url: str = None) -> dict</h2>
+<h2 id="extract_user_films">extract_user_films(url: str) -> dict</h2>
 
-**Documentation:**
+Extracts user films and summary statistics from a Letterboxd films URL.
 
-Extracts user films and their details from the given URL or returns all watched films.
+```python
+from letterboxdpy.pages.user_films import extract_user_films
 
-[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+extract_user_films)
+# Scrape from a user's watched films page
+data = extract_user_films("https://letterboxd.com/nmcassa/films/")
+
+print(f"Total films: {data['count']}")
+print(f"Liked films: {data['liked_count']}")
+print(f"Average rating: {data['rating_average']}")
+```
+
+**Parameters:**
+- `url` (str): Full URL to the user's films page or filtered view.
+
+**Returns:**
+- `dict`: Dictionary containing `movies`, `count`, `liked_count`, `rating_count`, `liked_percentage`, `rating_percentage`, and `rating_average`.

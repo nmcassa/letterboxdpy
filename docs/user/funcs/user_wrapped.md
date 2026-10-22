@@ -1,9 +1,11 @@
-<h2 id="user_wrapped">user_wrapped(user object)</h2>
+<h2 id="get_wrapped">get_wrapped(year=CURRENT_YEAR, fetch_runtime=False, max_workers=None) -> dict</h2>
 
 ```python
-from letterboxdpy import user
-user_instance = user.User("nmcassa")
-print(user.user_wrapped(user_instance, 2023))
+from letterboxdpy.user import User
+
+user_instance = User("nmcassa")
+wrapped = user_instance.get_wrapped(2023)
+print(f"Hours watched: {wrapped['hours_watched']}")
 ```
 
 <details>

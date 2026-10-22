@@ -1,13 +1,25 @@
-<h2 id="user_films">user_films(user object)</h2>
+<h2 id="user_films">get_films() -> dict</h2>
+
+Fetches all watched films and metadata for the user.
 
 ```python
-from letterboxdpy import user
-user_instance = user.User("nmcassa")
-print(user.user_films(user_instance))
+from letterboxdpy.user import User
+
+user_instance = User("nmcassa")
+
+# Get all watched films
+films_data = user_instance.get_films()
+print(f"Total watched: {films_data['count']}")
+
+# Filter films by score (e.g. 5-star films)
+five_stars = user_instance.get_films_by_rating(5.0)
+
+# Unrated films
+unrated = user_instance.get_films_not_rated()
 ```
 
 <details>
-    <summary>Click to expand the demo response for <code>user_films</code> method or <a href="/examples/exports/users/nmcassa/user_films.json" target="_blank">view the full response</a></summary>
+    <summary>Click to expand demo response</summary>
 
 ```json
 {
@@ -23,7 +35,7 @@ print(user.user_films(user_instance))
       "id": "488751",
       "rating": 4.5,
       "liked": true
-    },...
+    }
   },
   "count": 560,
   "liked_count": 80,

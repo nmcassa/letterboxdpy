@@ -12,7 +12,7 @@
   <a href="https://pypi.org/project/letterboxdpy/"><img src="https://img.shields.io/pypi/pyversions/letterboxdpy?color=blue&style=flat-square" alt="Python Version"></a>
   <a href="https://github.com/nmcassa/letterboxdpy/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/letterboxdpy?color=blue&style=flat-square" alt="License"></a>
   <a href="https://pepy.tech/project/letterboxdpy"><img src="https://static.pepy.tech/personalized-badge/letterboxdpy?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads&style=flat-square" alt="Downloads"></a>
-  <a href="https://github.com/nmcassa/letterboxdpy/actions/workflows/health-check.yml"><img src="https://img.shields.io/github/actions/workflow/status/nmcassa/letterboxdpy/health-check.yml?style=flat-square&label=Health%20Check" alt="Weekly DOM Health Check"></a>
+  <a href="https://github.com/nmcassa/letterboxdpy/actions/workflows/health-check.yml"><img src="https://img.shields.io/github/actions/workflow/status/nmcassa/letterboxdpy/health-check.yml?style=flat-square&label=Health%20Check" alt="Daily DOM Health Check"></a>
 </p>
 
 ---
@@ -70,7 +70,7 @@ print(user_instance)
   "username": "nmcassa",
   "url": "https://letterboxd.com/nmcassa",
   "id": 1500306,
-  "is_hq": false,
+  "badge": "member",
   "display_name": "nmcassa",
   "bio": null,
   "location": null,
@@ -98,6 +98,7 @@ print(user_instance)
     "upscaled": true,
     "url": "https://a.ltrbxd.com/resized/avatar/upload/1/5/0/0/3/0/6/shard/avtr-0-1000-0-1000-crop.jpg"
   },
+  "backdrop": null,
   "recent": {
     "watchlist": {
       "703077": {
@@ -511,16 +512,28 @@ ruff format .
 
 <h2 id="testing">Testing</h2>
 
-Run the full test suite using `pytest`:
+The test suite separates fast, deterministic offline unit tests from live external network tests (marked as `smoke`).
+
+### Run Offline Unit Tests (Default)
+
+Runs offline parser and model validation in ~0.5 seconds without network calls:
 
 ```bash
-python -m pytest tests
+python -m pytest
 ```
 
-Or run a specific test file:
+### Run Live Network Tests (Smoke Marker)
+
+Executes tests against live Letterboxd pages:
 
 ```bash
-python -m pytest tests/test_movie.py
+python -m pytest -m smoke
+```
+
+### Run All Tests
+
+```bash
+python -m pytest -m "smoke or not smoke"
 ```
 
 > [!NOTE]
@@ -528,11 +541,14 @@ python -m pytest tests/test_movie.py
 
 <h2 id="pre-commit-hooks">Pre-commit Hooks</h2>
 
-Pre-commit hooks automatically run Ruff and the test suite before every commit, ensuring no broken or non-compliant code enters the repository.
+Pre-commit hooks automatically format code, check linting rules with Ruff, and validate commit title length before each commit:
+
+- **Ruff & Ruff-Format:** Runs on commit to check and auto-format staged files.
+- **Commit Title Length:** Validates that the first line of the commit message follows [Conventional Commits](https://www.conventionalcommits.org/) and is at or under **62 characters** (checked on `commit-msg`).
 
 ```bash
-# Install hooks (one-time setup)
-pre-commit install
+# Install hooks for both pre-commit and commit-msg stages
+pre-commit install --hook-type pre-commit --hook-type commit-msg
 
 # Run manually against all files
 pre-commit run --all-files

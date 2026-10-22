@@ -1,9 +1,11 @@
-<h2 id="user_liked_reviews">user_liked_reviews(user object)</h2>
+<h2 id="get_liked_reviews">get_liked_reviews() -> dict</h2>
 
 ```python
-from letterboxdpy import user
-user_instance = user.User("nmcassa")
-print(user.user_liked_reviews(user_instance))
+from letterboxdpy.user import User
+
+user_instance = User("nmcassa")
+liked_reviews = user_instance.get_liked_reviews()
+print(f"Total liked reviews: {liked_reviews['count']}")
 ```
 
 <details>

@@ -1,9 +1,17 @@
-<h2 id="user_activity">get_activity()</h2>
+<h2 id="user_activity">get_activity() & get_activity_following() -> dict</h2>
 
 ```python
 from letterboxdpy.user import User
+
 user_instance = User("nmcassa")
-print(user_instance.get_activity())
+
+# Get user's own activity
+activity = user_instance.get_activity()
+print(activity)
+
+# Get activity of users they follow
+following_activity = user_instance.get_activity_following()
+print(following_activity)
 ```
 
 <details>
