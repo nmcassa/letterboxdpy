@@ -1,14 +1,33 @@
-<h2 id="user_watchlist">user_watchlist(user object)</h2>
+<h2 id="get_watchlist">get_watchlist(filters: dict | None = None) -> dict</h2>
+
+Fetches a user's watchlist with optional filtering capabilities (genres, services, ratings, decades).
 
 ```python
-from letterboxdpy import user
-user_instance = user.User("nmcassa")
-watchlist_result = user.user_watchlist(user_instance, {'genre':['action','-drama']})
-print(watchlist_result)
+from letterboxdpy.user import User
+
+user_instance = User("nmcassa")
+
+# Fetch full watchlist
+watchlist = user_instance.get_watchlist()
+print(f"Watchlist total count: {user_instance.get_watchlist_count()}")
+
+# Fetch with genre filters (e.g., action but not drama)
+filtered = user_instance.get_watchlist({'genre': ['action', '-drama']})
+print(f"Matched films: {filtered['data_count']}")
+```
+
+You can also use the standalone `Watchlist` class directly:
+
+```python
+from letterboxdpy.watchlist import Watchlist
+
+watchlist = Watchlist("nmcassa")
+print(f"Total: {watchlist.count}")
+print(watchlist.movies)
 ```
 
 <details>
-  <summary>Click to expand <code>user_watchlist</code> method response</summary>
+  <summary>Click to expand demo response</summary>
 
 ```json
 {
@@ -29,7 +48,7 @@ print(watchlist_result)
       "no": 6,
       "page": 1,
       "url": "https://letterboxd.com/films/from-dusk-till-dawn/"
-    },...
+    },
     "62780": {
       "name": "Mad Max: Fury Road",
       "slug": "mad-max-fury-road",

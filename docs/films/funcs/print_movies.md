@@ -1,7 +1,15 @@
-<h2 id="print_movies">print_movies(movies, title=None, max_count=None)</h2>
+<h2 id="print_movies">print_movies(movies: dict, title: str | None = None, max_count: int | None = None)</h2>
 
-**Documentation:**
+Utility helper to print a formatted list of movies to stdout.
 
-Print movies in a formatted list.
+```python
+from letterboxdpy.films import get_movies_by_year, print_movies
 
-[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+print_movies)
+movies = get_movies_by_year(2024, max=10)
+print_movies(movies, title="Top Movies of 2024", max_count=5)
+```
+
+**Parameters:**
+- `movies` (dict): Dictionary of movies keyed by movie ID.
+- `title` (str, optional): Header title printed above the list.
+- `max_count` (int, optional): Cap the number of printed rows.

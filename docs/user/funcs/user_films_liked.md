@@ -1,7 +1,17 @@
-<h2 id="user_films_liked">user_films_liked(user: letterboxdpy.user.User) -> dict</h2>
+<h2 id="get_liked_films">get_liked_films() -> dict</h2>
 
-**Documentation:**
+Fetches all films marked as liked by the user.
 
-No documentation provided.
+```python
+from letterboxdpy.user import User
 
-[To be documented.](https://github.com/search?q=repo:nmcassa/letterboxdpy+user_films_liked)
+user_instance = User("nmcassa")
+liked_films = user_instance.get_liked_films()
+
+print(f"Total liked films: {liked_films['count']}")
+for slug, movie in liked_films['movies'].items():
+    print(f"- {movie['name']} ({movie.get('year', 'N/A')})")
+```
+
+**Returns:**
+- `dict`: A dictionary containing `count`, `movies` (dict mapping film slug to movie metadata), and pagination details.

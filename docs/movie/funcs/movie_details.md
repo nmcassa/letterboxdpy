@@ -1,13 +1,22 @@
-<h2 id="movie_details">movie_details(movie object)</h2>
+<h2 id="movie_details">get_details_from_details() -> dict</h2>
+
+Fetches extended movie metadata (studios, countries, languages, alternative titles) from the film's `/details/` subpage.
 
 ```python
-from letterboxdpy import movie
-movie_instance = movie.Movie("v-for-vendetta")
-print(movie.movie_details(movie_instance))
+from letterboxdpy.movie import Movie
+
+movie_instance = Movie("v-for-vendetta")
+
+# Extended details from the /details/ tab
+details = movie_instance.get_details_from_details()
+print(details)
+
+# Basic details attribute on Movie instance
+print(movie_instance.details)
 ```
 
 <details>
-  <summary>Click to expand <code>movie_details</code> method response</summary>
+  <summary>Click to expand demo response</summary>
 
 ```json
 {
@@ -20,7 +29,6 @@ print(movie.movie_details(movie_instance))
         "Virtual Studios",
         "Anarchos Productions",
         "Silver Pictures",
-        "F\u00fcnfte Babelsberg Film",
         "Warner Bros. Productions",
         "DC Vertigo"
     ],
