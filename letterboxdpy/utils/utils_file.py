@@ -94,7 +94,7 @@ class CsvFile(File):
         import csv
         filepath = cls._get_path(path)
         if os.path.exists(filepath):
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, 'r', newline='', encoding='utf-8') as f:
                 return list(csv.reader(f))
         return None
 
