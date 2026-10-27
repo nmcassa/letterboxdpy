@@ -8,11 +8,11 @@ from letterboxdpy.utils.utils_url import extract_path_segment
 class UserTags:
     def __init__(self, username: str) -> None:
         self.username = username
-        self.url = f"{DOMAIN}/{self.username}/tags"
-        self.films_url = f"{DOMAIN}/{self.username}/tags/films"
-        self.diary_url = f"{DOMAIN}/{self.username}/tags/diary"
-        self.reviews_url = f"{DOMAIN}/{self.username}/tags/reviews"
-        self.lists_url = f"{DOMAIN}/{self.username}/tags/lists"
+        self.url = f"{DOMAIN}/{self.username}/tags/"
+        self.films_url = f"{DOMAIN}/{self.username}/tags/films/"
+        self.diary_url = f"{DOMAIN}/{self.username}/tags/diary/"
+        self.reviews_url = f"{DOMAIN}/{self.username}/tags/reviews/"
+        self.lists_url = f"{DOMAIN}/{self.username}/tags/lists/"
 
     def get_user_tags(self) -> dict:
         return extract_user_tags(self.url)
@@ -27,7 +27,8 @@ def extract_user_tags(url: str) -> dict:
 
         def fetch_dom() -> any:
             """Fetch and return the DOM for the page."""
-            return parse_url(f"{BASE_URL}/{page}")
+            clean_base = BASE_URL.rstrip("/")
+            return parse_url(f"{clean_base}/{page}/")
 
         def parse_tag(tag) -> dict:
             """Extract tag information from a single tag element."""

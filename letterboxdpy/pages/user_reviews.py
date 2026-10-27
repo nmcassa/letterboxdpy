@@ -8,7 +8,7 @@ from letterboxdpy.utils.utils_url import get_page_url
 class UserReviews:
     def __init__(self, username: str) -> None:
         self.username = username
-        self.url = f"{DOMAIN}/{self.username}/films/reviews"
+        self.url = f"{DOMAIN}/{self.username}/films/reviews/"
 
     def get_reviews(self):
         return extract_user_reviews(self.url)

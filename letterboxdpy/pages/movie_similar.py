@@ -4,7 +4,7 @@ class MovieSimilar:
     def __init__(self, slug: str):
         """Initialize MovieSimilar with a movie slug."""
         self.slug = slug
-        self.url = f"https://letterboxd.com/films/ajax/like/{slug}"
+        self.url = f"https://letterboxd.com/films/ajax/like/{slug}/"
 
     def get_similar_movies(self) -> dict:
         """Get movies similar to this movie."""

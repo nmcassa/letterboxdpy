@@ -10,18 +10,20 @@ from letterboxdpy.utils.utils_url import get_page_url
 class UserFilms:
     def __init__(self, username: str) -> None:
         self.username = username
-        self.url = f"{DOMAIN}/{self.username}/films"
+        self.url = f"{DOMAIN}/{self.username}/films/"
 
     def get_films(self) -> dict:
         return extract_user_films(self.url)
 
     def get_films_rated(self, rating: float | int) -> dict:
         assert rating in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5], "Invalid rating"
-        url = f"{self.url}/rated/{rating}/by/date"
+        clean_base = self.url.rstrip("/")
+        url = f"{clean_base}/rated/{rating}/by/date/"
         return extract_user_films(url)
 
     def get_films_not_rated(self) -> dict:
-        url = f"{self.url}/rated/none/by/date"
+        clean_base = self.url.rstrip("/")
+        url = f"{clean_base}/rated/none/by/date/"
         return extract_user_films(url)
 
     def get_genre_info(self):

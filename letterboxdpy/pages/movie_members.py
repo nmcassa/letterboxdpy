@@ -13,7 +13,7 @@ class MovieMembers:
     def __init__(self, slug: str):
         """Initialize MovieMembers with a movie slug."""
         self.slug = slug
-        self.url = f"{DOMAIN}/film/{slug}/members"
+        self.url = f"{DOMAIN}/film/{slug}/members/"
 
     @cached_property
     def dom(self) -> BeautifulSoup:

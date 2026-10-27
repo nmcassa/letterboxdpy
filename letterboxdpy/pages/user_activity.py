@@ -11,11 +11,11 @@ from letterboxdpy.utils.date_utils import DateUtils
 class UserActivity:
     def __init__(self, username: str) -> None:
         self.username = username
-        self._base_url = f"{DOMAIN}/ajax/activity-pagination/{self.username}"
+        self._base_url = f"{DOMAIN}/ajax/activity-pagination/{self.username}/"
 
         # Activity endpoints
         self.activity_url = self._base_url
-        self.activity_following_url = f"{self._base_url}/following"
+        self.activity_following_url = f"{self._base_url}following/"
 
     def get_activity(self) -> dict:
         return extract_activity(self.activity_url)

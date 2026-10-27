@@ -7,7 +7,7 @@ class MovieReviews:
     def __init__(self, slug: str):
         """Initialize MovieReviews with a movie slug."""
         self.slug = slug
-        self.url = f"{DOMAIN}/film/{slug}/reviews"
+        self.url = f"{DOMAIN}/film/{slug}/reviews/"
 
     def get_reviews(self) -> dict:
         """Get all reviews for this movie."""

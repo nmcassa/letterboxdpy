@@ -16,6 +16,7 @@ from letterboxdpy.core.exceptions import (
     ResourceNotFoundError,
 )
 from letterboxdpy.utils.utils_file import JsonFile
+from letterboxdpy.utils.utils_url import normalize_letterboxd_url
 
 
 class Scraper:
@@ -87,6 +88,7 @@ class Scraper:
     @classmethod
     def _fetch(cls, url: str) -> requests.Response:
         """Fetch the HTML content from the specified URL using a session with robust retry logic."""
+        url = normalize_letterboxd_url(url)
         max_retries = 5
         last_exception = None
         response = None
@@ -104,7 +106,7 @@ class Scraper:
                     url,
                     headers=cls.headers,
                     timeout=current_timeout,
-                    impersonate="chrome",
+                    impersonate="chrome120",
                 )
 
                 # Success

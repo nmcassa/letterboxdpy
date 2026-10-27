@@ -48,8 +48,11 @@ class Search:
         self.query = url_encode(query)
         self.search_filter = SearchFilter(search_filter)
         self._results = None
-        self.url = "/".join(
-            filter(None, [self.SEARCH_URL, self.search_filter.value, self.query])
+        self.url = (
+            "/".join(
+                filter(None, [self.SEARCH_URL, self.search_filter.value, self.query])
+            )
+            + "/"
         )
         self.adult = adult
 
@@ -104,7 +107,9 @@ class Search:
 
     def get_search_page_url(self, cursor: str | None) -> str:
         params = {"cursor": cursor, "adult": "" if self.adult else None}
-        return f"{self.url}/?{'&'.join(f'{k}={v}' for k, v in params.items() if v is not None)}"
+        clean_base = self.url.rstrip("/")
+        query_str = "&".join(f"{k}={v}" for k, v in params.items() if v is not None)
+        return f"{clean_base}/?{query_str}" if query_str else f"{clean_base}/"
 
     def get_parse_func_from_filter(self) -> Callable[[Tag], dict]:
         match self.search_filter:
@@ -203,7 +208,7 @@ class Search:
     def parse_review(self, result_item_elem: Tag) -> dict[str, Any]:
         article = result_item_elem.find("article")
         username = article.get("data-owner")
-        user_url = f"{DOMAIN}/{username}"
+        user_url = f"{DOMAIN}/{username}/"
 
         movie_container = article.find("div", class_="react-component figure")
         movie_slug = movie_container.get("data-item-slug")
@@ -266,7 +271,7 @@ class Search:
         href = href_elem.get("href")
         url = f"{DOMAIN}{href}"
         username, _, slug = href.split("/")[1:-1]
-        owner_url = f"{DOMAIN}/{username}"
+        owner_url = f"{DOMAIN}/{username}/"
         title = href_elem.text
         display_name_elem = href_elem.find_next("strong", class_="displayname")
         display_name = display_name_elem.text

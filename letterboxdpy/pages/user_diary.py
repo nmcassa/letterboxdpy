@@ -16,7 +16,7 @@ from letterboxdpy.utils.utils_url import get_page_url
 class UserDiary:
     def __init__(self, username: str) -> None:
         self.username = username
-        self.url = f"{DOMAIN}/{username}/diary"
+        self.url = f"{DOMAIN}/{username}/diary/"
 
     def get_diary(
         self,

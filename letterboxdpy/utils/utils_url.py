@@ -1,4 +1,6 @@
+import posixpath
 import re
+from urllib.parse import urlsplit, urlunsplit
 
 from fastfingertips.url_utils import extract_path_segment
 
@@ -52,3 +54,31 @@ def get_page_url(base_url: str, page: int, params: str = "") -> str:
         # Append params, ensuring no double '?'
         url += f"?{params.lstrip('?')}"
     return url
+
+
+def normalize_letterboxd_url(url: str) -> str:
+    """
+    Normalizes Letterboxd URLs to ensure canonical trailing slashes.
+    Prevents Cloudflare WAF challenges and redundant 301/302 redirects.
+    Preserves query parameters, fragments, and avoids file extensions.
+    """
+    if not isinstance(url, str) or not url.strip():
+        return url
+
+    parts = urlsplit(url)
+    # Only normalize Letterboxd web domains
+    if not parts.netloc or not (
+        "letterboxd.com" in parts.netloc or "boxd.it" in parts.netloc
+    ):
+        return url
+
+    path = parts.path
+    if not path:
+        path = "/"
+    elif not path.endswith("/"):
+        # Do not append slash if path has a file extension (e.g. .csv, .jpg, .png, .xml)
+        _, ext = posixpath.splitext(path)
+        if not ext:
+            path += "/"
+
+    return urlunsplit((parts.scheme, parts.netloc, path, parts.query, parts.fragment))

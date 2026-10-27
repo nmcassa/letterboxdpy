@@ -10,8 +10,8 @@ from letterboxdpy.utils.utils_url import get_page_url
 class UserNetwork:
     def __init__(self, username: str) -> None:
         self.username = username
-        self.following_url = f"{DOMAIN}/{self.username}/following"
-        self.followers_url = f"{DOMAIN}/{self.username}/followers"
+        self.following_url = f"{DOMAIN}/{self.username}/following/"
+        self.followers_url = f"{DOMAIN}/{self.username}/followers/"
 
     def get_following(self, page: int = 1, limit: int | None = None) -> dict:
         return extract_network(self.username, "following", page=page, limit=limit)
@@ -33,7 +33,7 @@ def extract_network(
         "following",
     ], "Section must be either 'followers' or 'following'"
 
-    BASE_URL = f"{DOMAIN}/{username}/{section}"
+    BASE_URL = f"{DOMAIN}/{username}/{section}/"
     PERSONS_PER_PAGE = 25
 
     def fetch_page(page_num: int):

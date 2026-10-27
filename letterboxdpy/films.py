@@ -98,7 +98,7 @@ def get_movies_by_genre(genre: str, max: int | None = None) -> dict:
     drama, family, fantasy, history, horror, music, mystery,
     romance, science-fiction, thriller, tv-movie, war, western
     """
-    BASE_URL = f"https://letterboxd.com/films/ajax/genre/{genre}"
+    BASE_URL = f"https://letterboxd.com/films/ajax/genre/{genre}/"
     return Films(BASE_URL, max).movies
 
 
@@ -114,7 +114,7 @@ def get_movies_by_service(service: str, max: int | None = None) -> dict:
 
 @assert_instance(str)
 def get_movies_by_theme(theme: str, max: int | None = None) -> dict:
-    BASE_URL = f"https://letterboxd.com/films/ajax/theme/{theme}"
+    BASE_URL = f"https://letterboxd.com/films/ajax/theme/{theme}/"
     return Films(BASE_URL, max).movies
 
 
@@ -126,7 +126,7 @@ def get_movies_by_nanogenre(nanogenre: str, max: int | None = None) -> dict:
 
 @assert_instance(str)
 def get_movies_by_mini_theme(theme: str, max: int | None = None) -> dict:
-    BASE_URL = f"https://letterboxd.com/films/ajax/mini-theme/{theme}"
+    BASE_URL = f"https://letterboxd.com/films/ajax/mini-theme/{theme}/"
     return Films(BASE_URL, max).movies
 
 
