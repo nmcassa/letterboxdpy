@@ -165,7 +165,7 @@ def extract_date_created(dom) -> str | None:
         data = dom.find("span", {"class": "published"})
 
     if data:
-        time_element = data.findChild("time")
+        time_element = data.find("time")
         if time_element and time_element.get("datetime"):
             return DateUtils.to_iso(time_element.get("datetime"))
 
@@ -181,7 +181,7 @@ def extract_date_updated(dom) -> str | None:
         data = dom.find("span", {"class": "published"})
 
     if data:
-        time_element = data.findChild("time")
+        time_element = data.find("time")
         if time_element and time_element.get("datetime"):
             return DateUtils.to_iso(time_element.get("datetime"))
 
@@ -199,8 +199,8 @@ def extract_tags(dom) -> list:
     data = []
 
     if dom:
-        dom = dom.findChildren("a")
-        for item in dom:
+        tags = dom.find_all("a")
+        for item in tags:
             data.append(item.text)
 
     return data
