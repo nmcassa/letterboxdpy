@@ -45,11 +45,16 @@ def get_page_url(base_url: str, page: int, params: str = "") -> str:
     """
     Generate a paginated URL from a base URL and page number.
     Ensures no double slashes and consistent trailing slashes.
+
+    Note:
+        Letterboxd accepts both '/page/1/' and the clean root URL '/',
+        but canonical pagination links on Letterboxd point to the root
+        path for page 1, while page 2+ follow '/page/{N}/'.
     """
     # Remove any trailing slashes from the base URL
     clean_base = base_url.rstrip("/")
-    # Letterboxd standard pagination format: /page/N/
-    url = f"{clean_base}/page/{page}/"
+    # Letterboxd canonical pagination: root URL for page 1, /page/N/ for page 2+
+    url = f"{clean_base}/" if page == 1 else f"{clean_base}/page/{page}/"
     if params:
         # Append params, ensuring no double '?'
         url += f"?{params.lstrip('?')}"

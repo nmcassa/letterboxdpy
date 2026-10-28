@@ -172,6 +172,8 @@ class TestEndpointUrlsFormat(unittest.TestCase):
         self.assertNotIn("//?", page_url)
 
     def test_get_page_url(self):
+        url_page_1 = get_page_url("https://letterboxd.com/testuser/films", 1)
+        self.assertEqual(url_page_1, "https://letterboxd.com/testuser/films/")
         url = get_page_url("https://letterboxd.com/testuser/films", 2)
         self.assertEqual(url, "https://letterboxd.com/testuser/films/page/2/")
         url_with_slash = get_page_url("https://letterboxd.com/testuser/films/", 2)
