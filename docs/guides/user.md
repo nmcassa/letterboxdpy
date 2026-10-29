@@ -180,6 +180,7 @@ print(f"Total logged: {wrapped.get('total_films')}")
             {
               "name": "Insomnia",
               "slug": "insomnia",
+              "id": "12890",
               "rating": 4.0,
               "liked": true,
               "rewatch": false
@@ -277,6 +278,129 @@ print(f"Total user lists: {lists['count']}")
 user_list = user.get_list("cold-palettes-dark-cities")
 print(f"List Title: {user_list.title} ({len(user_list.movies)} films)")
 ```
+
+---
+
+## Reviews
+
+Fetch all written reviews by the user across all films. Each review includes the movie info, log type, rating (parsed from Letterboxd's SVG star glyphs), review text, spoiler flag, and ISO 8601 date:
+
+```python
+reviews_data = user.get_reviews()
+print(f"Total reviews: {reviews_data['count']}")
+
+for log_id, review in reviews_data["reviews"].items():
+    movie = review["movie"]
+    rating = review["rating"]  # float (0.5–5.0) or None if unrated
+    print(f"{movie['name']} ({movie['release']}) — {rating}★")
+    print(f"  {review['review']['content'][:80]}")
+```
+
+??? example "Sample `get_reviews()` Response Payload (Truncated)"
+
+    ```json
+    {
+      "reviews": {
+        "987654321": {
+          "movie": {
+            "name": "The Prestige",
+            "slug": "the-prestige",
+            "id": "60744",
+            "release": 2006,
+            "link": "https://letterboxd.com/film/the-prestige/"
+          },
+          "type": "Watched",
+          "no": 0,
+          "link": "https://letterboxd.com/bugracoskun/film/the-prestige/",
+          "rating": 4.5,
+          "review": {
+            "content": "One of Nolan's best. The final reveal lands every time.",
+            "spoiler": false
+          },
+          "date": "2024-10-21T00:00:00.000000Z",
+          "page": 1
+        },
+        "...": "..."
+      },
+      "count": 42,
+      "last_page": 4
+    }
+    ```
+
+> [!NOTE]
+> Ratings are parsed from Letterboxd's SVG star glyph elements (`aria-label="★★★★½"`). Both the current SVG format and the legacy `rated-X` class format are supported, so ratings are always populated when present.
+
+---
+
+## Activity
+
+Fetch recent activity for the user or their followed accounts. Each entry includes a unique activity ID, ISO 8601 timestamp, a direct permalink (`url`), and a typed content payload:
+
+```python
+# Own recent activity
+activity = user.get_activity()
+print(f"Total activities: {activity['metadata']['total_activities']}")
+
+for act_id, entry in activity["activities"].items():
+    print(f"[{entry['activity_type']}] {entry['date']}")
+    print(f"  {entry['content'].get('description', '')}")
+    print(f"  {entry['url']}")
+
+# Activity feed from followed accounts
+following_activity = user.get_activity_following()
+```
+
+??? example "Sample `get_activity()` Response Payload (Truncated)"
+
+    ```json
+    {
+      "metadata": {
+        "export_timestamp": "2024-10-29T18:00:00.000000Z",
+        "source_url": "https://letterboxd.com/ajax/activity-pagination/bugracoskun/",
+        "total_activities": 15
+      },
+      "activities": {
+        "13321312465": {
+          "activity_type": "review",
+          "date": "2024-10-26T02:33:21.855000Z",
+          "url": "https://letterboxd.com/bugracoskun/film/the-prestige/",
+          "content": {
+            "action": "watched",
+            "description": "bugracoskun watched The Prestige",
+            "movie": {
+              "title": "The Prestige",
+              "year": 2006,
+              "slug": "the-prestige",
+              "url": "https://letterboxd.com/film/the-prestige/"
+            },
+            "review": {
+              "content": "One of Nolan's best.",
+              "contains_spoilers": false
+            }
+          }
+        },
+        "13321312400": {
+          "activity_type": "basic",
+          "date": "2024-10-25T14:10:00.000000Z",
+          "url": "https://letterboxd.com/film/inception/",
+          "content": {
+            "action": "watched",
+            "description": "bugracoskun watched Inception",
+            "movie": {
+              "title": "Inception",
+              "year": 2010,
+              "slug": "inception",
+              "url": "https://letterboxd.com/film/inception/"
+            }
+          }
+        },
+        "...": "..."
+      }
+    }
+    ```
+
+> [!NOTE]
+> Activity types are `review` (watched + wrote a review), `basic` (watched without a review), and `newlist` (created a list). The `url` field is a direct permalink to the film page or list — useful for deep-linking directly to the relevant content.
 
 ---
 
