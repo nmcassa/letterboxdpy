@@ -146,11 +146,13 @@ def extract_author(dom) -> str | None:
     if summary:
         name_link = summary.find("a", class_="name")
         if name_link:
-            return name_link.text.strip()
+            for badge in name_link.find_all(class_=lambda c: c and "badge" in c):
+                badge.decompose()
+            return name_link.get_text(strip=True)
 
     # Fallback to itemprop (legacy)
     data = dom.find("span", attrs={"itemprop": "name"})
-    return data.text.strip() if data else None
+    return data.get_text(strip=True) if data else None
 
 
 def extract_description(dom) -> str:
