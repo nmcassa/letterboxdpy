@@ -44,11 +44,13 @@ def extract_activity(ajax_url: str) -> dict:
         log_title = processor.get_log_title()
         log_type = processor.get_log_type()
         log_item_slug = processor.get_log_item_slug()
+        log_url = processor.get_log_url()
 
         # Build activity data structure
         log_data = {
             "activity_type": event_type,
             "date": build_time_data(date),
+            "url": log_url,
             "content": {},
         }
 

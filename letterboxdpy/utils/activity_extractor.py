@@ -48,7 +48,8 @@ class ActivityProcessor:
 
     def get_log_title(self) -> str:
         """Extract log title from section text."""
-        return self.section.p.text.strip() if self.section.p else ""
+        p_elem = self.section.find("p", class_="activity-summary") or self.section.p
+        return " ".join(p_elem.text.split()) if p_elem else ""
 
     @staticmethod
     def _extract_review_type(log_title: str) -> str:
@@ -125,6 +126,21 @@ class ActivityProcessor:
         elif event_type == "review":
             if div := self.section.find("div", {"class": "react-component"}):
                 return div.attrs.get("data-item-slug")
+
+        return None
+
+    def get_log_url(self) -> str | None:
+        """Extract primary URL associated with this activity."""
+        if (h2 := self.section.find("h2")) and (a := h2.find("a")):
+            href = a.get("href", "")
+            if href:
+                return f"{DOMAIN}{href}" if href.startswith("/") else href
+
+        targets = self.section.find_all("a", {"class": "target"})
+        if targets:
+            href = targets[-1].get("href", "")
+            if href:
+                return f"{DOMAIN}{href}" if href.startswith("/") else href
 
         return None
 
@@ -211,7 +227,9 @@ class ActivityProcessor:
                 stars += "½"
             return stars
 
-        return f"{extract_username()} {log_type} {film} {build_rating_stars()}".strip()
+        return " ".join(
+            f"{extract_username()} {log_type} {film} {build_rating_stars()}".split()
+        )
 
     def get_comment_data(self) -> dict:
         """Extract comment content and target URL."""
