@@ -46,10 +46,7 @@ desktop.ini
 
 # Example exports and generated reports
 exports/
-examples/exports/*
-!examples/exports/users/
-examples/exports/users/*
-!examples/exports/users/nmcassa/
+examples/exports/
 *report*.json
 
 # Local development and scratch files
