@@ -146,8 +146,12 @@ def extract_author(dom) -> str | None:
     if summary:
         name_link = summary.find("a", class_="name")
         if name_link:
-            for badge in name_link.find_all(class_=lambda c: c and "badge" in c):
-                badge.decompose()
+            # Target author display name span (avoids nested badge spans)
+            name_span = name_link.find("span", recursive=False) or name_link.find(
+                "span"
+            )
+            if name_span and not any("badge" in c for c in name_span.get("class", [])):
+                return name_span.get_text(strip=True)
             return name_link.get_text(strip=True)
 
     # Fallback to itemprop (legacy)
