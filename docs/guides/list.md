@@ -1,6 +1,6 @@
 # List Guide
 
-The `List` class allows extracting metadata, film entries, authors, and notes from any user-curated Letterboxd list.
+The `List` class allows extracting metadata, film entries, creation dates, tags, and notes from any user-curated Letterboxd list.
 
 ---
 
@@ -9,71 +9,87 @@ The `List` class allows extracting metadata, film entries, authors, and notes fr
 ```python
 from letterboxdpy.list import List
 
-# Initialize with author username and list slug
-film_list = List("nmcassa", "movies-to-watch-with-priscilla-park")
+# Initialize using list author username and list slug
+film_list = List("bugracoskun", "cold-palettes-dark-cities")
 
 print(f"Title: {film_list.title}")
 print(f"Author: {film_list.author}")
 print(f"Total Films: {film_list.count}")
+print(f"Created: {film_list.date_created}")
+print(f"Updated: {film_list.date_updated}")
+print(f"Tags: {film_list.tags}")
 print(f"Description: {film_list.description}")
 ```
 
-??? example "Example `List` Payload Structure"
+??? example "Sample `List` Payload Structure (Mock Demonstration)"
 
     ```json
     {
-      "username": "nmcassa",
-      "slug": "movies-to-watch-with-priscilla-park",
-      "url": "https://letterboxd.com/nmcassa/list/movies-to-watch-with-priscilla-park",
-      "list_id": "31052453",
-      "title": "Movies to Watch with Priscilla Park",
-      "author": "nmcassa",
-      "count": 2,
-      "date_created": "2024-05-18T16:44:57.013000Z",
-      "date_updated": "2024-05-20T14:58:06.486000Z",
-      "description": null,
-      "tags": [],
+      "username": "bugracoskun",
+      "slug": "cold-palettes-dark-cities",
+      "list_id": "10000001",
+      "title": "cold palettes, dark cities",
+      "author": "bugra",
+      "url": "https://letterboxd.com/bugracoskun/list/cold-palettes-dark-cities/",
+      "count": 25,
+      "date_created": "2025-01-01T00:00:00.000000Z",
+      "date_updated": "2025-06-01T00:00:00.000000Z",
+      "description": "Sample curated list demonstrating movie collection responses.",
+      "tags": [
+        "atmosphere",
+        "neo-noir",
+        "sample-list"
+      ],
       "_movies": {
-        "240344": {
-          "slug": "la-la-land",
-          "name": "La La Land",
-          "year": 2016,
-          "url": "https://letterboxd.com/film/la-la-land/"
-        }
+        "51345": {
+          "slug": "se7en",
+          "name": "Se7en",
+          "year": 1995,
+          "url": "https://letterboxd.com/film/se7en/"
+        },
+        "47104": {
+          "slug": "the-crow",
+          "name": "The Crow",
+          "year": 1994,
+          "url": "https://letterboxd.com/film/the-crow/"
+        },
+        "...": "..."
       }
     }
     ```
 
 ---
 
-## Iterating Over Movies
+## Accessing and Iterating Films
 
-A `List` instance can be iterated or accessed like a collection:
+The `.movies` property uses **lazy loading**; film entries are fetched and parsed from Letterboxd only upon first access, and cached for subsequent calls:
 
 ```python
-# Number of films
-total = len(film_list)
+# len() returns total films count
+print(f"List size: {len(film_list)}")
 
-# Access all movies dictionary
-for slug, movie in film_list.movies.items():
-    print(f"- {movie['name']} ({movie['year']}) -> {movie['url']}")
+# Iterate over movies dictionary
+for movie_id, film in film_list.movies.items():
+    print(f"- [{movie_id}] {film['name']} ({film['year']})")
+    print(f"  URL: {film['url']}")
 ```
 
 ---
 
-## List Metadata
+## List Metadata Reference
 
-Available properties on a `List` instance:
-
-- `film_list.list_id`: Unique numeric Letterboxd list ID
-- `film_list.title`: List title
-- `film_list.author`: List creator's username
-- `film_list.url`: Canonical Letterboxd URL
-- `film_list.count`: Total count of films in the list
-- `film_list.date_created`: Creation timestamp (ISO 8601)
-- `film_list.date_updated`: Last modified timestamp (ISO 8601)
-- `film_list.description`: Full text description / list notes
-- `film_list.tags`: List of tags assigned to the list
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `list_id` | `str` | Unique numeric identifier for the list on Letterboxd |
+| `title` | `str` | Human-readable title of the list |
+| `author` | `str` | Letterboxd username of the creator |
+| `url` | `str` | Canonical web URL of the list |
+| `count` | `int` | Total number of film entries |
+| `date_created`| `str` | ISO 8601 creation timestamp |
+| `date_updated`| `str` | ISO 8601 last modified timestamp |
+| `description` | `str` | Optional markdown/text notes attached to the list |
+| `tags` | `list[str]` | Custom user tags assigned to the list |
+| `movies` | `dict` | Dictionary mapping `movie_id` to movie dictionaries |
 
 ---
 

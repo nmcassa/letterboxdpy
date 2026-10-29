@@ -1,45 +1,62 @@
 # Watchlist Guide
 
-The `Watchlist` class provides tools to inspect and extract a user's saved watchlist, with support for advanced Letterboxd filters.
+`letterboxdpy` provides two complementary approaches to access a user's watchlist: the dedicated lightweight `Watchlist` class, and the filtered `UserWatchlist` page handler.
 
 ---
 
-## Quick Example
+## Standalone `Watchlist` Class
+
+The simplest way to inspect a member's saved watchlist:
 
 ```python
 from letterboxdpy.watchlist import Watchlist
 
-watchlist = Watchlist("nmcassa")
-watchlist.movies # lazy load
+watchlist = Watchlist("bugracoskun")
 
-print(f"Total Watchlist Films: {watchlist.count}")
+print(f"Username: {watchlist.username}")
+print(f"Total Films: {watchlist.count}")
+
+# .movies is lazily evaluated on first access
 for movie_id, film in list(watchlist.movies.items())[:5]:
-    print(f"- {film['name']} ({film['year']})")
+    print(f"- {film['name']} ({film['year']}) -> {film['url']}")
 ```
 
-??? example "Example `Watchlist` Payload Structure"
+??? example "Sample `Watchlist` Payload Structure (Mock Demonstration)"
 
     ```json
     {
-      "username": "nmcassa",
-      "url": "https://letterboxd.com/nmcassa/watchlist",
-      "count": 134,
+      "username": "bugracoskun",
+      "url": "https://letterboxd.com/bugracoskun/watchlist/",
+      "count": 150,
       "movies": {
-        "51315": {
-          "slug": "videodrome",
-          "name": "Videodrome",
-          "year": 1983,
-          "url": "https://letterboxd.com/film/videodrome/"
-        }
+        "51557": {
+          "slug": "constantine",
+          "name": "Constantine",
+          "year": 2005,
+          "url": "https://letterboxd.com/film/constantine/"
+        },
+        "35903": {
+          "slug": "time",
+          "name": "Time",
+          "year": 2006,
+          "url": "https://letterboxd.com/film/time/"
+        },
+        "...": "..."
       }
     }
     ```
 
 ---
 
-## Filtering Watchlists
+## Advanced Filtered Watchlists
 
-Letterboxd supports rich URL-based filters on watchlists. You can pass filter dictionaries directly when using the user page handler:
+When you need to filter a user's watchlist by genre, decade, release year, or streaming provider, use the `pages.watchlist` handler on a `User` instance:
+
+```python
+from letterboxdpy.user import User
+
+user = User("bugracoskun")
+```
 
 === "Filter by Genre"
     ```python
@@ -48,9 +65,9 @@ Letterboxd supports rich URL-based filters on watchlists. You can pass filter di
         filters={"genre": ["mystery"]}
     )
 
-    # Negative genre filter (exclude action)
-    no_action = user.pages.watchlist.get_watchlist(
-        filters={"genre": ["-action"]}
+    # Exclude specific genres (e.g. no horror)
+    no_horror = user.pages.watchlist.get_watchlist(
+        filters={"genre": ["-horror"]}
     )
     ```
 
@@ -61,9 +78,9 @@ Letterboxd supports rich URL-based filters on watchlists. You can pass filter di
         filters={"decade": "1990s"}
     )
 
-    # Released in 2023
-    released_2023 = user.pages.watchlist.get_watchlist(
-        filters={"year": "2023"}
+    # Released in 2024
+    films_2024 = user.pages.watchlist.get_watchlist(
+        filters={"year": "2024"}
     )
     ```
 
@@ -71,12 +88,30 @@ Letterboxd supports rich URL-based filters on watchlists. You can pass filter di
     ```python
     # Available on Criterion Channel or Netflix
     streaming = user.pages.watchlist.get_watchlist(
-        filters={"service": ["criterion-channel"]}
+        filters={"service": ["criterion-channel", "netflix"]}
     )
+    ```
+
+??? example "Example Filtered Watchlist Output"
+
+    ```json
+    {
+      "count": 14,
+      "data": {
+        "51557": {
+          "name": "Constantine",
+          "year": 2005,
+          "slug": "constantine",
+          "url": "https://letterboxd.com/film/constantine/"
+        }
+      }
+    }
     ```
 
 ---
 
 ## API Reference
 
-For detailed function definitions, see the [Watchlist API Reference](../api/watchlist.md).
+For detailed class definitions, see:
+- [Watchlist API Reference](../api/watchlist.md)
+- [User API Reference](../api/user.md)

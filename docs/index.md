@@ -6,11 +6,12 @@ A modern, fast, and feature-rich Python library for scraping and interacting wit
 
 ## Features
 
-- **Core Letterboxd Entities**: First-class support for `User`, `Movie`, `Search`, `List`, and `Films`.
-- **WAF & Cloudflare Resilient**: Built with `curl_cffi` using modern browser impersonation (`chrome120`) and RFC-compliant URL normalization.
-- **Deep User Insights**: Extract watchlists, diary logs, likes, reviews, followers, following, and genre distribution.
-- **Advanced Film Discovery**: Discover films by genre, sub-genre, themes, release years, decades, or streaming services.
-- **Type Annotated & Clean**: Clean, structured return models with consistent snake_case keys and ISO 8601 timestamps.
+- **Core Letterboxd Entities**: First-class models for `User`, `Movie`, `Search`, `List`, `Watchlist`, and `Members`.
+- **WAF & Cloudflare Resilient**: Built on `curl_cffi` using real browser TLS impersonation (`chrome120`) and RFC-compliant URL normalization.
+- **Deep User Insights**: Extract complete watchlists, chronological diary entries, user wrapped summaries, ratings, reviews, followers, and genre distribution.
+- **Advanced Film Discovery**: Discover films by genre, curated themes, release years, decades, or streaming services.
+- **Trace-Locked Sessions**: Authenticated account settings and profile updates via automated CSRF handling.
+- **Deterministic & Typed**: Strict type hints, comprehensive offline test suite, and clean snake_case JSON schemas.
 
 ---
 
@@ -28,11 +29,11 @@ A modern, fast, and feature-rich Python library for scraping and interacting wit
     pip install git+https://github.com/nmcassa/letterboxdpy.git
     ```
 
-=== "Editable / Development"
+=== "Editable (Development)"
     ```bash
     git clone https://github.com/nmcassa/letterboxdpy.git
     cd letterboxdpy
-    pip install -e ".[docs,examples]"
+    pip install -e ".[dev,docs,examples]"
     ```
 
 ---
@@ -46,18 +47,20 @@ A modern, fast, and feature-rich Python library for scraping and interacting wit
     from letterboxdpy.user import User
 
     # Initialize a user instance
-    user = User("nmcassa")
+    user = User("bugracoskun")
 
     print(f"Display Name: {user.display_name}")
+    print(f"Badge: {user.badge}")
     print(f"Watchlist Count: {user.watchlist_length}")
-    print(f"Bio: {user.bio}")
+    print(f"Watched Films: {user.stats.get('films')}")
     ```
 
-=== "Output"
+=== "Sample Output"
     ```text
-    Display Name: Nicholas Cassarino
-    Watchlist Count: 560
-    Bio: Film enthusiast & programmer.
+    Display Name: bugra
+    Badge: patron
+    Watchlist Count: 150
+    Watched Films: 500
     ```
 
 ### Fetching a Movie
@@ -66,19 +69,19 @@ A modern, fast, and feature-rich Python library for scraping and interacting wit
     ```python
     from letterboxdpy.movie import Movie
 
-    # Initialize by slug or TMDB/IMDb ID
-    movie = Movie("dune-part-two")
+    # Initialize by slug, TMDB ID, or IMDb ID
+    movie = Movie("v-for-vendetta")
 
     print(f"Title: {movie.title} ({movie.year})")
-    print(f"Rating: {movie.rating}")
+    print(f"Rating: {movie.rating} / 5.0")
     print(f"Runtime: {movie.runtime} mins")
     ```
 
 === "Output"
     ```text
-    Title: Dune: Part Two (2024)
-    Rating: 4.5
-    Runtime: 166 mins
+    Title: V for Vendetta (2005)
+    Rating: 3.84 / 5.0
+    Runtime: 132 mins
     ```
 
 ### Searching Letterboxd
@@ -89,10 +92,15 @@ A modern, fast, and feature-rich Python library for scraping and interacting wit
 
     # Search for films
     search = Search("Inception", search_filter=SearchFilter.FILMS)
-    results = search.results.get("results", [])
+    results = search.get_results(3)
 
-    for item in results[:3]:
+    for item in results.get("results", []):
         print(f"{item.get('name')} ({item.get('year')}) -> {item.get('url')}")
+    ```
+
+=== "Output"
+    ```text
+    Inception (2010) -> https://letterboxd.com/film/inception/
     ```
 
 ---
@@ -104,17 +112,35 @@ flowchart TD
     App[Your Application / Script] --> User[User Class]
     App --> Movie[Movie Class]
     App --> Search[Search Class]
+    App --> List[List / Watchlist]
     App --> Films[Films Discovery]
+    App --> Auth[UserSession / Settings]
     
     User --> Scraper[Scraper Gateway]
     Movie --> Scraper
     Search --> Scraper
+    List --> Scraper
     Films --> Scraper
+    Auth --> Scraper
     
     Scraper --> URLNorm[normalize_letterboxd_url]
-    URLNorm --> Curl[curl_cffi Chrome Session]
+    URLNorm --> Curl[curl_cffi Chrome TLS Session]
     Curl --> Letterboxd[(Letterboxd Web / CDN)]
 ```
 
-Explore the documentation guides on the left sidebar to dive deep into each component.
+---
 
+## Explore the Documentation
+
+| Module Guide | Description | API Reference |
+| :--- | :--- | :--- |
+| **[Getting Started](getting-started.md)** | Installation, Cloudflare resilience, core classes | - |
+| **[User Guide](guides/user.md)** | Profile stats, watched films, diary, wrapped, social | [User API](api/user.md) |
+| **[Movie Guide](guides/movie.md)** | Details, cast, crew, reviews, similar movies | [Movie API](api/movie.md) |
+| **[Search Guide](guides/search.md)** | Full-text search across 12 categories, slug lookup | [Search API](api/search.md) |
+| **[List Guide](guides/list.md)** | User lists, movie collections, tags, descriptions | [List API](api/list.md) |
+| **[Watchlist Guide](guides/watchlist.md)** | Saved watchlists, genre/decade/provider filtering | [Watchlist API](api/watchlist.md) |
+| **[Films & Discovery](guides/films.md)** | Browse upcoming, genres, themes, streaming services | [Films API](api/films.md) |
+| **[Members Guide](guides/members.md)** | Popular profiles, leaderboards, community members | [Members API](api/members.md) |
+| **[Authentication](guides/auth.md)** | Sessions, profile updates, notification management | [Auth API](api/auth.md) |
+| **[Development](development.md)** | Environment setup, pytest, Ruff linting, CI/CD | - |
