@@ -48,10 +48,16 @@ class JsonFile(File):
     EXTENSION = ".json"
 
     @classmethod
-    def save(cls, path: str, data: dict | list, indent: int = 2) -> None:
+    def save(
+        cls,
+        path: str,
+        data: dict | list,
+        indent: int = 2,
+        ensure_ascii: bool = False,
+    ) -> None:
         """Save data to a JSON file."""
-        with open(cls._get_path(path), "w") as f:
-            json_dump(data, f, indent=indent)
+        with open(cls._get_path(path), "w", encoding="utf-8") as f:
+            json_dump(data, f, indent=indent, ensure_ascii=ensure_ascii)
 
     @classmethod
     def load(cls, path: str) -> dict | None:
