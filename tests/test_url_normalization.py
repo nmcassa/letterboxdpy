@@ -57,7 +57,9 @@ class TestNormalizeLetterboxdUrl(unittest.TestCase):
             "https://letterboxd.com/s/search/?q=dune",
         )
         self.assertEqual(
-            normalize_letterboxd_url("https://letterboxd.com/films/popular?year=2024&sort=date"),
+            normalize_letterboxd_url(
+                "https://letterboxd.com/films/popular?year=2024&sort=date"
+            ),
             "https://letterboxd.com/films/popular/?year=2024&sort=date",
         )
 
@@ -177,7 +179,9 @@ class TestEndpointUrlsFormat(unittest.TestCase):
         url = get_page_url("https://letterboxd.com/testuser/films", 2)
         self.assertEqual(url, "https://letterboxd.com/testuser/films/page/2/")
         url_with_slash = get_page_url("https://letterboxd.com/testuser/films/", 2)
-        self.assertEqual(url_with_slash, "https://letterboxd.com/testuser/films/page/2/")
+        self.assertEqual(
+            url_with_slash, "https://letterboxd.com/testuser/films/page/2/"
+        )
 
 
 class TestScraperNormalization(unittest.TestCase):
