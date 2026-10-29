@@ -1,0 +1,1925 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A modern, resilient Letterboxd web scraper and data extraction library">
+      
+      
+        <meta name="author" content="Nicholas Cassarino & FastFingertips">
+      
+      
+        <link rel="canonical" href="https://nmcassa.github.io/letterboxdpy/examples/">
+      
+      
+        <link rel="prev" href="../api/scraper/">
+      
+      
+        <link rel="next" href="../development/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Examples - letterboxdpy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#examples-and-cli-tools" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="letterboxdpy" class="md-header__button md-logo" aria-label="letterboxdpy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            letterboxdpy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Examples
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nmcassa/letterboxdpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nmcassa/letterboxdpy
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/user/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/user/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Examples
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../development/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Development
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="letterboxdpy" class="md-nav__button md-logo" aria-label="letterboxdpy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    letterboxdpy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nmcassa/letterboxdpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nmcassa/letterboxdpy
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/movie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/watchlist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Watchlist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/films/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Films & Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/members/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Members
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication & Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/movie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Movie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/watchlist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Watchlist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/films/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Films Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/members/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Members
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/scraper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scraper & URLs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command-Line Conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-analytics-and-visualizations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Analytics and Visualizations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User Analytics and Visualizations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rating-distribution-plot-user_rating_plotpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rating Distribution Plot (user_rating_plot.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yearly-watching-statistics-user_plot_statisticspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Yearly Watching Statistics (user_plot_statistics.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#styled-excel-exporter-export_user_data_excelpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Styled Excel Exporter (export_user_data_excel.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprehensive-json-exporter-export_user_datapy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comprehensive JSON Exporter (export_user_data.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#social-and-network-insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Social and Network Insights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Social and Network Insights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#watchlist-comparison-compare_watchlistspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watchlist Comparison (compare_watchlists.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#follow-relationship-statistics-follow_statspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Follow Relationship Statistics (follow_stats.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-balance-analysis-network_balancepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Balance Analysis (network_balance.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bulk-media-and-list-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bulk Media and List Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bulk Media and List Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-diary-poster-downloader-export_user_diary_posterspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Diary Poster Downloader (export_user_diary_posters.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-search-and-film-exporter-search_and_export_listspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List Search and Film Exporter (search_and_export_lists.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interactive-account-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive Account Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interactive Account Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#profile-and-favorites-editor-profile_editorpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile and Favorites Editor (profile_editor.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notification-settings-manager-notification_managerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notification Settings Manager (notification_manager.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing-new-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contributing New Examples
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command-Line Conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-analytics-and-visualizations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Analytics and Visualizations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User Analytics and Visualizations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rating-distribution-plot-user_rating_plotpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rating Distribution Plot (user_rating_plot.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yearly-watching-statistics-user_plot_statisticspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Yearly Watching Statistics (user_plot_statistics.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#styled-excel-exporter-export_user_data_excelpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Styled Excel Exporter (export_user_data_excel.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprehensive-json-exporter-export_user_datapy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comprehensive JSON Exporter (export_user_data.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#social-and-network-insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Social and Network Insights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Social and Network Insights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#watchlist-comparison-compare_watchlistspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watchlist Comparison (compare_watchlists.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#follow-relationship-statistics-follow_statspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Follow Relationship Statistics (follow_stats.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-balance-analysis-network_balancepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Balance Analysis (network_balance.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bulk-media-and-list-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bulk Media and List Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bulk Media and List Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-diary-poster-downloader-export_user_diary_posterspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Diary Poster Downloader (export_user_diary_posters.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-search-and-film-exporter-search_and_export_listspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List Search and Film Exporter (search_and_export_lists.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interactive-account-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive Account Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interactive Account Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#profile-and-favorites-editor-profile_editorpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile and Favorites Editor (profile_editor.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notification-settings-manager-notification_managerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notification Settings Manager (notification_manager.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing-new-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contributing New Examples
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="examples-and-cli-tools">Examples and CLI Tools</h1>
+<p>The <code>letterboxdpy</code> repository includes a collection of production-ready CLI tools, data exporters, and visual analytics scripts located in the <code>examples/</code> directory.</p>
+<p>These scripts demonstrate real-world patterns for scraping, reporting, data visualization, and session management.</p>
+<hr />
+<h2 id="installation">Installation</h2>
+<p>Examples rely on optional third-party packages for visualization (<code>matplotlib</code>, <code>pillow</code>), interactive reporting (<code>Jinja2</code>, <code>rich</code>), and spreadsheet creation (<code>openpyxl</code>).</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Standard Install</label><label for="__tabbed_1_2">Editable Development</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"letterboxdpy[examples]"</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[examples]"</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="command-line-conventions">Command-Line Conventions</h2>
+<ul>
+<li>Run all commands from the repository root directory.</li>
+<li>Arguments in <code>&lt;angle_brackets&gt;</code> represent user-supplied values.</li>
+<li>Most username-driven scripts prompt for a username if omitted in the command.</li>
+<li>Scripts supporting the <code>--open</code> flag automatically launch generated HTML reports in your default browser.</li>
+<li>Authenticated scripts accept an optional <code>--path</code> parameter pointing to a <code>cookies.json</code> session file (defaults to <code>~/.letterboxdpy/cookies.json</code>).</li>
+</ul>
+<hr />
+<h2 id="user-analytics-and-visualizations">User Analytics and Visualizations</h2>
+<h3 id="rating-distribution-plot-user_rating_plotpy">Rating Distribution Plot (<code>user_rating_plot.py</code>)</h3>
+<p>Renders a Letterboxd-style histogram displaying the target user's ratings across all half-star increments (0.5 to 5.0 stars), along with mean rating and total rated film counts.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>examples/user_rating_plot.py<span class="w"> </span>bugracoskun
+</span></code></pre></div>
+<ul>
+<li><strong>Output:</strong> Interactive Matplotlib graphic window displaying rating frequency and distribution curve.</li>
+<li><strong>Dependencies:</strong> <code>matplotlib</code>, <code>numpy</code></li>
+</ul>
+<hr />
+<h3 id="yearly-watching-statistics-user_plot_statisticspy">Yearly Watching Statistics (<code>user_plot_statistics.py</code>)</h3>
+<p>Plots annual movie-watching volume from diary entries across release years or logging years.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Analyze all available years</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>python<span class="w"> </span>examples/user_plot_statistics.py<span class="w"> </span>bugracoskun
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Filter by release year range</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>python<span class="w"> </span>examples/user_plot_statistics.py<span class="w"> </span>bugracoskun<span class="w"> </span>--start-year<span class="w"> </span><span class="m">2015</span><span class="w"> </span>--end-year<span class="w"> </span><span class="m">2025</span>
+</span></code></pre></div>
+<ul>
+<li><strong>Output:</strong> Interactive Matplotlib bar chart of logged films per year.</li>
+<li><strong>Dependencies:</strong> <code>matplotlib</code></li>
+</ul>
+<hr />
+<h3 id="styled-excel-exporter-export_user_data_excelpy">Styled Excel Exporter (<code>export_user_data_excel.py</code>)</h3>
+<p>Exports complete user activity into an Excel workbook (<code>.xlsx</code>) featuring custom column formatting, header styles, and tabbed sheets for profile metadata, watched films, diary logs, and ratings.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>examples/export_user_data_excel.py<span class="w"> </span>bugracoskun<span class="w"> </span>--runtime<span class="w"> </span>--open
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Flag</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>--user &lt;username&gt;</code></td>
+<td style="text-align: left;">Alternative to positional username argument.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--runtime</code></td>
+<td style="text-align: left;">Fetches runtime for each movie to calculate total hours watched.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--force</code></td>
+<td style="text-align: left;">Overwrites existing exports without prompting.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--open</code></td>
+<td style="text-align: left;">Automatically opens the generated <code>.xlsx</code> file upon completion.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Output File:</strong> <code>examples/exports/users/&lt;username&gt;/&lt;username&gt;_data.xlsx</code></li>
+<li><strong>Dependencies:</strong> <code>openpyxl</code>, <code>rich</code></li>
+</ul>
+<hr />
+<h3 id="comprehensive-json-exporter-export_user_datapy">Comprehensive JSON Exporter (<code>export_user_data.py</code>)</h3>
+<p>Extracts every major dataset from a user profile into structured JSON files under an organized folder hierarchy.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>examples/export_user_data.py<span class="w"> </span>bugracoskun
+</span></code></pre></div>
+<p>Exports generated under <code>examples/exports/users/&lt;username&gt;/</code>:</p>
+<ul>
+<li><code>user.json</code>: Core profile details, follower counts, bio, website.</li>
+<li><code>films.json</code>: Complete catalog of watched films.</li>
+<li><code>watchlist.json</code>: Current watchlist entries.</li>
+<li><code>diary.json</code>: Chronological diary logs and review snippets.</li>
+<li><code>lists.json</code>: User-authored lists.</li>
+<li><code>followers.json</code> and <code>following.json</code>: Social graph entries.</li>
+</ul>
+<hr />
+<h2 id="social-and-network-insights">Social and Network Insights</h2>
+<h3 id="watchlist-comparison-compare_watchlistspy">Watchlist Comparison (<code>compare_watchlists.py</code>)</h3>
+<p>Compares a user's watchlist with the watchlists of users they follow, finding shared interests and common recommendations.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>python<span class="w"> </span>examples/compare_watchlists.py<span class="w"> </span>bugracoskun<span class="w"> </span>--open
+</span></code></pre></div>
+<ul>
+<li><strong>Output Files:</strong></li>
+<li><code>examples/exports/users/&lt;username&gt;/watchlist_comparison.json</code></li>
+<li><code>examples/exports/users/&lt;username&gt;/watchlist_comparison.html</code></li>
+<li><strong>Features:</strong> Computes overlap score, common films, and unique recommendations rendered via responsive HTML.</li>
+</ul>
+<hr />
+<h3 id="follow-relationship-statistics-follow_statspy">Follow Relationship Statistics (<code>follow_stats.py</code>)</h3>
+<p>Audits account connections to identify mutual follows, fans (users following you whom you do not follow back), and unrequited follows (users you follow who do not follow back).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python<span class="w"> </span>examples/follow_stats.py<span class="w"> </span>bugracoskun<span class="w"> </span>--open
+</span></code></pre></div>
+<ul>
+<li><strong>Output Files:</strong></li>
+<li><code>examples/exports/users/&lt;username&gt;/follow_stats.json</code></li>
+<li><code>examples/exports/users/&lt;username&gt;/follow_stats.html</code></li>
+<li><strong>Interactive UI:</strong> Searchable table of user avatars, badges, and follow states.</li>
+</ul>
+<hr />
+<h3 id="network-balance-analysis-network_balancepy">Network Balance Analysis (<code>network_balance.py</code>)</h3>
+<p>Analyzes follow ratios, mutual percentages, and network reciprocity metrics for any public profile.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>python<span class="w"> </span>examples/network_balance.py<span class="w"> </span>bugracoskun<span class="w"> </span>--open
+</span></code></pre></div>
+<ul>
+<li><strong>Output Files:</strong></li>
+<li><code>examples/exports/users/&lt;username&gt;/network_balance.json</code></li>
+<li><code>examples/exports/users/&lt;username&gt;/network_balance.html</code></li>
+</ul>
+<hr />
+<h2 id="bulk-media-and-list-operations">Bulk Media and List Operations</h2>
+<h3 id="user-diary-poster-downloader-export_user_diary_posterspy">User Diary Poster Downloader (<code>export_user_diary_posters.py</code>)</h3>
+<p>Crawls a user's diary and downloads full-resolution movie posters into a local directory.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>python<span class="w"> </span>examples/export_user_diary_posters.py<span class="w"> </span>bugracoskun
+</span></code></pre></div>
+<ul>
+<li><strong>Output Directory:</strong> <code>examples/exports/users/&lt;username&gt;/posters/</code></li>
+<li><strong>Dependencies:</strong> <code>pillow</code>, <code>curl_cffi</code></li>
+</ul>
+<hr />
+<h3 id="list-search-and-film-exporter-search_and_export_listspy">List Search and Film Exporter (<code>search_and_export_lists.py</code>)</h3>
+<p>Searches public Letterboxd lists matching a keyword query and exports all included film titles, release years, and URLs into CSV format.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>python<span class="w"> </span>examples/search_and_export_lists.py<span class="w"> </span><span class="s2">"Cyberpunk"</span><span class="w"> </span><span class="m">5</span>
+</span></code></pre></div>
+<ul>
+<li><strong>Arguments:</strong></li>
+<li>Search query string (e.g. <code>"Cyberpunk"</code>).</li>
+<li>Maximum number of lists to scrape (e.g. <code>5</code>).</li>
+<li><strong>Output Directory:</strong> <code>examples/exports/lists/</code></li>
+</ul>
+<hr />
+<h2 id="interactive-account-management">Interactive Account Management</h2>
+<blockquote>
+<p>[!NOTE]
+Account management tools require an active Letterboxd session. Generate a <code>cookies.json</code> using <code>UserSession.login()</code> or export browser cookies before running these scripts.</p>
+</blockquote>
+<h3 id="profile-and-favorites-editor-profile_editorpy">Profile and Favorites Editor (<code>profile_editor.py</code>)</h3>
+<p>Interactive command-line interface to view and modify Letterboxd profile fields and the four featured favorite films without using a web browser.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>python<span class="w"> </span>examples/profile_editor.py
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># or specify a custom cookies path</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>python<span class="w"> </span>examples/profile_editor.py<span class="w"> </span>--path<span class="w"> </span>/path/to/cookies.json
+</span></code></pre></div>
+<p>Editable fields include:</p>
+<ul>
+<li>Given Name / Family Name</li>
+<li>Bio / Description</li>
+<li>Location</li>
+<li>Website URL</li>
+<li>Pronoun Selection</li>
+<li>Top Four Featured Favorite Films</li>
+</ul>
+<hr />
+<h3 id="notification-settings-manager-notification_managerpy">Notification Settings Manager (<code>notification_manager.py</code>)</h3>
+<p>Interactive command-line tool to toggle site-wide notifications and email alert preferences.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>python<span class="w"> </span>examples/notification_manager.py
+</span></code></pre></div>
+<p>Configurable options include:</p>
+<ul>
+<li>New follower email notifications</li>
+<li>Comments on reviews and lists</li>
+<li>Mentions and reply alerts</li>
+<li>Letterboxd newsletter and weekly digest subscriptions</li>
+</ul>
+<hr />
+<h2 id="contributing-new-examples">Contributing New Examples</h2>
+<p>New utility scripts and reports are welcomed. Contributions should adhere to the standard module metadata header:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">__title__</span> <span class="o">=</span> <span class="s2">"Tool Name"</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">__description__</span> <span class="o">=</span> <span class="s2">"Single sentence summary of what the script accomplishes."</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">__version__</span> <span class="o">=</span> <span class="s2">"0.1.0"</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">__author__</span> <span class="o">=</span> <span class="s2">"yourusername"</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">__author_url__</span> <span class="o">=</span> <span class="s2">"https://github.com/yourusername"</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="n">__created_at__</span> <span class="o">=</span> <span class="s2">"2026-10-29"</span>
+</span></code></pre></div>
+<p>Guidelines for script contributions:</p>
+<ol>
+<li>Rely on <code>letterboxdpy</code> core models for all scraping operations.</li>
+<li>Put output files under <code>examples/exports/</code>.</li>
+<li>Provide descriptive CLI arguments using <code>sys.argv</code> or standard library <code>argparse</code>.</li>
+<li>Run <code>ruff check</code> and <code>ruff format</code> prior to submitting changes.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.annotate", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.expand", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>
