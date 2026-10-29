@@ -1,3 +1,5 @@
+import contextlib
+import json
 import warnings
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
@@ -16,7 +18,7 @@ from letterboxdpy.utils.utils_url import get_page_url
 class UserDiary:
     def __init__(self, username: str) -> None:
         self.username = username
-        self.url = f"{DOMAIN}/{username}/diary"
+        self.url = f"{DOMAIN}/{username}/diary/"
 
     def get_diary(
         self,
@@ -245,7 +247,17 @@ def extract_user_diary(
 
                 name = extract_movie_name(react_div)
                 slug = react_div.get("data-item-slug") if react_div else None
-                id = react_div.get("data-film-id") if react_div else None
+                id = None
+                if row.get("data-production-uid"):
+                    uid = row["data-production-uid"]
+                    id = uid.split(":")[-1] if ":" in uid else uid
+                elif react_div and "data-postered-identifier" in react_div.attrs:
+                    with contextlib.suppress(Exception):
+                        identifier = json.loads(react_div["data-postered-identifier"])
+                        uid = identifier.get("uid", "")
+                        id = uid.split(":")[-1] if ":" in uid else uid
+                elif react_div:
+                    id = react_div.get("data-film-id")
                 # released column (updated for new HTML structure)
                 if "releaseyear" in cols:
                     release = cols["releaseyear"].text.strip()

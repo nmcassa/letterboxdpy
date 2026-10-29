@@ -19,12 +19,12 @@ class UserLikes:
 
     def __init__(self, username: str) -> None:
         self.username = username
-        self._base_url = f"{DOMAIN}/{self.username}/likes"
+        self._base_url = f"{DOMAIN}/{self.username}/likes/"
 
         # Likes endpoints
-        self.films_url = f"{self._base_url}/films"
-        self.reviews_url = f"{self._base_url}/reviews/"
-        self.lists_url = f"{self._base_url}/lists"
+        self.films_url = f"{self._base_url}films/"
+        self.reviews_url = f"{self._base_url}reviews/"
+        self.lists_url = f"{self._base_url}lists/"
 
     def get_liked_films(self):
         """Get user's liked films."""

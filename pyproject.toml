@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "letterboxdpy"
-version = "6.6.1"
+version = "6.7.0"
 description = "A letterboxd webscraper"
 readme = "README.md"
 license = "MIT"
@@ -44,6 +44,11 @@ examples = [
     "numpy>=1.21.0",
     "pillow>=8.0.0",
     "openpyxl>=3.0.0",
+]
+docs = [
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.25.0",
 ]
 
 [project.urls]
@@ -118,4 +123,3 @@ markers = [
     "smoke: live external integration tests touching real Letterboxd servers",
 ]
 addopts = "-m 'not smoke'"
-

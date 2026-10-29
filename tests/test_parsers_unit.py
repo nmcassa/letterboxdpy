@@ -200,3 +200,47 @@ class TestMetaAndJsonLdParsers:
         html = "<script>var x = 1;</script>"
         soup = BeautifulSoup(html, "html.parser")
         assert extract_json_ld_script(soup) is None
+
+
+class TestExtractAuthor:
+    """Tests for extract_author in user_list page parser."""
+
+    def test_extract_author_with_badge(self):
+        from letterboxdpy.pages.user_list import extract_author
+
+        html = """
+        <div class="person-summary -inline">
+          <h1 class="title-4">
+            <small class="context">List by</small>
+            <a class="name" href="/bugracoskun/">
+              <span>bugra</span>
+              <span class="badge -patron -small">Patron</span>
+            </a>
+          </h1>
+        </div>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        assert extract_author(soup) == "bugra"
+
+    def test_extract_author_without_badge(self):
+        from letterboxdpy.pages.user_list import extract_author
+
+        html = """
+        <div class="person-summary -inline">
+          <h1 class="title-4">
+            <small class="context">List by</small>
+            <a class="name" href="/johndoe/">
+              <span>John Doe</span>
+            </a>
+          </h1>
+        </div>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        assert extract_author(soup) == "John Doe"
+
+    def test_extract_author_legacy_itemprop(self):
+        from letterboxdpy.pages.user_list import extract_author
+
+        html = """<div><span itemprop="name">Jane Doe</span></div>"""
+        soup = BeautifulSoup(html, "html.parser")
+        assert extract_author(soup) == "Jane Doe"

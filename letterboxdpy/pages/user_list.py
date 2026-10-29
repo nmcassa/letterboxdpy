@@ -146,11 +146,17 @@ def extract_author(dom) -> str | None:
     if summary:
         name_link = summary.find("a", class_="name")
         if name_link:
-            return name_link.text.strip()
+            # Target author display name span (avoids nested badge spans)
+            name_span = name_link.find("span", recursive=False) or name_link.find(
+                "span"
+            )
+            if name_span and not any("badge" in c for c in name_span.get("class", [])):
+                return name_span.get_text(strip=True)
+            return name_link.get_text(strip=True)
 
     # Fallback to itemprop (legacy)
     data = dom.find("span", attrs={"itemprop": "name"})
-    return data.text.strip() if data else None
+    return data.get_text(strip=True) if data else None
 
 
 def extract_description(dom) -> str:
@@ -165,7 +171,7 @@ def extract_date_created(dom) -> str | None:
         data = dom.find("span", {"class": "published"})
 
     if data:
-        time_element = data.findChild("time")
+        time_element = data.find("time")
         if time_element and time_element.get("datetime"):
             return DateUtils.to_iso(time_element.get("datetime"))
 
@@ -181,7 +187,7 @@ def extract_date_updated(dom) -> str | None:
         data = dom.find("span", {"class": "published"})
 
     if data:
-        time_element = data.findChild("time")
+        time_element = data.find("time")
         if time_element and time_element.get("datetime"):
             return DateUtils.to_iso(time_element.get("datetime"))
 
@@ -199,8 +205,8 @@ def extract_tags(dom) -> list:
     data = []
 
     if dom:
-        dom = dom.findChildren("a")
-        for item in dom:
+        tags = dom.find_all("a")
+        for item in tags:
             data.append(item.text)
 
     return data

@@ -1,27 +1,55 @@
-# Python cache and bytecode
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
 *~
 
-# Build artifacts
+# Caches and tooling
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Build and distribution artifacts
 build/
 dist/
 *.egg-info/
+*.egg
+.eggs/
 
-# macOS
+# Documentation build output
+site/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment and sensitive files
+.env
+.env.*
+.cookie/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating System files
 .DS_Store
-
-# Windows
+Thumbs.db
 desktop.ini
 
-# venv
-venv
-.venv
+# Example exports and generated reports
+exports/
+examples/exports/
+*report*.json
 
-# Local Development
+# Local development and scratch files
 pykit/
 lizard/
-
-# Cookies and Session
-.cookie/
+scratch/

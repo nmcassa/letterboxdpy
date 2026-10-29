@@ -14,7 +14,7 @@ from letterboxdpy.utils.utils_url import extract_path_segment
 class UserProfile:
     def __init__(self, username: str) -> None:
         self.username = username
-        self.url = f"{DOMAIN}/{self.username}"
+        self.url = f"{DOMAIN}/{self.username}/"
         self.dom = parse_url(self.url)
 
     def __str__(self) -> str:

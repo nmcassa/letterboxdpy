@@ -1,4 +1,6 @@
+import posixpath
 import re
+from urllib.parse import urlsplit, urlunsplit
 
 from fastfingertips.url_utils import extract_path_segment
 
@@ -43,12 +45,45 @@ def get_page_url(base_url: str, page: int, params: str = "") -> str:
     """
     Generate a paginated URL from a base URL and page number.
     Ensures no double slashes and consistent trailing slashes.
+
+    Note:
+        Letterboxd accepts both '/page/1/' and the clean root URL '/',
+        but canonical pagination links on Letterboxd point to the root
+        path for page 1, while page 2+ follow '/page/{N}/'.
     """
     # Remove any trailing slashes from the base URL
     clean_base = base_url.rstrip("/")
-    # Letterboxd standard pagination format: /page/N/
-    url = f"{clean_base}/page/{page}/"
+    # Letterboxd canonical pagination: root URL for page 1, /page/N/ for page 2+
+    url = f"{clean_base}/" if page == 1 else f"{clean_base}/page/{page}/"
     if params:
         # Append params, ensuring no double '?'
         url += f"?{params.lstrip('?')}"
     return url
+
+
+def normalize_letterboxd_url(url: str) -> str:
+    """
+    Normalizes Letterboxd URLs to ensure canonical trailing slashes.
+    Prevents Cloudflare WAF challenges and redundant 301/302 redirects.
+    Preserves query parameters, fragments, and avoids file extensions.
+    """
+    if not isinstance(url, str) or not url.strip():
+        return url
+
+    parts = urlsplit(url)
+    # Only normalize Letterboxd web domains
+    if not parts.netloc or not (
+        "letterboxd.com" in parts.netloc or "boxd.it" in parts.netloc
+    ):
+        return url
+
+    path = parts.path
+    if not path:
+        path = "/"
+    elif not path.endswith("/"):
+        # Do not append slash if path has a file extension (e.g. .csv, .jpg, .png, .xml)
+        _, ext = posixpath.splitext(path)
+        if not ext:
+            path += "/"
+
+    return urlunsplit((parts.scheme, parts.netloc, path, parts.query, parts.fragment))

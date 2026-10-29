@@ -1,14 +1,18 @@
 from letterboxdpy.constants.project import DOMAIN
 from letterboxdpy.core.scraper import parse_url
 from letterboxdpy.utils.movies_extractor import extract_movie_info
-from letterboxdpy.utils.utils_parser import parse_review_date, parse_review_text
+from letterboxdpy.utils.utils_parser import (
+    parse_rating,
+    parse_review_date,
+    parse_review_text,
+)
 from letterboxdpy.utils.utils_url import get_page_url
 
 
 class UserReviews:
     def __init__(self, username: str) -> None:
         self.username = username
-        self.url = f"{DOMAIN}/{self.username}/films/reviews"
+        self.url = f"{DOMAIN}/{self.username}/films/reviews/"
 
     def get_reviews(self):
         return extract_user_reviews(self.url)
@@ -81,13 +85,7 @@ def extract_user_reviews(url: str) -> dict:
             #            example for first review:  /username/film/movie_name/0/
             #            example for second review: /username/film/movie_name/1/
             #                the number is specified at the end of the url ---^
-            rating = log.find(
-                "span",
-                {
-                    "class": ["rating"],
-                },
-            )
-            rating = int(rating["class"][-1].split("-")[-1]) / 2.0 if rating else None
+            rating = parse_rating(log)
             # float ^^^--- rating: the numerical value of the rating given in the review (0.5-5.0)
             review, spoiler = parse_review_text(log)
             # str ^^^--- review: the text content of the review.

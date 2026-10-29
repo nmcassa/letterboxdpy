@@ -1,0 +1,109 @@
+# ==============================================================================
+# letterboxdpy Documentation Configuration
+# ==============================================================================
+# NOTE ON FUTURE MIGRATION (Material for MkDocs -> Zensical):
+# Material for MkDocs reaches official End-of-Life (EOL) on May 5, 2027.
+# Its official successor is Zensical (https://zensical.org).
+#
+# This configuration follows the Zensical compatibility standard:
+# 1. Uses core Material theme and standard pymdownx extensions.
+# 2. Avoids MkDocs-specific exotic hooks or vendor-locked plugins.
+# 3. When Zensical achieves full Python docstring generator parity,
+#    this file can directly be consumed by Zensical with minimal adjustments.
+# Guide: https://zensical.org/docs/compatibility/mkdocs/migration/
+# ==============================================================================
+
+site_name: letterboxdpy
+site_description: A modern, resilient Letterboxd web scraper and data extraction library
+site_author: Nicholas Cassarino & FastFingertips
+site_url: https://nmcassa.github.io/letterboxdpy/
+repo_url: https://github.com/nmcassa/letterboxdpy
+repo_name: nmcassa/letterboxdpy
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: en
+  palette:
+    # Scheme 1: Dark Mode (Default, matching Letterboxd style)
+    - scheme: slate
+      primary: deep orange
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    # Scheme 2: Light Mode
+    - scheme: default
+      primary: deep orange
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - content.code.copy
+    - content.code.annotate
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: ["."]
+          options:
+            docstring_style: google
+            show_source: false
+            show_root_heading: true
+            show_category_heading: false
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Guides:
+      - User: guides/user.md
+      - Movie: guides/movie.md
+      - Search: guides/search.md
+      - List: guides/list.md
+      - Watchlist: guides/watchlist.md
+      - Films & Discovery: guides/films.md
+      - Members: guides/members.md
+      - Authentication & Settings: guides/auth.md
+  - API Reference:
+      - User: api/user.md
+      - Movie: api/movie.md
+      - Search: api/search.md
+      - List: api/list.md
+      - Watchlist: api/watchlist.md
+      - Films Discovery: api/films.md
+      - Members: api/members.md
+      - Authentication: api/auth.md
+      - Settings: api/settings.md
+      - Scraper & URLs: api/scraper.md
+  - Examples: examples.md
+  - Development: development.md
