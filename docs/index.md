@@ -143,4 +143,5 @@ flowchart TD
 | **[Films & Discovery](guides/films.md)** | Browse upcoming, genres, themes, streaming services | [Films API](api/films.md) |
 | **[Members Guide](guides/members.md)** | Popular profiles, leaderboards, community members | [Members API](api/members.md) |
 | **[Authentication](guides/auth.md)** | Sessions, profile updates, notification management | [Auth API](api/auth.md) |
+| **[Examples & Tools](examples.md)** | Ready-to-run CLI utilities, export tools, visualizations | - |
 | **[Development](development.md)** | Environment setup, pytest, Ruff linting, CI/CD | - |
