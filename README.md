@@ -30,17 +30,17 @@
 </p>
 
 <p align="center">
-  <a href="https://nmcassa.github.io/letterboxdpy/"><strong>Home</strong></a>
+  <a href="https://fastfingertips.github.io/letterboxdpy/"><strong>Home</strong></a>
   &middot;
-  <a href="https://nmcassa.github.io/letterboxdpy/getting-started/"><strong>Get started</strong></a>
+  <a href="https://fastfingertips.github.io/letterboxdpy/getting-started/"><strong>Get started</strong></a>
   &middot;
-  <a href="https://nmcassa.github.io/letterboxdpy/guides/user/"><strong>User Guide</strong></a>
+  <a href="https://fastfingertips.github.io/letterboxdpy/guides/user/"><strong>User Guide</strong></a>
   &middot;
-  <a href="https://nmcassa.github.io/letterboxdpy/guides/movie/"><strong>Movie Guide</strong></a>
+  <a href="https://fastfingertips.github.io/letterboxdpy/guides/movie/"><strong>Movie Guide</strong></a>
   &middot;
-  <a href="https://nmcassa.github.io/letterboxdpy/examples/"><strong>Examples</strong></a>
+  <a href="https://fastfingertips.github.io/letterboxdpy/examples/"><strong>Examples</strong></a>
   &middot;
-  <a href="https://nmcassa.github.io/letterboxdpy/development/"><strong>Development</strong></a>
+  <a href="https://fastfingertips.github.io/letterboxdpy/development/"><strong>Development</strong></a>
 </p>
 
 <p align="center">
@@ -50,6 +50,6 @@
 
 <p align="center">
   <em>
-    Documentation: <a href="https://nmcassa.github.io/letterboxdpy/">nmcassa.github.io/letterboxdpy/</a>
+    Documentation: <a href="https://fastfingertips.github.io/letterboxdpy/">fastfingertips.github.io/letterboxdpy/</a>
   </em>
 </p>

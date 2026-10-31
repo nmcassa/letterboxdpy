@@ -16,7 +16,7 @@
 site_name: letterboxdpy
 site_description: A modern, resilient Letterboxd web scraper and data extraction library
 site_author: Nicholas Cassarino & FastFingertips
-site_url: https://nmcassa.github.io/letterboxdpy/
+site_url: https://fastfingertips.github.io/letterboxdpy/
 repo_url: https://github.com/nmcassa/letterboxdpy
 repo_name: nmcassa/letterboxdpy
 edit_uri: edit/main/docs/
