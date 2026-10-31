@@ -53,7 +53,7 @@ docs = [
 
 [project.urls]
 Repository = "https://github.com/nmcassa/letterboxdpy"
-Documentation = "https://github.com/nmcassa/letterboxdpy"
+Documentation = "https://fastfingertips.github.io/letterboxdpy"
 "Bug Tracker" = "https://github.com/nmcassa/letterboxdpy/issues"
 "Source Code" = "https://github.com/nmcassa/letterboxdpy/archive/refs/heads/main.zip"
 
