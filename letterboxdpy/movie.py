@@ -158,8 +158,11 @@ class Movie:
         return self.pages.members.get_watchers_stats()
 
     # REVIEWS PAGE
-    def get_reviews(self) -> dict:
-        return self.pages.reviews.get_reviews()
+    def get_all_recent_reviews(self) -> dict:
+        return self.pages.reviews.get_all_recent_reviews()
+
+    def get_all_popular_reviews(self) -> dict:
+        return self.pages.reviews.get_all_popular_reviews()
 
     def get_reviews_by_rating(self, rating: float) -> dict:
         return self.pages.reviews.get_reviews_by_rating(rating)
