@@ -124,8 +124,8 @@ class ActivityProcessor:
                 return targets[-1].attrs["href"].split("/")[-2]
 
         elif event_type == "review":
-            if div := self.section.find("div", {"class": "react-component"}):
-                return div.attrs.get("data-item-slug")
+            div = self.section.find("div", {"class": "react-component"})
+            return div.attrs.get("data-item-slug") if div else None
 
         return None
 
