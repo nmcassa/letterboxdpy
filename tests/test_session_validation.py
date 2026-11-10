@@ -30,6 +30,7 @@ class TestCookieExpiry:
         has_expiry = any(c.expires for c in session.cookies.jar)
         assert has_expiry, "No cookies have expiry information"
 
+    @pytest.mark.smoke()
     def test_signed_in_as_cookie_has_30_day_expiry(self):
         """letterboxd.signed.in.as cookie should expire in ~30 days."""
         try:
@@ -54,6 +55,7 @@ class TestCookieExpiry:
 class TestSessionValidation:
     """Test UserSession.validate() method."""
 
+    @pytest.mark.smoke()
     def test_valid_session_returns_true(self):
         """A valid session should return True from validate()."""
         try:

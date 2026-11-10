@@ -25,6 +25,7 @@ def us():
     return session
 
 
+@pytest.mark.smoke()
 class TestUserSession:
     """Unit tests for UserSession cookie and identity resolution."""
 

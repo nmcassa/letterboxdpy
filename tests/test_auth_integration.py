@@ -20,6 +20,7 @@ def us():
     return session
 
 
+@pytest.mark.smoke()
 @pytest.mark.usefixtures("us")
 class TestAuthIntegration:
     """
