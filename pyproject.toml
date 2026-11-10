@@ -123,3 +123,10 @@ markers = [
     "smoke: live external integration tests touching real Letterboxd servers",
 ]
 addopts = "-m 'not smoke'"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.2",
+    "pytest>=9.2.0",
+    "ruff>=0.17.4",
+]
