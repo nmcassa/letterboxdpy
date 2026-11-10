@@ -1,33 +1,25 @@
 """Tests for the User class."""
 
-import unittest
-
 import pytest
 
 from letterboxdpy.user import User
 
 
+@pytest.fixture(scope="module")
+def user():
+    return User("nmcassa")
+
+
 @pytest.mark.smoke()
-class TestUser(unittest.TestCase):
+class TestUser:
     """Integration tests for User scraping methods."""
 
-    @classmethod
-    def setUpClass(cls):
-        cls.user = User("nmcassa")
+    def test_get_all_liked_films(self, user):
+        assert all(v["liked"] for v in user.get_liked_films()["movies"].values())
 
-    def test_get_all_liked_films(self):
-        movies = self.user.get_liked_films()["movies"]
-        values = movies.values()
+    def test_network_data(self, user):
+        followers = user.get_followers()
+        following = user.get_following()
 
-        self.assertTrue(all(value["liked"] for value in values))
-
-    def test_network_data(self):
-        followers = self.user.get_followers()
-        following = self.user.get_following()
-
-        self.assertEqual(self.user.stats["followers"], len(followers))
-        self.assertEqual(self.user.stats["following"], len(following))
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert user.stats["followers"] == len(followers)
+        assert user.stats["following"] == len(following)

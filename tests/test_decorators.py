@@ -1,11 +1,11 @@
 """Tests for core decorators."""
 
-import unittest
+import pytest
 
 from letterboxdpy.core.decorators import assert_instance, skip_if
 
 
-class TestSkipIf(unittest.TestCase):
+class TestSkipIf:
     """Unit tests for the generic skip_if decorator."""
 
     def test_direct_attribute_match(self):
@@ -17,8 +17,8 @@ class TestSkipIf(unittest.TestCase):
             def access_feature(self):
                 return "ALLOWED"
 
-        self.assertEqual(Account("banned").access_feature(), "BLOCKED")
-        self.assertEqual(Account("member").access_feature(), "ALLOWED")
+        assert Account("banned").access_feature() == "BLOCKED"
+        assert Account("member").access_feature() == "ALLOWED"
 
     def test_boolean_flag_without_match(self):
         class Profile:
@@ -29,8 +29,8 @@ class TestSkipIf(unittest.TestCase):
             def get_public_activity(self):
                 return ["post1", "post2"]
 
-        self.assertIsNone(Profile(True).get_public_activity())
-        self.assertEqual(Profile(False).get_public_activity(), ["post1", "post2"])
+        assert Profile(True).get_public_activity() is None
+        assert Profile(False).get_public_activity() == ["post1", "post2"]
 
     def test_getter_fallback(self):
         class Page:
@@ -44,8 +44,8 @@ class TestSkipIf(unittest.TestCase):
             def get_watchlist(self):
                 return [1, 2, 3]
 
-        self.assertIsNone(Page("hq").get_watchlist())
-        self.assertEqual(Page("pro").get_watchlist(), [1, 2, 3])
+        assert Page("hq").get_watchlist() is None
+        assert Page("pro").get_watchlist() == [1, 2, 3]
 
     def test_explicit_getter_name(self):
         class Page:
@@ -56,7 +56,7 @@ class TestSkipIf(unittest.TestCase):
             def fetch(self):
                 return "data"
 
-        self.assertIsNone(Page().fetch())
+        assert Page().fetch() is None
 
     def test_container_match(self):
         class Membership:
@@ -67,10 +67,10 @@ class TestSkipIf(unittest.TestCase):
             def get_backdrop(self):
                 return {"url": "http://img.com"}
 
-        self.assertIsNone(Membership(None).get_backdrop())
-        self.assertIsNone(Membership("pro").get_backdrop())
-        self.assertEqual(Membership("patron").get_backdrop(), {"url": "http://img.com"})
-        self.assertEqual(Membership("crew").get_backdrop(), {"url": "http://img.com"})
+        assert Membership(None).get_backdrop() is None
+        assert Membership("pro").get_backdrop() is None
+        assert Membership("patron").get_backdrop() == {"url": "http://img.com"}
+        assert Membership("crew").get_backdrop() == {"url": "http://img.com"}
 
     def test_callable_predicate(self):
         class Film:
@@ -81,8 +81,8 @@ class TestSkipIf(unittest.TestCase):
             def analyze(self):
                 return "ANALYZED"
 
-        self.assertEqual(Film(1888).analyze(), "TOO_OLD")
-        self.assertEqual(Film(1994).analyze(), "ANALYZED")
+        assert Film(1888).analyze() == "TOO_OLD"
+        assert Film(1994).analyze() == "ANALYZED"
 
     def test_caching_evaluation(self):
         class HeavyService:
@@ -106,11 +106,11 @@ class TestSkipIf(unittest.TestCase):
                 return "c"
 
         service = HeavyService()
-        self.assertIsNone(service.method_a())
-        self.assertIsNone(service.method_b())
-        self.assertIsNone(service.method_c())
+        assert service.method_a() is None
+        assert service.method_b() is None
+        assert service.method_c() is None
         # The DOM / extraction logic must be called EXACTLY once!
-        self.assertEqual(service.dom_lookups, 1)
+        assert service.dom_lookups == 1
 
     def test_attribute_already_set_to_none(self):
         class User:
@@ -127,9 +127,9 @@ class TestSkipIf(unittest.TestCase):
                 return "ok"
 
         u = User()
-        self.assertEqual(u.test_method(), "ok")
+        assert u.test_method() == "ok"
         # Should not fall back to get_badge since self.badge is already present
-        self.assertEqual(u.calls, 0)
+        assert u.calls == 0
 
     def test_explicit_none_match(self):
         class Site:
@@ -140,11 +140,11 @@ class TestSkipIf(unittest.TestCase):
             def ping(self):
                 return "PING_OK"
 
-        self.assertEqual(Site(None).ping(), "NO_WEBSITE")
-        self.assertEqual(Site("https://example.com").ping(), "PING_OK")
+        assert Site(None).ping() == "NO_WEBSITE"
+        assert Site("https://example.com").ping() == "PING_OK"
 
 
-class TestAssertInstance(unittest.TestCase):
+class TestAssertInstance:
     """Unit tests for the assert_instance decorator."""
 
     def test_assert_instance_success(self):
@@ -152,16 +152,12 @@ class TestAssertInstance(unittest.TestCase):
         def process(val: int):
             return val * 2
 
-        self.assertEqual(process(5), 10)
+        assert process(5) == 10
 
     def test_assert_instance_failure(self):
         @assert_instance(int)
         def process(val: int):
             return val * 2
 
-        with self.assertRaises(AssertionError):
+        with pytest.raises(AssertionError):
             process("5")  # type: ignore
-
-
-if __name__ == "__main__":
-    unittest.main()

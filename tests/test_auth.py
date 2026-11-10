@@ -5,49 +5,47 @@ Tests cookie loading, username/csrf resolution, and session validity.
 For library-wide integration tests, see test_auth_integration.py
 """
 
-import unittest
+import pytest
 
 from letterboxdpy.auth import BASE_URL, DEFAULT_COOKIE_PATH, UserSession
 
 
-class TestUserSession(unittest.TestCase):
+@pytest.fixture(scope="module")
+def us():
+    if not DEFAULT_COOKIE_PATH.exists():
+        pytest.skip(f"Missing cookie file: {DEFAULT_COOKIE_PATH}")
+
+    # Load and validate session without calling interactive ensure()
+    try:
+        session = UserSession.load(DEFAULT_COOKIE_PATH)
+        if not session.validate():
+            pytest.skip("Existing session cookie is invalid or expired")
+    except Exception as e:
+        pytest.skip(f"Could not load session: {e}")
+    return session
+
+
+@pytest.mark.smoke()
+class TestUserSession:
     """Unit tests for UserSession cookie and identity resolution."""
 
-    @classmethod
-    def setUpClass(cls):
-        if not DEFAULT_COOKIE_PATH.exists():
-            raise unittest.SkipTest(f"Missing cookie file: {DEFAULT_COOKIE_PATH}")
-
-        # Load and validate session without calling interactive ensure()
-        try:
-            us = UserSession.load(DEFAULT_COOKIE_PATH)
-            if not us.validate():
-                raise unittest.SkipTest("Existing session cookie is invalid or expired")
-            cls.us = us
-        except Exception as e:
-            raise unittest.SkipTest(f"Could not load session: {e}") from e
-
-    def test_username_resolution(self):
+    def test_username_resolution(self, us):
         """Username must be resolved from cookies."""
-        self.assertTrue(self.us.username)
+        assert us.username
 
-    def test_csrf_resolution(self):
+    def test_csrf_resolution(self, us):
         """CSRF token must be resolved and valid."""
-        csrf = self.us.csrf
-        self.assertIsNotNone(csrf)
-        self.assertGreater(len(csrf), 10)
+        csrf = us.csrf
+        assert csrf is not None
+        assert len(csrf) > 10
 
-    def test_session_validity(self):
+    def test_session_validity(self, us):
         """Session must not redirect to login page."""
         url = f"{BASE_URL}/activity/"
-        response = self.us.session.get(url, allow_redirects=True)
+        response = us.session.get(url, allow_redirects=True)
 
-        self.assertEqual(response.status_code, 200)
+        assert response.status_code == 200
 
         final_url = str(response.url)
-        self.assertNotIn("/sign-in", final_url)
-        self.assertNotIn("/user/login", final_url)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert "/sign-in" not in final_url
+        assert "/user/login" not in final_url
