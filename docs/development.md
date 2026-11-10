@@ -6,16 +6,16 @@ This guide covers setting up your development environment, running tests, lintin
 
 ## Environment Setup
 
-`letterboxdpy` requires **Python 3.10 or higher**.
+`letterboxdpy` requires **Python 3.10 or higher** and uses [uv](https://docs.astral.sh/uv/getting-started/installation/) for its development environment.
 
-Clone the repository and install all optional development dependencies:
+Clone the repository and install all development dependencies:
 
 ```bash
 git clone https://github.com/nmcassa/letterboxdpy.git
 cd letterboxdpy
 
-# Install in editable mode with development, docs, and example dependencies
-pip install -e ".[dev,docs,examples]"
+# Create .venv with the dev tools plus the docs and examples extras
+uv sync --all-extras
 ```
 
 ---
@@ -26,13 +26,13 @@ This project uses [Ruff](https://docs.astral.sh/ruff/) for fast Python linting a
 
 ```bash
 # Check for lint issues
-ruff check .
+uv run ruff check .
 
 # Automatically fix fixable issues
-ruff check --fix .
+uv run ruff check --fix .
 
 # Format code
-ruff format .
+uv run ruff format .
 ```
 
 ---
@@ -46,7 +46,7 @@ The test suite separates fast, deterministic offline unit tests from live extern
 Executes parser and model tests in ~0.5 seconds without any external network calls:
 
 ```bash
-python -m pytest
+uv run pytest
 ```
 
 ### Run Live Network Tests (Smoke Marker)
@@ -54,13 +54,13 @@ python -m pytest
 Executes integration tests directly against live Letterboxd endpoints:
 
 ```bash
-python -m pytest -m smoke
+uv run pytest -m smoke
 ```
 
 ### Run All Tests
 
 ```bash
-python -m pytest -m "smoke or not smoke"
+uv run pytest -m "smoke or not smoke"
 ```
 
 > [!NOTE]
@@ -77,7 +77,7 @@ The documentation site is built with [Material for MkDocs](https://squidfunk.git
 To preview the documentation locally with hot-reloading:
 
 ```bash
-mkdocs serve
+uv run mkdocs serve
 ```
 
 Open `http://127.0.0.1:8000` in your browser.
@@ -87,7 +87,7 @@ Open `http://127.0.0.1:8000` in your browser.
 To verify that all cross-references, docstrings, and navigation links build without warnings:
 
 ```bash
-mkdocs build --strict
+uv run mkdocs build --strict
 ```
 
 ---
@@ -101,10 +101,10 @@ Pre-commit hooks automatically check linting rules with Ruff and validate commit
 
 ```bash
 # Install hooks for both pre-commit and commit-msg stages
-pre-commit install --hook-type pre-commit --hook-type commit-msg
+uv run pre-commit install --hook-type pre-commit --hook-type commit-msg
 
 # Run manually against all files
-pre-commit run --all-files
+uv run pre-commit run --all-files
 ```
 
 ---

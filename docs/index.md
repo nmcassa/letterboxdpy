@@ -33,7 +33,7 @@ A modern, fast, and feature-rich Python library for scraping and interacting wit
     ```bash
     git clone https://github.com/nmcassa/letterboxdpy.git
     cd letterboxdpy
-    pip install -e ".[dev,docs,examples]"
+    uv sync --all-extras
     ```
 
 ---
