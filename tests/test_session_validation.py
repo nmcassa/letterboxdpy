@@ -8,61 +8,62 @@ Tests the UserSession.validate() method and related functionality:
 """
 
 import time
-import unittest
+
+import pytest
 
 from letterboxdpy.auth import DEFAULT_COOKIE_PATH, UserSession
 
+requires_cookie = pytest.mark.skipif(
+    not DEFAULT_COOKIE_PATH.exists(), reason="Requires valid cookie file"
+)
 
-class TestCookieExpiry(unittest.TestCase):
+
+@requires_cookie
+class TestCookieExpiry:
     """Test local cookie expiry detection (no network required)."""
 
-    @unittest.skipUnless(DEFAULT_COOKIE_PATH.exists(), "Requires valid cookie file")
     def test_cookie_expiry_is_preserved(self):
         """Cookie expiry timestamps should be loaded from file."""
         session = UserSession.load(DEFAULT_COOKIE_PATH).session
 
         # At least one cookie should have expires set
         has_expiry = any(c.expires for c in session.cookies.jar)
-        self.assertTrue(has_expiry, "No cookies have expiry information")
+        assert has_expiry, "No cookies have expiry information"
 
-    @unittest.skipUnless(DEFAULT_COOKIE_PATH.exists(), "Requires valid cookie file")
     def test_signed_in_as_cookie_has_30_day_expiry(self):
         """letterboxd.signed.in.as cookie should expire in ~30 days."""
         try:
             us = UserSession.load(DEFAULT_COOKIE_PATH)
             if not us.validate():
-                raise unittest.SkipTest("Existing cookie file is invalid/expired")
+                pytest.skip("Existing cookie file is invalid/expired")
             session = us.session
         except Exception as e:
-            raise unittest.SkipTest(f"Could not load/validate session: {e}") from e
+            pytest.skip(f"Could not load/validate session: {e}")
 
         for c in session.cookies.jar:
             if c.name == "letterboxd.signed.in.as" and c.expires:
                 days_remaining = (c.expires - time.time()) / 86400
-                self.assertGreater(days_remaining, 0, "Cookie has already expired")
-                self.assertLess(
-                    days_remaining, 31, "Cookie expiry is more than 30 days"
-                )
+                assert days_remaining > 0, "Cookie has already expired"
+                assert days_remaining < 31, "Cookie expiry is more than 30 days"
                 return
 
-        self.skipTest("letterboxd.signed.in.as cookie not found with expiry")
+        pytest.skip("letterboxd.signed.in.as cookie not found with expiry")
 
 
-class TestSessionValidation(unittest.TestCase):
+@requires_cookie
+class TestSessionValidation:
     """Test UserSession.validate() method."""
 
-    @unittest.skipUnless(DEFAULT_COOKIE_PATH.exists(), "Requires valid cookie file")
     def test_valid_session_returns_true(self):
         """A valid session should return True from validate()."""
         try:
             us = UserSession.load(DEFAULT_COOKIE_PATH)
             if not us.validate():
-                raise unittest.SkipTest("Existing session cookie is invalid or expired")
-            self.assertTrue(us.validate())
+                pytest.skip("Existing session cookie is invalid or expired")
+            assert us.validate()
         except Exception as e:
-            raise unittest.SkipTest(f"Could not load session: {e}") from e
+            pytest.skip(f"Could not load session: {e}")
 
-    @unittest.skipUnless(DEFAULT_COOKIE_PATH.exists(), "Requires valid cookie file")
     def test_corrupted_cookie_detected(self):
         """Corrupting cookies should eventually fail validation."""
         instance = UserSession.load(DEFAULT_COOKIE_PATH)
@@ -74,10 +75,10 @@ class TestSessionValidation(unittest.TestCase):
 
         # The local is_logged_in should still return True
         # (it only checks presence, not validity)
-        self.assertTrue(instance.is_logged_in)
+        assert instance.is_logged_in
 
 
-class TestLogoutSignalDetection(unittest.TestCase):
+class TestLogoutSignalDetection:
     """Test detection of server logout signals in headers."""
 
     def test_logout_signal_in_set_cookie(self):
@@ -92,7 +93,7 @@ class TestLogoutSignalDetection(unittest.TestCase):
             "letterboxd.user=;" in set_cookie or "max-age=0" in set_cookie
         )
 
-        self.assertTrue(has_logout_signal)
+        assert has_logout_signal
 
     def test_normal_headers_no_logout_signal(self):
         """Normal response headers should not trigger logout detection."""
@@ -106,8 +107,4 @@ class TestLogoutSignalDetection(unittest.TestCase):
             "letterboxd.user=;" in set_cookie or "max-age=0" in set_cookie
         )
 
-        self.assertFalse(has_logout_signal)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert not has_logout_signal
