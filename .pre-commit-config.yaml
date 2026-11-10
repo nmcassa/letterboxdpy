@@ -1,8 +1,8 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.9
+    rev: v0.17.4
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: [ --fix ]
       - id: ruff-format
 
@@ -10,6 +10,7 @@ repos:
     hooks:
       - id: check-commit-title
         name: Check commit title length (<= 62 chars)
-        entry: python -c "import sys; p=sys.argv[1]; lines=[l.strip() for l in open(p, encoding='utf-8') if not l.startswith('#') and l.strip()]; title=lines[0] if lines else ''; sys.exit(f'[ERROR] Commit title exceeds 62 characters ({len(title)} chars):\nSubject: {title}\nRule: Keep the title line at or under 62 characters.') if len(title) > 62 else None"
-        language: system
+        entry: >-
+          python -c "import sys; p=sys.argv[1]; lines=[l.strip() for l in open(p, encoding='utf-8') if not l.startswith('#') and l.strip()]; title=lines[0] if lines else ''; sys.exit(f'[ERROR] Commit title exceeds 62 characters ({len(title)} chars):\nSubject: {title}\nRule: Keep the title line at or under 62 characters.') if len(title) > 62 else None"
+        language: python
         stages: [commit-msg]
